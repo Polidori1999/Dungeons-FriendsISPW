@@ -10,7 +10,8 @@
     (io ho gia il radius non mi devo preoccupare della sua implementazione)
 
 6) The system shall provide a notification with the player's nickname that has joined the lobby.
+                    (maybe troppo simibile alla user story)
 
-
+?) The system shall provide a register button to create an account.
 
 *joinable lobbies: if the player limit set by the "Dungeon Master" has not been reached.
