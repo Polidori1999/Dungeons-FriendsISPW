@@ -1,0 +1,16 @@
+1) The system shall provide an fillabe character’s sheet. 
+
+2) The system shall provide a counter of player for joinable lobbies.
+
+3) The system shall provide a fillable text box for game session information.
+
+4) The system shall provide a slide input menu for selecting the search radius.
+
+5) The system shall provide a list of joinable lobbies* in the seleceted radius.
+    (io ho gia il radius non mi devo preoccupare della sua implementazione)
+
+6) The system shall provide a notification with the player's nickname that has joined the lobby.
+
+
+
+*joinable lobbies: if the player limit set by the "Dungeon Master" has not been reached.
