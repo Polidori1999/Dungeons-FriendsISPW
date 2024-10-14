@@ -14,3 +14,6 @@ USER STORY poi se dividono
 		1) a new player has joined;
 		2) date and time of the game session;
 		3) the game session was cancelled.
+
+
+come player voglio il riassunto
