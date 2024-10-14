@@ -1,0 +1,16 @@
+USER STORY poi se dividono
+
+1) As a "Dungeon master", i want to create a lobby, so that the players can join it.
+2) As a "Player", i want to consult the player's handbook, so that i can follow the rules.
+3) As a "Dungeon master", i want to access the list of character's sheets in my lobby, so that i can retreive information about them.
+4) As a "Player", i want to select a maximun radius of interest, so that i can see only the lobby near me.
+5) As a user, i want to receive a notification*, so that i retreive news about the game session.
+6) ?? 
+?) As a "Dungeon master", i want to upload a map, so that i can palce the characters in it.
+?) As a "Player", i want to access my character's sheet, so that i can modify it.
+?) As a "Dungeon master", i want to add a despriction to the lobby, so that i can
+
+*notification:	list: 
+		1) a new player has joined;
+		2) date and time of the game session;
+		3) the game session was cancelled.
