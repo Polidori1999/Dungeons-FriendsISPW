@@ -1,19 +1,22 @@
 USER STORY poi se dividono
 
 1) As a "Dungeon master", i want to create a lobby, so that the players can join it.
-2) As a "Player", i want to consult the player's handbook, so that i can follow the rules.
+2) As a "Player", i want to consult the player's handbook, so that i can follow the rules. (have a reference from them whenever i want)
 3) As a "Dungeon master", i want to access the list of character's sheets in my lobby, so that i can retreive information about them.
 4) As a "Player", i want to select a maximun radius of interest, so that i can see only the lobby near me.
-5) As a user, i want to receive a notification*, so that i retreive news about the game session.
+5) As a user, i want to receive a notification*, so that i retreive news about the game session. (si può fare lo stesso al contrario magari DM che manda notifiche a tutti i players)
 6) ?? 
-?) As a "Dungeon master", i want to upload a map, so that i can palce the characters in it.
+?) As a "Dungeon master", i want to upload a map, so that i can palce the characters in it (so that i can use them during the game session directly from the app).
 ?) As a "Player", i want to access my character's sheet, so that i can modify it.
 ?) As a "Dungeon master", i want to add a despriction to the lobby, so that i can
+?) As a "Player", i want to login into the app, so that a can participate in game session with other players.
+?) As a "Player", i want to access and modify my character's sheet, so that i can always keep it updated.
+?) As a "Player", i want to join a lobby, so that i can play with the other users.
+?) As a "Player", i want download my character's sheet, so that i can access it offline or print it for live game sessions.
+?) forse qualcosa sul comunicare usando discord durante le sessioni online?
+?) As a "Player" ("Dungeon Master"), i wanto to access (/create) the riassunto (porca loca non mi viene in inglese), so that i can keep updatede the game session.
 
 *notification:	list: 
 		1) a new player has joined;
 		2) date and time of the game session;
 		3) the game session was cancelled.
-
-
-come player voglio il riassunto
