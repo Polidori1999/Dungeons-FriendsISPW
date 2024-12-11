@@ -1,0 +1,86 @@
+@startuml
+actor Utente
+boundary CharacterBoundary <<Boundary>>
+control CharacterController <<Control>>
+entity Character <<Entity>>
+entity CharacterFactory <<Factory>>
+entity CharacterDAO <<DAO>>
+
+== Visualizzazione Personaggi ==
+Utente -> CharacterBoundary : displayCharacterList()
+activate CharacterBoundary
+CharacterBoundary -> CharacterController : getCharacterList()
+activate CharacterController
+CharacterController -> CharacterDAO : fetchAll()
+activate CharacterDAO
+CharacterDAO --> CharacterController : Return character list
+CharacterController --> CharacterBoundary : Return character list
+CharacterBoundary --> Utente : Show list of characters
+
+deactivate CharacterDAO
+
+deactivate CharacterController
+
+deactivate CharacterBoundary
+
+== Creazione Nuovo Personaggio ==
+Utente -> CharacterBoundary : Clicca "Create new character"
+activate CharacterBoundary
+CharacterBoundary -> CharacterController : createCharacter(data)
+activate CharacterController
+CharacterController -> CharacterFactory : create(data)
+activate CharacterFactory
+CharacterFactory --> CharacterController : Return new character instance
+CharacterController -> Character : validate(data)
+activate Character
+Character -> CharacterDAO : save()
+activate CharacterDAO
+CharacterDAO --> Character : Return success
+Character --> CharacterController : Return success
+CharacterController --> CharacterBoundary : Notifica successo
+
+deactivate CharacterDAO
+
+deactivate Character
+
+deactivate CharacterController
+
+deactivate CharacterBoundary
+
+== Modifica Scheda Personaggio ==
+Utente -> CharacterBoundary : Seleziona "Edit character"
+activate CharacterBoundary
+CharacterBoundary -> CharacterController : editCharacter(characterId, data)
+activate CharacterController
+CharacterController -> Character : validate(data)
+activate Character
+Character -> CharacterDAO : update(characterId, data)
+activate CharacterDAO
+CharacterDAO --> Character : Return success
+Character --> CharacterController : Return success
+CharacterController --> CharacterBoundary : Notifica successo
+
+deactivate CharacterDAO
+
+deactivate Character
+
+deactivate CharacterController
+
+deactivate CharacterBoundary
+
+== Eliminazione Scheda Personaggio ==
+Utente -> CharacterBoundary : Seleziona "Delete character"
+activate CharacterBoundary
+CharacterBoundary -> CharacterController : deleteCharacter(characterId)
+activate CharacterController
+CharacterController -> CharacterDAO : delete(characterId)
+activate CharacterDAO
+CharacterDAO --> CharacterController : Return success
+CharacterController --> CharacterBoundary : Notifica successo
+
+deactivate CharacterDAO
+
+deactivate CharacterController
+
+deactivate CharacterBoundary
+@enduml
