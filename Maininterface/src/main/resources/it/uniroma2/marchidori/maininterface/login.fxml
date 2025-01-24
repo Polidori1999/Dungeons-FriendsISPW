@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.marchidori.maininterface.LoginController">
+   <children>
+      <Button layoutX="274.0" layoutY="175.0" mnemonicParsing="false" onAction="#center" text="center" />
+      <Button layoutX="274.0" layoutY="14.0" mnemonicParsing="false" onAction="#up" text="up" />
+      <Button layoutX="14.0" layoutY="188.0" mnemonicParsing="false" onAction="#left" text="left" />
+      <Button layoutX="274.0" layoutY="361.0" mnemonicParsing="false" onAction="#down" text="down" />
+      <Button layoutX="542.0" layoutY="176.0" mnemonicParsing="false" onAction="#right" text="right" />
+   </children>
+</AnchorPane>
