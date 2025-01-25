@@ -65,7 +65,7 @@ public class LoginController {
         Parent root = loader.load();
 
         // Ottieni lo stage attuale
-        Stage stage = (Stage) root.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) borderLoginPane.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
 
         // Crea una nuova scena e impostala nello stage
         Scene scene = new Scene(root);
