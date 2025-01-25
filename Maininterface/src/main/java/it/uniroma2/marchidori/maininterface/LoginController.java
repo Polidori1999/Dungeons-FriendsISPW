@@ -49,16 +49,26 @@ public class LoginController {
     private void checkLogin() throws IOException {
         if(email.getText().equals("Mario") && password.getText().equals("123")){
             wrongLogin.setText("success!");
-            Parent parent = FXMLLoader.load(this.getClass().getResource("Home.fxml"));
-            Scene scene = new Scene(parent);
-            Stage stage = (Stage) borderLoginPane.getScene().getWindow();
-            stage.setScene(scene);
-            stage.centerOnScreen();
+            goToHome();
 
         }else if(email.getText().isEmpty() && password.getText().isEmpty()){
             wrongLogin.setText("please enter your data!");
         }else{
             wrongLogin.setText("wrong email or password!");
         }
+    }
+
+    @FXML
+    private void goToHome() throws IOException {
+        // Carica il file FXML della seconda scena
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Home.fxml"));
+        Parent root = loader.load();
+
+        // Ottieni lo stage attuale
+        Stage stage = (Stage) root.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Crea una nuova scena e impostala nello stage
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
     }
 }
