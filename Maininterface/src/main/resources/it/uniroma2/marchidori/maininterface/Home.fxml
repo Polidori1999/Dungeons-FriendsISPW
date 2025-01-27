@@ -1,57 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderHomePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #292932; -fx-border-image-width: 0px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.marchidori.maininterface.HomeController">
-   <center>
-      <Button fx:id="logOut" mnemonicParsing="false" onAction="#onClickLogOut" text="Log out" BorderPane.alignment="CENTER" />
-   </center>
-   <left>
-      <VBox prefHeight="327.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button mnemonicParsing="false" prefHeight="49.0" prefWidth="100.0" style="-fx-background-color: 0px;" text="MyCharacters" textFill="WHITE">
-               <padding>
-                  <Insets top="90.0" />
-               </padding>
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font></Button>
-            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="145.0" style="-fx-background-color: 0px;" text="Join Lobby" textFill="WHITE">
-               <padding>
-                  <Insets top="10.0" />
-               </padding>
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font></Button>
-            <Button layoutX="10.0" layoutY="55.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="145.0" style="-fx-background-color: 0px;" text="Manage Lobby" textFill="WHITE">
-               <padding>
-                  <Insets top="10.0" />
-               </padding>
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font></Button>
-            <Button layoutX="10.0" layoutY="101.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="145.0" style="-fx-background-color: 0px;" text="Consult Rules" textFill="WHITE">
-               <padding>
-                  <Insets top="10.0" />
-               </padding>
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font></Button>
-         </children>
-      </VBox>
-   </left>
-   <top>
-      <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: 0px;" text="Dungeons &amp; Friends" textFill="WHITE" BorderPane.alignment="TOP_LEFT">
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
+<AnchorPane fx:id="HomePane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.marchidori.maininterface.HomeController">
+   <children>
+      <!-- Pulsante principale -->
+      <Button mnemonicParsing="false" prefHeight="17.0" prefWidth="141.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="458.66666666666663">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-   </top>
-</BorderPane>
+      <VBox layoutX="14.0" layoutY="83.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="486.0">
+         <children>
+            <!-- Pulsante My Characters -->
+            <Button fx:id="Mychar" mnemonicParsing="false" prefHeight="49.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <!-- Pulsante Join Lobby -->
+            <Button fx:id="Joinlobby" mnemonicParsing="false" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <!-- Pulsante Manage Lobby -->
+            <Button fx:id="ManageLobby" mnemonicParsing="false" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <!-- Pulsante Consult Rules -->
+            <Button fx:id="Consult_rules" mnemonicParsing="false" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

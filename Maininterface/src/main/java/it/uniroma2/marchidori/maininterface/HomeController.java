@@ -1,28 +1,33 @@
 package it.uniroma2.marchidori.maininterface;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HomeController{
+public class HomeController {
 
     @FXML
-    private Button logOut;
+    private Button Consult_rules;
 
     @FXML
-    private BorderPane borderHomePane;
+    private AnchorPane HomePane;
 
     @FXML
-    void onClickLogOut(ActionEvent event) throws IOException {
-        goToLogin();
-    }
+    private Button Joinlobby;
+
+    @FXML
+    private Button ManageLobby;
+
+    @FXML
+    private Button Mychar;
+
+
 
     @FXML
     private void goToLogin() throws IOException {
@@ -31,7 +36,7 @@ public class HomeController{
         Parent root = loader.load();
 
         // Ottieni lo stage attuale
-        Stage stage = (Stage) borderHomePane.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) HomePane.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
 
         // Crea una nuova scena e impostala nello stage
         Scene scene = new Scene(root);
