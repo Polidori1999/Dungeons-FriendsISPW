@@ -159,4 +159,16 @@ public class HomeController {
             return name + " - " + type + " - " + duration + " - " + numPlayers + " players";
         }
     }
+    @FXML
+    void onClickMyCharacter(ActionEvent event) throws IOException {
+        goToMyChar();
+    }
+    private void goToMyChar() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("CharacterList.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) HomePane.getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+
+    }
 }
