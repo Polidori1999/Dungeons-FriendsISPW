@@ -10,7 +10,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ import java.io.IOException;
 public class LoginController {
 
     @FXML
-    private BorderPane borderLoginPane;
+    private AnchorPane anchorLoginPane;
 
     @FXML
     private Button create_Account;
@@ -42,7 +42,16 @@ public class LoginController {
     private Label wrongLogin;
 
     @FXML
+    public void initialize() {
+        // Imposta la grandezza massima del pulsante a metà delle dimensioni del contenitore
+        login.maxWidthProperty().bind(anchorLoginPane.widthProperty().divide(2));
+        login.maxHeightProperty().bind(anchorLoginPane.heightProperty().divide(2));
+    }
+
+    @FXML
     void clickLogin(ActionEvent event) throws IOException {
+        login.maxWidthProperty().bind(anchorLoginPane.widthProperty().divide(2));
+        login.maxHeightProperty().bind(anchorLoginPane.heightProperty().divide(2));
         checkLogin();
     }
 
@@ -65,7 +74,7 @@ public class LoginController {
         Parent root = loader.load();
 
         // Ottieni lo stage attuale
-        Stage stage = (Stage) borderLoginPane.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) anchorLoginPane.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
 
         // Crea una nuova scena e impostala nello stage
         Scene scene = new Scene(root);
