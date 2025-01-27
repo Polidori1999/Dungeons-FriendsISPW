@@ -14,6 +14,7 @@
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 <?import javafx.scene.control.ListView?>
+
 <AnchorPane fx:id="HomePane" minHeight="720.0" minWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.marchidori.maininterface.HomeController">
    <children>
       <VBox id="Vbox" layoutX="27.0" layoutY="171.0" prefHeight="245.0" prefWidth="151.0" AnchorPane.leftAnchor="27.0" AnchorPane.rightAnchor="1102.0">
