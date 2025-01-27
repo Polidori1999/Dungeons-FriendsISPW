@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="HomePane" minHeight="720.0" minWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.marchidori.maininterface.HomeController">
+<AnchorPane fx:id="CharacterPane" minHeight="720.0" minWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.marchidori.maininterface.CharacterListController">
     <children>
         <VBox id="Vbox" layoutX="27.0" layoutY="171.0" prefHeight="245.0" prefWidth="151.0" AnchorPane.leftAnchor="27.0" AnchorPane.rightAnchor="1102.0">
             <children>
@@ -42,20 +43,12 @@
             </children>
         </VBox>
         <!-- Pulsante principale -->
-        <Button alignment="TOP_LEFT" layoutX="-8.0" layoutY="-3.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="349.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE">
+        <Button fx:id="goToHome" alignment="TOP_LEFT" layoutX="-8.0" layoutY="-3.0" mnemonicParsing="false" onAction="#onClickGoToHome" prefHeight="65.0" prefWidth="349.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE">
             <font>
                 <Font name="System Bold" size="30.0" />
             </font>
         </Button>
         <TextField id="SearchBar" alignment="CENTER" layoutX="525.0" layoutY="15.0" prefHeight="34.0" prefWidth="278.0" promptText="Cerca" />
-        <Text fill="WHITE" layoutX="1068.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filter By">
-            <font>
-                <Font name="System Bold" size="15.0" />
-            </font>
-        </Text>
-        <ComboBox id="ComboBox1" fx:id="ComboBox1" layoutX="1060.0" layoutY="200.0" prefHeight="34.0" prefWidth="158.0" promptText="Live/On-line" />
-        <ComboBox id="ComboBox1" fx:id="ComboBox2" layoutX="1060.0" layoutY="260.0" prefHeight="34.0" prefWidth="158.0" promptText="Duration" />
-        <ComboBox id="ComboBox1" fx:id="ComboBox3" layoutX="1060.0" layoutY="320.0" prefHeight="34.0" prefWidth="158.0" promptText="Num Players" />
         <Button fx:id="userButton" layoutX="1219.0" layoutY="11.0" mnemonicParsing="false" onAction="#onClickUser" prefHeight="41.0" prefWidth="45.0" style="-fx-background-color: transoparent;" textFill="#f80606">
             <graphic>
                 <ImageView blendMode="MULTIPLY" fitHeight="53.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
@@ -68,6 +61,20 @@
                 </ImageView>
             </graphic>
         </Button>
+      <Pane layoutX="8.0" layoutY="189.0" prefHeight="15.0" prefWidth="15.0" style="-fx-background-color: #e90000;" />
+      <TableView fx:id="tableViewChar" layoutX="235.0" layoutY="64.0" prefHeight="522.0" prefWidth="858.0">
+        <columns>
+            <TableColumn fx:id="tableViewCharName" minWidth="0.0" prefWidth="248.0" text="Name" />
+            <TableColumn fx:id="tableViewCharAge" prefWidth="133.3333740234375" text="Age" />
+            <TableColumn fx:id="tableViewCharClass" prefWidth="249.55560302734375" text="Class" />
+            <TableColumn fx:id="tableViewCharRace" prefWidth="227.111083984375" text="Race" />
+        </columns>
+      </TableView>
+      <Button fx:id="newCharacterButton" layoutX="611.0" layoutY="621.0" mnemonicParsing="false" onAction="#onClickNewCharacter" text="New Characater">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
 
     </children>
 </AnchorPane>

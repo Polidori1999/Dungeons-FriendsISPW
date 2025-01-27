@@ -3,6 +3,7 @@ module it.uniroma2.marchidori.maininterface {
     requires javafx.fxml;
     requires jdk.compiler;
     requires javafx.graphics;
+    requires java.desktop;
 
 
     opens it.uniroma2.marchidori.maininterface to javafx.fxml;
