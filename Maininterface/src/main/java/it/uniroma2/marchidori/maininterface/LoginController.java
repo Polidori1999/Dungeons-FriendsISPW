@@ -50,8 +50,6 @@ public class LoginController {
 
     @FXML
     void clickLogin(ActionEvent event) throws IOException {
-        login.maxWidthProperty().bind(anchorLoginPane.widthProperty().divide(2));
-        login.maxHeightProperty().bind(anchorLoginPane.heightProperty().divide(2));
         checkLogin();
     }
 

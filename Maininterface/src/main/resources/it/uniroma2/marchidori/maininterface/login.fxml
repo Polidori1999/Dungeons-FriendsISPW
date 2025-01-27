@@ -47,7 +47,7 @@
          </font></Button>
 
       <!-- Messaggio di errore login -->
-      <Label fx:id="wrongLogin" layoutX="20.0" layoutY="280.0" textFill="#e90000">
+      <Label fx:id="wrongLogin" layoutX="176.0" layoutY="125.0" prefHeight="21.0" prefWidth="250.0" textFill="#e90000">
          <font>
             <Font size="15.0" />
          </font>

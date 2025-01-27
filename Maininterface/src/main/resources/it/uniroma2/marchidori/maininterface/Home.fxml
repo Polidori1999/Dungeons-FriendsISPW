@@ -16,54 +16,54 @@
       <VBox id="Vbox" layoutX="27.0" layoutY="171.0" prefHeight="245.0" prefWidth="151.0" AnchorPane.leftAnchor="27.0" AnchorPane.rightAnchor="1102.0">
          <children>
             <!-- Pulsante My Characters -->
-            <Button fx:id="Mychar" mnemonicParsing="false" prefHeight="61.0" prefWidth="150.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
+            <Button fx:id="Mychar" mnemonicParsing="false" prefHeight="51.0" prefWidth="150.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
                <font>
-                  <Font name="System Bold Italic" size="51.0" />
+                  <Font name="System Bold" size="15.0" />
                </font>
             </Button>
             <!-- Pulsante Join Lobby -->
             <Button fx:id="Joinlobby" mnemonicParsing="false" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="System Bold" size="15.0" />
                </font>
             </Button>
             <!-- Pulsante Manage Lobby -->
             <Button fx:id="ManageLobby" mnemonicParsing="false" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="System Bold" size="15.0" />
                </font>
             </Button>
             <!-- Pulsante Consult Rules -->
             <Button fx:id="Consult_rules" mnemonicParsing="false" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="System Bold" size="15.0" />
                </font>
             </Button>
          </children>
       </VBox>
       <!-- Pulsante principale -->
-      <Button alignment="TOP_LEFT" layoutX="-44.0" layoutY="3.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="308.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE">
+      <Button alignment="TOP_LEFT" layoutX="-8.0" layoutY="-3.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="349.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE">
          <font>
-            <Font name="System Bold" size="12.0" />
+            <Font name="System Bold" size="30.0" />
          </font>
       </Button>
-      <TextField id="SearchBar" alignment="CENTER" layoutX="238.0" layoutY="3.0" promptText="Cerca" />
-      <Text fill="WHITE" layoutX="520.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filter By">
+      <TextField id="SearchBar" alignment="CENTER" layoutX="525.0" layoutY="15.0" prefHeight="34.0" prefWidth="278.0" promptText="Cerca" />
+      <Text fill="WHITE" layoutX="1068.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filter By">
          <font>
-            <Font name="System Bold" size="12.0" />
+            <Font name="System Bold" size="15.0" />
          </font>
       </Text>
-      <ComboBox id="ComboBox1" fx:id="ComboBox1" layoutX="436.0" layoutY="100.0" prefWidth="150.0" promptText="Live/On-line" />
-      <ComboBox id="ComboBox1" fx:id="ComboBox2" layoutX="436.0" layoutY="142.0" prefWidth="150.0" promptText="Duration" />
-      <ComboBox id="ComboBox1" fx:id="ComboBox3" layoutX="436.0" layoutY="183.0" prefWidth="150.0" promptText="Num Players" />
-      <Button fx:id="AccountButton" layoutX="541.0" layoutY="3.0" mnemonicParsing="false" onAction="#goToLogin" style="-fx-background-color: transparent;" textFill="WHITE">
+      <ComboBox id="ComboBox1" fx:id="ComboBox1" layoutX="1060.0" layoutY="200.0" prefHeight="34.0" prefWidth="158.0" promptText="Live/On-line" />
+      <ComboBox id="ComboBox1" fx:id="ComboBox2" layoutX="1060.0" layoutY="260.0" prefHeight="34.0" prefWidth="158.0" promptText="Duration" />
+      <ComboBox id="ComboBox1" fx:id="ComboBox3" layoutX="1060.0" layoutY="320.0" prefHeight="34.0" prefWidth="158.0" promptText="Num Players" />
+      <Button fx:id="userButton" layoutX="1219.0" layoutY="11.0" mnemonicParsing="false" onAction="#onClickUser" prefHeight="41.0" prefWidth="45.0" style="-fx-background-color: transoparent;" textFill="#f80606">
          <graphic>
-            <ImageView fitHeight="26.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView blendMode="MULTIPLY" fitHeight="53.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@icons8-utente-uomo-cerchiato-24.png" />
+                  <Image url="@user_icon.jpg" />
                </image>
                <effect>
-                  <ColorAdjust brightness="1.0" />
+                  <ColorAdjust contrast="1.0" hue="1.0" saturation="-1.0" />
                </effect>
             </ImageView>
          </graphic>
