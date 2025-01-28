@@ -7,23 +7,24 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class HomeController {
+public class HomeController implements Initializable {
 
     @FXML
     private AnchorPane HomePane;
 
-    // ComboBox per filtri: type, durata, numPlayers
+    // ComboBox per i filtri (type, durata, numPlayers)
     @FXML
     private ComboBox<String> ComboBox1; // "Online"/"Presenza"
     @FXML
@@ -42,19 +43,23 @@ public class HomeController {
     @FXML
     private Button userButton;
 
-    // ListView che mostrerà i LobbyBean
+    // **TableView** e colonne
     @FXML
-    private ListView<LobbyBean> lobbyListView;
+    private TableView<LobbyBean> lobbyTableView;
+    @FXML
+    private TableColumn<LobbyBean, String> lobbyNameColumn;
+    @FXML
+    private TableColumn<LobbyBean, Void> joinButtonColumn;
 
-    // Controller BCE che gestisce la logica di filtri/join
+    // Controller di logica per la gestione dei filtri e del join
     private JoinLobbyController joinLobbyController;
 
-    // Collezione di LobbyBean filtrati
+    // Lista osservabile contenente le lobby filtrate
     private ObservableList<LobbyBean> filteredLobbies;
 
     @FXML
-    public void initialize() {
-        // 1) Creiamo il JoinLobbyController PRIMA di usarlo!
+    public void initialize(URL url, ResourceBundle rb) {
+        // 1) Inizializziamo il JoinLobbyController
         joinLobbyController = new JoinLobbyController();
 
         // 2) Popoliamo i ComboBox
@@ -67,21 +72,63 @@ public class HomeController {
         ComboBox2.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
         ComboBox3.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
 
-        // 4) Primo caricamento (filtro vuoto => tutte le lobby)
+        // 4) Carichiamo le lobby iniziali (tutte)
         List<LobbyBean> initial = joinLobbyController.filterLobbies(null, null, null);
         filteredLobbies = FXCollections.observableArrayList(initial);
-        lobbyListView.setItems(filteredLobbies);
+
+        // 5) Inizializziamo la TableView
+        initTableView();
+    }
+
+    /**
+     * Inizializza la TableView, le sue colonne e collega la ObservableList.
+     */
+    private void initTableView() {
+        // Colonna "Lobby Name"
+        // Usa "name" perché in LobbyBean esiste getName()
+        lobbyNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        // Colonna con il pulsante "Join"
+        joinButtonColumn.setCellFactory(col -> new TableCell<>() {
+            private final Button joinBtn = new Button("Join");
+
+            {
+                // Azione per il pulsante "Join"
+                joinBtn.setOnAction((ActionEvent event) -> {
+                    // Recupera la riga su cui è stato cliccato
+                    LobbyBean lobby = getTableView().getItems().get(getIndex());
+                    // Chiama la logica per "joinare" la lobby
+                    joinLobbyController.joinLobby(lobby,"");
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(joinBtn);
+                }
+            }
+        });
+
+        // 6) Colleghiamo l'ObservableList alla TableView
+        lobbyTableView.setItems(filteredLobbies);
     }
 
     /**
      * Legge i valori dei ComboBox e invoca il JoinLobbyController per filtrare.
      */
     private void doFilter() {
-        String type = ComboBox1.getValue();
-        String duration = ComboBox2.getValue();
-        String numPlayers = ComboBox3.getValue();
+        // Prendiamo i filtri dai ComboBox
+        String type = ComboBox1.getValue();      // "Online"/"Presenza"
+        String duration = ComboBox2.getValue();  // "Singola"/"Campagna"
+        String numPlayers = ComboBox3.getValue(); // "2..8"
 
+        // Recuperiamo la lista filtrata
         List<LobbyBean> result = joinLobbyController.filterLobbies(type, duration, numPlayers);
+        // Aggiorniamo la collezione osservabile, che aggiornerà la TableView
         filteredLobbies.setAll(result);
     }
 
@@ -113,5 +160,5 @@ public class HomeController {
         stage.setScene(new Scene(root));
     }
 
-    // (Altri metodi per "Joinlobby", "ManageLobby", ecc., se li implementerai)
+    // ... Altri metodi (Joinlobby, ManageLobby, ecc.) se richiesti ...
 }
