@@ -9,6 +9,7 @@ public class CharacterSheet {
     public String age;
     public String classe;
     public Button editButton;
+    public Button deleteButton;
 
     CharacterSheet (String name, String race, String age, String classe) {
         this.name = name;
@@ -20,6 +21,7 @@ public class CharacterSheet {
         this.classe = classe;
         System.out.println(classe);
         this.editButton = new Button("Edit Character");
+        this.deleteButton = new Button("Delete Character");
     }
 
     public String getAge() {
@@ -53,6 +55,12 @@ public class CharacterSheet {
     }
     public void setEditButton(Button editButton) {
         this.editButton = editButton;
+    }
+    public Button getDeleteButton() {
+        return deleteButton;
+    }
+    public void setDeleteButton(Button deleteButton) {
+        this.deleteButton = deleteButton;
     }
 
 }

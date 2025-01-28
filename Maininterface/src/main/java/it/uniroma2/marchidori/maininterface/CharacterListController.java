@@ -56,12 +56,18 @@ public class CharacterListController implements Initializable {
     @FXML
     private TableColumn<CharacterSheet, String> tableViewCharRace;
 
+    // Colonna EDIT (definita in FXML, fx:id="tableViewCharButton")
     @FXML
     private TableColumn<CharacterSheet, Button> tableViewCharButton;
+
+    // Colonna DELETE (definita in FXML, fx:id="tableViewCharDelete")
+    @FXML
+    private TableColumn<CharacterSheet, Button> tableViewCharDelete;
 
     @FXML
     private Button userButton;
 
+    // Lista dei personaggi
     private final ObservableList<CharacterSheet> data = FXCollections.observableArrayList();
 
     @FXML
@@ -80,6 +86,7 @@ public class CharacterListController implements Initializable {
 
     @FXML
     void onClickNewCharacter(ActionEvent event) {
+        // Esempio: creiamo 3 personaggi fittizi
         CharacterSheet character1 = new CharacterSheet("giov", "human","17","barbaro");
         CharacterSheet character2 = new CharacterSheet("giov", "human","17","barbaro");
         CharacterSheet character3 = new CharacterSheet("giov", "human","17","barbaro");
@@ -93,54 +100,88 @@ public class CharacterListController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Impostiamo i ValueFactory per i campi "testuali"
+        // Impostiamo i ValueFactory per i campi testuali
         tableViewCharAge.setCellValueFactory(new PropertyValueFactory<>("Age"));
         tableViewCharClass.setCellValueFactory(new PropertyValueFactory<>("Class"));
         tableViewCharName.setCellValueFactory(new PropertyValueFactory<>("Name"));
         tableViewCharRace.setCellValueFactory(new PropertyValueFactory<>("Race"));
 
-        // Impostiamo il ValueFactory della colonna "Edit" per creare un nuovo Button per ogni riga
+        // ===================== COLONNA EDIT =====================
         tableViewCharButton.setCellValueFactory(cellData -> {
             Button editBtn = new Button("Edit");
             return new ReadOnlyObjectWrapper<>(editBtn);
         });
 
-        // Definiamo la CellFactory per mostrare e gestire il pulsante su ogni riga
         tableViewCharButton.setCellFactory(col -> new TableCell<CharacterSheet, Button>() {
             @Override
             protected void updateItem(Button item, boolean empty) {
                 super.updateItem(item, empty);
-
                 if (empty || item == null) {
                     setGraphic(null);
                 } else {
                     setGraphic(item);
-                    // Azione associata al pulsante
-                    item.setOnAction(e -> {
-                        CharacterSheet selectedChar = getTableView().getItems().get(getIndex());
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
-                        Parent root = null;
-                        try {
-                            root = loader.load();
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
-                        Stage stage = (Stage) CharacterPane.getScene().getWindow();
-                        Scene scene = new Scene(root);
-                        stage.setScene(scene);
 
-                        // Esempio: potresti aprire un nuovo FXML per l'edit
-                        // apriFinestraEdit(selectedChar);
+                    // Azione del pulsante "Edit"
+                    item.setOnAction(e -> {
+                        // 1) Recuperiamo il personaggio corrispondente
+                        CharacterSheet selectedChar = getTableView().getItems().get(getIndex());
+
+                        // 2) Apriamo la finestra CharacterSheet.fxml e passiamo il personaggio
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("CharacterSheet.fxml"));
+                            Parent root = loader.load();
+
+                            // Recuperiamo il suo controller
+                            CharacterSheetController sheetController = loader.getController();
+                            // Passiamo il CharacterSheet selezionato
+                            sheetController.setCharacterSheet(selectedChar);
+
+                            // Cambiamo scena
+                            Stage stage = (Stage) CharacterPane.getScene().getWindow();
+                            Scene scene = new Scene(root);
+                            stage.setScene(scene);
+
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
                     });
                 }
             }
         });
 
-        // Aggiungiamo un esempio di personaggio all'avvio
+        // ===================== COLONNA DELETE =====================
+        tableViewCharDelete.setCellValueFactory(cellData -> {
+            Button deleteBtn = new Button("Delete");
+            return new ReadOnlyObjectWrapper<>(deleteBtn);
+        });
+
+        tableViewCharDelete.setCellFactory(col -> new TableCell<CharacterSheet, Button>() {
+            @Override
+            protected void updateItem(Button item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(item);
+
+                    // Azione del pulsante "Delete"
+                    item.setOnAction(e -> {
+                        // Recupera il personaggio corrispondente
+                        CharacterSheet selectedChar = getTableView().getItems().get(getIndex());
+                        // Rimuove il personaggio dalla lista
+                        getTableView().getItems().remove(selectedChar);
+                        // Se non ci sono altri riferimenti all'oggetto,
+                        // il GC potrà deallocarlo successivamente
+                    });
+                }
+            }
+        });
+
+        // Aggiungiamo un personaggio di esempio all'avvio
         CharacterSheet prova = new CharacterSheet("probva","giov","17","barbaro");
         data.add(prova);
 
-        // Infine, carichiamo i dati nella TableView
+        // Carichiamo i dati iniziali nella TableView
         tableViewChar.setItems(data);
     }
 

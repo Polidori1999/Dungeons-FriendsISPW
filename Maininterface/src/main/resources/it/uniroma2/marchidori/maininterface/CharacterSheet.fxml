@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="characterSheetPane" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.marchidori.maininterface.CharacterSheetController">
+   <children>
+      <Button fx:id="userButton" layoutX="1222.0" layoutY="3.0" mnemonicParsing="false" onAction="#onClickUser" prefHeight="41.0" prefWidth="45.0" style="-fx-background-color: transoparent;" textFill="#f80606">
+         <graphic>
+            <ImageView blendMode="MULTIPLY" fitHeight="53.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@user_icon.jpg" />
+               </image>
+               <effect>
+                  <ColorAdjust contrast="1.0" hue="1.0" saturation="-1.0" />
+               </effect>
+            </ImageView>
+         </graphic>
+      </Button>
+      <VBox id="Vbox" layoutX="27.0" layoutY="171.0" prefHeight="245.0" prefWidth="151.0">
+         <children>
+            <Button fx:id="Mychar" mnemonicParsing="false" onAction="#onclickGoToMyCharList" prefHeight="51.0" prefWidth="150.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Button>
+            <Button fx:id="Joinlobby" mnemonicParsing="false" onAction="#onClickGoToJoinLobby" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Button>
+            <Button fx:id="ManageLobby" mnemonicParsing="false" onAction="#onClickGoToManageLobby" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Button>
+            <Button fx:id="Consult_rules" mnemonicParsing="false" onAction="#onClickGoToConsultRules" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
+      <Button fx:id="goToHome" alignment="TOP_LEFT" layoutX="-8.0" layoutY="-3.0" mnemonicParsing="false" onAction="#onClickGoToHome" prefHeight="65.0" prefWidth="349.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="30.0" />
+         </font>
+      </Button>
+      <Pane layoutX="8.0" layoutY="189.0" prefHeight="15.0" prefWidth="15.0" style="-fx-background-color: #e90000;" />
+      <Pane layoutX="238.0" layoutY="131.0" prefHeight="472.0" prefWidth="813.0" style="-fx-background-color: #ffffff;">
+         <children>
+            <TextField fx:id="charName" layoutX="13.0" layoutY="4.0" promptText="Name" />
+            <TextField fx:id="charAge" layoutX="167.0" layoutY="4.0" prefHeight="25.0" prefWidth="42.0" promptText="Age" />
+            <TextField fx:id="charClass" layoutX="214.0" layoutY="4.0" promptText="Class">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </TextField>
+            <TextField fx:id="charLevel" layoutX="369.0" layoutY="4.0" prefHeight="25.0" prefWidth="42.0" promptText="Level" />
+            <RadioButton fx:id="strenghtTS" layoutX="136.0" layoutY="80.0" mnemonicParsing="false" text="Strenght" />
+            <TextField fx:id="charRace" layoutX="415.0" layoutY="4.0" promptText="Race">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </TextField>
+            <Label layoutX="14.0" layoutY="80.0" text="Strenght" />
+            <Label layoutX="14.0" layoutY="130.0" text="Dexerity" />
+            <Label layoutX="14.0" layoutY="180.0" text="Constitution" />
+            <Label layoutX="14.0" layoutY="230.0" text="Intelligence" />
+            <Label layoutX="14.0" layoutY="280.0" text="Wisdom" />
+            <Label layoutX="14.0" layoutY="330.0" text="Charisma" />
+            <Line endX="-6.333343505859375" layoutX="233.0" layoutY="80.0" startX="-100.0" />
+            <Line endX="4.166656494140625" endY="-0.5" layoutX="222.0" layoutY="199.0" startX="-89.0" startY="-0.5" />
+            <Line endX="-76.5" endY="-67.0" layoutX="209.0" layoutY="147.0" startX="-76.5" startY="51.0" />
+            <Line endX="7.666656494140625" endY="-76.5" layoutX="219.0" layoutY="157.0" startX="7.666656494140625" startY="41.0" />
+            <RadioButton fx:id="dexerityTS" layoutX="136.0" layoutY="100.0" mnemonicParsing="false" text="Dexerity" />
+            <RadioButton fx:id="ConsitutionTS" layoutX="136.0" layoutY="120.0" mnemonicParsing="false" text="Constitution" />
+            <RadioButton fx:id="intelligenceTS" layoutX="136.0" layoutY="140.0" mnemonicParsing="false" text="Intelligence" />
+            <RadioButton fx:id="winsdomTS" layoutX="136.0" layoutY="160.0" mnemonicParsing="false" text="Wisdom" />
+            <RadioButton fx:id="charismaTS" layoutX="136.0" layoutY="180.0" mnemonicParsing="false" text="Charisma" />
+            <Label layoutX="132.0" layoutY="59.0" prefHeight="19.0" prefWidth="79.0" style="-fx-background-color: #ffffff;" text="Saving Throws" />
+            <TextField fx:id="charStrenght" layoutX="90.0" layoutY="76.0" prefHeight="25.0" prefWidth="31.0" promptText="n" />
+            <TextField fx:id="charDexerity" layoutX="90.0" layoutY="125.0" prefHeight="25.0" prefWidth="31.0" promptText="n" />
+            <TextField fx:id="charConstitution" layoutX="90.0" layoutY="177.0" prefHeight="25.0" prefWidth="31.0" promptText="n" />
+            <TextField fx:id="charIntelligence" layoutX="90.0" layoutY="225.0" prefHeight="25.0" prefWidth="31.0" promptText="n" />
+            <TextField fx:id="charWisdom" layoutX="90.0" layoutY="277.0" prefHeight="25.0" prefWidth="31.0" promptText="n" />
+            <TextField fx:id="charCharisma" layoutX="90.0" layoutY="326.0" prefHeight="25.0" prefWidth="31.0" promptText="n" />
+            <RadioButton fx:id="acrobatics" layoutX="244.0" layoutY="80.0" mnemonicParsing="false" text="Acrobatics (DEX)" />
+            <RadioButton fx:id="animalHandling" layoutX="244.0" layoutY="100.0" mnemonicParsing="false" text="Animal Hnadling (WIS)" />
+            <RadioButton fx:id="arcana" layoutX="244.0" layoutY="120.0" mnemonicParsing="false" text="Arcana (INT)" />
+            <RadioButton fx:id="athletics" layoutX="244.0" layoutY="140.0" mnemonicParsing="false" text="Athletics (STR)" />
+            <RadioButton fx:id="deception" layoutX="244.0" layoutY="160.0" mnemonicParsing="false" text="Deception (CHA)" />
+            <RadioButton fx:id="history" layoutX="244.0" layoutY="180.0" mnemonicParsing="false" text="History (INT)" />
+            <RadioButton fx:id="insight" layoutX="244.0" layoutY="200.0" mnemonicParsing="false" text="Insight (WIS)" />
+            <RadioButton fx:id="intimidation" layoutX="244.0" layoutY="220.0" mnemonicParsing="false" text="Intimidation (CHA)" />
+            <RadioButton fx:id="investigation" layoutX="244.0" layoutY="240.0" mnemonicParsing="false" text="Investigation (INT)" />
+            <RadioButton fx:id="medicine" layoutX="244.0" layoutY="260.0" mnemonicParsing="false" text="Medicine (WIS)" />
+            <RadioButton fx:id="nature" layoutX="244.0" layoutY="280.0" mnemonicParsing="false" text="Nature (INT)" />
+            <RadioButton fx:id="perception" layoutX="244.0" layoutY="300.0" mnemonicParsing="false" text="Perception (WIS)" />
+            <RadioButton fx:id="performance" layoutX="244.0" layoutY="320.0" mnemonicParsing="false" text="Performance (CHA)" />
+            <RadioButton fx:id="persuasion" layoutX="244.0" layoutY="340.0" mnemonicParsing="false" text="Persuasion (CHA)" />
+            <RadioButton fx:id="religion" layoutX="244.0" layoutY="360.0" mnemonicParsing="false" text="Religion (INT)" />
+            <RadioButton fx:id="sleightOfHand" layoutX="244.0" layoutY="380.0" mnemonicParsing="false" text="Sleight of hand (DEX)" />
+            <RadioButton fx:id="stealth" layoutX="244.0" layoutY="400.0" mnemonicParsing="false" text="Stealth (DEX)" />
+            <RadioButton fx:id="survival" layoutX="244.0" layoutY="420.0" mnemonicParsing="false" text="Survival (WIS)" />
+            <Line endX="4.166656494140625" endY="231.66668701171875" layoutX="232.0" layoutY="209.0" startX="4.166656494140625" startY="-129.22222900390625" />
+            <Line endX="4.166656494140625" endY="231.66668701171875" layoutX="407.0" layoutY="209.0" startX="4.166656494140625" startY="-129.22222900390625" />
+            <Line endX="167.6666259765625" endY="-10.72222900390625" layoutX="243.0" layoutY="90.0" startX="-6.77777099609375" startY="-10.72222900390625" />
+            <Line endX="25.6666259765625" endY="0.16668701171875" layoutX="385.0" layoutY="441.0" startX="-149.33334350585938" startY="0.16668701171875" />
+            <Label layoutX="235.0" layoutY="59.0" text="Skills" />
+         </children>
+      </Pane>
+      <Button fx:id="saveButton" layoutX="982.0" layoutY="615.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #e90000;" text="Save" textFill="WHITE" />
+      <Button fx:id="goBackToList" layoutX="238.0" layoutY="615.0" mnemonicParsing="false" onAction="#onClickGoBackToList" prefHeight="25.0" prefWidth="88.0" style="-fx-background-color: #e90000;" text="Return to list" textFill="WHITE" />
+      <Label fx:id="errorMessage" layoutX="626.0" layoutY="105.0" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
