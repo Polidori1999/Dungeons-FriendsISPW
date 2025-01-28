@@ -14,7 +14,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         primaryStage.setResizable(true); //non ridimensionabile
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("CharacterList.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         primaryStage.setTitle("Login_Screen");
         primaryStage.setScene(scene);

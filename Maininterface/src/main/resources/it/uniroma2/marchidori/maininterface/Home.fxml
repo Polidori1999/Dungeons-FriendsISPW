@@ -14,130 +14,217 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="HomePane" minHeight="720.0" minWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.marchidori.maininterface.HomeController">
-   <children>
-      <VBox id="Vbox" layoutX="27.0" layoutY="171.0" prefHeight="245.0" prefWidth="151.0" AnchorPane.leftAnchor="27.0" AnchorPane.rightAnchor="1102.0">
-         <children>
-            <!-- Pulsante My Characters -->
-            <Button fx:id="Mychar" mnemonicParsing="false" onAction="#onClickMyCharacter" prefHeight="51.0" prefWidth="150.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="15.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="20.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@Lista.png" />
-                     </image>
-                     <effect>
-                        <ColorAdjust brightness="1.0" />
-                     </effect>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <!-- Pulsante Join Lobby -->
-            <Button fx:id="Joinlobby" mnemonicParsing="false" prefHeight="45.0" prefWidth="128.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="15.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="20.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@Coppa.png" />
-                     </image>
-                     <effect>
-                        <ColorAdjust brightness="1.0" />
-                     </effect>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <!-- Pulsante Manage Lobby -->
-            <Button fx:id="ManageLobby" mnemonicParsing="false" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="15.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="81.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@Lucchetto.png" />
-                     </image>
-                     <effect>
-                        <ColorAdjust brightness="1.0" />
-                     </effect>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <!-- Pulsante Consult Rules -->
-            <Button fx:id="Consult_rules" mnemonicParsing="false" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="15.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="86.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@joystick_game_5561.png" />
-                     </image>
-                     <effect>
-                        <ColorAdjust brightness="1.0" />
-                     </effect>
-                  </ImageView>
-               </graphic>
-            </Button>
-         </children>
-      </VBox>
-      <!-- Pulsante principale -->
-      <Button alignment="TOP_LEFT" layoutX="-8.0" layoutY="-3.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="349.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="30.0" />
-         </font>
-      </Button>
-      <TextField id="SearchBar" alignment="CENTER" layoutX="525.0" layoutY="15.0" prefHeight="34.0" prefWidth="278.0" promptText="Cerca" />
-      <Text fill="WHITE" layoutX="1068.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filter By">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font>
-      </Text>
-      <ComboBox fx:id="ComboBox1" layoutX="1060.0" layoutY="200.0" prefHeight="34.0" prefWidth="158.0" promptText="Live/On-line">
-         <items>
-            <FXCollections fx:factory="observableArrayList">
-               <String fx:value="Online" />
-               <String fx:value="Presenza" />
-            </FXCollections>
-         </items>
-      </ComboBox>
-      <ComboBox fx:id="ComboBox2" layoutX="1060.0" layoutY="260.0" prefHeight="34.0" prefWidth="158.0" promptText="Duration">
-         <items>
-            <FXCollections fx:factory="observableArrayList">
-               <String fx:value="Singola" />
-               <String fx:value="Campagna" />
-            </FXCollections>
-         </items>
-      </ComboBox>
-      <ComboBox fx:id="ComboBox3" layoutX="1060.0" layoutY="320.0" prefHeight="34.0" prefWidth="158.0" promptText="Num Players">
-         <items>
-            <FXCollections fx:factory="observableArrayList">
-               <String fx:value="2" />
-               <String fx:value="3" />
-               <String fx:value="4" />
-               <String fx:value="5" />
-               <String fx:value="6" />
-               <String fx:value="7" />
-               <String fx:value="8" />
-            </FXCollections>
-         </items>
-      </ComboBox>
-      <ListView fx:id="lobbyListView" layoutX="525.0" layoutY="160.0" prefHeight="200.0" prefWidth="278.0" />
+<AnchorPane fx:id="HomePane" minHeight="720.0" minWidth="1280.0"
+            style="-fx-background-color: #292932;"
+            xmlns="http://javafx.com/javafx/21.0.0"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="it.uniroma2.marchidori.maininterface.HomeController">
 
-      <Button fx:id="userButton" layoutX="1219.0" layoutY="11.0" mnemonicParsing="false" onAction="#onClickUser" prefHeight="41.0" prefWidth="45.0" style="-fx-background-color: transparent;" textFill="#f80606">
-         <graphic>
-            <ImageView blendMode="MULTIPLY" fitHeight="53.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@user_icon.jpg" />
-               </image>
-               <effect>
-                  <ColorAdjust contrast="1.0" hue="1.0" saturation="-1.0" />
-               </effect>
-            </ImageView>
-         </graphic>
-      </Button>
-   </children>
+    <children>
+        <VBox fx:id="Vbox"
+              layoutX="27.0" layoutY="171.0"
+              prefHeight="245.0" prefWidth="151.0"
+              AnchorPane.leftAnchor="27.0"
+              AnchorPane.rightAnchor="1102.0">
+            <children>
+                <!-- Pulsante My Characters -->
+                <Button fx:id="Mychar" mnemonicParsing="false" onAction="#onClickMyCharacter"
+                        prefHeight="51.0" prefWidth="150.0"
+                        style="-fx-background-color: transparent;"
+                        text="MyCharacters" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="16.0"
+                                   pickOnBounds="true"
+                                   preserveRatio="true">
+                            <image>
+                                <Image url="@Lista.png" />
+                            </image>
+                            <effect>
+                                <ColorAdjust brightness="1.0" />
+                            </effect>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <!-- Pulsante Join Lobby -->
+                <Button fx:id="Joinlobby" mnemonicParsing="false"
+                        prefHeight="45.0" prefWidth="128.0"
+                        style="-fx-background-color: transparent;"
+                        text="Join Lobby" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="18.0"
+                                   pickOnBounds="true"
+                                   preserveRatio="true">
+                            <image>
+                                <Image url="@Coppa.png" />
+                            </image>
+                            <effect>
+                                <ColorAdjust brightness="1.0" />
+                            </effect>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <!-- Pulsante Manage Lobby -->
+                <Button fx:id="ManageLobby" mnemonicParsing="false"
+                        prefHeight="45.0" prefWidth="151.0"
+                        style="-fx-background-color: transparent;"
+                        text="Manage Lobby" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="81.0" fitWidth="19.0"
+                                   pickOnBounds="true"
+                                   preserveRatio="true">
+                            <image>
+                                <Image url="@Lucchetto.png" />
+                            </image>
+                            <effect>
+                                <ColorAdjust brightness="1.0" />
+                            </effect>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <!-- Pulsante Consult Rules -->
+                <Button fx:id="Consult_rules" mnemonicParsing="false"
+                        prefHeight="45.0" prefWidth="151.0"
+                        style="-fx-background-color: transparent;"
+                        text="Consult Rules" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="86.0" fitWidth="23.0"
+                                   pickOnBounds="true"
+                                   preserveRatio="true">
+                            <image>
+                                <Image url="@joystick_game_5561.png" />
+                            </image>
+                            <effect>
+                                <ColorAdjust brightness="1.0" />
+                            </effect>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </children>
+        </VBox>
+
+        <!-- Pulsante principale -->
+        <Button alignment="TOP_LEFT" layoutX="-8.0" layoutY="-3.0"
+                mnemonicParsing="false"
+                prefHeight="65.0"
+                prefWidth="349.0"
+                style="-fx-background-color: transparent;"
+                text="Dungeons &amp; Friends"
+                textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="30.0" />
+            </font>
+        </Button>
+
+        <!-- Campo di ricerca -->
+        <TextField fx:id="SearchBar"
+                   alignment="CENTER"
+                   layoutX="525.0"
+                   layoutY="15.0"
+                   prefHeight="34.0"
+                   prefWidth="278.0"
+                   promptText="Cerca" />
+
+        <Text fill="WHITE"
+              layoutX="1068.0"
+              layoutY="176.0"
+              strokeType="OUTSIDE"
+              strokeWidth="0.0"
+              text="Filter By">
+            <font>
+                <Font name="System Bold" size="15.0" />
+            </font>
+        </Text>
+
+        <ComboBox fx:id="ComboBox1"
+                  layoutX="1060.0"
+                  layoutY="200.0"
+                  prefHeight="34.0"
+                  prefWidth="158.0"
+                  promptText="Live/On-line">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Online" />
+                    <String fx:value="Presenza" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+
+        <ComboBox fx:id="ComboBox2"
+                  layoutX="1060.0"
+                  layoutY="260.0"
+                  prefHeight="34.0"
+                  prefWidth="158.0"
+                  promptText="Duration">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Singola" />
+                    <String fx:value="Campagna" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+
+        <ComboBox fx:id="ComboBox3"
+                  layoutX="1060.0"
+                  layoutY="320.0"
+                  prefHeight="34.0"
+                  prefWidth="158.0"
+                  promptText="Num Players">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="2" />
+                    <String fx:value="3" />
+                    <String fx:value="4" />
+                    <String fx:value="5" />
+                    <String fx:value="6" />
+                    <String fx:value="7" />
+                    <String fx:value="8" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+
+        <ListView fx:id="lobbyListView"
+                  layoutX="525.0"
+                  layoutY="160.0"
+                  prefHeight="200.0"
+                  prefWidth="278.0" />
+
+        <Button fx:id="userButton"
+                layoutX="1219.0"
+                layoutY="11.0"
+                mnemonicParsing="false"
+                onAction="#onClickUser"
+                prefHeight="41.0"
+                prefWidth="45.0"
+                style="-fx-background-color: transparent;"
+                textFill="#f80606">
+            <graphic>
+                <ImageView blendMode="MULTIPLY"
+                           fitHeight="53.0"
+                           fitWidth="44.0"
+                           pickOnBounds="true"
+                           preserveRatio="true">
+                    <image>
+                        <Image url="@user_icon.jpg" />
+                    </image>
+                    <effect>
+                        <ColorAdjust contrast="1.0"
+                                     hue="1.0"
+                                     saturation="-1.0" />
+                    </effect>
+                </ImageView>
+            </graphic>
+        </Button>
+    </children>
 </AnchorPane>
