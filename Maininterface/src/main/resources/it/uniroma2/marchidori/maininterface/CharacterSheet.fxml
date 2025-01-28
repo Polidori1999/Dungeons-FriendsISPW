@@ -121,7 +121,7 @@
             <Label layoutX="235.0" layoutY="59.0" text="Skills" />
          </children>
       </Pane>
-      <Button fx:id="saveButton" layoutX="982.0" layoutY="615.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #e90000;" text="Save" textFill="WHITE" />
+      <Button fx:id="saveButton" layoutX="982.0" layoutY="615.0" mnemonicParsing="false" onAction="#onClickSaveCharacter" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #e90000;" text="Save" textFill="WHITE" />
       <Button fx:id="goBackToList" layoutX="238.0" layoutY="615.0" mnemonicParsing="false" onAction="#onClickGoBackToList" prefHeight="25.0" prefWidth="88.0" style="-fx-background-color: #e90000;" text="Return to list" textFill="WHITE" />
       <Label fx:id="errorMessage" layoutX="626.0" layoutY="105.0" textFill="WHITE">
          <font>

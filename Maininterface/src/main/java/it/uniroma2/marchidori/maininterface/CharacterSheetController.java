@@ -50,9 +50,7 @@ public class CharacterSheetController {
     @FXML
     private TextField charLevel;
 
-    // Ecc. per tutti i campi che hai...
-
-    // Pulsanti o RadioButton o Label vari...
+    // Pulsanti / bottoni vari
     @FXML
     private Button goBackToList;
 
@@ -62,40 +60,89 @@ public class CharacterSheetController {
     @FXML
     private Button saveButton;
 
-    // Salviamo qui il character ricevuto
+    // --- Variabili di supporto per gestire Creazione o Modifica ---
+    /** Se creazione = true, stiamo creando un nuovo personaggio. Se false, stiamo modificando. */
+    private boolean creationMode = false;
+
+    /** Riferimento al personaggio in caso di modifica */
     private CharacterSheet currentCharacter;
 
     /**
-     * Questo metodo viene chiamato dal Controller "CharacterListController"
-     * quando si clicca "Edit". Ci permette di ricevere il CharacterSheet da visualizzare.
+     * Riferimento al controller padre (CharacterListController),
+     * per poter aggiungere un nuovo personaggio all'ObservableList, se siamo in creationMode.
+     */
+    private CharacterListController parentController;
+
+    // -------------------------------------------------------------
+    //              METODI DI CONFIGURAZIONE DEL CONTROLLER
+    // -------------------------------------------------------------
+
+    /**
+     * Viene chiamato dal CharacterListController se siamo in modalità creazione.
+     */
+    public void setCreationMode(boolean creationMode) {
+        this.creationMode = creationMode;
+        if (creationMode) {
+            // Se vogliamo partire con i campi vuoti
+            charName.setText("");
+            charRace.setText("");
+            charAge.setText("");
+            charClass.setText("");
+            charStrenght.setText("");
+            charDexerity.setText("");
+            charConstitution.setText("");
+            charIntelligence.setText("");
+            charWisdom.setText("");
+            charCharisma.setText("");
+            charLevel.setText("");
+        }
+    }
+
+    /**
+     * Viene chiamato dal CharacterListController per passare
+     * un riferimento a se stesso (così possiamo aggiungere un personaggio).
+     */
+    public void setParentController(CharacterListController parentController) {
+        this.parentController = parentController;
+    }
+
+    /**
+     * Viene chiamato dal CharacterListController quando si clicca "Edit".
+     * Imposta la modalità "modifica" e popola i campi con i dati del personaggio.
      */
     public void setCharacterSheet(CharacterSheet character) {
-        // Salviamo il riferimento
         this.currentCharacter = character;
+        this.creationMode = false; // Stiamo modificando un personaggio esistente
 
         // Popoliamo i campi
         charName.setText(character.getName());
         charRace.setText(character.getRace());
         charAge.setText(character.getAge());
-        charClass.setText(character.getClasse());  // Attento al nome se è "getClass()" vs "getClass_()"
-        // e così via per Forza, Destrezza, etc. se li hai nel model
-        // Esempio:
-        // charStrenght.setText(character.getStrength());
-        // charDexerity.setText(character.getDexterity());
-        // ... ecc.
+        charClass.setText(character.getClasse());
+        charStrenght.setText(character.getStrength());
+        charDexerity.setText(character.getDexterity());
+        charConstitution.setText(character.getConstitution());
+        charIntelligence.setText(character.getIntelligence());
+        charWisdom.setText(character.getWisdom());
+        charCharisma.setText(character.getCharisma());
+        charLevel.setText(character.getLevel());
     }
+
+    // -------------------------------------------------------------
+    //                 METODI DI NAVIGAZIONE INALTERATI
+    //     (manteniamo i tuoi metodi come da codice originale)
+    // -------------------------------------------------------------
 
     @FXML
     void onClickGoBackToList(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("CharacterList.fxml"));
-        Parent root = loader.load();
+        // Invece di ricaricare CharacterList.fxml, ci limitiamo a chiudere questa finestra
         Stage stage = (Stage) characterSheetPane.getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+        stage.close();
     }
 
     @FXML
     void onClickGoToHome(ActionEvent event) throws IOException {
+        // Rimane invariato (se vuoi davvero cambiare finestra)
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Home.fxml"));
         Parent root = loader.load();
         Stage stage = (Stage) characterSheetPane.getScene().getWindow();
@@ -125,27 +172,62 @@ public class CharacterSheetController {
 
     @FXML
     void onclickGoToMyCharList(ActionEvent event) throws IOException {
+        // Esempio: potresti voler chiudere la finestra corrente, o ricaricare la lista
         FXMLLoader loader = new FXMLLoader(getClass().getResource("CharacterList.fxml"));
         Parent root = loader.load();
         Stage stage = (Stage) characterSheetPane.getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+        stage.setScene(new Scene(root));
     }
 
+    // -------------------------------------------------------------
+    //           SALVATAGGIO DEL PERSONAGGIO (BOTTONE SAVE)
+    // -------------------------------------------------------------
+
     @FXML
-    void onClickSaveCharacter(ActionEvent event) {
-        // Esempio: salva i campi nell’oggetto
-        // Attento a convertire eventuali stringhe in interi se necessario.
-        currentCharacter.setName(charName.getText());
-        currentCharacter.setRace(charRace.getText());
-        currentCharacter.setAge(charAge.getText());
-        currentCharacter.setClasse(charClass.getText()); // o setClass() se la proprietà si chiama diversamente
+    void onClickSaveCharacter(ActionEvent event) throws IOException {
+        if (creationMode) {
+            // Creiamo un nuovo CharacterSheet
+            CharacterSheet newCharacter = new CharacterSheet(
+                    charName.getText(),
+                    charRace.getText(),
+                    charAge.getText(),
+                    charClass.getText(),
+                    charLevel.getText(),
+                    charStrenght.getText(),
+                    charDexerity.getText(),
+                    charIntelligence.getText(),
+                    charWisdom.getText(),
+                    charCharisma.getText(),
+                    charConstitution.getText()
+            );
 
-        // Se devi aggiornare la TableView, potresti ricaricarla
-        // ma serve un riferimento al controller principale o un modello condiviso
-        // A seconda di come gestisci i tuoi dati, potresti semplicemente
-        // salvare l'oggetto e poi tornare alla lista con "onClickGoBackToList(...)"
+            // Aggiungiamolo alla lista nel controller padre
+            if (parentController != null) {
+                parentController.addNewCharacter(newCharacter);
+            }
+            System.out.println("Creato nuovo personaggio: " + newCharacter);
 
-        System.out.println("Dati aggiornati: " + currentCharacter);
+        } else {
+            // Stiamo modificando un personaggio esistente
+            if (currentCharacter != null) {
+                currentCharacter.setName(charName.getText());
+                currentCharacter.setRace(charRace.getText());
+                currentCharacter.setAge(charAge.getText());
+                currentCharacter.setClasse(charClass.getText());
+                currentCharacter.setLevel(charLevel.getText());
+                currentCharacter.setStrength(charStrenght.getText());
+                currentCharacter.setDexterity(charDexerity.getText());
+                currentCharacter.setIntelligence(charIntelligence.getText());
+                currentCharacter.setWisdom(charWisdom.getText());
+                currentCharacter.setCharisma(charCharisma.getText());
+                currentCharacter.setConstitution(charConstitution.getText());
+
+                System.out.println("Aggiornato personaggio esistente: " + currentCharacter);
+            }
+        }
+
+        // Chiudiamo la finestra (invece di ricaricare CharacterList.fxml)
+        Stage stage = (Stage) characterSheetPane.getScene().getWindow();
+        stage.close();
     }
 }

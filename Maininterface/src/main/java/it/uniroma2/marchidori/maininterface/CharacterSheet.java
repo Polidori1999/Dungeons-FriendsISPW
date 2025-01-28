@@ -5,21 +5,31 @@ import java.awt.*;
 
 public class CharacterSheet {
     public String name;
+    public String level;
     public String race;
     public String age;
     public String classe;
     public Button editButton;
     public Button deleteButton;
+    public String strength;
+    public String dexterity;
+    public String intelligence;
+    public String wisdom;
+    public String charisma;
+    public String constitution;
 
-    CharacterSheet (String name, String race, String age, String classe) {
+    CharacterSheet (String name, String race, String age, String classe, String level, String strength, String dexterity, String intelligence, String wisdom, String charisma, String constitution) {
         this.name = name;
-        System.out.println(name);
         this.race = race;
-        System.out.println(race);
         this.age = age;
-        System.out.println(age);
         this.classe = classe;
-        System.out.println(classe);
+        this.strength = strength;
+        this.dexterity = dexterity;
+        this.intelligence = intelligence;
+        this.wisdom = wisdom;
+        this.charisma = charisma;
+        this.constitution = constitution;
+        this.level = level;
         this.editButton = new Button("Edit Character");
         this.deleteButton = new Button("Delete Character");
     }
@@ -62,5 +72,46 @@ public class CharacterSheet {
     public void setDeleteButton(Button deleteButton) {
         this.deleteButton = deleteButton;
     }
-
+    public String getStrength() {
+        return strength;
+    }
+    public void setStrength(String strength) {
+        this.strength = strength;
+    }
+    public String getDexterity() {
+        return dexterity;
+    }
+    public void setDexterity(String dexterity) {
+        this.dexterity = dexterity;
+    }
+    public String getIntelligence() {
+        return intelligence;
+    }
+    public void setIntelligence(String intelligence) {
+        this.intelligence = intelligence;
+    }
+    public String getWisdom() {
+        return wisdom;
+    }
+    public void setWisdom(String wisdom) {
+        this.wisdom = wisdom;
+    }
+    public String getCharisma() {
+        return charisma;
+    }
+    public void setCharisma(String charisma) {
+        this.charisma = charisma;
+    }
+    public String getConstitution() {
+        return constitution;
+    }
+    public void setConstitution(String constitution) {
+        this.constitution = constitution;
+    }
+    public String getLevel() {
+        return level;
+    }
+    public void setLevel(String level) {
+        this.level = level;
+    }
 }

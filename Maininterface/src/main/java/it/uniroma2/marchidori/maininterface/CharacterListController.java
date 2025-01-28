@@ -9,12 +9,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,25 +22,16 @@ import java.util.ResourceBundle;
 public class CharacterListController implements Initializable {
 
     @FXML
-    private Button Consult_rules;
-
-    @FXML
     private AnchorPane CharacterPane;
 
     @FXML
-    private Button Joinlobby;
-
-    @FXML
-    private Button ManageLobby;
-
-    @FXML
-    private Button Mychar;
-
-    @FXML
-    private Button newCharacterButton;
-
-    @FXML
     private TableView<CharacterSheet> tableViewChar;
+
+    @FXML
+    private TableColumn<CharacterSheet, String> tableViewCharName;
+
+    @FXML
+    private TableColumn<CharacterSheet, String> tableViewCharRace;
 
     @FXML
     private TableColumn<CharacterSheet, String> tableViewCharAge;
@@ -51,62 +40,22 @@ public class CharacterListController implements Initializable {
     private TableColumn<CharacterSheet, String> tableViewCharClass;
 
     @FXML
-    private TableColumn<CharacterSheet, String> tableViewCharName;
-
+    private TableColumn<CharacterSheet, Button> tableViewCharButton;  // colonna "Edit"
     @FXML
-    private TableColumn<CharacterSheet, String> tableViewCharRace;
+    private TableColumn<CharacterSheet, Button> tableViewCharDelete;  // colonna "Delete"
 
-    // Colonna EDIT (definita in FXML, fx:id="tableViewCharButton")
-    @FXML
-    private TableColumn<CharacterSheet, Button> tableViewCharButton;
-
-    // Colonna DELETE (definita in FXML, fx:id="tableViewCharDelete")
-    @FXML
-    private TableColumn<CharacterSheet, Button> tableViewCharDelete;
-
-    @FXML
-    private Button userButton;
-
-    // Lista dei personaggi
+    // La tua lista di personaggi
     private final ObservableList<CharacterSheet> data = FXCollections.observableArrayList();
-
-    @FXML
-    void onClickGoToHome(ActionEvent event) throws IOException {
-        goToHome();
-    }
-
-    private void goToHome() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Home.fxml"));
-        Parent root = loader.load();
-
-        Stage stage = (Stage) CharacterPane.getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-    }
-
-    @FXML
-    void onClickNewCharacter(ActionEvent event) {
-        // Esempio: creiamo 3 personaggi fittizi
-        CharacterSheet character1 = new CharacterSheet("giov", "human","17","barbaro");
-        CharacterSheet character2 = new CharacterSheet("giov", "human","17","barbaro");
-        CharacterSheet character3 = new CharacterSheet("giov", "human","17","barbaro");
-
-        data.add(character1);
-        data.add(character2);
-        data.add(character3);
-
-        tableViewChar.setItems(data);
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Impostiamo i ValueFactory per i campi testuali
-        tableViewCharAge.setCellValueFactory(new PropertyValueFactory<>("Age"));
-        tableViewCharClass.setCellValueFactory(new PropertyValueFactory<>("Class"));
-        tableViewCharName.setCellValueFactory(new PropertyValueFactory<>("Name"));
-        tableViewCharRace.setCellValueFactory(new PropertyValueFactory<>("Race"));
+        // Associazioni "classiche" colonne -> campi
+        tableViewCharName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tableViewCharRace.setCellValueFactory(new PropertyValueFactory<>("race"));
+        tableViewCharAge.setCellValueFactory(new PropertyValueFactory<>("age"));
+        tableViewCharClass.setCellValueFactory(new PropertyValueFactory<>("classe"));
 
-        // ===================== COLONNA EDIT =====================
+        // ----- Colonna EDIT -----
         tableViewCharButton.setCellValueFactory(cellData -> {
             Button editBtn = new Button("Edit");
             return new ReadOnlyObjectWrapper<>(editBtn);
@@ -120,36 +69,16 @@ public class CharacterListController implements Initializable {
                     setGraphic(null);
                 } else {
                     setGraphic(item);
-
-                    // Azione del pulsante "Edit"
+                    // Azione "Edit"
                     item.setOnAction(e -> {
-                        // 1) Recuperiamo il personaggio corrispondente
                         CharacterSheet selectedChar = getTableView().getItems().get(getIndex());
-
-                        // 2) Apriamo la finestra CharacterSheet.fxml e passiamo il personaggio
-                        try {
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("CharacterSheet.fxml"));
-                            Parent root = loader.load();
-
-                            // Recuperiamo il suo controller
-                            CharacterSheetController sheetController = loader.getController();
-                            // Passiamo il CharacterSheet selezionato
-                            sheetController.setCharacterSheet(selectedChar);
-
-                            // Cambiamo scena
-                            Stage stage = (Stage) CharacterPane.getScene().getWindow();
-                            Scene scene = new Scene(root);
-                            stage.setScene(scene);
-
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                        }
+                        openEditCharacterModal(selectedChar);
                     });
                 }
             }
         });
 
-        // ===================== COLONNA DELETE =====================
+        // ----- Colonna DELETE -----
         tableViewCharDelete.setCellValueFactory(cellData -> {
             Button deleteBtn = new Button("Delete");
             return new ReadOnlyObjectWrapper<>(deleteBtn);
@@ -163,30 +92,108 @@ public class CharacterListController implements Initializable {
                     setGraphic(null);
                 } else {
                     setGraphic(item);
-
-                    // Azione del pulsante "Delete"
+                    // Azione "Delete"
                     item.setOnAction(e -> {
-                        // Recupera il personaggio corrispondente
                         CharacterSheet selectedChar = getTableView().getItems().get(getIndex());
-                        // Rimuove il personaggio dalla lista
                         getTableView().getItems().remove(selectedChar);
-                        // Se non ci sono altri riferimenti all'oggetto,
-                        // il GC potrà deallocarlo successivamente
                     });
                 }
             }
         });
 
-        // Aggiungiamo un personaggio di esempio all'avvio
-        CharacterSheet prova = new CharacterSheet("probva","giov","17","barbaro");
-        data.add(prova);
-
-        // Carichiamo i dati iniziali nella TableView
+        // Imposta la lista
         tableViewChar.setItems(data);
+
+        // Esempio: se vuoi aggiungere un personaggio di default
+        // data.add(new CharacterSheet("Eroe", "Umano", "20", "Mago", ...));
     }
 
+    // ---------------------------------------------------------
+    //                   BOTTONE: NEW CHARACTER
+    // ---------------------------------------------------------
     @FXML
-    void onClickUser(ActionEvent event) throws IOException {
-        goToHome();
+    void onClickNewCharacter(ActionEvent event) {
+        openCreateCharacterModal();
+    }
+
+    // ---------------------------------------------------------
+    //    Apri una FINESTRA secondaria (Stage modale) per CREARE
+    // ---------------------------------------------------------
+    private void openCreateCharacterModal() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("CharacterSheet.fxml"));
+            Parent root = loader.load();
+
+            // Recupera il controller
+            CharacterSheetController sheetController = loader.getController();
+            // Indica che siamo in "creation mode"
+            sheetController.setCreationMode(true);
+            // Passiamo a "sheetController" un riferimento a questo controller
+            sheetController.setParentController(this);
+
+            // Crea una finestra secondaria "modale"
+            Stage modalStage = new Stage();
+            modalStage.setTitle("Crea Nuovo Personaggio");
+            modalStage.initOwner(CharacterPane.getScene().getWindow());
+            modalStage.initModality(Modality.WINDOW_MODAL);
+
+            // Imposta la scena
+            modalStage.setScene(new Scene(root));
+            // Mostra la finestra e ATTENDE la chiusura
+            modalStage.showAndWait();
+
+            // Quando la finestra si chiude, se l'utente ha cliccato "Save",
+            // il personaggio risulta aggiunto. Aggiorniamo (se necessario):
+            tableViewChar.refresh();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    // ---------------------------------------------------------
+    //    Apri una FINESTRA secondaria (Stage modale) per EDIT
+    // ---------------------------------------------------------
+    private void openEditCharacterModal(CharacterSheet characterToEdit) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("CharacterSheet.fxml"));
+            Parent root = loader.load();
+
+            CharacterSheetController sheetController = loader.getController();
+            // Impostiamo i campi con il personaggio esistente
+            sheetController.setCharacterSheet(characterToEdit);
+
+            // Crea uno Stage modale
+            Stage modalStage = new Stage();
+            modalStage.setTitle("Modifica Personaggio");
+            modalStage.initOwner(CharacterPane.getScene().getWindow());
+            modalStage.initModality(Modality.WINDOW_MODAL);
+
+            modalStage.setScene(new Scene(root));
+            modalStage.showAndWait();
+
+            // Alla chiusura, il personaggio è già stato modificato nella ObservableList
+            tableViewChar.refresh();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    // ---------------------------------------------------------
+    //    Metodo invocato dal CharacterSheetController
+    //    quando l'utente salva un NUOVO personaggio
+    // ---------------------------------------------------------
+    public void addNewCharacter(CharacterSheet newChar) {
+        data.add(newChar);
+        // La table è già collegata a data, si aggiorna da sola,
+        // ma se vuoi forzare un ridisegno immediato:
+        tableViewChar.refresh();
+    }
+
+    public void onClickGoToHome(ActionEvent actionEvent) {
+    }
+
+    public void onClickUser(ActionEvent actionEvent) {
     }
 }
