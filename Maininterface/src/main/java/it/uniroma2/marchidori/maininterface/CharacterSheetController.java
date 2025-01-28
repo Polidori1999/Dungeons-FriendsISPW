@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface;
 
+import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

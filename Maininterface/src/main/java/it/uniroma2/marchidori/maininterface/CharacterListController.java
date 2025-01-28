@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface;
 
+import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

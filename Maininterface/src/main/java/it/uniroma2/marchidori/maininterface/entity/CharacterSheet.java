@@ -1,4 +1,4 @@
-package it.uniroma2.marchidori.maininterface;
+package it.uniroma2.marchidori.maininterface.entity;
 
 
 import java.awt.*;
