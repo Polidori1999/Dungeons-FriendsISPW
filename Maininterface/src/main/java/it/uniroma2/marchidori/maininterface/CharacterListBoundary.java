@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CharacterListController implements Initializable {
+public class CharacterListBoundary implements Initializable {
 
     @FXML
     private AnchorPane CharacterPane;

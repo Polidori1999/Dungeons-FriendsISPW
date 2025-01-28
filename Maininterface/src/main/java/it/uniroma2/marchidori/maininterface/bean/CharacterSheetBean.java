@@ -1,11 +1,11 @@
-package it.uniroma2.marchidori.maininterface.entity;
+package it.uniroma2.marchidori.maininterface.bean;
+
 
 /**
- * Entity "CharacterSheet":
- * Dati di dominio per un personaggio.
- * Niente riferimenti a UI (Button, ecc.).
+ * Bean (DTO) per scambiare i dati di CharacterSheet
+ * tra la Boundary (UI) e la Control.
  */
-public class CharacterSheet {
+public class CharacterSheetBean {
 
     private String name;
     private String race;
@@ -19,9 +19,13 @@ public class CharacterSheet {
     private String charisma;
     private String constitution;
 
-    public CharacterSheet(String name, String race, String age, String classe, String level,
-                          String strength, String dexterity, String intelligence,
-                          String wisdom, String charisma, String constitution) {
+    public CharacterSheetBean() {
+        // costruttore vuoto
+    }
+
+    public CharacterSheetBean(String name, String race, String age, String classe, String level,
+                              String strength, String dexterity, String intelligence,
+                              String wisdom, String charisma, String constitution) {
         this.name = name;
         this.race = race;
         this.age = age;
@@ -35,7 +39,7 @@ public class CharacterSheet {
         this.constitution = constitution;
     }
 
-    // Getters e Setters
+    // Getter/Setter
     public String getName() {
         return name;
     }
@@ -111,5 +115,10 @@ public class CharacterSheet {
     }
     public void setConstitution(String constitution) {
         this.constitution = constitution;
+    }
+
+    @Override
+    public String toString() {
+        return "[CharacterSheetBean] " + name + " (Class: " + classe + ", Level: " + level + ")";
     }
 }

@@ -72,7 +72,7 @@ public class CharacterSheetController {
      * Riferimento al controller padre (CharacterListController),
      * per poter aggiungere un nuovo personaggio all'ObservableList, se siamo in creationMode.
      */
-    private CharacterListController parentController;
+    private CharacterListBoundary parentController;
 
     // -------------------------------------------------------------
     //              METODI DI CONFIGURAZIONE DEL CONTROLLER
@@ -103,7 +103,7 @@ public class CharacterSheetController {
      * Viene chiamato dal CharacterListController per passare
      * un riferimento a se stesso (così possiamo aggiungere un personaggio).
      */
-    public void setParentController(CharacterListController parentController) {
+    public void setParentController(CharacterListBoundary parentController) {
         this.parentController = parentController;
     }
 
