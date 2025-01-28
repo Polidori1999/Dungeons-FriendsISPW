@@ -10,7 +10,6 @@ public class CharacterSheet {
     public String age;
     public String classe;
     public Button editButton;
-
     public Button deleteButton;
     public String strength;
     public String dexterity;
@@ -19,7 +18,7 @@ public class CharacterSheet {
     public String charisma;
     public String constitution;
 
-    CharacterSheet (String name, String race, String age, String classe, String level, String strength, String dexterity, String intelligence, String wisdom, String charisma, String constitution) {
+    public CharacterSheet(String name, String race, String age, String classe, String level, String strength, String dexterity, String intelligence, String wisdom, String charisma, String constitution) {
         this.name = name;
         this.race = race;
         this.age = age;

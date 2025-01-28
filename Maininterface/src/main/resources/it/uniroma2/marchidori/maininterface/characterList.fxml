@@ -54,7 +54,7 @@
 
         <TextField id="SearchBar" alignment="CENTER" layoutX="525.0" layoutY="15.0" prefHeight="34.0" prefWidth="278.0" promptText="Cerca" />
 
-        <Button fx:id="userButton" layoutX="1219.0" layoutY="11.0" mnemonicParsing="false" onAction="#onClickUser" prefHeight="41.0" prefWidth="45.0" style="-fx-background-color: transoparent;" textFill="#f80606">
+        <Button fx:id="userButton" layoutX="1219.0" layoutY="11.0" mnemonicParsing="false" onAction="#onClickUser" prefHeight="41.0" prefWidth="45.0" style="-fx-background-color: transparent;" textFill="#f80606">
             <graphic>
                 <ImageView blendMode="MULTIPLY" fitHeight="53.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                     <image>

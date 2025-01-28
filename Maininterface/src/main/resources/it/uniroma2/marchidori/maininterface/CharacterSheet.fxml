@@ -16,7 +16,7 @@
 
 <AnchorPane fx:id="characterSheetPane" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.marchidori.maininterface.CharacterSheetController">
    <children>
-      <Button fx:id="userButton" layoutX="1222.0" layoutY="3.0" mnemonicParsing="false" onAction="#onClickUser" prefHeight="41.0" prefWidth="45.0" style="-fx-background-color: transoparent;" textFill="#f80606">
+      <Button fx:id="userButton" layoutX="1222.0" layoutY="3.0" mnemonicParsing="false" onAction="#onClickUser" prefHeight="41.0" prefWidth="45.0" style="-fx-background-color: transparent;" textFill="#f80606">
          <graphic>
             <ImageView blendMode="MULTIPLY" fitHeight="53.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                <image>
