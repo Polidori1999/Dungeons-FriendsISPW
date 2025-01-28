@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,11 +10,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -53,9 +53,11 @@ public class CharacterListController implements Initializable {
     @FXML
     private TableColumn<CharacterSheet, String> tableViewCharName;
 
-
     @FXML
     private TableColumn<CharacterSheet, String> tableViewCharRace;
+
+    @FXML
+    private TableColumn<CharacterSheet, Button> tableViewCharButton;
 
     @FXML
     private Button userButton;
@@ -66,19 +68,15 @@ public class CharacterListController implements Initializable {
     void onClickGoToHome(ActionEvent event) throws IOException {
         goToHome();
     }
+
     private void goToHome() throws IOException {
-        // Carica il file FXML della seconda scena
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Home.fxml"));
         Parent root = loader.load();
 
-        // Ottieni lo stage attuale
-        Stage stage = (Stage) CharacterPane.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-        // Crea una nuova scena e impostala nello stage
+        Stage stage = (Stage) CharacterPane.getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
     }
-
 
     @FXML
     void onClickNewCharacter(ActionEvent event) {
@@ -93,14 +91,56 @@ public class CharacterListController implements Initializable {
         tableViewChar.setItems(data);
     }
 
+    @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // Impostiamo i ValueFactory per i campi "testuali"
         tableViewCharAge.setCellValueFactory(new PropertyValueFactory<>("Age"));
         tableViewCharClass.setCellValueFactory(new PropertyValueFactory<>("Class"));
         tableViewCharName.setCellValueFactory(new PropertyValueFactory<>("Name"));
         tableViewCharRace.setCellValueFactory(new PropertyValueFactory<>("Race"));
 
+        // Impostiamo il ValueFactory della colonna "Edit" per creare un nuovo Button per ogni riga
+        tableViewCharButton.setCellValueFactory(cellData -> {
+            Button editBtn = new Button("Edit");
+            return new ReadOnlyObjectWrapper<>(editBtn);
+        });
+
+        // Definiamo la CellFactory per mostrare e gestire il pulsante su ogni riga
+        tableViewCharButton.setCellFactory(col -> new TableCell<CharacterSheet, Button>() {
+            @Override
+            protected void updateItem(Button item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(item);
+                    // Azione associata al pulsante
+                    item.setOnAction(e -> {
+                        CharacterSheet selectedChar = getTableView().getItems().get(getIndex());
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
+                        Parent root = null;
+                        try {
+                            root = loader.load();
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                        Stage stage = (Stage) CharacterPane.getScene().getWindow();
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+
+                        // Esempio: potresti aprire un nuovo FXML per l'edit
+                        // apriFinestraEdit(selectedChar);
+                    });
+                }
+            }
+        });
+
+        // Aggiungiamo un esempio di personaggio all'avvio
         CharacterSheet prova = new CharacterSheet("probva","giov","17","barbaro");
         data.add(prova);
+
+        // Infine, carichiamo i dati nella TableView
         tableViewChar.setItems(data);
     }
 
@@ -108,5 +148,4 @@ public class CharacterListController implements Initializable {
     void onClickUser(ActionEvent event) throws IOException {
         goToHome();
     }
-
 }

@@ -1,11 +1,14 @@
 package it.uniroma2.marchidori.maininterface;
 
 
+import java.awt.*;
+
 public class CharacterSheet {
     public String name;
     public String race;
     public String age;
     public String classe;
+    public Button editButton;
 
     CharacterSheet (String name, String race, String age, String classe) {
         this.name = name;
@@ -16,6 +19,7 @@ public class CharacterSheet {
         System.out.println(age);
         this.classe = classe;
         System.out.println(classe);
+        this.editButton = new Button("Edit Character");
     }
 
     public String getAge() {
@@ -42,6 +46,13 @@ public class CharacterSheet {
     }
     public void setRace(String race) {
         this.race = race;
+    }
+
+    public Button getEditButton() {
+        return editButton;
+    }
+    public void setEditButton(Button editButton) {
+        this.editButton = editButton;
     }
 
 }
