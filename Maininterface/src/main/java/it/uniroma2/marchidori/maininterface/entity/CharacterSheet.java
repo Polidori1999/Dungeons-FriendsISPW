@@ -10,6 +10,7 @@ public class CharacterSheet {
     public String age;
     public String classe;
     public Button editButton;
+
     public Button deleteButton;
     public String strength;
     public String dexterity;
