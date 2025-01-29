@@ -15,4 +15,6 @@ module it.uniroma2.marchidori.maininterface {
 
     // Aggiungi questa riga per permettere a javafx.base di riflettere sulle classi nel package .bean
     opens it.uniroma2.marchidori.maininterface.bean to javafx.base;
+    exports it.uniroma2.marchidori.maininterface.boundary;
+    opens it.uniroma2.marchidori.maininterface.boundary to javafx.fxml;
 }
