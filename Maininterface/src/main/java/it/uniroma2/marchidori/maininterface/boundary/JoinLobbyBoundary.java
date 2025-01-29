@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 public class JoinLobbyBoundary implements Initializable {
 
     @FXML
-    private AnchorPane HomePane;
+    private AnchorPane joinLobbyPane;
 
     // ComboBox per i filtri (type, durata, numPlayers)
     @FXML
@@ -158,26 +158,71 @@ public class JoinLobbyBoundary implements Initializable {
     }
 
     @FXML
-    void onClickUser(ActionEvent event) throws IOException {
-        goToLogin();
-    }
-
-    private void goToLogin() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
-        Parent root = loader.load();
-        Stage stage = (Stage) HomePane.getScene().getWindow();
-        stage.setScene(new Scene(root));
+    void onClickGoToConsultRules(ActionEvent event) throws IOException {
+        try {
+            changeScene("consultRules.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
-    void onClickMyCharacter(ActionEvent event) throws IOException {
-        goToMyChar();
+    void onClickGoToHome(ActionEvent event) {
+        try {
+            changeScene("home.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private void goToMyChar() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("characterList.fxml"));
-        Parent root = loader.load();
-        Stage stage = (Stage) HomePane.getScene().getWindow();
-        stage.setScene(new Scene(root));
+    @FXML
+    void onClickGoToJoinLobby(ActionEvent event) {
+        try {
+            changeScene("joinLobby.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    @FXML
+    void onClickGoToManageLobby(ActionEvent event) {
+        try {
+            changeScene("manageLobby.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    void onClickUser(ActionEvent event) {
+        try {
+            changeScene("user.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    void onclickGoToMyCharList(ActionEvent event) {
+        try {
+            changeScene("characterList.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    private void changeScene(String fxml) throws IOException {
+        // Carica il file FXML della seconda scena
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml));
+        Parent root = loader.load();
+
+        // Ottieni lo stage attuale
+        Stage stage = (Stage) joinLobbyPane.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Crea una nuova scena e impostala nello stage
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+    }
+
 }

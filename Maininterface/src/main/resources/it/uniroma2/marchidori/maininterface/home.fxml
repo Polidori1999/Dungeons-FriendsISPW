@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="registerPane" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.marchidori.maininterface.boundary.HomeBoundary">
+   <children>
+      <Button fx:id="userButton" layoutX="1220.0" layoutY="5.0" mnemonicParsing="false" onAction="#onClickUser" prefHeight="41.0" prefWidth="45.0" style="-fx-background-color: transparent;" textFill="#f80606">
+         <graphic>
+            <ImageView blendMode="MULTIPLY" fitHeight="53.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@user_icon.jpg" />
+               </image>
+               <effect>
+                  <ColorAdjust contrast="1.0" hue="1.0" saturation="-1.0" />
+               </effect>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="goToHome" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#onClickGoToHome" prefHeight="65.0" prefWidth="349.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="30.0" />
+         </font>
+      </Button>
+      <Button fx:id="Mychar" layoutX="320.0" layoutY="180.0" mnemonicParsing="false" onAction="#onclickGoToMyCharList" prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font>
+      </Button>
+      <Button fx:id="Joinlobby" layoutX="640.0" layoutY="180.0" mnemonicParsing="false" onAction="#onClickGoToJoinLobby" prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font>
+      </Button>
+      <Button fx:id="ManageLobby" layoutX="320.0" layoutY="360.0" mnemonicParsing="false" onAction="#onClickGoToManageLobby" prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font>
+      </Button>
+      <Button fx:id="Consult_rules" layoutX="640.0" layoutY="360.0" mnemonicParsing="false" onAction="#onClickGoToConsultRules" prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

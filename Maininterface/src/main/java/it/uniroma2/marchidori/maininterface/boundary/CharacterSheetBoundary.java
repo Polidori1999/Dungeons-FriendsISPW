@@ -142,43 +142,73 @@ public class CharacterSheetBoundary {
     }
 
     @FXML
-    void onClickGoToHome(ActionEvent event) throws IOException {
-        // Rimane invariato (se vuoi davvero cambiare finestra)
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("JoinLobby.fxml"));
-        Parent root = loader.load();
-        Stage stage = (Stage) characterSheetPane.getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+    void onClickGoToConsultRules(ActionEvent event) throws IOException {
+        try {
+            changeScene("consultRules.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
-    void onClickGoToConsultRules(ActionEvent event) {
-        // ...
+    void onClickGoToHome(ActionEvent event) {
+        try {
+            changeScene("home.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
-    void onClickGoToJoinLobby(ActionEvent event) throws IOException {
-        // ...
+    void onClickGoToJoinLobby(ActionEvent event) {
+        try {
+            changeScene("joinLobby.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
     void onClickGoToManageLobby(ActionEvent event) {
-        // ...
+        try {
+            changeScene("manageLobby.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
-    void onClickUser(ActionEvent event) throws IOException {
-        // ...
+    void onClickUser(ActionEvent event) {
+        try {
+            changeScene("user.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
-    void onclickGoToMyCharList(ActionEvent event) throws IOException {
-        // Esempio: potresti voler chiudere la finestra corrente, o ricaricare la lista
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("CharacterList.fxml"));
+    void onclickGoToMyCharList(ActionEvent event) {
+        try {
+            changeScene("characterList.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    private void changeScene(String fxml) throws IOException {
+        // Carica il file FXML della seconda scena
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml));
         Parent root = loader.load();
-        Stage stage = (Stage) characterSheetPane.getScene().getWindow();
-        stage.setScene(new Scene(root));
+
+        // Ottieni lo stage attuale
+        Stage stage = (Stage) characterSheetPane.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Crea una nuova scena e impostala nello stage
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
     }
+
 
     // -------------------------------------------------------------
     //           SALVATAGGIO DEL PERSONAGGIO (BOTTONE SAVE)

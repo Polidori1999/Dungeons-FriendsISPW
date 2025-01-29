@@ -54,10 +54,16 @@ public class LoginBoundary {
         checkLogin();
     }
 
+    @FXML
+    void onClickCreate(ActionEvent event) throws IOException {
+        changeScene("register.fxml");
+    }
+
+
     private void checkLogin() throws IOException {
         if(email.getText().equals("Mario") && password.getText().equals("123")){
             wrongLogin.setText("success!");
-            goToHome();
+            changeScene("home.fxml");
 
         }else if(email.getText().isEmpty() && password.getText().isEmpty()){
             wrongLogin.setText("please enter your data!");
@@ -67,9 +73,9 @@ public class LoginBoundary {
     }
 
     @FXML
-    private void goToHome() throws IOException {
+    private void changeScene(String fxml) throws IOException {
         // Carica il file FXML della seconda scena
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/joinLobby.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml));
         Parent root = loader.load();
 
         // Ottieni lo stage attuale

@@ -58,7 +58,7 @@
          <font>
             <Font size="20.0" />
          </font></Text>
-      <Button fx:id="create_Account" layoutX="271.0" layoutY="432.0" mnemonicParsing="false" style="-fx-background-color: #292932;" text="Create" textFill="#e90000">
+      <Button fx:id="create_Account" layoutX="271.0" layoutY="432.0" mnemonicParsing="false" onAction="#onClickCreate" style="-fx-background-color: #292932;" text="Create" textFill="#e90000">
          <font>
             <Font size="20.0" />
          </font></Button>
