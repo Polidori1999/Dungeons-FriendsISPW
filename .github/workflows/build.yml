@@ -1,36 +1,57 @@
-name: SonarQube
+name: SonarCloud
+
 on:
   push:
     branches:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
+
 jobs:
   build:
     name: Build and analyze
     runs-on: ubuntu-latest
     steps:
+      # 1) Effettua il checkout del repository
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          # Importante per Sonar, in modo che abbia lo storico per le metriche
+          fetch-depth: 0
+
+      # 2) Imposta JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: 17
-          distribution: 'zulu' # Alternative distribution options are available.
+          distribution: 'zulu'
+
+      # 3) (Facoltativo) Cache delle librerie Sonar
       - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+
+      # 4) (Facoltativo) Cache delle dipendenze Maven
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+
+      # 5) Compila e analizza con SonarCloud
       - name: Build and analyze
         env:
+          # Devi aver definito SONAR_TOKEN nei "Secrets" (repo -> Settings -> Secrets -> Actions)
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Polidori1999_Dungeons-FriendsISPW
+        run: |
+          # Entra nella cartella Maininterface (dove risiede il tuo pom.xml)
+          cd Maininterface
+          # Esegui la build e l'analisi Sonar
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.projectKey=Polidori1999_Dungeons-FriendsISPW \
+            -Dsonar.organization=polidori1999 \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${SONAR_TOKEN}
