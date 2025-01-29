@@ -32,5 +32,5 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build and analyze
         env:
-          SONAR_TOKEN: ${{ 3488fc4534f98e4debc3585f1ff1312f7cd8967a }}
+          SONAR_TOKEN: ${{ 27a0f5f76cc938f58a2d6f1fa840023330630777 }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=marchidori
