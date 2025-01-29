@@ -69,7 +69,7 @@ public class LoginBoundary {
     @FXML
     private void goToHome() throws IOException {
         // Carica il file FXML della seconda scena
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("JoinLobby.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/joinLobby.fxml"));
         Parent root = loader.load();
 
         // Ottieni lo stage attuale
