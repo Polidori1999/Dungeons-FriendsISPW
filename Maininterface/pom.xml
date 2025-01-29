@@ -14,7 +14,7 @@
   <!-- Proprietà di progetto -->
   <properties>
 
-    <sonar.organization>marchidori</sonar.organization>
+    <sonar.organization>polidori1999</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
     <!-- Java 21 -->
