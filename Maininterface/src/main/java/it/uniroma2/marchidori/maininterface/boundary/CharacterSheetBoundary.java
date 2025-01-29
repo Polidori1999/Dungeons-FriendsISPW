@@ -183,6 +183,7 @@ public class CharacterSheetBoundary {
             changeScene("user.fxml");
         } catch (IOException e) {
             throw new RuntimeException(e);
+
         }
     }
 

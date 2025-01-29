@@ -42,6 +42,17 @@ public class RegisterBoundary {
             throw new RuntimeException(e);
         }
     }
+
+    @FXML
+    void onClickGoBackToLogin(ActionEvent event) throws IOException {
+        try {
+            changeScene("login.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     @FXML
     private void changeScene(String fxml) throws IOException {
         // Carica il file FXML della seconda scena
