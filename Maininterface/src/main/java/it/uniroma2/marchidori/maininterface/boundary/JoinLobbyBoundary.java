@@ -163,7 +163,7 @@ public class JoinLobbyBoundary implements Initializable {
     }
 
     private void goToLogin() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
         Parent root = loader.load();
         Stage stage = (Stage) HomePane.getScene().getWindow();
         stage.setScene(new Scene(root));
@@ -175,7 +175,7 @@ public class JoinLobbyBoundary implements Initializable {
     }
 
     private void goToMyChar() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("CharacterList.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("characterList.fxml"));
         Parent root = loader.load();
         Stage stage = (Stage) HomePane.getScene().getWindow();
         stage.setScene(new Scene(root));
