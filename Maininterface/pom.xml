@@ -4,7 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-
   <modelVersion>4.0.0</modelVersion>
   <groupId>it.uniroma2.marchidori</groupId>
   <artifactId>Maininterface</artifactId>
@@ -12,28 +11,28 @@
   <name>Maininterface</name>
 
   <properties>
-    <!-- Parametri Sonar (solo se ti occorre invocare "mvn sonar:sonar" in locale) -->
+    <!-- Se vuoi lanciare "mvn sonar:sonar" in locale -->
     <sonar.organization>polidori1999</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
-    <!-- Java 21 -->
+    <!-- Versione Java (21) -->
     <java.version>21</java.version>
 
-    <!-- Versione JavaFX: su Maven Central esiste la 21.0.0.0 -->
-    <javafx.version>21.0.0.0</javafx.version>
+    <!-- Versione JavaFX presente su Maven Central (es. 21.0.1.1) -->
+    <javafx.version>21.0.1.1</javafx.version>
 
-    <!-- Rilevamento OS (es: windows-x86_64, linux-aarch64, ecc.) -->
+    <!-- Detect OS/Arch con os-maven-plugin -->
     <javafx.platform>${os.detected.name}-${os.detected.arch}</javafx.platform>
 
-    <!-- (Facoltativo) JUnit 5, se fai test -->
+    <!-- (Facoltativo) JUnit 5 per test -->
     <junit.version>5.10.2</junit.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-  <!-- Import BOM di JavaFX -->
   <dependencyManagement>
     <dependencies>
+      <!-- Importiamo il BOM di JavaFX versione 21.0.1.1 -->
       <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-bom</artifactId>
@@ -45,7 +44,7 @@
   </dependencyManagement>
 
   <dependencies>
-    <!-- JavaFX Controls + FXML con classifier dinamico (windows, linux, mac, ecc.) -->
+    <!-- JavaFX Controls e FXML con classifier automatico (Win/Mac/Linux) -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
@@ -58,7 +57,7 @@
       <version>${javafx.version}</version>
       <classifier>${javafx.platform}</classifier>
     </dependency>
-    <!-- ...aggiungi se servono javafx-graphics, javafx-media, javafx-web... -->
+    <!-- Aggiungi qui altre dipendenze JavaFX se servono (graphics, media, web, ecc.) -->
 
     <!-- JUnit 5 (opzionale) -->
     <dependency>
@@ -77,7 +76,8 @@
 
   <build>
     <plugins>
-      <!-- Compilatore per Java 21 -->
+
+      <!-- Compilatore Maven (Java 21) -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -88,7 +88,7 @@
         </configuration>
       </plugin>
 
-      <!-- Plugin che rileva l'OS (necessario per i classifier JavaFX) -->
+      <!-- Plugin OS detection (per i classifier JavaFX) -->
       <plugin>
         <groupId>kr.motd.maven</groupId>
         <artifactId>os-maven-plugin</artifactId>
@@ -102,7 +102,7 @@
         </executions>
       </plugin>
 
-      <!-- (Facoltativo) JavaFX Maven plugin per eseguire o creare immagini . -->
+      <!-- (Facoltativo) JavaFX Maven Plugin -->
       <!--
       <plugin>
         <groupId>org.openjfx</groupId>
@@ -118,6 +118,7 @@
         </executions>
       </plugin>
       -->
+
     </plugins>
   </build>
 
