@@ -11,17 +11,17 @@
   <name>Maininterface</name>
 
   <properties>
-    <!-- Se vuoi lanciare "mvn sonar:sonar" in locale -->
+    <!-- (Facoltativo) per "mvn sonar:sonar" in locale -->
     <sonar.organization>polidori1999</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
-    <!-- Versione Java (21) -->
+    <!-- Java 21 -->
     <java.version>21</java.version>
 
-    <!-- Versione JavaFX presente su Maven Central (es. 21.0.1.1) -->
-    <javafx.version>21.0.1.1</javafx.version>
+    <!-- JavaFX BOM 21 (versione esistente su Maven Central) -->
+    <javafx.version>21.0.2.1</javafx.version>
 
-    <!-- Detect OS/Arch con os-maven-plugin -->
+    <!-- OS detection (Windows/Linux/mac) con os-maven-plugin -->
     <javafx.platform>${os.detected.name}-${os.detected.arch}</javafx.platform>
 
     <!-- (Facoltativo) JUnit 5 per test -->
@@ -30,9 +30,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+  <!-- Import BOM di JavaFX 21.0.2.1 -->
   <dependencyManagement>
     <dependencies>
-      <!-- Importiamo il BOM di JavaFX versione 21.0.1.1 -->
       <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-bom</artifactId>
@@ -44,7 +44,7 @@
   </dependencyManagement>
 
   <dependencies>
-    <!-- JavaFX Controls e FXML con classifier automatico (Win/Mac/Linux) -->
+    <!-- JavaFX Controls + FXML con classifier automatico -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
@@ -57,7 +57,8 @@
       <version>${javafx.version}</version>
       <classifier>${javafx.platform}</classifier>
     </dependency>
-    <!-- Aggiungi qui altre dipendenze JavaFX se servono (graphics, media, web, ecc.) -->
+
+    <!-- Altre dipendenze JavaFX? (graphics, media, web) vanno aggiunte allo stesso modo -->
 
     <!-- JUnit 5 (opzionale) -->
     <dependency>
@@ -76,7 +77,6 @@
 
   <build>
     <plugins>
-
       <!-- Compilatore Maven (Java 21) -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -88,7 +88,7 @@
         </configuration>
       </plugin>
 
-      <!-- Plugin OS detection (per i classifier JavaFX) -->
+      <!-- Plugin per rilevare OS (necessario per i classifier JavaFX) -->
       <plugin>
         <groupId>kr.motd.maven</groupId>
         <artifactId>os-maven-plugin</artifactId>
@@ -118,8 +118,6 @@
         </executions>
       </plugin>
       -->
-
     </plugins>
   </build>
-
 </project>
