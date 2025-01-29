@@ -1,6 +1,7 @@
 package it.uniroma2.marchidori.maininterface.control;
 
-
+import it.uniroma2.marchidori.maininterface.bean.AbilityScoresBean;
+import it.uniroma2.marchidori.maininterface.bean.CharacterInfoBean;
 import it.uniroma2.marchidori.maininterface.bean.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
 
@@ -13,10 +14,10 @@ import java.util.List;
  */
 public class CharacterSheetController {
 
-    private List<CharacterSheet> allCharacters;
+    private final List<CharacterSheet> allCharacters;
 
     public CharacterSheetController() {
-        // Carichiamo qualche personaggio di esempio
+        // Carichiamo qualche personaggio di esempio (Entity pura)
         allCharacters = new ArrayList<>();
         allCharacters.add(new CharacterSheet("Aragorn", "Human", "25", "Ranger", "5",
                 "16", "14", "12", "10", "8", "13"));
@@ -26,6 +27,8 @@ public class CharacterSheetController {
 
     /**
      * Restituisce tutti i personaggi come Bean (per la UI).
+     * Ogni Entity viene convertita in un CharacterSheetBean
+     * che a sua volta contiene un CharacterInfoBean e un AbilityScoresBean.
      */
     public List<CharacterSheetBean> getAllCharacters() {
         List<CharacterSheetBean> beans = new ArrayList<>();
@@ -37,6 +40,8 @@ public class CharacterSheetController {
 
     /**
      * Crea un nuovo personaggio, partendo dal Bean.
+     * Converte il CharacterSheetBean (spezzato in info e ability)
+     * in una Entity "CharacterSheet" e la aggiunge alla lista in memoria.
      */
     public void createCharacter(CharacterSheetBean bean) {
         CharacterSheet newCS = beanToEntity(bean);
@@ -44,33 +49,51 @@ public class CharacterSheetController {
     }
 
     /**
-     * Aggiorna un personaggio esistente (lo cerchiamo per nome).
+     * Aggiorna un personaggio esistente (cerca per nome).
+     * Usa i campi di CharacterSheetBean (spezzati in info e ability).
      */
     public void updateCharacter(CharacterSheetBean bean) {
-        CharacterSheet existing = findByName(bean.getName());
+        // Troviamo la Entity esistente basandoci sul nome
+        CharacterSheet existing = findByName(bean.getInfo().getName());
         if (existing != null) {
-            existing.setRace(bean.getRace());
-            existing.setAge(bean.getAge());
-            existing.setClasse(bean.getClasse());
-            existing.setLevel(bean.getLevel());
-            existing.setStrength(bean.getStrength());
-            existing.setDexterity(bean.getDexterity());
-            existing.setIntelligence(bean.getIntelligence());
-            existing.setWisdom(bean.getWisdom());
-            existing.setCharisma(bean.getCharisma());
-            existing.setConstitution(bean.getConstitution());
+            // Aggiorniamo la parte "info"
+            existing.setRace(bean.getInfo().getRace());
+            existing.setAge(bean.getInfo().getAge());
+            existing.setClasse(bean.getInfo().getClasse());
+            existing.setLevel(bean.getInfo().getLevel());
+
+            // Aggiorniamo la parte "abilityScores"
+            existing.setStrength(bean.getAbilityScores().getStrength());
+            existing.setDexterity(bean.getAbilityScores().getDexterity());
+            existing.setIntelligence(bean.getAbilityScores().getIntelligence());
+            existing.setWisdom(bean.getAbilityScores().getWisdom());
+            existing.setCharisma(bean.getAbilityScores().getCharisma());
+            existing.setConstitution(bean.getAbilityScores().getConstitution());
         }
     }
 
-    // -- Conversioni
+    // -------------------------------------------------------------
+    //                      METODI PRIVATI
+    // -------------------------------------------------------------
 
+    /**
+     * Converte da Entity pura a Bean complesso.
+     * - Crea un CharacterInfoBean con i dati generici
+     * - Crea un AbilityScoresBean con i punteggi
+     * - Inserisce tutto nel CharacterSheetBean
+     */
     private CharacterSheetBean entityToBean(CharacterSheet cs) {
-        return new CharacterSheetBean(
+        // Crea la parte "info"
+        CharacterInfoBean infoBean = new CharacterInfoBean(
                 cs.getName(),
                 cs.getRace(),
                 cs.getAge(),
                 cs.getClasse(),
-                cs.getLevel(),
+                cs.getLevel()
+        );
+
+        // Crea la parte "ability scores"
+        AbilityScoresBean abilityBean = new AbilityScoresBean(
                 cs.getStrength(),
                 cs.getDexterity(),
                 cs.getIntelligence(),
@@ -78,24 +101,36 @@ public class CharacterSheetController {
                 cs.getCharisma(),
                 cs.getConstitution()
         );
+
+        // Infine crea il bean complessivo
+        return new CharacterSheetBean(infoBean, abilityBean);
     }
 
+    /**
+     * Converte da Bean "spezzato" a Entity pura.
+     */
     private CharacterSheet beanToEntity(CharacterSheetBean bean) {
+        CharacterInfoBean info = bean.getInfo();
+        AbilityScoresBean ability = bean.getAbilityScores();
+
         return new CharacterSheet(
-                bean.getName(),
-                bean.getRace(),
-                bean.getAge(),
-                bean.getClasse(),
-                bean.getLevel(),
-                bean.getStrength(),
-                bean.getDexterity(),
-                bean.getIntelligence(),
-                bean.getWisdom(),
-                bean.getCharisma(),
-                bean.getConstitution()
+                info.getName(),
+                info.getRace(),
+                info.getAge(),
+                info.getClasse(),
+                info.getLevel(),
+                ability.getStrength(),
+                ability.getDexterity(),
+                ability.getIntelligence(),
+                ability.getWisdom(),
+                ability.getCharisma(),
+                ability.getConstitution()
         );
     }
 
+    /**
+     * Cerca un personaggio (Entity) in base al nome.
+     */
     private CharacterSheet findByName(String name) {
         for (CharacterSheet cs : allCharacters) {
             if (cs.getName().equals(name)) {
