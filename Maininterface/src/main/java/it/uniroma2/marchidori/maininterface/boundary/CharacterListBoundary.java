@@ -1,4 +1,4 @@
-package it.uniroma2.marchidori.maininterface;
+package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -126,7 +126,7 @@ public class CharacterListBoundary implements Initializable {
             Parent root = loader.load();
 
             // Recupera il controller
-            CharacterSheetController sheetController = loader.getController();
+            CharacterSheetBoundary sheetController = loader.getController();
             // Indica che siamo in "creation mode"
             sheetController.setCreationMode(true);
             // Passiamo a "sheetController" un riferimento a questo controller
@@ -160,7 +160,7 @@ public class CharacterListBoundary implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("CharacterSheet.fxml"));
             Parent root = loader.load();
 
-            CharacterSheetController sheetController = loader.getController();
+            CharacterSheetBoundary sheetController = loader.getController();
             // Impostiamo i campi con il personaggio esistente
             sheetController.setCharacterSheet(characterToEdit);
 

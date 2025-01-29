@@ -1,4 +1,4 @@
-package it.uniroma2.marchidori.maininterface;
+package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
@@ -19,7 +19,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class HomeController implements Initializable {
+public class JoinLobbyBoundary implements Initializable {
 
     @FXML
     private AnchorPane HomePane;
@@ -50,6 +50,8 @@ public class HomeController implements Initializable {
     private TableColumn<LobbyBean, String> lobbyNameColumn;
     @FXML
     private TableColumn<LobbyBean, Void> joinButtonColumn;
+    @FXML
+    private TableColumn<LobbyBean, Void> favouriteButton;
 
     // Controller di logica per la gestione dei filtri e del join
     private JoinLobbyController joinLobbyController;
@@ -88,7 +90,30 @@ public class HomeController implements Initializable {
         // Usa "name" perché in LobbyBean esiste getName()
         lobbyNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-        // Colonna con il pulsante "Join"
+        // Colonna con il pulsante "favourite"
+        favouriteButton.setCellFactory(col -> new TableCell<>() {
+            private final Button favouriteBtn = new Button("Add to Favourite");
+
+            {
+                // Azione per il pulsante "Join"
+                favouriteBtn.setOnAction((ActionEvent event) -> {
+                    // Recupera la riga su cui è stato cliccato
+                    LobbyBean lobby = getTableView().getItems().get(getIndex());
+                    // Chiama la logica per "joinare" la lobby
+                    joinLobbyController.joinLobby(lobby,"");
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(favouriteBtn);
+                }
+            }
+        });
         joinButtonColumn.setCellFactory(col -> new TableCell<>() {
             private final Button joinBtn = new Button("Join");
 
@@ -132,10 +157,6 @@ public class HomeController implements Initializable {
         filteredLobbies.setAll(result);
     }
 
-    // -------------------------------
-    //       Metodi di navigazione
-    // -------------------------------
-
     @FXML
     void onClickUser(ActionEvent event) throws IOException {
         goToLogin();
@@ -159,6 +180,4 @@ public class HomeController implements Initializable {
         Stage stage = (Stage) HomePane.getScene().getWindow();
         stage.setScene(new Scene(root));
     }
-
-    // ... Altri metodi (Joinlobby, ManageLobby, ecc.) se richiesti ...
 }

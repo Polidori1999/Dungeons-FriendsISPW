@@ -1,4 +1,4 @@
-package it.uniroma2.marchidori.maininterface;
+package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
 import javafx.event.ActionEvent;
@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class CharacterSheetController {
+public class CharacterSheetBoundary {
 
     @FXML
     private AnchorPane characterSheetPane;
@@ -144,7 +144,7 @@ public class CharacterSheetController {
     @FXML
     void onClickGoToHome(ActionEvent event) throws IOException {
         // Rimane invariato (se vuoi davvero cambiare finestra)
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Home.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("JoinLobby.fxml"));
         Parent root = loader.load();
         Stage stage = (Stage) characterSheetPane.getScene().getWindow();
         Scene scene = new Scene(root);

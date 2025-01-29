@@ -1,4 +1,4 @@
-package it.uniroma2.marchidori.maininterface;
+package it.uniroma2.marchidori.maininterface.boundary;
 
 
 import javafx.event.ActionEvent;
@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class LoginController {
+public class LoginBoundary {
 
     @FXML
     private AnchorPane anchorLoginPane;
@@ -69,7 +69,7 @@ public class LoginController {
     @FXML
     private void goToHome() throws IOException {
         // Carica il file FXML della seconda scena
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Home.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("JoinLobby.fxml"));
         Parent root = loader.load();
 
         // Ottieni lo stage attuale
