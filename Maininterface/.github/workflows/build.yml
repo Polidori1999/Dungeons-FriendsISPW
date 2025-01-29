@@ -47,6 +47,6 @@ jobs:
         run: |
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.projectKey=Polidori1999_Dungeons-FriendsISPW \
-            -Dsonar.organization=marchidori \
+            -Dsonar.organization=Leonardo \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${SONAR_TOKEN}
