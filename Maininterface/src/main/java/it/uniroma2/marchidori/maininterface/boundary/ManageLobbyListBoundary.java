@@ -130,6 +130,7 @@ public class ManageLobbyListBoundary {
 
     @FXML
     private void changeScene(String fxml) throws IOException {
+
         // Carica il file FXML della seconda scena
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml));
         Parent root = loader.load();

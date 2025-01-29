@@ -68,6 +68,7 @@ public class ManageLobbyBoundary {
 
     @FXML
     void onClickGoToConsultRules(ActionEvent event) {
+
         try {
             changeScene("consultRules.fxml");
         } catch (IOException e) {
