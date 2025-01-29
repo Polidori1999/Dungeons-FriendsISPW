@@ -5,43 +5,63 @@
                              https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
+
   <groupId>it.uniroma2.marchidori</groupId>
   <artifactId>Maininterface</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>Maininterface</name>
 
-
   <!-- Proprietà di progetto -->
   <properties>
-
+    <!-- Parametri Sonar (facoltativi, se vuoi lanciare "mvn sonar:sonar" in locale) -->
     <sonar.organization>polidori1999</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
-    <!-- Java 21 -->
+    <!-- Versioni Java e JavaFX -->
     <java.version>21</java.version>
-    <!-- JavaFX 21 -->
-    <javafx.version>21.0.0</javafx.version>
-    <!-- Versione di JUnit (se ti serve) -->
+    <javafx.version>21</javafx.version>
+
+    <!-- Necessario per costruire il classifier OS, es: "windows-x86_64", "linux-aarch64", ecc. -->
+    <javafx.platform>${os.detected.name}-${os.detected.arch}</javafx.platform>
+
+    <!-- Versione JUnit (se ti serve per i test) -->
     <junit.version>5.10.2</junit.version>
-    <!-- Encoding -->
+
+    <!-- Encoding e build -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-  <dependencies>
+  <!-- Importiamo il BOM di JavaFX (così non dobbiamo ripetere la versione) -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-bom</artifactId>
+        <version>${javafx.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
-    <!-- JavaFX: controls + fxml, versione 21.0.0 -->
+  <dependencies>
+    <!-- JavaFX Controls e FXML, con classifier dinamico -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
       <version>${javafx.version}</version>
+      <classifier>${javafx.platform}</classifier>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
       <version>${javafx.version}</version>
+      <classifier>${javafx.platform}</classifier>
     </dependency>
 
-    <!-- Dipendenze per JUnit (opzionali) -->
+    <!-- Se usi anche javafx-graphics, javafx-media, javafx-web, aggiungili allo stesso modo -->
+
+    <!-- JUnit 5 (opzionale, solo se fai test) -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
@@ -58,28 +78,42 @@
 
   <build>
     <plugins>
-      <!-- Plugin per compilare in Java 21 -->
+      <!-- Compilatore Maven (Java 21) -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.13.0</version>
         <configuration>
-          <!-- Sorgente e target a 21 -->
           <source>${java.version}</source>
           <target>${java.version}</target>
         </configuration>
       </plugin>
 
-      <!-- Plugin JavaFX Maven (facoltativo) -->
+      <!-- Plugin per rilevare l'OS (necessario per i classifier di JavaFX) -->
+      <plugin>
+        <groupId>kr.motd.maven</groupId>
+        <artifactId>os-maven-plugin</artifactId>
+        <version>1.7.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>detect</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Plugin JavaFX (facoltativo, per eseguire o creare un'immagine della tua app)
+           Se non ti serve, puoi rimuoverlo.-->
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
-        <version>0.0.8</version>
+        <version>0.0.14</version>
         <executions>
           <execution>
             <id>default-cli</id>
             <configuration>
-              <!-- Metti qui la classe che contiene il tuo metodo main -->
+              <!-- Classe con il main() JavaFX -->
               <mainClass>it.uniroma2.marchidori.maininterface.Main</mainClass>
               <launcher>app</launcher>
               <jlinkZipName>app</jlinkZipName>
@@ -93,4 +127,5 @@
       </plugin>
     </plugins>
   </build>
+
 </project>
