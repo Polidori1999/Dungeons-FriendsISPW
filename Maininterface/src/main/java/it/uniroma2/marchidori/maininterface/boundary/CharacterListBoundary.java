@@ -252,6 +252,7 @@ public class CharacterListBoundary implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml));
         Parent root = loader.load();
 
+
         // Ottieni lo stage attuale
         Stage stage = (Stage) CharacterPane.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
 
