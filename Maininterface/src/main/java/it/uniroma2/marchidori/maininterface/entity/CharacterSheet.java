@@ -19,6 +19,8 @@ public class CharacterSheet {
     private String charisma;
     private String constitution;
 
+
+
     public CharacterSheet(String name, String race, String age, String classe, String level,
                           String strength, String dexterity, String intelligence,
                           String wisdom, String charisma, String constitution) {

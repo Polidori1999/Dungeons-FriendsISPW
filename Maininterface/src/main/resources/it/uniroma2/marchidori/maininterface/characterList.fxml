@@ -4,40 +4,74 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.effect.ColorAdjust?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.effect.ColorAdjust?>
 
-<AnchorPane fx:id="CharacterPane" minHeight="720.0" minWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.marchidori.maininterface.boundary.CharacterListBoundary">
+<AnchorPane fx:id="CharacterPane"
+            minHeight="720.0"
+            minWidth="1280.0"
+            style="-fx-background-color: #292932;"
+            xmlns="http://javafx.com/javafx/17.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="it.uniroma2.marchidori.maininterface.boundary.CharacterListBoundary">
 
     <children>
-        <VBox id="Vbox" layoutX="27.0" layoutY="171.0" prefHeight="245.0" prefWidth="151.0" AnchorPane.leftAnchor="27.0" AnchorPane.rightAnchor="1102.0">
+        <!-- VBOX laterale con i pulsanti di navigazione -->
+        <VBox id="Vbox"
+              layoutX="27.0"
+              layoutY="171.0"
+              prefHeight="245.0"
+              prefWidth="151.0">
             <children>
                 <!-- Pulsante My Characters -->
-                <Button fx:id="Mychar" mnemonicParsing="false" onAction="#onclickGoToMyCharList" prefHeight="51.0" prefWidth="150.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
+                <Button fx:id="Mychar"
+                        mnemonicParsing="false"
+                        prefHeight="51.0"
+                        prefWidth="150.0"
+                        style="-fx-background-color: transparent;"
+                        text="MyCharacters"
+                        textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Button>
                 <!-- Pulsante Join Lobby -->
-                <Button fx:id="Joinlobby" mnemonicParsing="false" onAction="#onClickGoToJoinLobby" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
+                <Button fx:id="Joinlobby"
+                        mnemonicParsing="false"
+                        prefHeight="45.0"
+                        prefWidth="151.0"
+                        style="-fx-background-color: transparent;"
+                        text="Join Lobby"
+                        textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Button>
                 <!-- Pulsante Manage Lobby -->
-                <Button fx:id="ManageLobby" mnemonicParsing="false" onAction="#onClickGoToManageLobby" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
+                <Button fx:id="ManageLobby"
+                        mnemonicParsing="false"
+                        prefHeight="45.0"
+                        prefWidth="151.0"
+                        style="-fx-background-color: transparent;"
+                        text="Manage Lobby"
+                        textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Button>
                 <!-- Pulsante Consult Rules -->
-                <Button fx:id="Consult_rules" mnemonicParsing="false" onAction="#onClickGoToConsultRules" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
+                <Button fx:id="Consult_rules"
+                        mnemonicParsing="false"
+                        prefHeight="45.0"
+                        prefWidth="151.0"
+                        style="-fx-background-color: transparent;"
+                        text="Consult Rules"
+                        textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
@@ -45,18 +79,46 @@
             </children>
         </VBox>
 
-        <!-- Pulsante principale -->
-        <Button fx:id="goToHome" alignment="TOP_LEFT" layoutX="-8.0" layoutY="-3.0" mnemonicParsing="false" onAction="#onClickGoToHome" prefHeight="65.0" prefWidth="349.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE">
+        <!-- Pulsante principale "Dungeons & Friends" -->
+        <Button fx:id="goToHome"
+                alignment="TOP_LEFT"
+                layoutX="-8.0"
+                layoutY="-3.0"
+                mnemonicParsing="false"
+                prefHeight="65.0"
+                prefWidth="349.0"
+                style="-fx-background-color: transparent;"
+                text="Dungeons &amp; Friends"
+                textFill="WHITE">
             <font>
                 <Font name="System Bold" size="30.0" />
             </font>
         </Button>
 
-        <TextField id="SearchBar" alignment="CENTER" layoutX="525.0" layoutY="15.0" prefHeight="34.0" prefWidth="278.0" promptText="Cerca" />
+        <!-- Un campo di testo "SearchBar" di esempio -->
+        <TextField id="SearchBar"
+                   alignment="CENTER"
+                   layoutX="525.0"
+                   layoutY="15.0"
+                   prefHeight="34.0"
+                   prefWidth="278.0"
+                   promptText="Cerca" />
 
-        <Button fx:id="userButton" layoutX="1219.0" layoutY="11.0" mnemonicParsing="false" onAction="#onClickUser" prefHeight="41.0" prefWidth="45.0" style="-fx-background-color: transparent;" textFill="#f80606">
+        <!-- Bottone utente in alto a destra -->
+        <Button fx:id="userButton"
+                layoutX="1219.0"
+                layoutY="11.0"
+                mnemonicParsing="false"
+                prefHeight="41.0"
+                prefWidth="45.0"
+                style="-fx-background-color: transparent;"
+                textFill="#f80606">
             <graphic>
-                <ImageView blendMode="MULTIPLY" fitHeight="53.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView blendMode="MULTIPLY"
+                           fitHeight="53.0"
+                           fitWidth="44.0"
+                           pickOnBounds="true"
+                           preserveRatio="true">
                     <image>
                         <Image url="@user_icon.jpg" />
                     </image>
@@ -67,32 +129,37 @@
             </graphic>
         </Button>
 
-        <Pane layoutX="8.0" layoutY="189.0" prefHeight="15.0" prefWidth="15.0" style="-fx-background-color: #e90000;" />
+        <!-- Una piccola Pane rossa (decorativa?) -->
+        <Pane layoutX="8.0"
+              layoutY="189.0"
+              prefHeight="15.0"
+              prefWidth="15.0"
+              style="-fx-background-color: #e90000;" />
 
-        <TableView fx:id="tableViewChar" layoutX="235.0" layoutY="64.0" prefHeight="522.0" prefWidth="858.0" style="-fx-background-color: #292932;">
+        <!-- Tabella che mostra CharacterSheetBean -->
+        <TableView fx:id="tableViewChar"
+                   layoutX="235.0"
+                   layoutY="64.0"
+                   prefHeight="522.0"
+                   prefWidth="858.0"
+                   style="-fx-background-color: #292932;">
             <columns>
-                <TableColumn fx:id="tableViewCharName" minWidth="0.0" prefWidth="170.00006103515625" text="Name" />
-                <TableColumn fx:id="tableViewCharAge" prefWidth="80.6666259765625" text="Age" />
-                <TableColumn fx:id="tableViewCharClass" prefWidth="171.333251953125" text="Class" />
-                <TableColumn fx:id="tableViewCharRace" prefWidth="128.6666259765625" text="Race" />
-
-                <!-- Colonna Edit -->
-                <TableColumn fx:id="tableViewCharButton" prefWidth="152.5" text="Edit">
-                    <!-- AGGIUNTA -->
-                    <cellValueFactory>
-                        <!--
-                             'editButton' deve corrispondere a una proprietà nel tuo
-                             model o a un valore gestito dal tuo Controller tramite
-                             setCellFactory (vedremo dopo come).
-                        -->
-                        <PropertyValueFactory property="editButton" />
-                    </cellValueFactory>
-                </TableColumn>
-            <TableColumn fx:id="tableViewCharDelete" prefWidth="152.6666259765625" text="Delete" />
+                <TableColumn fx:id="tableViewCharName" minWidth="0.0" prefWidth="170.0" text="Name" />
+                <TableColumn fx:id="tableViewCharAge" prefWidth="80.6666" text="Age" />
+                <TableColumn fx:id="tableViewCharClass" prefWidth="171.3332" text="Class" />
+                <TableColumn fx:id="tableViewCharRace" prefWidth="128.6666" text="Race" />
+                <TableColumn fx:id="tableViewCharButton" prefWidth="152.5" text="Edit" />
+                <TableColumn fx:id="tableViewCharDelete" prefWidth="152.6666" text="Delete" />
             </columns>
         </TableView>
 
-        <Button fx:id="newCharacterButton" layoutX="611.0" layoutY="621.0" mnemonicParsing="false" onAction="#onClickNewCharacter" text="New Characater">
+        <!-- Bottone per creare un nuovo personaggio -->
+        <Button fx:id="newCharacterButton"
+                layoutX="611.0"
+                layoutY="621.0"
+                mnemonicParsing="false"
+                onAction="#onClickNewCharacter"
+                text="New Characater">
             <font>
                 <Font size="15.0" />
             </font>
