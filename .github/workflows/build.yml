@@ -43,7 +43,7 @@ jobs:
         run: |
           cd Maininterface
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -Dsonar.projectKey=polidori1999 \
+            -Dsonar.projectKey=Maininterface \
             -Dsonar.organization=Leonardo \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${SONAR_TOKEN}
