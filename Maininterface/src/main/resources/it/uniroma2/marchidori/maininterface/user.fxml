@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.image.Image?>
@@ -12,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ManageLobbyPane" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.marchidori.maininterface.boundary.ManageLobbyBoundary">
+<AnchorPane fx:id="userPane" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.marchidori.maininterface.boundary.UserBoundary">
    <children>
       <Button fx:id="goToHome" alignment="TOP_LEFT" layoutX="-8.0" layoutY="-3.0" mnemonicParsing="false" onAction="#onClickGoToHome" prefHeight="65.0" prefWidth="349.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE">
          <font>
@@ -89,7 +88,6 @@
             </Button>
          </children>
       </VBox>
-      <Pane layoutX="8.0" layoutY="284.0" prefHeight="15.0" prefWidth="15.0" style="-fx-background-color: #e90000;" />
       <Button fx:id="userButton" layoutX="1219.0" layoutY="11.0" mnemonicParsing="false" onAction="#onClickUser" prefHeight="41.0" prefWidth="45.0" style="-fx-background-color: transparent;" textFill="#f80606">
          <graphic>
             <ImageView blendMode="MULTIPLY" fitHeight="53.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
@@ -102,20 +100,26 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="goBackToList" layoutX="238.0" layoutY="615.0" mnemonicParsing="false" onAction="#onClickGoBackToListOfLobbies" prefHeight="25.0" prefWidth="88.0" style="-fx-background-color: #e90000;" text="Return to list" textFill="WHITE" />
-      <Button fx:id="saveButton" layoutX="982.0" layoutY="615.0" mnemonicParsing="false" onAction="#onClickSaveLobby" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #e90000;" text="Save" textFill="WHITE" />
-      <Pane layoutX="238.0" layoutY="131.0" prefHeight="472.0" prefWidth="813.0" style="-fx-background-color: #ffffff;">
+      <Button fx:id="logOutButton" layoutX="238.0" layoutY="450.0" mnemonicParsing="false" onAction="#onClickLogOut" prefHeight="51.0" prefWidth="301.0" style="-fx-background-color: #e90000;" text="Log Out" textFill="WHITE">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Pane layoutX="238.0" layoutY="131.0" prefHeight="269.0" prefWidth="301.0" style="-fx-background-color: #ffffff;">
          <children>
-            <TextField fx:id="charName" layoutX="90.0" layoutY="77.0" promptText="Name of the lobby" />
-            <TextField fx:id="charAge" layoutX="475.0" layoutY="75.0" prefHeight="25.0" prefWidth="69.0" promptText="Duration" />
-            <TextField fx:id="charClass" layoutX="313.0" layoutY="77.0" prefHeight="25.0" prefWidth="78.0" promptText="Live/Online">
+            <TextField fx:id="userName" layoutX="90.0" layoutY="70.0" promptText="Username" />
+            <TextField fx:id="emailUser" layoutX="90.0" layoutY="125.0" prefHeight="25.0" prefWidth="78.0" promptText="Email">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
             </TextField>
-            <TextField fx:id="charLevel" layoutX="645.0" layoutY="74.0" prefHeight="25.0" prefWidth="78.0" promptText="MaxPlayers" />
-            <TextArea layoutX="307.0" layoutY="154.0" prefHeight="200.0" prefWidth="200.0" promptText="Description of the lobby" />
+            <TextField fx:id="roleUser" layoutX="90.0" layoutY="180.0" prefHeight="25.0" prefWidth="118.0" promptText="Role" />
          </children>
       </Pane>
+      <ImageView fx:id="tiamatImage" fitHeight="522.0" fitWidth="675.0" layoutX="561.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Tiamat.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

@@ -60,7 +60,7 @@ public class ManageLobbyBoundary {
     @FXML
     void onClickGoBackToListOfLobbies(ActionEvent event) {
         try {
-            changeScene("ManageLobbyList.fxml");
+            changeScene("manageLobbyList.fxml");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
