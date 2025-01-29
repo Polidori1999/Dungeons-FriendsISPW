@@ -19,25 +19,25 @@
         <VBox id="Vbox" layoutX="27.0" layoutY="171.0" prefHeight="245.0" prefWidth="151.0" AnchorPane.leftAnchor="27.0" AnchorPane.rightAnchor="1102.0">
             <children>
                 <!-- Pulsante My Characters -->
-                <Button fx:id="Mychar" mnemonicParsing="false" prefHeight="51.0" prefWidth="150.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
+                <Button fx:id="Mychar" mnemonicParsing="false" onAction="#onclickGoToMyCharList" prefHeight="51.0" prefWidth="150.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Button>
                 <!-- Pulsante Join Lobby -->
-                <Button fx:id="Joinlobby" mnemonicParsing="false" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
+                <Button fx:id="Joinlobby" mnemonicParsing="false" onAction="#onClickGoToJoinLobby" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Button>
                 <!-- Pulsante Manage Lobby -->
-                <Button fx:id="ManageLobby" mnemonicParsing="false" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
+                <Button fx:id="ManageLobby" mnemonicParsing="false" onAction="#onClickGoToManageLobby" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Button>
                 <!-- Pulsante Consult Rules -->
-                <Button fx:id="Consult_rules" mnemonicParsing="false" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
+                <Button fx:id="Consult_rules" mnemonicParsing="false" onAction="#onClickGoToConsultRules" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>

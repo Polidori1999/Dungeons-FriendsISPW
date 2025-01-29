@@ -37,7 +37,7 @@
                     </graphic>
                 </Button>
                 <!-- Pulsante Join Lobby -->
-                <Button fx:id="Joinlobby" mnemonicParsing="false" prefHeight="45.0" prefWidth="128.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
+                <Button fx:id="Joinlobby" mnemonicParsing="false" onAction="#onClickGoToJoinLobby" prefHeight="45.0" prefWidth="128.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
@@ -53,7 +53,7 @@
                     </graphic>
                 </Button>
                 <!-- Pulsante Manage Lobby -->
-                <Button fx:id="ManageLobby" mnemonicParsing="false" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
+                <Button fx:id="ManageLobby" mnemonicParsing="false" onAction="#onClickGoToManageLobby" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
@@ -69,7 +69,7 @@
                     </graphic>
                 </Button>
                 <!-- Pulsante Consult Rules -->
-                <Button fx:id="Consult_rules" mnemonicParsing="false" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
+                <Button fx:id="Consult_rules" mnemonicParsing="false" onAction="#onClickGoToConsultRules" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
@@ -88,7 +88,7 @@
         </VBox>
 
         <!-- Pulsante principale -->
-        <Button alignment="TOP_LEFT" layoutX="-8.0" layoutY="-3.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="349.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE">
+        <Button fx:id="home" alignment="TOP_LEFT" layoutX="-8.0" layoutY="-3.0" mnemonicParsing="false" onAction="#onClickGoToHome" prefHeight="65.0" prefWidth="349.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE">
             <font>
                 <Font name="System Bold" size="30.0" />
             </font>

@@ -203,7 +203,7 @@ public class JoinLobbyBoundary implements Initializable {
     }
 
     @FXML
-    void onclickGoToMyCharList(ActionEvent event) {
+    void onClickMyCharacter(ActionEvent event) {
         try {
             changeScene("characterList.fxml");
         } catch (IOException e) {
