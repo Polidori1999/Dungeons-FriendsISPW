@@ -1,0 +1,52 @@
+name: SonarCloud
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # 1) Effettua il checkout del repository
+      - uses: actions/checkout@v4
+        with:
+          # Consigliato: disabilitare lo shallow clone per calcolare correttamente alcune metriche
+          fetch-depth: 0
+
+      # 2) Imposta JDK 17 (puoi adattare la versione in base alle tue necessità)
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'zulu'
+
+      # 3) Cache delle librerie Sonar (per velocizzare build successive)
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      # 4) Cache delle dipendenze Maven
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      # 5) Compila il progetto e fai l'analisi SonarCloud
+      - name: Build and analyze
+        env:
+          # Assicurati di aver configurato SONAR_TOKEN nei Secrets del repo
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.projectKey=Polidori1999_Dungeons-FriendsISPW \
+            -Dsonar.organization=marchidori \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${SONAR_TOKEN}
