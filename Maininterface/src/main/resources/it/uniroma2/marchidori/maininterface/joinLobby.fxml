@@ -2,6 +2,7 @@
 
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TableColumn?>
@@ -52,9 +53,12 @@
                             </effect>
                         </ImageView>
                     </graphic>
+               <VBox.margin>
+                  <Insets left="1.0" />
+               </VBox.margin>
                 </Button>
                 <!-- Pulsante Manage Lobby -->
-                <Button fx:id="ManageLobby" mnemonicParsing="false" onAction="#onClickGoToManageLobby" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
+                <Button fx:id="ManageLobby" mnemonicParsing="false" onAction="#onClickGoToManageLobby" prefHeight="45.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
@@ -68,6 +72,9 @@
                             </effect>
                         </ImageView>
                     </graphic>
+               <VBox.margin>
+                  <Insets left="4.0" />
+               </VBox.margin>
                 </Button>
                 <!-- Pulsante Consult Rules -->
                 <Button fx:id="Consult_rules" mnemonicParsing="false" onAction="#onClickGoToConsultRules" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">

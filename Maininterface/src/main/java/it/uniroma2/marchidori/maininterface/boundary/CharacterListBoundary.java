@@ -122,7 +122,7 @@ public class CharacterListBoundary implements Initializable {
     // ---------------------------------------------------------
     private void openCreateCharacterModal() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("CharacterSheet.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/characterSheet.fxml"));
             Parent root = loader.load();
 
             // Recupera il controller
@@ -157,7 +157,7 @@ public class CharacterListBoundary implements Initializable {
     // ---------------------------------------------------------
     private void openEditCharacterModal(CharacterSheet characterToEdit) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("CharacterSheet.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/characterSheet.fxml"));
             Parent root = loader.load();
 
             CharacterSheetBoundary sheetController = loader.getController();
@@ -222,7 +222,7 @@ public class CharacterListBoundary implements Initializable {
     @FXML
     void onClickGoToManageLobby(ActionEvent event) {
         try {
-            changeScene("manageLobby.fxml");
+            changeScene("manageLobbyList.fxml");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -238,7 +238,7 @@ public class CharacterListBoundary implements Initializable {
     }
 
     @FXML
-    void onclickGoToMyCharList(ActionEvent event) {
+    void onClickMyCharacter(ActionEvent event) {
         try {
             changeScene("characterList.fxml");
         } catch (IOException e) {

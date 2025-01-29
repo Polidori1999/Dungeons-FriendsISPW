@@ -187,7 +187,7 @@ public class JoinLobbyBoundary implements Initializable {
     @FXML
     void onClickGoToManageLobby(ActionEvent event) {
         try {
-            changeScene("manageLobby.fxml");
+            changeScene("manageLobbyList.fxml");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
