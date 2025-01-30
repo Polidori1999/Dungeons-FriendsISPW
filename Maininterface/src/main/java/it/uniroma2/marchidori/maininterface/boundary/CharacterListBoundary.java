@@ -15,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
@@ -42,6 +43,7 @@ public class CharacterListBoundary implements Initializable {
 
     @FXML
     private TableColumn<CharacterSheetBean, Button> tableViewCharButton;  // colonna "Edit"
+
     @FXML
     private TableColumn<CharacterSheetBean, Button> tableViewCharDelete; // colonna "Delete"
 
@@ -70,7 +72,7 @@ public class CharacterListBoundary implements Initializable {
             Button editBtn = new Button("Edit");
             return new ReadOnlyObjectWrapper<>(editBtn);
         });
-        tableViewCharButton.setCellFactory(col -> new TableCell<CharacterSheetBean, Button>() {
+        tableViewCharButton.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(Button item, boolean empty) {
                 super.updateItem(item, empty);
@@ -91,7 +93,7 @@ public class CharacterListBoundary implements Initializable {
             Button deleteBtn = new Button("Delete");
             return new ReadOnlyObjectWrapper<>(deleteBtn);
         });
-        tableViewCharDelete.setCellFactory(col -> new TableCell<CharacterSheetBean, Button>() {
+        tableViewCharDelete.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(Button item, boolean empty) {
                 super.updateItem(item, empty);
@@ -103,8 +105,8 @@ public class CharacterListBoundary implements Initializable {
                         // Rimuoviamo il Bean dalla tabella
                         CharacterSheetBean selectedBean = getTableView().getItems().get(getIndex());
                         getTableView().getItems().remove(selectedBean);
-                        // Potresti anche voler aggiornare la lista nel controller,
-                        // se implementi un metodo "controller.deleteCharacter(selectedBean);"
+                        // Se necessario, chiamare anche un metodo su controller
+                        // (ad esempio "controller.deleteCharacter(selectedBean);")
                     });
                 }
             }
@@ -129,9 +131,9 @@ public class CharacterListBoundary implements Initializable {
             CharacterSheetBoundary sheetController = loader.getController();
             // Creazione mode
             sheetController.setCreationMode(true);
-            // Passiamo un riferimento al controller BCE
+            // Passiamo il controller BCE
             sheetController.setController(controller);
-            // Passiamo un riferimento a "questa" boundary
+            // Passiamo la boundary
             sheetController.setParentBoundary(this);
 
             Stage modalStage = new Stage();
@@ -141,9 +143,7 @@ public class CharacterListBoundary implements Initializable {
             modalStage.setScene(new Scene(root));
             modalStage.showAndWait();
 
-            // Al ritorno, se un personaggio è stato creato,
-            // la finestra secondaria potrebbe aver aggiunto
-            // un Bean con "addNewCharacterBean(...)"
+            // Refresh della tabella dopo la chiusura della finestra
             tableViewChar.refresh();
 
         } catch (IOException e) {
@@ -174,7 +174,7 @@ public class CharacterListBoundary implements Initializable {
             modalStage.setScene(new Scene(root));
             modalStage.showAndWait();
 
-            // Al ritorno, potremmo refreshare
+            // Refresh
             tableViewChar.refresh();
 
         } catch (IOException e) {
@@ -191,13 +191,9 @@ public class CharacterListBoundary implements Initializable {
         tableViewChar.refresh();
     }
 
-    // Se vuoi reimportare la lista dal controller, puoi farlo qui.
-    // Oppure, se preferisci, basta refresh.
     public void refreshTable() {
         tableViewChar.refresh();
     }
-
-    // Altri metodi di navigazione (onClickGoToHome, etc.) invariati
 
     @FXML
     void onClickGoToConsultRules(ActionEvent event) {
@@ -264,38 +260,41 @@ public class CharacterListBoundary implements Initializable {
 
     @FXML
     private void changeScene(String fxml) throws IOException {
-
-        // Carica il file FXML della seconda scena
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml));
         Parent root = loader.load();
-
-        // Ottieni lo stage attuale
-        Stage stage = (Stage) CharacterPane.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-        // Crea una nuova scena e impostala nello stage
+        Stage stage = (Stage) CharacterPane.getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
     }
 
-    // ...
 
     // -------------- Utility --------------
+
     /**
-     * Per semplificare la setCellValueFactory, usiamo una piccola classe interna
-     * che restituisce la property con un ReadOnlyObjectWrapper.
-     */
-    private static class ReadOnlyObjectWrapperFactory<S> implements javafx.util.Callback<TableColumn.CellDataFeatures<S,String>, javafx.beans.value.ObservableValue<String>> {
-        private final String propertyName;
-        public ReadOnlyObjectWrapperFactory(String propertyName) {
-            this.propertyName = propertyName;
-        }
+         * Modificata in modo da restituire i dati effettivi di CharacterSheetBean
+         * (invece della stringa fissa "???").
+         */
+        private record ReadOnlyObjectWrapperFactory<S>(String propertyName)
+                implements Callback<TableColumn.CellDataFeatures<S, String>, javafx.beans.value.ObservableValue<String>> {
+
         @Override
-        public javafx.beans.value.ObservableValue<String> call(TableColumn.CellDataFeatures<S, String> param) {
-            // Reflection super semplice (o potresti usare PropertyValueFactory).
-            // Oppure puoi usare un lambda, come hai fatto a mano.
-            // Qui metto un esempio veloce per illustrare l'idea.
-            // Invece, potresti fare a mano: new ReadOnlyObjectWrapper<>(param.getValue().getName()) etc.
-            return new ReadOnlyObjectWrapper<>("???");
+            public javafx.beans.value.ObservableValue<String> call(TableColumn.CellDataFeatures<S, String> param) {
+                S rowItem = param.getValue();
+
+                // Accertiamoci che l'oggetto nella riga sia un CharacterSheetBean
+                if (rowItem instanceof CharacterSheetBean bean) {
+                    // In base al "propertyName", ritorniamo il valore appropriato
+                    return switch (propertyName) {
+                        case "name" -> new ReadOnlyObjectWrapper<>(bean.getInfo().getName());
+                        case "race" -> new ReadOnlyObjectWrapper<>(bean.getInfo().getRace());
+                        case "age" -> new ReadOnlyObjectWrapper<>(String.valueOf(bean.getInfo().getAge()));
+                        case "classe" -> new ReadOnlyObjectWrapper<>(bean.getInfo().getClasse());
+                        // se per qualche ragione arriva un propertyName sconosciuto, ritorna "???"
+                        default -> new ReadOnlyObjectWrapper<>("???");
+                    };
+                }
+
+                return new ReadOnlyObjectWrapper<>("???");
+            }
         }
-    }
 }
