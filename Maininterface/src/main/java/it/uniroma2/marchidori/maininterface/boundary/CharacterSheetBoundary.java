@@ -1,8 +1,8 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
-import it.uniroma2.marchidori.maininterface.bean.CharacterStatsBean;
 import it.uniroma2.marchidori.maininterface.bean.CharacterInfoBean;
 import it.uniroma2.marchidori.maininterface.bean.CharacterSheetBean;
+import it.uniroma2.marchidori.maininterface.bean.CharacterStatsBean;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,12 +14,19 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Boundary per mostrare/creare/modificare i dati di un CharacterSheet
  * in forma "spezzata" (info + statsScores).
  */
 public class CharacterSheetBoundary {
+
+    // ---------------------------------
+    // LOGGING: sostituisce System.err
+    // ---------------------------------
+    private static final Logger LOGGER = Logger.getLogger(CharacterSheetBoundary.class.getName());
 
     @FXML
     private AnchorPane characterSheetPane;
@@ -40,20 +47,19 @@ public class CharacterSheetBoundary {
     @FXML
     private TextField charLevel;
 
-
     // ---------------------- FIELDS: sezione "statsScores" ----------------------
     @FXML
-    private TextField charStrenght;   // STR
+    private TextField charStrenght;     // STR
     @FXML
-    private TextField charDexerity;   // DEX
+    private TextField charDexerity;     // DEX
     @FXML
     private TextField charConstitution; // CON
     @FXML
     private TextField charIntelligence; // INT
     @FXML
-    private TextField charWisdom;    // WIS
+    private TextField charWisdom;       // WIS
     @FXML
-    private TextField charCharisma;  // CHA
+    private TextField charCharisma;     // CHA
 
     // Flag: true se stiamo creando, false se stiamo modificando
     private boolean creationMode;
@@ -128,7 +134,7 @@ public class CharacterSheetBoundary {
         if (bean.getInfoBean() != null) {
             charName.setText(bean.getInfoBean().getName());
             charRace.setText(bean.getInfoBean().getRace());
-            charAge.setText(String.valueOf(bean.getInfoBean().getAge())); //poichè dobbiamo convertire
+            charAge.setText(String.valueOf(bean.getInfoBean().getAge())); // poichè dobbiamo convertire
             charClass.setText(bean.getInfoBean().getClasse());
             charLevel.setText(String.valueOf(bean.getInfoBean().getLevel()));
         }
@@ -146,19 +152,19 @@ public class CharacterSheetBoundary {
      * Crea un CharacterInfoBean dai campi "info".
      */
     private CharacterInfoBean buildInfoBeanFromFields() {
-        int ageInt=0;
-        int levelInt=0;
-
-        try{
+        int ageInt = 0;
+        int levelInt = 0;
+        try {
             ageInt = Integer.parseInt(charAge.getText());
         } catch (NumberFormatException e) {
-            System.err.println("Errore nell'età impostata");
+            LOGGER.log(Level.WARNING, "Errore nell'età impostata, uso 0 di default", e);
         }
-        try{
+        try {
             levelInt = Integer.parseInt(charLevel.getText());
         } catch (NumberFormatException e) {
-            System.err.println("Errore nel livello impostato");
+            LOGGER.log(Level.WARNING, "Errore nel livello impostato, uso 0 di default", e);
         }
+
         return new CharacterInfoBean(
                 charName.getText(),
                 charRace.getText(),
@@ -172,43 +178,44 @@ public class CharacterSheetBoundary {
      * Crea un statsScoresBean dai campi "stats".
      */
     private CharacterStatsBean buildStatsBeanFromFields() {
-        int strenghInt=0;
-        int dexInt=0;
-        int constInt=0;
-        int intellInt=0;
-        int wisInt=0;
-        int charismaInt=0;
+        int strenghInt = 0;
+        int dexInt     = 0;
+        int constInt   = 0;
+        int intellInt  = 0;
+        int wisInt     = 0;
+        int charismaInt= 0;
 
         try {
             strenghInt = Integer.parseInt(charStrenght.getText());
         } catch (NumberFormatException e) {
-            System.err.println("Valore di forza non valido, impostato a 0.");
+            LOGGER.log(Level.WARNING, "Valore di forza non valido, impostato a 0", e);
         }
         try {
             dexInt = Integer.parseInt(charDexerity.getText());
         } catch (NumberFormatException e) {
-            System.err.println("Valore di destrezza non valido, impostato a 0.");
+            LOGGER.log(Level.WARNING, "Valore di destrezza non valido, impostato a 0", e);
         }
         try {
             constInt = Integer.parseInt(charConstitution.getText());
         } catch (NumberFormatException e) {
-            System.err.println("Valore di costituzione non valido, impostato a 0.");
+            LOGGER.log(Level.WARNING, "Valore di costituzione non valido, impostato a 0", e);
         }
         try {
             intellInt = Integer.parseInt(charIntelligence.getText());
         } catch (NumberFormatException e) {
-            System.err.println("Valore di intelligenza non valido, impostato a 0.");
+            LOGGER.log(Level.WARNING, "Valore di intelligenza non valido, impostato a 0", e);
         }
         try {
             wisInt = Integer.parseInt(charWisdom.getText());
         } catch (NumberFormatException e) {
-            System.err.println("Valore di saggezza non valido, impostato a 0.");
+            LOGGER.log(Level.WARNING, "Valore di saggezza non valido, impostato a 0", e);
         }
         try {
             charismaInt = Integer.parseInt(charCharisma.getText());
         } catch (NumberFormatException e) {
-            System.err.println("Valore di carisma non valido, impostato a 0.");
+            LOGGER.log(Level.WARNING, "Valore di carisma non valido, impostato a 0", e);
         }
+
         return new CharacterStatsBean(
                 strenghInt,
                 dexInt,
@@ -219,15 +226,13 @@ public class CharacterSheetBoundary {
         );
     }
 
-
-
     // -------------------------------------------------------------
     //                 SALVATAGGIO (BOTTONE SAVE)
     // -------------------------------------------------------------
     @FXML
     void onClickSaveCharacter(ActionEvent event) {
         if (controller == null) {
-            System.err.println("ERRORE: Controller non impostato!");
+            LOGGER.warning("Controller non impostato! Impossibile salvare il personaggio.");
             return;
         }
 
@@ -247,13 +252,12 @@ public class CharacterSheetBoundary {
             if (parentBoundary != null) {
                 parentBoundary.addNewCharacterBean(newBean);
             }
-            System.out.println("Creato nuovo bean: " + newBean);
+            LOGGER.info("Creato nuovo bean: " + newBean);
 
         } else {
             // Modifica di un bean esistente
             if (currentBean != null) {
                 // Aggiorniamo i sub-bean
-                // (se i sub-bean erano null, creiamoli: dipende dal tuo design)
                 if (currentBean.getInfoBean() == null) {
                     currentBean.setInfoBean(new CharacterInfoBean());
                 }
@@ -262,25 +266,22 @@ public class CharacterSheetBoundary {
                 }
 
                 // Aggiorniamo i dati "info"
-
                 CharacterInfoBean infoB = currentBean.getInfoBean();
                 infoB.setName(charName.getText());
                 infoB.setRace(charRace.getText());
 
-                //convertiamo strng->int
-                try{
+                try {
                     infoB.setAge(Integer.parseInt(charAge.getText()));
                 } catch (NumberFormatException e) {
                     infoB.setAge(0);
-                    System.err.println("Valore di età non valido!");
+                    LOGGER.log(Level.WARNING, "Valore di età non valido, impostato a 0", e);
                 }
-                try{
+                try {
                     infoB.setLevel(Integer.parseInt(charLevel.getText()));
-                } catch(NumberFormatException e) {
+                } catch (NumberFormatException e) {
                     infoB.setLevel(0);
-                    System.err.println("Valore di livello non valido!");
+                    LOGGER.log(Level.WARNING, "Valore di livello non valido, impostato a 0", e);
                 }
-
 
                 // Aggiorniamo i dati "stats"
                 CharacterStatsBean statsB = currentBean.getStatsBean();
@@ -288,37 +289,43 @@ public class CharacterSheetBoundary {
                     statsB.setStrength(Integer.parseInt(charStrenght.getText()));
                 } catch (NumberFormatException e) {
                     statsB.setStrength(0);
+                    LOGGER.log(Level.WARNING, "Valore di forza non valido, impostato a 0", e);
                 }
                 try {
                     statsB.setDexterity(Integer.parseInt(charDexerity.getText()));
                 } catch (NumberFormatException e) {
                     statsB.setDexterity(0);
+                    LOGGER.log(Level.WARNING, "Valore di destrezza non valido, impostato a 0", e);
                 }
                 try {
                     statsB.setConstitution(Integer.parseInt(charConstitution.getText()));
                 } catch (NumberFormatException e) {
                     statsB.setConstitution(0);
+                    LOGGER.log(Level.WARNING, "Valore di costituzione non valido, impostato a 0", e);
                 }
                 try {
                     statsB.setIntelligence(Integer.parseInt(charIntelligence.getText()));
                 } catch (NumberFormatException e) {
                     statsB.setIntelligence(0);
+                    LOGGER.log(Level.WARNING, "Valore di intelligenza non valido, impostato a 0", e);
                 }
                 try {
                     statsB.setWisdom(Integer.parseInt(charWisdom.getText()));
                 } catch (NumberFormatException e) {
                     statsB.setWisdom(0);
+                    LOGGER.log(Level.WARNING, "Valore di saggezza non valido, impostato a 0", e);
                 }
                 try {
                     statsB.setCharisma(Integer.parseInt(charCharisma.getText()));
                 } catch (NumberFormatException e) {
                     statsB.setCharisma(0);
+                    LOGGER.log(Level.WARNING, "Valore di carisma non valido, impostato a 0", e);
                 }
 
                 // 2) Avvisiamo il controller che aggiorni il personaggio esistente
                 controller.updateCharacter(currentBean);
 
-                System.out.println("Aggiornato bean esistente: " + currentBean);
+                LOGGER.info("Aggiornato bean esistente: " + currentBean);
 
                 // 3) Avvisiamo la finestra di lista di refresh
                 if (parentBoundary != null) {
@@ -376,7 +383,9 @@ public class CharacterSheetBoundary {
     // -------------------------------------------------------------
     private void changeScene(String fxml) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml)
+            );
             Parent root = loader.load();
 
             Stage stage = (Stage) characterSheetPane.getScene().getWindow();
@@ -384,7 +393,8 @@ public class CharacterSheetBoundary {
             stage.setScene(scene);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            // In un passaggio successivo, potresti anche lanciare una SceneChangeException
+            LOGGER.log(Level.SEVERE, "Errore nel cambio scena a " + fxml, e);//SEVERE perchè è grave
         }
     }
 }
