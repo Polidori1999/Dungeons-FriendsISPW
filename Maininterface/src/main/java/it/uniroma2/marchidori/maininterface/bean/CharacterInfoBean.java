@@ -8,6 +8,7 @@ public class CharacterInfoBean {
     private String classe;
     private String level;
 
+
     public CharacterInfoBean() {
         // costruttore vuoto
     }

@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.bean;
 
+
 public class CharacterSheetBean {
 
     private CharacterInfoBean info;

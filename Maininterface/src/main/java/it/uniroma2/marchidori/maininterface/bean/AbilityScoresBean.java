@@ -1,5 +1,7 @@
 package it.uniroma2.marchidori.maininterface.bean;
 
+
+
 public class AbilityScoresBean {
 
     private String strength;
