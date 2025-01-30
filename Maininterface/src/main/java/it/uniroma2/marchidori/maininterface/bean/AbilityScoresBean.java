@@ -15,6 +15,7 @@ public class AbilityScoresBean {
         // costruttore vuoto
     }
 
+
     public AbilityScoresBean(String strength, String dexterity,
                              String intelligence, String wisdom,
                              String charisma, String constitution) {
