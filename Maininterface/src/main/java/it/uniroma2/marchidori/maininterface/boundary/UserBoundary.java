@@ -1,24 +1,19 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
-import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ManageLobbyListBoundary {
-
-    @FXML
-    private AnchorPane manageLobbyListPane;
+public class UserBoundary {
 
     @FXML
     private Button Consult_rules;
@@ -36,34 +31,25 @@ public class ManageLobbyListBoundary {
     private VBox Vbox;
 
     @FXML
+    private TextField emailUser;
+
+    @FXML
     private Button goToHome;
 
     @FXML
-    private Button newLobbyButton;
+    private Button logOutButton;
 
     @FXML
-    private TableColumn<LobbyBean, String> tableViewDuration;
-
-    @FXML
-    private TableColumn<LobbyBean, String> tableViewLiveOrNot;
-
-    @FXML
-    private TableView<LobbyBean> tableViewLobby;
-
-    @FXML
-    private TableColumn<LobbyBean, Void> tableViewLobbyDelete;
-
-    @FXML
-    private TableColumn<LobbyBean, Void> tableViewLobbyEdit;
-
-    @FXML
-    private TableColumn<LobbyBean, String> tableViewLobbyName;
-
-    @FXML
-    private TableColumn<LobbyBean, String> tableViewMaxPlayers;
+    private TextField roleUser;
 
     @FXML
     private Button userButton;
+
+    @FXML
+    private TextField userName;
+
+    @FXML
+    private AnchorPane userPane;
 
     @FXML
     void onClickGoToConsultRules(ActionEvent event) {
@@ -102,18 +88,18 @@ public class ManageLobbyListBoundary {
     }
 
     @FXML
-    void onClickMyCharacter(ActionEvent event) {
+    void onClickLogOut(ActionEvent event) {
         try {
-            changeScene("characterList.fxml");
+            changeScene("login.fxml");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     @FXML
-    void onClickNewLobby(ActionEvent event) {
+    void onClickMyCharacter(ActionEvent event) {
         try {
-            changeScene("manageLobby.fxml");
+            changeScene("characterList.fxml");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -130,13 +116,12 @@ public class ManageLobbyListBoundary {
 
     @FXML
     private void changeScene(String fxml) throws IOException {
-
         // Carica il file FXML della seconda scena
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml));
         Parent root = loader.load();
 
         // Ottieni lo stage attuale
-        Stage stage = (Stage) manageLobbyListPane.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) userPane.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
 
         // Crea una nuova scena e impostala nello stage
         Scene scene = new Scene(root);
