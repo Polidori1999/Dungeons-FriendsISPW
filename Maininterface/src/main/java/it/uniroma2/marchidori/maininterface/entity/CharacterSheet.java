@@ -2,116 +2,121 @@ package it.uniroma2.marchidori.maininterface.entity;
 
 /**
  * Entity "CharacterSheet":
- * Dati di dominio per un personaggio.
- * Niente riferimenti a UI (Button, ecc.).
+ * Aggrega i dati relativi a un personaggio,
+ * suddivisi tra "CharacterInfo" e "CharacterStats".
  */
 public class CharacterSheet {
 
-    private String name;
-    private String race;
-    private String age;
-    private String classe;
-    private String level;
-    private String strength;
-    private String dexterity;
-    private String intelligence;
-    private String wisdom;
-    private String charisma;
-    private String constitution;
+    private CharacterInfo characterInfo;
+    private CharacterStats characterStats;
 
-
-
-    public CharacterSheet(String name, String race, String age, String classe, String level,
-                          String strength, String dexterity, String intelligence,
-                          String wisdom, String charisma, String constitution) {
-        this.name = name;
-        this.race = race;
-        this.age = age;
-        this.classe = classe;
-        this.level = level;
-        this.strength = strength;
-        this.dexterity = dexterity;
-        this.intelligence = intelligence;
-        this.wisdom = wisdom;
-        this.charisma = charisma;
-        this.constitution = constitution;
+    // Costruttore vuoto
+    public CharacterSheet() {
     }
 
-    // Getters e Setters
+    // Costruttore principale a 2 parametri
+    public CharacterSheet(CharacterInfo characterInfo, CharacterStats characterStats) {
+        this.characterInfo = characterInfo;
+        this.characterStats = characterStats;
+    }
+
+    // Getter e Setter per i due oggetti
+    public CharacterInfo getCharacterInfo() {
+        return characterInfo;
+    }
+    public void setCharacterInfo(CharacterInfo characterInfo) {
+        this.characterInfo = characterInfo;
+    }
+
+    public CharacterStats getCharacterStats() {
+        return characterStats;
+    }
+    public void setCharacterStats(CharacterStats characterStats) {
+        this.characterStats = characterStats;
+    }
+
+    /**
+     * Metodi delegati per comodità, così se il Controller fa
+     * existing.setRace(...) funziona senza creare da zero
+     * un CharacterInfo e un CharacterStats.
+     */
+
+    // ---------- INFO ----------
     public String getName() {
-        return name;
+        return characterInfo.getName();
     }
     public void setName(String name) {
-        this.name = name;
+        characterInfo.setName(name);
     }
 
     public String getRace() {
-        return race;
+        return characterInfo.getRace();
     }
     public void setRace(String race) {
-        this.race = race;
+        characterInfo.setRace(race);
     }
 
-    public String getAge() {
-        return age;
+    public int getAge() {
+        return characterInfo.getAge();
     }
-    public void setAge(String age) {
-        this.age = age;
+    public void setAge(int age) {
+        characterInfo.setAge(age);
     }
 
     public String getClasse() {
-        return classe;
+        return characterInfo.getClasse();
     }
     public void setClasse(String classe) {
-        this.classe = classe;
+        characterInfo.setClasse(classe);
     }
 
-    public String getLevel() {
-        return level;
+    public int getLevel() {
+        return characterInfo.getLevel();
     }
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
-    public String getStrength() {
-        return strength;
-    }
-    public void setStrength(String strength) {
-        this.strength = strength;
+    public void setLevel(int level) {
+        characterInfo.setLevel(level);
     }
 
-    public String getDexterity() {
-        return dexterity;
+    // ---------- STATS ----------
+    public int getStrength() {
+        return characterStats.getStrength();
     }
-    public void setDexterity(String dexterity) {
-        this.dexterity = dexterity;
-    }
-
-    public String getIntelligence() {
-        return intelligence;
-    }
-    public void setIntelligence(String intelligence) {
-        this.intelligence = intelligence;
+    public void setStrength(int strength) {
+        characterStats.setStrength(strength);
     }
 
-    public String getWisdom() {
-        return wisdom;
+    public int getDexterity() {
+        return characterStats.getDexterity();
     }
-    public void setWisdom(String wisdom) {
-        this.wisdom = wisdom;
-    }
-
-    public String getCharisma() {
-        return charisma;
-    }
-    public void setCharisma(String charisma) {
-        this.charisma = charisma;
+    public void setDexterity(int dexterity) {
+        characterStats.setDexterity(dexterity);
     }
 
-    public String getConstitution() {
-        return constitution;
+    public int getIntelligence() {
+        return characterStats.getIntelligence();
     }
-    public void setConstitution(String constitution) {
-        this.constitution = constitution;
+    public void setIntelligence(int intelligence) {
+        characterStats.setIntelligence(intelligence);
+    }
+
+    public int getWisdom() {
+        return characterStats.getWisdom();
+    }
+    public void setWisdom(int wisdom) {
+        characterStats.setWisdom(wisdom);
+    }
+
+    public int getCharisma() {
+        return characterStats.getCharisma();
+    }
+    public void setCharisma(int charisma) {
+        characterStats.setCharisma(charisma);
+    }
+
+    public int getConstitution() {
+        return characterStats.getConstitution();
+    }
+    public void setConstitution(int constitution) {
+        characterStats.setConstitution(constitution);
     }
 }

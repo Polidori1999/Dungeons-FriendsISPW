@@ -1,6 +1,6 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
-import it.uniroma2.marchidori.maininterface.bean.AbilityScoresBean;
+import it.uniroma2.marchidori.maininterface.bean.CharacterStatsBean;
 import it.uniroma2.marchidori.maininterface.bean.CharacterInfoBean;
 import it.uniroma2.marchidori.maininterface.bean.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
@@ -17,7 +17,7 @@ import java.io.IOException;
 
 /**
  * Boundary per mostrare/creare/modificare i dati di un CharacterSheet
- * in forma "spezzata" (info + abilityScores).
+ * in forma "spezzata" (info + statsScores).
  */
 public class CharacterSheetBoundary {
 
@@ -41,7 +41,7 @@ public class CharacterSheetBoundary {
     private TextField charLevel;
 
 
-    // ---------------------- FIELDS: sezione "abilityScores" ----------------------
+    // ---------------------- FIELDS: sezione "statsScores" ----------------------
     @FXML
     private TextField charStrenght;   // STR
     @FXML
@@ -111,7 +111,7 @@ public class CharacterSheetBoundary {
         charClass.setText("");
         charLevel.setText("");
 
-        // Sezione "ability"
+        // Sezione "stats"
         charStrenght.setText("");
         charDexerity.setText("");
         charConstitution.setText("");
@@ -121,24 +121,24 @@ public class CharacterSheetBoundary {
     }
 
     /**
-     * Legge i valori da bean.info e bean.abilityScores,
+     * Legge i valori da bean.info e bean.statsScores,
      * e li mostra nei campi di testo.
      */
     private void populateFieldsFromBean(CharacterSheetBean bean) {
-        if (bean.getInfo() != null) {
-            charName.setText(bean.getInfo().getName());
-            charRace.setText(bean.getInfo().getRace());
-            charAge.setText(bean.getInfo().getAge());
-            charClass.setText(bean.getInfo().getClasse());
-            charLevel.setText(bean.getInfo().getLevel());
+        if (bean.getInfoBean() != null) {
+            charName.setText(bean.getInfoBean().getName());
+            charRace.setText(bean.getInfoBean().getRace());
+            charAge.setText(String.valueOf(bean.getInfoBean().getAge())); //poichè dobbiamo convertire
+            charClass.setText(bean.getInfoBean().getClasse());
+            charLevel.setText(String.valueOf(bean.getInfoBean().getLevel()));
         }
-        if (bean.getAbilityScores() != null) {
-            charStrenght.setText(bean.getAbilityScores().getStrength());
-            charDexerity.setText(bean.getAbilityScores().getDexterity());
-            charConstitution.setText(bean.getAbilityScores().getConstitution());
-            charIntelligence.setText(bean.getAbilityScores().getIntelligence());
-            charWisdom.setText(bean.getAbilityScores().getWisdom());
-            charCharisma.setText(bean.getAbilityScores().getCharisma());
+        if (bean.getStatsBean() != null) {
+            charStrenght.setText(String.valueOf(bean.getStatsBean().getStrength()));
+            charDexerity.setText(String.valueOf(bean.getStatsBean().getDexterity()));
+            charConstitution.setText(String.valueOf(bean.getStatsBean().getConstitution()));
+            charIntelligence.setText(String.valueOf(bean.getStatsBean().getIntelligence()));
+            charWisdom.setText(String.valueOf(bean.getStatsBean().getWisdom()));
+            charCharisma.setText(String.valueOf(bean.getStatsBean().getCharisma()));
         }
     }
 
@@ -146,26 +146,76 @@ public class CharacterSheetBoundary {
      * Crea un CharacterInfoBean dai campi "info".
      */
     private CharacterInfoBean buildInfoBeanFromFields() {
+        int ageInt=0;
+        int levelInt=0;
+
+        try{
+            ageInt = Integer.parseInt(charAge.getText());
+        } catch (NumberFormatException e) {
+            System.err.println("Errore nell'età impostata");
+        }
+        try{
+            levelInt = Integer.parseInt(charLevel.getText());
+        } catch (NumberFormatException e) {
+            System.err.println("Errore nel livello impostato");
+        }
         return new CharacterInfoBean(
                 charName.getText(),
                 charRace.getText(),
-                charAge.getText(),
+                ageInt,
                 charClass.getText(),
-                charLevel.getText()
+                levelInt
         );
     }
 
     /**
-     * Crea un AbilityScoresBean dai campi "ability".
+     * Crea un statsScoresBean dai campi "stats".
      */
-    private AbilityScoresBean buildAbilityBeanFromFields() {
-        return new AbilityScoresBean(
-                charStrenght.getText(),
-                charDexerity.getText(),
-                charIntelligence.getText(),
-                charWisdom.getText(),
-                charCharisma.getText(),
-                charConstitution.getText()
+    private CharacterStatsBean buildStatsBeanFromFields() {
+        int strenghInt=0;
+        int dexInt=0;
+        int constInt=0;
+        int intellInt=0;
+        int wisInt=0;
+        int charismaInt=0;
+
+        try {
+            strenghInt = Integer.parseInt(charStrenght.getText());
+        } catch (NumberFormatException e) {
+            System.err.println("Valore di forza non valido, impostato a 0.");
+        }
+        try {
+            dexInt = Integer.parseInt(charDexerity.getText());
+        } catch (NumberFormatException e) {
+            System.err.println("Valore di destrezza non valido, impostato a 0.");
+        }
+        try {
+            constInt = Integer.parseInt(charConstitution.getText());
+        } catch (NumberFormatException e) {
+            System.err.println("Valore di costituzione non valido, impostato a 0.");
+        }
+        try {
+            intellInt = Integer.parseInt(charIntelligence.getText());
+        } catch (NumberFormatException e) {
+            System.err.println("Valore di intelligenza non valido, impostato a 0.");
+        }
+        try {
+            wisInt = Integer.parseInt(charWisdom.getText());
+        } catch (NumberFormatException e) {
+            System.err.println("Valore di saggezza non valido, impostato a 0.");
+        }
+        try {
+            charismaInt = Integer.parseInt(charCharisma.getText());
+        } catch (NumberFormatException e) {
+            System.err.println("Valore di carisma non valido, impostato a 0.");
+        }
+        return new CharacterStatsBean(
+                strenghInt,
+                dexInt,
+                constInt,
+                intellInt,
+                wisInt,
+                charismaInt
         );
     }
 
@@ -183,12 +233,12 @@ public class CharacterSheetBoundary {
 
         if (creationMode) {
             // Creazione
-            // 1) Ricaviamo un infoBean e un abilityBean dai campi
+            // 1) Ricaviamo un infoBean e un statsBean dai campi
             CharacterInfoBean infoBean = buildInfoBeanFromFields();
-            AbilityScoresBean abilityBean = buildAbilityBeanFromFields();
+            CharacterStatsBean statsBean = buildStatsBeanFromFields();
 
             // 2) Creiamo un CharacterSheetBean che le raggruppa
-            CharacterSheetBean newBean = new CharacterSheetBean(infoBean, abilityBean);
+            CharacterSheetBean newBean = new CharacterSheetBean(infoBean, statsBean);
 
             // 3) Passiamo il bean al controller per creare il personaggio
             controller.createCharacter(newBean);
@@ -204,27 +254,66 @@ public class CharacterSheetBoundary {
             if (currentBean != null) {
                 // Aggiorniamo i sub-bean
                 // (se i sub-bean erano null, creiamoli: dipende dal tuo design)
-                if (currentBean.getInfo() == null) {
-                    currentBean.setInfo(new CharacterInfoBean());
+                if (currentBean.getInfoBean() == null) {
+                    currentBean.setInfoBean(new CharacterInfoBean());
                 }
-                if (currentBean.getAbilityScores() == null) {
-                    currentBean.setAbilityScores(new AbilityScoresBean());
+                if (currentBean.getStatsBean() == null) {
+                    currentBean.setStatsBean(new CharacterStatsBean());
                 }
 
                 // Aggiorniamo i dati "info"
-                currentBean.getInfo().setName(charName.getText());
-                currentBean.getInfo().setRace(charRace.getText());
-                currentBean.getInfo().setAge(charAge.getText());
-                currentBean.getInfo().setClasse(charClass.getText());
-                currentBean.getInfo().setLevel(charLevel.getText());
 
-                // Aggiorniamo i dati "ability"
-                currentBean.getAbilityScores().setStrength(charStrenght.getText());
-                currentBean.getAbilityScores().setDexterity(charDexerity.getText());
-                currentBean.getAbilityScores().setIntelligence(charIntelligence.getText());
-                currentBean.getAbilityScores().setWisdom(charWisdom.getText());
-                currentBean.getAbilityScores().setCharisma(charCharisma.getText());
-                currentBean.getAbilityScores().setConstitution(charConstitution.getText());
+                CharacterInfoBean infoB = currentBean.getInfoBean();
+                infoB.setName(charName.getText());
+                infoB.setRace(charRace.getText());
+
+                //convertiamo strng->int
+                try{
+                    infoB.setAge(Integer.parseInt(charAge.getText()));
+                } catch (NumberFormatException e) {
+                    infoB.setAge(0);
+                    System.err.println("Valore di età non valido!");
+                }
+                try{
+                    infoB.setLevel(Integer.parseInt(charLevel.getText()));
+                } catch(NumberFormatException e) {
+                    infoB.setLevel(0);
+                    System.err.println("Valore di livello non valido!");
+                }
+
+
+                // Aggiorniamo i dati "stats"
+                CharacterStatsBean statsB = currentBean.getStatsBean();
+                try {
+                    statsB.setStrength(Integer.parseInt(charStrenght.getText()));
+                } catch (NumberFormatException e) {
+                    statsB.setStrength(0);
+                }
+                try {
+                    statsB.setDexterity(Integer.parseInt(charDexerity.getText()));
+                } catch (NumberFormatException e) {
+                    statsB.setDexterity(0);
+                }
+                try {
+                    statsB.setConstitution(Integer.parseInt(charConstitution.getText()));
+                } catch (NumberFormatException e) {
+                    statsB.setConstitution(0);
+                }
+                try {
+                    statsB.setIntelligence(Integer.parseInt(charIntelligence.getText()));
+                } catch (NumberFormatException e) {
+                    statsB.setIntelligence(0);
+                }
+                try {
+                    statsB.setWisdom(Integer.parseInt(charWisdom.getText()));
+                } catch (NumberFormatException e) {
+                    statsB.setWisdom(0);
+                }
+                try {
+                    statsB.setCharisma(Integer.parseInt(charCharisma.getText()));
+                } catch (NumberFormatException e) {
+                    statsB.setCharisma(0);
+                }
 
                 // 2) Avvisiamo il controller che aggiorni il personaggio esistente
                 controller.updateCharacter(currentBean);

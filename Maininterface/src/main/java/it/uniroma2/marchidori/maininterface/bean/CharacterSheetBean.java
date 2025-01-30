@@ -3,41 +3,41 @@ package it.uniroma2.marchidori.maininterface.bean;
 
 public class CharacterSheetBean {
 
-    private CharacterInfoBean info;
-    private AbilityScoresBean abilityScores;
+    private CharacterInfoBean infoBean;
+    private CharacterStatsBean statsBean;
 
     public CharacterSheetBean() {
         // costruttore vuoto
     }
 
-    public CharacterSheetBean(CharacterInfoBean info, AbilityScoresBean abilityScores) {
-        this.info = info;
-        this.abilityScores = abilityScores;
+    public CharacterSheetBean(CharacterInfoBean info, CharacterStatsBean abilityScores) {
+        this.infoBean = info;
+        this.statsBean = abilityScores;
     }
 
     // Getter / Setter
-    public CharacterInfoBean getInfo() {
-        return info;
+    public CharacterInfoBean getInfoBean() {
+        return infoBean;
     }
 
-    public void setInfo(CharacterInfoBean info) {
-        this.info = info;
+    public void setInfoBean(CharacterInfoBean infoBean) {
+        this.infoBean = infoBean;
     }
 
-    public AbilityScoresBean getAbilityScores() {
-        return abilityScores;
+    public CharacterStatsBean getStatsBean() {
+        return statsBean;
     }
 
-    public void setAbilityScores(AbilityScoresBean abilityScores) {
-        this.abilityScores = abilityScores;
+    public void setStatsBean(CharacterStatsBean statsBean) {
+        this.statsBean = statsBean;
     }
 
     @Override
     public String toString() {
         // Esempio di output, usando i dati dei due bean
         return "[CharacterSheetBean] " +
-                (info != null ? info.getName() : "NoName") +
-                " (Class: " + (info != null ? info.getClasse() : "?") +
-                ", Level: " + (info != null ? info.getLevel() : "?") + ")";
+                (infoBean != null ? infoBean.getName() : "NoName") +
+                " (Class: " + (infoBean != null ? infoBean.getClasse() : "?") +
+                ", Level: " + (infoBean != null ? infoBean.getLevel() : "?") + ")";
     }
 }

@@ -1,9 +1,12 @@
 package it.uniroma2.marchidori.maininterface.control;
 
-import it.uniroma2.marchidori.maininterface.bean.AbilityScoresBean;
+import it.uniroma2.marchidori.maininterface.bean.CharacterStatsBean;
 import it.uniroma2.marchidori.maininterface.bean.CharacterInfoBean;
 import it.uniroma2.marchidori.maininterface.bean.CharacterSheetBean;
+import it.uniroma2.marchidori.maininterface.entity.CharacterInfo;
 import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
+import it.uniroma2.marchidori.maininterface.entity.CharacterStats;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +22,15 @@ public class CharacterSheetController {
     public CharacterSheetController() {
         // Carichiamo qualche personaggio di esempio (Entity pura)
         allCharacters = new ArrayList<>();
-        allCharacters.add(new CharacterSheet("Aragorn", "Human", "25", "Ranger", "5",
-                "16", "14", "12", "10", "8", "13"));
-        allCharacters.add(new CharacterSheet("Legolas", "Elf", "90", "Archer", "7",
-                "14", "18", "10", "12", "16", "10"));
+        // 1) Aragorn
+        CharacterInfo infoAragorn = new CharacterInfo("Aragorn", "Human", 25, "Ranger", 5);
+        CharacterStats statsAragorn = new CharacterStats(16, 14, 12, 10, 8, 13);
+        allCharacters.add(new CharacterSheet(infoAragorn, statsAragorn));
+
+        // 2) Legolas
+        CharacterInfo infoLegolas = new CharacterInfo("Legolas", "Elf", 90, "Archer", 7);
+        CharacterStats statsLegolas = new CharacterStats(14, 18, 10, 12, 16, 10);
+        allCharacters.add(new CharacterSheet(infoLegolas, statsLegolas));
     }
 
     /**
@@ -54,21 +62,21 @@ public class CharacterSheetController {
      */
     public void updateCharacter(CharacterSheetBean bean) {
         // Troviamo la Entity esistente basandoci sul nome
-        CharacterSheet existing = findByName(bean.getInfo().getName());
+        CharacterSheet existing = findByName(bean.getInfoBean().getName());
         if (existing != null) {
             // Aggiorniamo la parte "info"
-            existing.setRace(bean.getInfo().getRace());
-            existing.setAge(bean.getInfo().getAge());
-            existing.setClasse(bean.getInfo().getClasse());
-            existing.setLevel(bean.getInfo().getLevel());
+            existing.setRace(bean.getInfoBean().getRace());
+            existing.setAge(bean.getInfoBean().getAge());
+            existing.setClasse(bean.getInfoBean().getClasse());
+            existing.setLevel(bean.getInfoBean().getLevel());
 
             // Aggiorniamo la parte "abilityScores"
-            existing.setStrength(bean.getAbilityScores().getStrength());
-            existing.setDexterity(bean.getAbilityScores().getDexterity());
-            existing.setIntelligence(bean.getAbilityScores().getIntelligence());
-            existing.setWisdom(bean.getAbilityScores().getWisdom());
-            existing.setCharisma(bean.getAbilityScores().getCharisma());
-            existing.setConstitution(bean.getAbilityScores().getConstitution());
+            existing.setStrength(bean.getStatsBean().getStrength());
+            existing.setDexterity(bean.getStatsBean().getDexterity());
+            existing.setIntelligence(bean.getStatsBean().getIntelligence());
+            existing.setWisdom(bean.getStatsBean().getWisdom());
+            existing.setCharisma(bean.getStatsBean().getCharisma());
+            existing.setConstitution(bean.getStatsBean().getConstitution());
         }
     }
 
@@ -93,7 +101,7 @@ public class CharacterSheetController {
         );
 
         // Crea la parte "ability scores"
-        AbilityScoresBean abilityBean = new AbilityScoresBean(
+        CharacterStatsBean abilityBean = new CharacterStatsBean(
                 cs.getStrength(),
                 cs.getDexterity(),
                 cs.getIntelligence(),
@@ -110,22 +118,25 @@ public class CharacterSheetController {
      * Converte da Bean "spezzato" a Entity pura.
      */
     private CharacterSheet beanToEntity(CharacterSheetBean bean) {
-        CharacterInfoBean info = bean.getInfo();
-        AbilityScoresBean ability = bean.getAbilityScores();
+        CharacterInfoBean infoBean = bean.getInfoBean();
+        CharacterStatsBean statsBean = bean.getStatsBean();
 
-        return new CharacterSheet(
-                info.getName(),
-                info.getRace(),
-                info.getAge(),
-                info.getClasse(),
-                info.getLevel(),
-                ability.getStrength(),
-                ability.getDexterity(),
-                ability.getIntelligence(),
-                ability.getWisdom(),
-                ability.getCharisma(),
-                ability.getConstitution()
+        CharacterInfo infoEntity = new CharacterInfo(
+                infoBean.getName(),
+                infoBean.getRace(),
+                infoBean.getAge(),
+                infoBean.getClasse(),
+                infoBean.getLevel()
         );
+        CharacterStats statsEntity = new CharacterStats(
+                statsBean.getStrength(),
+                statsBean.getDexterity(),
+                statsBean.getIntelligence(),
+                statsBean.getWisdom(),
+                statsBean.getCharisma(),
+                statsBean.getConstitution()
+        );
+        return new CharacterSheet(infoEntity, statsEntity);
     }
 
     /**

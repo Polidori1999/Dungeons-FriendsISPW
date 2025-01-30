@@ -4,16 +4,16 @@ public class CharacterInfoBean {
 
     private String name;
     private String race;
-    private String age;
+    private int age;
     private String classe;
-    private String level;
+    private int level;
 
 
     public CharacterInfoBean() {
         // costruttore vuoto
     }
 
-    public CharacterInfoBean(String name, String race, String age, String classe, String level) {
+    public CharacterInfoBean(String name, String race, int age, String classe, int level) {
         this.name = name;
         this.race = race;
         this.age = age;
@@ -28,12 +28,12 @@ public class CharacterInfoBean {
     public String getRace() { return race; }
     public void setRace(String race) { this.race = race; }
 
-    public String getAge() { return age; }
-    public void setAge(String age) { this.age = age; }
+    public int getAge() { return age; }
+    public void setAge(int age) { this.age = age; }
 
     public String getClasse() { return classe; }
     public void setClasse(String classe) { this.classe = classe; }
 
-    public String getLevel() { return level; }
-    public void setLevel(String level) { this.level = level; }
+    public int getLevel() { return level; }
+    public void setLevel(int level) { this.level = level; }
 }

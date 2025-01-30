@@ -285,10 +285,10 @@ public class CharacterListBoundary implements Initializable {
                 if (rowItem instanceof CharacterSheetBean bean) {
                     // In base al "propertyName", ritorniamo il valore appropriato
                     return switch (propertyName) {
-                        case "name" -> new ReadOnlyObjectWrapper<>(bean.getInfo().getName());
-                        case "race" -> new ReadOnlyObjectWrapper<>(bean.getInfo().getRace());
-                        case "age" -> new ReadOnlyObjectWrapper<>(String.valueOf(bean.getInfo().getAge()));
-                        case "classe" -> new ReadOnlyObjectWrapper<>(bean.getInfo().getClasse());
+                        case "name" -> new ReadOnlyObjectWrapper<>(bean.getInfoBean().getName());
+                        case "race" -> new ReadOnlyObjectWrapper<>(bean.getInfoBean().getRace());
+                        case "age" -> new ReadOnlyObjectWrapper<>(String.valueOf(bean.getInfoBean().getAge()));
+                        case "classe" -> new ReadOnlyObjectWrapper<>(bean.getInfoBean().getClasse());
                         // se per qualche ragione arriva un propertyName sconosciuto, ritorna "???"
                         default -> new ReadOnlyObjectWrapper<>("???");
                     };
