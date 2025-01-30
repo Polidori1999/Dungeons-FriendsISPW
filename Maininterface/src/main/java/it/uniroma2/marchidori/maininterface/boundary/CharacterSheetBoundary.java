@@ -394,7 +394,12 @@ public class CharacterSheetBoundary {
 
         } catch (IOException e) {
             // In un passaggio successivo, potresti anche lanciare una SceneChangeException
-            LOGGER.log(Level.SEVERE, "Errore nel cambio scena a " + fxml, e);//SEVERE perchè è grave
+            LOGGER.log(
+                    Level.SEVERE,
+                    String.format("Errore nel cambio scena a %s", fxml),
+                    e
+            );//SEVERE perchè è grave
+
         }
     }
 }
