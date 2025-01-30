@@ -68,7 +68,7 @@ public class UserBoundary {
             throw new RuntimeException(e);
         }
     }
-
+//okey prova issue cloud
     @FXML
     void onClickGoToJoinLobby(ActionEvent event) {
         try {
