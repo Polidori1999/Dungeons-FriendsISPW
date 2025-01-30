@@ -4,6 +4,7 @@ module it.uniroma2.marchidori.maininterface {
     requires jdk.compiler;
     requires javafx.graphics;
     requires java.desktop;
+    requires java.logging;
 
     // Apre il package principale ai file FXML (controller, ecc.)
     opens it.uniroma2.marchidori.maininterface to javafx.fxml;

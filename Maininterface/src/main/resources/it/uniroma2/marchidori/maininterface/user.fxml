@@ -18,9 +18,9 @@
             <Font name="System Bold" size="30.0" />
          </font>
       </Button>
-      <VBox fx:id="Vbox" layoutX="27.0" layoutY="171.0" prefHeight="245.0" prefWidth="151.0">
+      <VBox fx:id="vBox" layoutX="27.0" layoutY="171.0" prefHeight="245.0" prefWidth="151.0">
          <children>
-            <Button fx:id="Mychar" mnemonicParsing="false" onAction="#onClickMyCharacter" prefHeight="51.0" prefWidth="150.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
+            <Button fx:id="myChar" mnemonicParsing="false" onAction="#onClickMyCharacter" prefHeight="51.0" prefWidth="150.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
@@ -35,7 +35,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="Joinlobby" mnemonicParsing="false" onAction="#onClickGoToJoinLobby" prefHeight="45.0" prefWidth="128.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
+            <Button fx:id="joinLobby" mnemonicParsing="false" onAction="#onClickGoToJoinLobby" prefHeight="45.0" prefWidth="128.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
@@ -53,7 +53,7 @@
                   <Insets left="1.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="ManageLobby" mnemonicParsing="false" onAction="#onClickGoToManageLobby" prefHeight="45.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
+            <Button fx:id="manageLobby" mnemonicParsing="false" onAction="#onClickGoToManageLobby" prefHeight="45.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
@@ -71,7 +71,7 @@
                   <Insets left="3.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="Consult_rules" mnemonicParsing="false" onAction="#onClickGoToConsultRules" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
+            <Button fx:id="consultRules" mnemonicParsing="false" onAction="#onClickGoToConsultRules" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
@@ -100,20 +100,21 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="logOutButton" layoutX="238.0" layoutY="450.0" mnemonicParsing="false" onAction="#onClickLogOut" prefHeight="51.0" prefWidth="301.0" style="-fx-background-color: #e90000;" text="Log Out" textFill="WHITE">
+      <Button fx:id="logOutButton" layoutX="240.0" layoutY="450.0" mnemonicParsing="false" onAction="#onClickLogOut" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #e90000;" text="Log Out" textFill="WHITE">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
-      <Pane layoutX="238.0" layoutY="131.0" prefHeight="269.0" prefWidth="301.0" style="-fx-background-color: #ffffff;">
+      <Pane layoutX="240.0" layoutY="130.0" prefHeight="270.0" prefWidth="300.0" style="-fx-background-color: #ffffff;">
          <children>
-            <TextField fx:id="userName" layoutX="90.0" layoutY="70.0" promptText="Username" />
-            <TextField fx:id="emailUser" layoutX="90.0" layoutY="125.0" prefHeight="25.0" prefWidth="78.0" promptText="Email">
+            <TextField fx:id="userName" layoutX="80.0" layoutY="40.0" prefHeight="25.0" promptText="Username" />
+            <TextField fx:id="emailUser" layoutX="80.0" layoutY="95.0" prefHeight="25.0" prefWidth="78.0" promptText="Email">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
             </TextField>
-            <TextField fx:id="roleUser" layoutX="90.0" layoutY="180.0" prefHeight="25.0" prefWidth="118.0" promptText="Role" />
+            <TextField fx:id="roleUser" layoutX="80.0" layoutY="150.0" prefHeight="25.0" prefWidth="118.0" promptText="Role" />
+            <Button fx:id="switchRoleDM" layoutX="80.0" layoutY="205.0" mnemonicParsing="false" onAction="#onClickSwitchRole" prefHeight="25.0" style="-fx-background-color: #e90000;" text="Switch role to Dungeon Master" textFill="WHITE" />
          </children>
       </Pane>
       <ImageView fx:id="tiamatImage" fitHeight="522.0" fitWidth="675.0" layoutX="561.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true">

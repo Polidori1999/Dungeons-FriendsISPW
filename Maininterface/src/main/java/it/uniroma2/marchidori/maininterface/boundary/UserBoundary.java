@@ -1,5 +1,8 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
+import it.uniroma2.marchidori.maininterface.entity.PlayerRole;
+import it.uniroma2.marchidori.maininterface.entity.User;
+import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,25 +13,26 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UserBoundary {
 
     @FXML
-    private Button Consult_rules;
+    private Button consultRules;
 
     @FXML
-    private Button Joinlobby;
+    private Button joinLobby;
 
     @FXML
-    private Button ManageLobby;
+    private Button manageLobby;
 
     @FXML
-    private Button Mychar;
+    private Button myChar;
 
     @FXML
-    private VBox Vbox;
+    private VBox vBox;
 
     @FXML
     private TextField emailUser;
@@ -51,12 +55,15 @@ public class UserBoundary {
     @FXML
     private AnchorPane userPane;
 
+    private User currentUser;
+    private static final Logger LOGGER = Logger.getLogger(UserBoundary.class.getName());
+
     @FXML
     void onClickGoToConsultRules(ActionEvent event) {
         try {
             changeScene("consultRules.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from user to consult rules.", e);
         }
     }
 
@@ -65,16 +72,16 @@ public class UserBoundary {
         try {
             changeScene("home.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from user to home.", e);
         }
     }
-//okey prova issue cloud
+
     @FXML
     void onClickGoToJoinLobby(ActionEvent event) {
         try {
             changeScene("joinLobby.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from user to join lobby.", e);
         }
     }
 
@@ -83,7 +90,7 @@ public class UserBoundary {
         try {
             changeScene("manageLobbyList.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from user to manage lobby list.", e);
         }
     }
 
@@ -92,7 +99,7 @@ public class UserBoundary {
         try {
             changeScene("login.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from user to login.", e);
         }
     }
 
@@ -101,7 +108,7 @@ public class UserBoundary {
         try {
             changeScene("characterList.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from user to my character list.", e);
         }
     }
 
@@ -110,8 +117,16 @@ public class UserBoundary {
         try {
             changeScene("user.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from user to user.", e);
         }
+    }
+
+    @FXML
+    void onClickSwitchRole(ActionEvent event) throws IOException {
+        currentUser.switchRole();
+        LOGGER.log(Level.INFO, () -> "Player esegue l'azione: " + currentUser.getRoleBehavior().getRoleName());
+        changeScene("userDM.fxml");
+        //creare differenziazione userDM.fxml e userPlayer.fxml
     }
 
     @FXML
@@ -121,11 +136,10 @@ public class UserBoundary {
         Parent root = loader.load();
 
         // Ottieni lo stage attuale
-        Stage stage = (Stage) userPane.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) userPane.getScene().getWindow();
 
         // Crea una nuova scena e impostala nello stage
         Scene scene = new Scene(root);
         stage.setScene(scene);
     }
-
 }
