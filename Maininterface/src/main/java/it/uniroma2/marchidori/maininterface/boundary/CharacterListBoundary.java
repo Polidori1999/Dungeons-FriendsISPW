@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 public class CharacterListBoundary implements Initializable {
 
     @FXML
-    private AnchorPane CharacterPane;
+    private AnchorPane characterPane;
 
     @FXML
     private TableView<CharacterSheetBean> tableViewChar;
@@ -139,7 +139,7 @@ public class CharacterListBoundary implements Initializable {
 
             Stage modalStage = new Stage();
             modalStage.setTitle("Nuovo Personaggio");
-            modalStage.initOwner(CharacterPane.getScene().getWindow());
+            modalStage.initOwner(characterPane.getScene().getWindow());
             modalStage.initModality(Modality.WINDOW_MODAL);
             modalStage.setScene(new Scene(root));
             modalStage.showAndWait();
@@ -171,7 +171,7 @@ public class CharacterListBoundary implements Initializable {
 
             Stage modalStage = new Stage();
             modalStage.setTitle("Modifica Personaggio");
-            modalStage.initOwner(CharacterPane.getScene().getWindow());
+            modalStage.initOwner(characterPane.getScene().getWindow());
             modalStage.initModality(Modality.WINDOW_MODAL);
             modalStage.setScene(new Scene(root));
             modalStage.showAndWait();
@@ -266,7 +266,7 @@ public class CharacterListBoundary implements Initializable {
                 getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml)
         );
         Parent root = loader.load();
-        Stage stage = (Stage) CharacterPane.getScene().getWindow();
+        Stage stage = (Stage) characterPane.getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
     }
