@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.bean.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
+import it.uniroma2.marchidori.maininterface.exception.SceneChangeException; // <<-- IMPORT ECCEZIONE DEDICATA
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -147,7 +148,8 @@ public class CharacterListBoundary implements Initializable {
             tableViewChar.refresh();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            // Usare la "dedicated exception" SceneChangeException
+            throw new SceneChangeException("Errore nel cambio scena (nuovo personaggio).", e);
         }
     }
 
@@ -178,7 +180,7 @@ public class CharacterListBoundary implements Initializable {
             tableViewChar.refresh();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new SceneChangeException("Errore nel cambio scena (modifica personaggio).", e);
         }
     }
 
@@ -200,7 +202,7 @@ public class CharacterListBoundary implements Initializable {
         try {
             changeScene("consultRules.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Errore nel cambiare scena a consultRules.fxml", e);
         }
     }
 
@@ -209,7 +211,7 @@ public class CharacterListBoundary implements Initializable {
         try {
             changeScene("home.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Errore nel cambiare scena a home.fxml", e);
         }
     }
 
@@ -218,7 +220,7 @@ public class CharacterListBoundary implements Initializable {
         try {
             changeScene("joinLobby.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Errore nel cambiare scena a joinLobby.fxml", e);
         }
     }
 
@@ -227,7 +229,7 @@ public class CharacterListBoundary implements Initializable {
         try {
             changeScene("manageLobby.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Errore nel cambiare scena a manageLobby.fxml", e);
         }
     }
 
@@ -236,7 +238,7 @@ public class CharacterListBoundary implements Initializable {
         try {
             changeScene("characterList.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Errore nel cambiare scena a characterList.fxml", e);
         }
     }
 
@@ -245,7 +247,7 @@ public class CharacterListBoundary implements Initializable {
         try {
             changeScene("newLobby.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Errore nel cambiare scena a newLobby.fxml", e);
         }
     }
 
@@ -254,47 +256,48 @@ public class CharacterListBoundary implements Initializable {
         try {
             changeScene("user.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Errore nel cambiare scena a user.fxml", e);
         }
     }
 
     @FXML
     private void changeScene(String fxml) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml));
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml)
+        );
         Parent root = loader.load();
         Stage stage = (Stage) CharacterPane.getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
     }
 
-
     // -------------- Utility --------------
 
     /**
-         * Modificata in modo da restituire i dati effettivi di CharacterSheetBean
-         * (invece della stringa fissa "???").
-         */
-        private record ReadOnlyObjectWrapperFactory<S>(String propertyName)
-                implements Callback<TableColumn.CellDataFeatures<S, String>, javafx.beans.value.ObservableValue<String>> {
+     * Modificata in modo da restituire i dati effettivi di CharacterSheetBean
+     * (invece della stringa fissa "???").
+     */
+    private record ReadOnlyObjectWrapperFactory<S>(String propertyName)
+            implements Callback<TableColumn.CellDataFeatures<S, String>, javafx.beans.value.ObservableValue<String>> {
 
         @Override
-            public javafx.beans.value.ObservableValue<String> call(TableColumn.CellDataFeatures<S, String> param) {
-                S rowItem = param.getValue();
+        public javafx.beans.value.ObservableValue<String> call(TableColumn.CellDataFeatures<S, String> param) {
+            S rowItem = param.getValue();
 
-                // Accertiamoci che l'oggetto nella riga sia un CharacterSheetBean
-                if (rowItem instanceof CharacterSheetBean bean) {
-                    // In base al "propertyName", ritorniamo il valore appropriato
-                    return switch (propertyName) {
-                        case "name" -> new ReadOnlyObjectWrapper<>(bean.getInfoBean().getName());
-                        case "race" -> new ReadOnlyObjectWrapper<>(bean.getInfoBean().getRace());
-                        case "age" -> new ReadOnlyObjectWrapper<>(String.valueOf(bean.getInfoBean().getAge()));
-                        case "classe" -> new ReadOnlyObjectWrapper<>(bean.getInfoBean().getClasse());
-                        // se per qualche ragione arriva un propertyName sconosciuto, ritorna "???"
-                        default -> new ReadOnlyObjectWrapper<>("???");
-                    };
-                }
-
-                return new ReadOnlyObjectWrapper<>("???");
+            // Accertiamoci che l'oggetto nella riga sia un CharacterSheetBean
+            if (rowItem instanceof CharacterSheetBean bean) {
+                // In base al "propertyName", ritorniamo il valore appropriato
+                return switch (propertyName) {
+                    case "name" -> new ReadOnlyObjectWrapper<>(bean.getInfoBean().getName());
+                    case "race" -> new ReadOnlyObjectWrapper<>(bean.getInfoBean().getRace());
+                    case "age" -> new ReadOnlyObjectWrapper<>(String.valueOf(bean.getInfoBean().getAge()));
+                    case "classe" -> new ReadOnlyObjectWrapper<>(bean.getInfoBean().getClasse());
+                    // se per qualche ragione arriva un propertyName sconosciuto, ritorna "???"
+                    default -> new ReadOnlyObjectWrapper<>("???");
+                };
             }
+
+            return new ReadOnlyObjectWrapper<>("???");
         }
+    }
 }
