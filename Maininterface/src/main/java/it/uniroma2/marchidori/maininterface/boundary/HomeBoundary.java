@@ -1,13 +1,9 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
-import it.uniroma2.marchidori.maininterface.entity.User;
-import it.uniroma2.marchidori.maininterface.sceneManager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -75,19 +71,13 @@ public class HomeBoundary {
         }
     }
 
-
-
     @FXML
     void onClickUser(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/user.fxml"));
-        UserPlayerBoundary controller = new UserPlayerBoundary();
-        controller.setCurrentUser(currentUser);
-        loader.setController(controller);
-        Parent root = loader.load();
-        Stage stage = (Stage) homePane.getScene().getWindow();
-
-        stage.setScene(new Scene(root));
-        stage.show();
+        try {
+            changeScene("user.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -103,7 +93,7 @@ public class HomeBoundary {
     private void changeScene(String fxml) throws IOException {
         // Usa SceneSwitcher per cambiare scena
         Stage currentStage = (Stage) homePane.getScene().getWindow();
-        SceneSwitcher.changeScene(currentStage, fxml);  // Cambia scena con SceneSwitcher
+        SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher
     }
 
 }

@@ -235,5 +235,6 @@ public class JoinLobbyBoundary implements Initializable {
     }
 
     public void setCurrentUser(UserBean currentUser) {
+        //boh
     }
 }

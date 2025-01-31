@@ -3,9 +3,10 @@ package it.uniroma2.marchidori.maininterface.boundary;
 import it.uniroma2.marchidori.maininterface.bean.CharacterInfoBean;
 import it.uniroma2.marchidori.maininterface.bean.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.bean.CharacterStatsBean;
+import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
 
-import it.uniroma2.marchidori.maininterface.sceneManager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -52,14 +53,17 @@ public class CharacterSheetBoundary {
     // Flag: true se stiamo creando, false se stiamo modificando
     private boolean creationMode;
 
+    protected UserBean currentUser = new UserBean("123", "Mario", "@lol@", null);
+
+
     // Bean esistente (in caso di modifica)
     private CharacterSheetBean currentBean;
 
     // Riferimento al controller BCE
-    private CharacterSheetController controller;
+    private CharacterSheetController controller = new CharacterSheetController();
 
     // Riferimento alla finestra di lista (se vogliamo avvisarla di aggiornamenti)
-    private CharacterListBoundary parentBoundary;
+    private CharacterListPlayerBoundary parentBoundary;
 
     // -------------------------------------------------------------
     //            METODI DI CONFIGURAZIONE DELLA BOUNDARY
@@ -68,7 +72,7 @@ public class CharacterSheetBoundary {
         this.controller = controller;
     }
 
-    public void setParentBoundary(CharacterListBoundary parentBoundary) {
+    public void setParentBoundary(CharacterListPlayerBoundary parentBoundary) {
         this.parentBoundary = parentBoundary;
     }
 
@@ -136,21 +140,17 @@ public class CharacterSheetBoundary {
     //                 SALVATAGGIO (BOTTONE SAVE)
     // -------------------------------------------------------------
     @FXML
-    void onClickSaveCharacter(ActionEvent event) {
+    void onClickSaveCharacter(ActionEvent event) throws IOException {
+        setController(controller);
         if (controller == null) {
             // Se serve, gestisci l'errore qui (es. un alert)
             return;
         }
         // Semplifichiamo la logica: se creationMode è true, creiamo; altrimenti, aggiorniamo
         if (creationMode) {
-            createNewCharacter();
         } else {
             updateExistingCharacter();
         }
-
-        // Chiudiamo la finestra
-        Stage stage = (Stage) characterSheetPane.getScene().getWindow();
-        stage.close();
     }
 
     /**
@@ -163,9 +163,8 @@ public class CharacterSheetBoundary {
         CharacterSheetBean newBean = new CharacterSheetBean(infoBean, statsBean);
         controller.createCharacter(newBean);
 
-        if (parentBoundary != null) {
-            parentBoundary.addNewCharacterBean(newBean);
-        }
+        if (parentBoundary != null) parentBoundary.addNewCharacterBean(newBean);
+
     }
 
     /**
@@ -204,6 +203,11 @@ public class CharacterSheetBoundary {
 
         if (parentBoundary != null) {
             parentBoundary.refreshTable();
+        }
+        try {
+            changeScene("characterList.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -247,9 +251,12 @@ public class CharacterSheetBoundary {
     //                     NAVIGAZIONE (RESTO)
     // -------------------------------------------------------------
     @FXML
-    void onClickGoBackToList(ActionEvent event) {
-        Stage stage = (Stage) characterSheetPane.getScene().getWindow();
-        stage.close();
+    void onClickGoBackToList(ActionEvent event) throws IOException {
+        try {
+            changeScene("characterList.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -286,6 +293,6 @@ public class CharacterSheetBoundary {
     private void changeScene(String fxml) throws IOException {
         // Usa SceneSwitcher per cambiare scena
         Stage currentStage = (Stage) characterSheetPane.getScene().getWindow();
-        SceneSwitcher.changeScene(currentStage, fxml);  // Cambia scena con SceneSwitcher
+        SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher
     }
 }

@@ -11,15 +11,20 @@ public class Pair<K, V> {
         this.value = value;
     }
 
-    public K getKey() { return key; }
-    public V getValue() { return value; }
+    public K getKey() {
+        return key;
+    }
+
+    public V getValue() {
+        return value;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Pair)) return false;
-        Pair<?, ?> pair = (Pair<?, ?>) o;
-        return Objects.equals(key, pair.key) && Objects.equals(value, pair.value);
+        if (!(o instanceof Pair<?, ?> pair)) return false;
+        return Objects.equals(key, pair.key) &&
+                Objects.equals(value, pair.value);
     }
 
     @Override

@@ -169,14 +169,6 @@ public class ManageLobbyListBoundary{
         }
     }
 
-    @FXML
-    void onClickNewLobby(ActionEvent event) {
-        try {
-            changeScene("manageLobby.fxml");
-        } catch (IOException e) {
-            throw new SceneChangeException("Error during change scene from manage lobby list to new lobby.", e);
-        }
-    }
 
     @FXML
     void onClickUser(ActionEvent event) {

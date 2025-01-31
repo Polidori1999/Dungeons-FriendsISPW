@@ -4,6 +4,11 @@ public enum SceneIdEnum {
     MANAGE_LOBBY_LIST,
     JOIN_LOBBY,
     CHARACTER_LIST,
-    USER
+    USER,
+    CHARACTER_SHEET,
+    HOME,
+    LOGIN,
+    REGISTER,
+    MANAGE_LOBBY;
     // Aggiungi altre scene se necessario
 }

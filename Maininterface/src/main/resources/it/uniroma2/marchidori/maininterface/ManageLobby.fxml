@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="manageLobbyPane" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.marchidori.maininterface.boundary.ManageLobbyBoundary">
+<AnchorPane fx:id="manageLobbyPane" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button fx:id="goToHome" alignment="TOP_LEFT" layoutX="-8.0" layoutY="-3.0" mnemonicParsing="false" onAction="#onClickGoToHome" prefHeight="65.0" prefWidth="349.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE">
          <font>

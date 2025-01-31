@@ -1,8 +1,10 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
+import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
@@ -51,6 +53,15 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
             }
             // Ad esempio, potresti cambiare scena oppure aprire un form per creare una nuova lobby
         });
+    }
+
+    @FXML
+    void onClickNewLobby(ActionEvent event) {
+        try {
+            changeScene("newLobby.fxml");
+        } catch (IOException e) {
+            throw new SceneChangeException("Errore nel cambiare scena a newLobby.fxml", e);
+        }
     }
 
     @FXML

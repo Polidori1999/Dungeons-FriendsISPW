@@ -6,8 +6,12 @@ import it.uniroma2.marchidori.maininterface.bean.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.entity.CharacterInfo;
 import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
 import it.uniroma2.marchidori.maininterface.entity.CharacterStats;
+import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
+import javafx.fxml.FXML;
+import javafx.stage.Stage;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -150,4 +154,5 @@ public class CharacterSheetController {
         }
         return null;
     }
+
 }

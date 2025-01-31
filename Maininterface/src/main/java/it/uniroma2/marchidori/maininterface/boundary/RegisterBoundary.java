@@ -1,12 +1,10 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
+import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
-import it.uniroma2.marchidori.maininterface.sceneManager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -36,10 +34,12 @@ public class RegisterBoundary {
     @FXML
     private Label wrongLogin;
 
+    private UserBean currentUser = new UserBean("123", "Mario", "@lol@", null);
+
     @FXML
     void clickRegister(ActionEvent event) throws IOException {
         try {
-            changeScene("login.fxml");
+            changeScene();
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from register to login.", e);
         }
@@ -48,7 +48,7 @@ public class RegisterBoundary {
     @FXML
     void onClickGoBackToLogin(ActionEvent event) throws IOException {
         try {
-            changeScene("login.fxml");
+            changeScene();
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from user to login.", e);
         }
@@ -56,10 +56,10 @@ public class RegisterBoundary {
 
 
     @FXML
-    private void changeScene(String fxml) throws IOException {
+    private void changeScene() throws IOException {
         // Usa SceneSwitcher per cambiare scena
         Stage currentStage = (Stage) registerPane.getScene().getWindow();
-        SceneSwitcher.changeScene(currentStage, fxml, );  // Cambia scena con SceneSwitcher
+        SceneSwitcher.changeScene(currentStage, "login.fxml", currentUser);  // Cambia scena con SceneSwitcher
     }
 
 }

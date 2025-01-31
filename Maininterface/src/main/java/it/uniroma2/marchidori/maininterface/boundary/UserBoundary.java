@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
+import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -90,20 +91,6 @@ public class UserBoundary {
     // Metodi generici di cambio scena
     // ------------------------------------------------------------
 
-    @FXML
-    protected void changeScene(String fxml) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml));
-        Parent root = loader.load();
-
-        // Passa l'utente anche al nuovo controller, se è un UserBoundary
-        Object ctrl = loader.getController();
-        if (ctrl instanceof UserBoundary userBoundary) {
-            userBoundary.setCurrentUser(this.currentUser);
-        }
-
-        Stage stage = (Stage) userPane.getScene().getWindow();
-        stage.setScene(new Scene(root));
-    }
 
     @FXML
     protected void onClickGoToConsultRules(ActionEvent event) {
@@ -171,5 +158,12 @@ public class UserBoundary {
     @FXML
     protected void onClickSwitchRole(ActionEvent event) throws IOException {
         // Vuoto: verrà override in UserPlayerBoundary e UserDMBoundary
+    }
+
+    @FXML
+    private void changeScene(String fxml) throws IOException {
+        // Usa SceneSwitcher per cambiare scena
+        Stage currentStage = (Stage) userPane.getScene().getWindow();
+        SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher
     }
 }

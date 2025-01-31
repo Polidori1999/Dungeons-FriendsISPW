@@ -59,9 +59,8 @@ public class LoginBoundary {
     @FXML
     void clickLogin(ActionEvent event) throws IOException {
         try {
-            if (checkLogin()) {
-                Stage currentStage = (Stage) anchorLoginPane.getScene().getWindow();  // Ottieni lo Stage corrente
-                SceneSwitcher.changeScene(currentStage, "home.fxml", currentUser);
+            if (checkLogin()) {// Ottieni lo Stage corrente
+                changeScene("home.fxml");
             } else {
                 wrongLogin.setText("Wrong email or password!");
             }
