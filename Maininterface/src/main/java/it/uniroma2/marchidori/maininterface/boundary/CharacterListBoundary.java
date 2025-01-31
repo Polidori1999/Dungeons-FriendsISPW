@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.bean.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
+import it.uniroma2.marchidori.maininterface.sceneManager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException; // <<-- IMPORT ECCEZIONE DEDICATA
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -262,13 +263,9 @@ public class CharacterListBoundary implements Initializable {
 
     @FXML
     private void changeScene(String fxml) throws IOException {
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml)
-        );
-        Parent root = loader.load();
-        Stage stage = (Stage) characterPane.getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+        // Usa SceneSwitcher per cambiare scena
+        Stage currentStage = (Stage) characterPane.getScene().getWindow();
+        SceneSwitcher.changeScene(currentStage, fxml);  // Cambia scena con SceneSwitcher
     }
 
     // -------------- Utility --------------

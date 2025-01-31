@@ -1,6 +1,7 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
+import it.uniroma2.marchidori.maininterface.sceneManager.SceneSwitcher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -56,16 +57,9 @@ public class RegisterBoundary {
 
     @FXML
     private void changeScene(String fxml) throws IOException {
-        // Carica il file FXML della seconda scena
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml));
-        Parent root = loader.load();
-
-        // Ottieni lo stage attuale
-        Stage stage = (Stage) registerPane.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-        // Crea una nuova scena e impostala nello stage
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+        // Usa SceneSwitcher per cambiare scena
+        Stage currentStage = (Stage) registerPane.getScene().getWindow();
+        SceneSwitcher.changeScene(currentStage, fxml, );  // Cambia scena con SceneSwitcher
     }
 
 }

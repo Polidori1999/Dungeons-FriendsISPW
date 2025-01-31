@@ -2,6 +2,8 @@ package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
+import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.bean.UserBean;  // Importa UserBean
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -65,6 +67,13 @@ public class ManageLobbyListBoundary {
 
     @FXML
     private Button userButton;
+
+    private UserBean currentUser;  // Variabile per gestire l'utente corrente
+
+    @FXML
+    public void setCurrentUser(UserBean currentUser) {
+        this.currentUser = currentUser;  // Metodo per settare currentUser
+    }
 
     @FXML
     void onClickGoToConsultRules(ActionEvent event) {
@@ -131,17 +140,9 @@ public class ManageLobbyListBoundary {
 
     @FXML
     private void changeScene(String fxml) throws IOException {
-
-        // Carica il file FXML della seconda scena
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml));
-        Parent root = loader.load();
-
-        // Ottieni lo stage attuale
-        Stage stage = (Stage) manageLobbyListPane.getScene().getWindow();
-
-        // Crea una nuova scena e impostala nello stage
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+        // Usa SceneSwitcher per cambiare scena
+        Stage currentStage = (Stage) manageLobbyListPane.getScene().getWindow();
+        SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher passando currentUser
     }
 
 }
