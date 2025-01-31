@@ -233,4 +233,7 @@ public class JoinLobbyBoundary implements Initializable {
         Stage currentStage = (Stage) joinLobbyPane.getScene().getWindow();
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher
     }
+
+    public void setCurrentUser(UserBean currentUser) {
+    }
 }

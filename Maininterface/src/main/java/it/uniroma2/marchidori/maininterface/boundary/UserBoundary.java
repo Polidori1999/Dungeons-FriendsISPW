@@ -1,7 +1,6 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
-import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

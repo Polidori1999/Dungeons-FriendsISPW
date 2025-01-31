@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
+import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -145,4 +146,7 @@ public class ManageLobbyBoundary {
         stage.setScene(scene);
     }
 
+    public void seCurrentUser(UserBean currentUser) {
+
+    }
 }
