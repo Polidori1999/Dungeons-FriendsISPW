@@ -54,7 +54,7 @@ public class JoinLobbyBoundary implements Initializable {
     @FXML
     private TableColumn<LobbyBean, Void> favouriteButton;
 
-    public UserBean currentUser = new UserBean("123", "Mario", "@lol@", null);
+    private UserBean currentUser = new UserBean("123", "Mario", "@lol@", null);
 
     // Controller di logica per la gestione dei filtri e del join
     private JoinLobbyController joinLobbyController;
@@ -95,52 +95,64 @@ public class JoinLobbyBoundary implements Initializable {
 
         // Colonna con il pulsante "favourite"
         favouriteButton.setCellFactory(col -> new TableCell<>() {
-            private final Button favouriteBtn = new Button("Add to Favourite");
 
-            {
-                // Azione per il pulsante "Join"
-                favouriteBtn.setOnAction((ActionEvent event) -> {
-                    // Recupera la riga su cui è stato cliccato
-                    LobbyBean lobby = getTableView().getItems().get(getIndex());
-                    // Chiama la logica per "joinare" la lobby
-                    joinLobbyController.joinLobby(lobby,"");
-                });
-            }
+            private Button favouriteBtn;
 
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
+
                 if (empty) {
                     setGraphic(null);
-                } else {
-                    setGraphic(favouriteBtn);
+                    return;
                 }
+
+                initFavouriteButtonIfNeeded();
+                setGraphic(favouriteBtn);
+            }
+
+            private void initFavouriteButtonIfNeeded() {
+                if (favouriteBtn == null) {
+                    favouriteBtn = new Button("Add to Favourite");
+                    favouriteBtn.setOnAction(event -> handleFavouriteAction());
+                }
+            }
+
+            private void handleFavouriteAction() {
+                // Recupera la riga su cui è stato cliccato
+                LobbyBean lobby = getTableView().getItems().get(getIndex());
+                // Logica per "aggiungere ai preferiti" / "joinare" la lobby
+                joinLobbyController.joinLobby(lobby, "");
             }
         });
 
-        joinButtonColumn.setCellFactory(col -> new TableCell<>() {
-            private final Button joinBtn = new Button("Join");
 
-            {
-                // Azione per il pulsante "Join"
-                joinBtn.setOnAction((ActionEvent event) -> {
-                    // Recupera la riga su cui è stato cliccato
-                    LobbyBean lobby = getTableView().getItems().get(getIndex());
-                    // Chiama la logica per "joinare" la lobby
-                    joinLobbyController.joinLobby(lobby,"");
-                });
-            }
+
+        joinButtonColumn.setCellFactory(col -> new TableCell<>() {
+            private Button joinBtn;  // pulsante non inizializzato subito
 
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
+
                 if (empty) {
                     setGraphic(null);
                 } else {
+                    // Istanzia il pulsante solo la prima volta
+                    if (joinBtn == null) {
+                        joinBtn = new Button("Join");
+                        joinBtn.setOnAction(event -> {
+                            // Recupera la riga su cui è stato cliccato
+                            LobbyBean lobby = getTableView().getItems().get(getIndex());
+                            // Logica per "joinare" la lobby
+                            joinLobbyController.joinLobby(lobby, "");
+                        });
+                    }
                     setGraphic(joinBtn);
                 }
             }
         });
+
 
         // 6) Colleghiamo l'ObservableList alla TableView
         lobbyTableView.setItems(filteredLobbies);
