@@ -1,7 +1,8 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
-
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
+import it.uniroma2.marchidori.maininterface.sceneManager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.control.AuthController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -43,9 +44,14 @@ public class LoginBoundary {
     @FXML
     private Label wrongLogin;
 
+    private AuthController authentication;
+
+    public LoginBoundary() {
+        this.authentication = new AuthController();
+    }
+
     @FXML
     public void initialize() {
-        // Imposta la grandezza massima del pulsante a metà delle dimensioni del contenitore
         login.maxWidthProperty().bind(anchorLoginPane.widthProperty().divide(2));
         login.maxHeightProperty().bind(anchorLoginPane.heightProperty().divide(2));
     }
@@ -53,9 +59,13 @@ public class LoginBoundary {
     @FXML
     void clickLogin(ActionEvent event) throws IOException {
         try {
-            checkLogin();
+            if (checkLogin()) {
+                changeScene("home.fxml");
+            } else {
+                wrongLogin.setText("Wrong email or password!");
+            }
         } catch (IOException e) {
-            throw new SceneChangeException("Error during change scene from login to home.", e);
+            throw new SceneChangeException("Error during scene change from login to home.", e);
         }
     }
 
@@ -64,34 +74,35 @@ public class LoginBoundary {
         try {
             changeScene("register.fxml");
         } catch (IOException e) {
-            throw new SceneChangeException("Error during change scene from login to create.", e);
+            throw new SceneChangeException("Error during scene change from login to register.", e);
         }
     }
 
+    private boolean checkLogin() {
+        String userEmail = email.getText();
+        String userPassword = password.getText();
 
-    private void checkLogin() throws IOException {
-        if(email.getText().equals("Mario") && password.getText().equals("123")){
-            wrongLogin.setText("success!");
-            changeScene("home.fxml");
-
-        }else if(email.getText().isEmpty() && password.getText().isEmpty()){
-            wrongLogin.setText("please enter your data!");
-        }else{
-            wrongLogin.setText("wrong email or password!");
+        if (userEmail.isEmpty() || userPassword.isEmpty()) {
+            wrongLogin.setText("Please enter your data!");
+            return false;
         }
+
+        // Delego l'autenticazione al servizio
+        boolean authenticated = authentication.authenticate(userEmail, userPassword);
+
+        if (authenticated) {
+            wrongLogin.setText("Success!");
+        } else {
+            wrongLogin.setText("Wrong email or password!");
+        }
+
+        return authenticated;
     }
 
     @FXML
     private void changeScene(String fxml) throws IOException {
-        // Carica il file FXML della seconda scena
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml));
-        Parent root = loader.load();
-
-        // Ottieni lo stage attuale
-        Stage stage = (Stage) anchorLoginPane.getScene().getWindow();
-
-        // Crea una nuova scena e impostala nello stage
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+        Stage currentStage = (Stage) anchorLoginPane.getScene().getWindow();  // Ottieni lo Stage corrente
+        SceneSwitcher.changeScene(currentStage, fxml);  // Usa SceneSwitcher per cambiare scena
     }
+
 }

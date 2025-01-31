@@ -5,6 +5,7 @@ import java.util.List;
 
 /**
  * Entity "Lobby": dati e logica di dominio.
+ * Fatta in questo modo con finale e solo getter la lobby è immutabile
  */
 public class Lobby {
     private final String lobbyName;

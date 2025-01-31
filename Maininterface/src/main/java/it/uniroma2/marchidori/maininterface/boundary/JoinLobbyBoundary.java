@@ -1,20 +1,19 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
+import it.uniroma2.marchidori.maininterface.sceneManager.SceneSwitcher; // Importa SceneSwitcher
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -115,6 +114,7 @@ public class JoinLobbyBoundary implements Initializable {
                 }
             }
         });
+
         joinButtonColumn.setCellFactory(col -> new TableCell<>() {
             private final Button joinBtn = new Button("Join");
 
@@ -168,7 +168,7 @@ public class JoinLobbyBoundary implements Initializable {
     }
 
     @FXML
-    void onClickGoToHome(ActionEvent event) {
+    void onClickGoToHome(ActionEvent event) throws IOException {
         try {
             changeScene("home.fxml");
         } catch (IOException e) {
@@ -177,7 +177,7 @@ public class JoinLobbyBoundary implements Initializable {
     }
 
     @FXML
-    void onClickGoToJoinLobby(ActionEvent event) {
+    void onClickGoToJoinLobby(ActionEvent event) throws IOException {
         try {
             changeScene("joinLobby.fxml");
         } catch (IOException e) {
@@ -186,7 +186,7 @@ public class JoinLobbyBoundary implements Initializable {
     }
 
     @FXML
-    void onClickGoToManageLobby(ActionEvent event) {
+    void onClickGoToManageLobby(ActionEvent event) throws IOException {
         try {
             changeScene("manageLobbyList.fxml");
         } catch (IOException e) {
@@ -195,7 +195,7 @@ public class JoinLobbyBoundary implements Initializable {
     }
 
     @FXML
-    void onClickUser(ActionEvent event) {
+    void onClickUser(ActionEvent event) throws IOException {
         try {
             changeScene("user.fxml");
         } catch (IOException e) {
@@ -204,7 +204,7 @@ public class JoinLobbyBoundary implements Initializable {
     }
 
     @FXML
-    void onClickMyCharacter(ActionEvent event) {
+    void onClickMyCharacter(ActionEvent event) throws IOException {
         try {
             changeScene("characterList.fxml");
         } catch (IOException e) {
@@ -214,16 +214,8 @@ public class JoinLobbyBoundary implements Initializable {
 
     @FXML
     private void changeScene(String fxml) throws IOException {
-        // Carica il file FXML della seconda scena
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml));
-        Parent root = loader.load();
-
-        // Ottieni lo stage attuale
-        Stage stage = (Stage) joinLobbyPane.getScene().getWindow();
-
-        // Crea una nuova scena e impostala nello stage
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+        // Usa SceneSwitcher per cambiare scena
+        Stage currentStage = (Stage) joinLobbyPane.getScene().getWindow();
+        SceneSwitcher.changeScene(currentStage, fxml);  // Cambia scena con SceneSwitcher
     }
-
 }
