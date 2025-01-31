@@ -56,9 +56,9 @@ public class UserBoundary {
     @FXML
     protected Button switchRoleButton;
 
-
-
-    protected User currentUser = new User("123", "Mario", "@lol@", null);
+    // --> Usiamo SOLO qui la variabile currentUser: le sottoclassi la ereditano
+    // Meglio "protected" se le sottoclassi devono accedervi direttamente
+    protected User currentUser;
 
     /**
      * Invocato automaticamente da JavaFX dopo l'iniezione dei nodi @FXML.
@@ -87,7 +87,7 @@ public class UserBoundary {
     }
 
     // ------------------------------------------------------------
-    // I metodi generici di cambio scena (usati magari per altre pagine)
+    // Metodi generici di cambio scena
     // ------------------------------------------------------------
 
     @FXML
@@ -95,7 +95,7 @@ public class UserBoundary {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml));
         Parent root = loader.load();
 
-        // Passa l'utente anche al nuovo controller (se è un UserBoundary).
+        // Passa l'utente anche al nuovo controller, se è un UserBoundary
         Object ctrl = loader.getController();
         if (ctrl instanceof UserBoundary) {
             ((UserBoundary) ctrl).setCurrentUser(this.currentUser);
@@ -168,11 +168,8 @@ public class UserBoundary {
         }
     }
 
-    // ------------------------------------------------------------
-    // Il metodo di switch ruolo qui è "vuoto". Lo gestiamo nelle sottoclassi.
-    // ------------------------------------------------------------
     @FXML
     protected void onClickSwitchRole(ActionEvent event) throws IOException {
-        // Verrà override in UserPlayerBoundary e UserDMBoundary
+        // Vuoto: verrà override in UserPlayerBoundary e UserDMBoundary
     }
 }

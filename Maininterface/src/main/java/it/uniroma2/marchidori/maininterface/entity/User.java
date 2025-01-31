@@ -72,12 +72,12 @@ public class User {
      * o viceversa a runtime.
      */
     public void switchRole() {
-        if (roleBehavior instanceof PlayerRole) {
+        if (this.roleBehavior.canAccessDMTools()) {
             // Da Player a DM
-            this.roleBehavior = new DMRole();
-        } else if (roleBehavior instanceof DMRole) {
-            // Da DM a Player
             this.roleBehavior = new PlayerRole();
+        } else {
+            // Da DM a Player
+            this.roleBehavior = new DMRole();
         }
     }
 

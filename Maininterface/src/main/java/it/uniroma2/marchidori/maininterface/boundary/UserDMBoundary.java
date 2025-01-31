@@ -1,6 +1,5 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
-import it.uniroma2.marchidori.maininterface.entity.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UserDMBoundary extends UserBoundary {
-    protected User currentUser = new User("123", "Mario", "@lol@", null);
 
     private static final Logger LOGGER = Logger.getLogger(UserDMBoundary.class.getName());
 
@@ -28,7 +26,7 @@ public class UserDMBoundary extends UserBoundary {
     @FXML
     protected void onClickSwitchRole(ActionEvent event) throws IOException {
         // 1) Cambia ruolo nel model
-        currentUser.switchRole();
+        currentUser.switchRole();   // <-- usa il field PROTECTED ereditato
         LOGGER.log(Level.INFO, () -> "Switched role to: " + currentUser.getRoleBehavior().getRoleName());
 
         // 2) Carica user.fxml ma con controller Player
