@@ -4,12 +4,10 @@ import it.uniroma2.marchidori.maininterface.bean.CharacterInfoBean;
 import it.uniroma2.marchidori.maininterface.bean.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.bean.CharacterStatsBean;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
-import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
+
+import it.uniroma2.marchidori.maininterface.sceneManager.SceneSwitcher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -255,51 +253,39 @@ public class CharacterSheetBoundary {
     }
 
     @FXML
-    void onClickGoToConsultRules(ActionEvent event) {
+    void onClickGoToConsultRules(ActionEvent event) throws IOException {
         changeScene("consultRules.fxml");
     }
 
     @FXML
-    void onClickGoToHome(ActionEvent event) {
+    void onClickGoToHome(ActionEvent event) throws IOException {
         changeScene("home.fxml");
     }
 
     @FXML
-    void onClickGoToJoinLobby(ActionEvent event) {
+    void onClickGoToJoinLobby(ActionEvent event) throws IOException {
         changeScene("joinLobby.fxml");
     }
 
     @FXML
-    void onClickGoToManageLobby(ActionEvent event) {
+    void onClickGoToManageLobby(ActionEvent event) throws IOException {
         changeScene("manageLobby.fxml");
     }
 
     @FXML
-    void onClickUser(ActionEvent event) {
+    void onClickUser(ActionEvent event) throws IOException {
         changeScene("user.fxml");
     }
 
     @FXML
-    void onclickGoToMyCharList(ActionEvent event) {
+    void onclickGoToMyCharList(ActionEvent event) throws IOException {
         changeScene("characterList.fxml");
     }
 
-    private void changeScene(String fxml) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml)
-            );
-            Parent root = loader.load();
-
-            Stage stage = (Stage) characterSheetPane.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-
-        } catch (IOException e) {
-            throw new SceneChangeException(
-                    "Errore nel cambio scena a " + fxml,
-                    e
-            );
-        }
+    @FXML
+    private void changeScene(String fxml) throws IOException {
+        // Usa SceneSwitcher per cambiare scena
+        Stage currentStage = (Stage) characterSheetPane.getScene().getWindow();
+        SceneSwitcher.changeScene(currentStage, fxml);  // Cambia scena con SceneSwitcher
     }
 }

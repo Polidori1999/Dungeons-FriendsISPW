@@ -1,11 +1,10 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
+import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.bean.UserBean;  // Importa UserBean
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -58,6 +57,13 @@ public class ManageLobbyBoundary {
     @FXML
     private Button userButton;
 
+    private UserBean currentUser;  // Aggiunta la variabile per l'utente corrente
+
+    @FXML
+    public void setCurrentUser(UserBean currentUser) {
+        this.currentUser = currentUser;  // Metodo per settare l'utente corrente
+    }
+
     @FXML
     void onClickGoBackToListOfLobbies(ActionEvent event) {
         try {
@@ -69,7 +75,6 @@ public class ManageLobbyBoundary {
 
     @FXML
     void onClickGoToConsultRules(ActionEvent event) {
-
         try {
             changeScene("consultRules.fxml");
         } catch (IOException e) {
@@ -133,16 +138,8 @@ public class ManageLobbyBoundary {
 
     @FXML
     private void changeScene(String fxml) throws IOException {
-        // Carica il file FXML della seconda scena
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml));
-        Parent root = loader.load();
-
-        // Ottieni lo stage attuale
-        Stage stage = (Stage) manageLobbyPane.getScene().getWindow();
-
-        // Crea una nuova scena e impostala nello stage
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+        // Usa SceneSwitcher per cambiare scena
+        Stage currentStage = (Stage) manageLobbyPane.getScene().getWindow();
+        SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher passando currentUser
     }
-
 }
