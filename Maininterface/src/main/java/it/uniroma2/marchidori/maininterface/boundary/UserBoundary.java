@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
+import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import javafx.event.ActionEvent;
@@ -58,7 +59,7 @@ public class UserBoundary {
 
     // --> Usiamo SOLO qui la variabile currentUser: le sottoclassi la ereditano
     // Meglio "protected" se le sottoclassi devono accedervi direttamente
-    protected User currentUser;
+    protected UserBean currentUser;
 
     /**
      * Invocato automaticamente da JavaFX dopo l'iniezione dei nodi @FXML.
@@ -82,7 +83,7 @@ public class UserBoundary {
     /**
      * Metodo per passare l'oggetto User da fuori (es. quando si carica questo controller).
      */
-    public void setCurrentUser(User currentUser) {
+    public void setCurrentUser(UserBean currentUser) {
         this.currentUser = currentUser;
     }
 
@@ -97,8 +98,8 @@ public class UserBoundary {
 
         // Passa l'utente anche al nuovo controller, se è un UserBoundary
         Object ctrl = loader.getController();
-        if (ctrl instanceof UserBoundary) {
-            ((UserBoundary) ctrl).setCurrentUser(this.currentUser);
+        if (ctrl instanceof UserBoundary userBoundary) {
+            userBoundary.setCurrentUser(this.currentUser);
         }
 
         Stage stage = (Stage) userPane.getScene().getWindow();

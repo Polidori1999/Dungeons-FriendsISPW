@@ -1,13 +1,11 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
+import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
-import it.uniroma2.marchidori.maininterface.sceneManager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.control.AuthController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -45,6 +43,8 @@ public class LoginBoundary {
     private Label wrongLogin;
 
     private AuthController authentication;
+    public UserBean currentUser = new UserBean("123", "Mario", "@lol@", null);
+
 
     public LoginBoundary() {
         this.authentication = new AuthController();
@@ -60,7 +60,8 @@ public class LoginBoundary {
     void clickLogin(ActionEvent event) throws IOException {
         try {
             if (checkLogin()) {
-                changeScene("home.fxml");
+                Stage currentStage = (Stage) anchorLoginPane.getScene().getWindow();  // Ottieni lo Stage corrente
+                SceneSwitcher.changeScene(currentStage, "home.fxml", currentUser);
             } else {
                 wrongLogin.setText("Wrong email or password!");
             }
@@ -102,7 +103,7 @@ public class LoginBoundary {
     @FXML
     private void changeScene(String fxml) throws IOException {
         Stage currentStage = (Stage) anchorLoginPane.getScene().getWindow();  // Ottieni lo Stage corrente
-        SceneSwitcher.changeScene(currentStage, fxml);  // Usa SceneSwitcher per cambiare scena
+        SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Usa SceneSwitcher per cambiare scena
     }
 
 }

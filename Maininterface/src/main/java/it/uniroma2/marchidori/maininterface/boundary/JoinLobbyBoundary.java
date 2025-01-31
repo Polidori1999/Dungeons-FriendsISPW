@@ -1,7 +1,8 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
-import it.uniroma2.marchidori.maininterface.sceneManager.SceneSwitcher; // Importa SceneSwitcher
+import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher; // Importa SceneSwitcher
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import javafx.collections.FXCollections;
@@ -52,6 +53,8 @@ public class JoinLobbyBoundary implements Initializable {
     private TableColumn<LobbyBean, Void> joinButtonColumn;
     @FXML
     private TableColumn<LobbyBean, Void> favouriteButton;
+
+    public UserBean currentUser = new UserBean("123", "Mario", "@lol@", null);
 
     // Controller di logica per la gestione dei filtri e del join
     private JoinLobbyController joinLobbyController;
@@ -216,6 +219,6 @@ public class JoinLobbyBoundary implements Initializable {
     private void changeScene(String fxml) throws IOException {
         // Usa SceneSwitcher per cambiare scena
         Stage currentStage = (Stage) joinLobbyPane.getScene().getWindow();
-        SceneSwitcher.changeScene(currentStage, fxml);  // Cambia scena con SceneSwitcher
+        SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher
     }
 }

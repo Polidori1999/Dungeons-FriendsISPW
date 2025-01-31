@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
+import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -35,7 +36,7 @@ public class HomeBoundary {
     @FXML
     private Button userButton;
 
-    public User currentUser = new User("123", "Mario", "@lol@", null);;
+    public UserBean currentUser = new UserBean("123", "Mario", "@lol@", null);
 
     @FXML
     void onClickGoToConsultRules(ActionEvent event) throws IOException {
