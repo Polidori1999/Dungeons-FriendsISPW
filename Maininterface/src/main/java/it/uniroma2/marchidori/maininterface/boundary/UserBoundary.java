@@ -121,6 +121,7 @@ public class UserBoundary {
         }
     }
 
+
     @FXML
     void onClickSwitchRole(ActionEvent event) throws IOException {
         currentUser.switchRole();

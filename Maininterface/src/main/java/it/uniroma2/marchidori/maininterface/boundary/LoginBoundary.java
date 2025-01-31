@@ -1,6 +1,7 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
 
+import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,13 +23,13 @@ public class LoginBoundary {
     private AnchorPane anchorLoginPane;
 
     @FXML
-    private Button create_Account;
+    private Button createAccount;
 
     @FXML
     private TextField email;
 
     @FXML
-    private Button forgot_password;
+    private Button forgotPassword;
 
     @FXML
     private Button login;
@@ -37,7 +38,7 @@ public class LoginBoundary {
     private PasswordField password;
 
     @FXML
-    private CheckBox remember_me;
+    private CheckBox rememberMe;
 
     @FXML
     private Label wrongLogin;
@@ -51,12 +52,20 @@ public class LoginBoundary {
 
     @FXML
     void clickLogin(ActionEvent event) throws IOException {
-        checkLogin();
+        try {
+            checkLogin();
+        } catch (IOException e) {
+            throw new SceneChangeException("Error during change scene from login to home.", e);
+        }
     }
 
     @FXML
     void onClickCreate(ActionEvent event) throws IOException {
-        changeScene("register.fxml");
+        try {
+            changeScene("register.fxml");
+        } catch (IOException e) {
+            throw new SceneChangeException("Error during change scene from login to create.", e);
+        }
     }
 
 
@@ -79,7 +88,7 @@ public class LoginBoundary {
         Parent root = loader.load();
 
         // Ottieni lo stage attuale
-        Stage stage = (Stage) anchorLoginPane.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) anchorLoginPane.getScene().getWindow();
 
         // Crea una nuova scena e impostala nello stage
         Scene scene = new Scene(root);

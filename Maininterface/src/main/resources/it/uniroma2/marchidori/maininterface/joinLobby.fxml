@@ -20,10 +20,10 @@
 <AnchorPane fx:id="joinLobbyPane" minHeight="720.0" minWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.marchidori.maininterface.boundary.JoinLobbyBoundary">
 
     <children>
-        <VBox fx:id="Vbox" layoutX="27.0" layoutY="171.0" prefHeight="245.0" prefWidth="151.0" AnchorPane.leftAnchor="27.0" AnchorPane.rightAnchor="1102.0">
+        <VBox fx:id="vBox" layoutX="27.0" layoutY="171.0" prefHeight="245.0" prefWidth="151.0" AnchorPane.leftAnchor="27.0" AnchorPane.rightAnchor="1102.0">
             <children>
                 <!-- Pulsante My Characters -->
-                <Button fx:id="Mychar" mnemonicParsing="false" onAction="#onClickMyCharacter" prefHeight="51.0" prefWidth="150.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
+                <Button fx:id="myChar" mnemonicParsing="false" onAction="#onClickMyCharacter" prefHeight="51.0" prefWidth="150.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
@@ -39,7 +39,7 @@
                     </graphic>
                 </Button>
                 <!-- Pulsante Join Lobby -->
-                <Button fx:id="Joinlobby" mnemonicParsing="false" onAction="#onClickGoToJoinLobby" prefHeight="45.0" prefWidth="128.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
+                <Button fx:id="joinLobby" mnemonicParsing="false" onAction="#onClickGoToJoinLobby" prefHeight="45.0" prefWidth="128.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
@@ -58,7 +58,7 @@
                </VBox.margin>
                 </Button>
                 <!-- Pulsante Manage Lobby -->
-                <Button fx:id="ManageLobby" mnemonicParsing="false" onAction="#onClickGoToManageLobby" prefHeight="45.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
+                <Button fx:id="manageLobby" mnemonicParsing="false" onAction="#onClickGoToManageLobby" prefHeight="45.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
@@ -77,7 +77,7 @@
                </VBox.margin>
                 </Button>
                 <!-- Pulsante Consult Rules -->
-                <Button fx:id="Consult_rules" mnemonicParsing="false" onAction="#onClickGoToConsultRules" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
+                <Button fx:id="consultRules" mnemonicParsing="false" onAction="#onClickGoToConsultRules" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
@@ -103,7 +103,7 @@
         </Button>
 
         <!-- Campo di ricerca -->
-        <TextField fx:id="SearchBar" alignment="CENTER" layoutX="527.0" layoutY="5.0" prefHeight="35.0" prefWidth="300.0" promptText="Cerca" AnchorPane.leftAnchor="490.0" AnchorPane.rightAnchor="490.0" />
+        <TextField fx:id="searchBar" alignment="CENTER" layoutX="527.0" layoutY="5.0" prefHeight="35.0" prefWidth="300.0" promptText="Cerca" AnchorPane.leftAnchor="490.0" AnchorPane.rightAnchor="490.0" />
 
         <Text fill="WHITE" layoutX="1068.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filter By">
             <font>
@@ -111,7 +111,7 @@
             </font>
         </Text>
 
-        <ComboBox fx:id="ComboBox1" layoutX="1060.0" layoutY="200.0" prefHeight="34.0" prefWidth="158.0" promptText="Live/On-line">
+        <ComboBox fx:id="comboBox1" layoutX="1060.0" layoutY="200.0" prefHeight="34.0" prefWidth="158.0" promptText="Live/On-line">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Online" />
@@ -120,7 +120,7 @@
             </items>
         </ComboBox>
 
-        <ComboBox fx:id="ComboBox2" layoutX="1060.0" layoutY="260.0" prefHeight="34.0" prefWidth="158.0" promptText="Duration">
+        <ComboBox fx:id="comboBox2" layoutX="1060.0" layoutY="260.0" prefHeight="34.0" prefWidth="158.0" promptText="Duration">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Singola" />
@@ -129,7 +129,7 @@
             </items>
         </ComboBox>
 
-        <ComboBox fx:id="ComboBox3" layoutX="1060.0" layoutY="320.0" prefHeight="34.0" prefWidth="158.0" promptText="Num Players">
+        <ComboBox fx:id="comboBox3" layoutX="1060.0" layoutY="320.0" prefHeight="34.0" prefWidth="158.0" promptText="Num Players">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="2" />

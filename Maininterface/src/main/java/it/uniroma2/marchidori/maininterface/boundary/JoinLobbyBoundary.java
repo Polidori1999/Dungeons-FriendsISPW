@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
+import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,20 +27,20 @@ public class JoinLobbyBoundary implements Initializable {
 
     // ComboBox per i filtri (type, durata, numPlayers)
     @FXML
-    private ComboBox<String> ComboBox1; // "Online"/"Presenza"
+    private ComboBox<String> comboBox1; // "Online"/"Presenza"
     @FXML
-    private ComboBox<String> ComboBox2; // "Singola"/"Campagna"
+    private ComboBox<String> comboBox2; // "Singola"/"Campagna"
     @FXML
-    private ComboBox<String> ComboBox3; // "2..8"
+    private ComboBox<String> comboBox3; // "2..8"
 
     @FXML
-    private Button Consult_rules;
+    private Button consultRules;
     @FXML
-    private Button Joinlobby;
+    private Button joinlobby;
     @FXML
-    private Button ManageLobby;
+    private Button manageLobby;
     @FXML
-    private Button Mychar;
+    private Button myChar;
     @FXML
     private Button userButton;
 
@@ -65,14 +66,14 @@ public class JoinLobbyBoundary implements Initializable {
         joinLobbyController = new JoinLobbyController();
 
         // 2) Popoliamo i ComboBox
-        ComboBox1.setItems(FXCollections.observableArrayList("Online", "Presenza"));
-        ComboBox2.setItems(FXCollections.observableArrayList("Singola", "Campagna"));
-        ComboBox3.setItems(FXCollections.observableArrayList("2", "3", "4", "5", "6", "7", "8"));
+        comboBox1.setItems(FXCollections.observableArrayList("Online", "Presenza"));
+        comboBox2.setItems(FXCollections.observableArrayList("Singola", "Campagna"));
+        comboBox3.setItems(FXCollections.observableArrayList("2", "3", "4", "5", "6", "7", "8"));
 
         // 3) Listener per filtrare appena cambia un ComboBox
-        ComboBox1.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
-        ComboBox2.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
-        ComboBox3.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
+        comboBox1.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
+        comboBox2.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
+        comboBox3.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
 
         // 4) Carichiamo le lobby iniziali (tutte)
         List<LobbyBean> initial = joinLobbyController.filterLobbies(null, null, null);
@@ -147,9 +148,9 @@ public class JoinLobbyBoundary implements Initializable {
      */
     private void doFilter() {
         // Prendiamo i filtri dai ComboBox
-        String type = ComboBox1.getValue();      // "Online"/"Presenza"
-        String duration = ComboBox2.getValue();  // "Singola"/"Campagna"
-        String numPlayers = ComboBox3.getValue(); // "2..8"
+        String type = comboBox1.getValue();      // "Online"/"Presenza"
+        String duration = comboBox2.getValue();  // "Singola"/"Campagna"
+        String numPlayers = comboBox3.getValue(); // "2..8"
 
         // Recuperiamo la lista filtrata
         List<LobbyBean> result = joinLobbyController.filterLobbies(type, duration, numPlayers);
@@ -162,7 +163,7 @@ public class JoinLobbyBoundary implements Initializable {
         try {
             changeScene("consultRules.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from join lobby to consult rules.", e);
         }
     }
 
@@ -171,7 +172,7 @@ public class JoinLobbyBoundary implements Initializable {
         try {
             changeScene("home.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from join lobby to home.", e);
         }
     }
 
@@ -180,7 +181,7 @@ public class JoinLobbyBoundary implements Initializable {
         try {
             changeScene("joinLobby.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from join lobby to join lobby.", e);
         }
     }
 
@@ -189,7 +190,7 @@ public class JoinLobbyBoundary implements Initializable {
         try {
             changeScene("manageLobbyList.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from join lobby to manage lobby list.", e);
         }
     }
 
@@ -198,7 +199,7 @@ public class JoinLobbyBoundary implements Initializable {
         try {
             changeScene("user.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from join lobby to user.", e);
         }
     }
 
@@ -207,7 +208,7 @@ public class JoinLobbyBoundary implements Initializable {
         try {
             changeScene("characterList.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from join lobby to character list.", e);
         }
     }
 
@@ -218,7 +219,7 @@ public class JoinLobbyBoundary implements Initializable {
         Parent root = loader.load();
 
         // Ottieni lo stage attuale
-        Stage stage = (Stage) joinLobbyPane.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) joinLobbyPane.getScene().getWindow();
 
         // Crea una nuova scena e impostala nello stage
         Scene scene = new Scene(root);

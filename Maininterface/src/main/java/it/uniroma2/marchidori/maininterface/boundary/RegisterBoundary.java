@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
+import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,7 +40,7 @@ public class RegisterBoundary {
         try {
             changeScene("login.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from user to login.", e);
         }
     }
 
@@ -48,7 +49,7 @@ public class RegisterBoundary {
         try {
             changeScene("login.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from user to login.", e);
         }
     }
 

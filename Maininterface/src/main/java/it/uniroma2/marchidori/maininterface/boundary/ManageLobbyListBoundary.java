@@ -1,6 +1,7 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
+import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,19 +22,19 @@ public class ManageLobbyListBoundary {
     private AnchorPane manageLobbyListPane;
 
     @FXML
-    private Button Consult_rules;
+    private Button consultRules;
 
     @FXML
-    private Button Joinlobby;
+    private Button joinlobby;
 
     @FXML
-    private Button ManageLobby;
+    private Button manageLobby;
 
     @FXML
-    private Button Mychar;
+    private Button myChar;
 
     @FXML
-    private VBox Vbox;
+    private VBox vBox;
 
     @FXML
     private Button goToHome;
@@ -70,7 +71,7 @@ public class ManageLobbyListBoundary {
         try {
             changeScene("consultRules.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from manage lobby to consult rules.", e);
         }
     }
 
@@ -79,7 +80,7 @@ public class ManageLobbyListBoundary {
         try {
             changeScene("home.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from manage lobby to home.", e);
         }
     }
 
@@ -88,7 +89,7 @@ public class ManageLobbyListBoundary {
         try {
             changeScene("joinLobby.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from manage lobby list to join lobby.", e);
         }
     }
 
@@ -97,7 +98,7 @@ public class ManageLobbyListBoundary {
         try {
             changeScene("manageLobbyList.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from manage lobby list to manage lobby.", e);
         }
     }
 
@@ -106,7 +107,7 @@ public class ManageLobbyListBoundary {
         try {
             changeScene("characterList.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from manage lobby list to character list.", e);
         }
     }
 
@@ -115,7 +116,7 @@ public class ManageLobbyListBoundary {
         try {
             changeScene("manageLobby.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from manage lobby list to new lobby.", e);
         }
     }
 
@@ -124,7 +125,7 @@ public class ManageLobbyListBoundary {
         try {
             changeScene("user.fxml");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Error during change scene from manage lobby list to user.", e);
         }
     }
 
@@ -136,7 +137,7 @@ public class ManageLobbyListBoundary {
         Parent root = loader.load();
 
         // Ottieni lo stage attuale
-        Stage stage = (Stage) manageLobbyListPane.getScene().getWindow(); // Alternativa: (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) manageLobbyListPane.getScene().getWindow();
 
         // Crea una nuova scena e impostala nello stage
         Scene scene = new Scene(root);

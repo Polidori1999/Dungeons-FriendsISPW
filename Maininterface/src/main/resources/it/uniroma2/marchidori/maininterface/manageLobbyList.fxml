@@ -13,7 +13,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane fx:id="manageLobbyListPane" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.marchidori.maininterface.boundary.ManageLobbyListBoundary">
    <children>
       <Button fx:id="goToHome" alignment="TOP_LEFT" layoutX="-8.0" layoutY="-3.0" mnemonicParsing="false" onAction="#onClickGoToHome" prefHeight="65.0" prefWidth="349.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE">
@@ -23,7 +22,7 @@
       </Button>
       <VBox fx:id="Vbox" layoutX="27.0" layoutY="171.0" prefHeight="245.0" prefWidth="151.0">
          <children>
-            <Button fx:id="Mychar" mnemonicParsing="false" onAction="#onClickMyCharacter" prefHeight="51.0" prefWidth="150.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
+            <Button fx:id="myChar" mnemonicParsing="false" onAction="#onClickMyCharacter" prefHeight="51.0" prefWidth="150.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
@@ -38,7 +37,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="Joinlobby" mnemonicParsing="false" onAction="#onClickGoToJoinLobby" prefHeight="45.0" prefWidth="128.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
+            <Button fx:id="joinlobby" mnemonicParsing="false" onAction="#onClickGoToJoinLobby" prefHeight="45.0" prefWidth="128.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
@@ -56,7 +55,7 @@
                   <Insets left="1.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="ManageLobby" mnemonicParsing="false" onAction="#onClickGoToManageLobby" prefHeight="45.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
+            <Button fx:id="manageLobby" mnemonicParsing="false" onAction="#onClickGoToManageLobby" prefHeight="45.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
@@ -74,7 +73,7 @@
                   <Insets left="3.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="Consult_rules" mnemonicParsing="false" onAction="#onClickGoToConsultRules" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
+            <Button fx:id="consultRules" mnemonicParsing="false" onAction="#onClickGoToConsultRules" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
