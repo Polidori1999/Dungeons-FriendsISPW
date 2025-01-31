@@ -18,7 +18,7 @@ import java.io.IOException;
 public class RegisterBoundary {
 
     @FXML
-    private Button Register;
+    private Button register;
 
     @FXML
     private PasswordField confirmPassword;
@@ -40,7 +40,7 @@ public class RegisterBoundary {
         try {
             changeScene("login.fxml");
         } catch (IOException e) {
-            throw new SceneChangeException("Error during change scene from user to login.", e);
+            throw new SceneChangeException("Error during change scene from register to login.", e);
         }
     }
 

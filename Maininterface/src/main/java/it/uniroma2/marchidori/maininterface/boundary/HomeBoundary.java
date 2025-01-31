@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
+import it.uniroma2.marchidori.maininterface.entity.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,6 +34,8 @@ public class HomeBoundary {
 
     @FXML
     private Button userButton;
+
+    public User currentUser;
 
     @FXML
     void onClickGoToConsultRules(ActionEvent event) throws IOException {
@@ -70,13 +73,19 @@ public class HomeBoundary {
         }
     }
 
+
+
     @FXML
-    void onClickUser(ActionEvent event) {
-        try {
-            changeScene("user.fxml");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    void onClickUser(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/user.fxml"));
+        UserPlayerBoundary controller = new UserPlayerBoundary();
+        controller.setCurrentUser(currentUser);
+        loader.setController(controller);
+        Parent root = loader.load();
+        Stage stage = (Stage) homePane.getScene().getWindow();
+
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     @FXML

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="userPane" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.marchidori.maininterface.boundary.UserBoundary">
+<AnchorPane fx:id="userPane" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button fx:id="goToHome" alignment="TOP_LEFT" layoutX="-8.0" layoutY="-3.0" mnemonicParsing="false" onAction="#onClickGoToHome" prefHeight="65.0" prefWidth="349.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE">
          <font>
@@ -108,13 +108,13 @@
       <Pane layoutX="240.0" layoutY="130.0" prefHeight="270.0" prefWidth="300.0" style="-fx-background-color: #ffffff;">
          <children>
             <TextField fx:id="userName" layoutX="80.0" layoutY="40.0" prefHeight="25.0" promptText="Username" />
-            <TextField fx:id="emailUser" layoutX="80.0" layoutY="95.0" prefHeight="25.0" prefWidth="78.0" promptText="Email">
+            <TextField fx:id="emailUser" editable="false" layoutX="80.0" layoutY="95.0" prefHeight="25.0" prefWidth="78.0" promptText="Email">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
             </TextField>
-            <TextField fx:id="roleUser" layoutX="80.0" layoutY="150.0" prefHeight="25.0" prefWidth="118.0" promptText="Role" />
-            <Button fx:id="switchRoleDM" layoutX="80.0" layoutY="205.0" mnemonicParsing="false" onAction="#onClickSwitchRole" prefHeight="25.0" style="-fx-background-color: #e90000;" text="Switch role to Dungeon Master" textFill="WHITE" />
+            <TextField fx:id="roleUser" editable="false" layoutX="80.0" layoutY="150.0" prefHeight="25.0" prefWidth="118.0" promptText="Role" />
+            <Button fx:id="switchRoleButton" layoutX="80.0" layoutY="205.0" mnemonicParsing="false" onAction="#onClickSwitchRole" prefHeight="25.0" style="-fx-background-color: #e90000;" text="Switch role to Dungeon Master" textFill="WHITE" />
          </children>
       </Pane>
       <ImageView fx:id="tiamatImage" fitHeight="522.0" fitWidth="675.0" layoutX="561.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true">

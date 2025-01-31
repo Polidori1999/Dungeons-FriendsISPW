@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface;
 
+import it.uniroma2.marchidori.maininterface.entity.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,7 +13,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         primaryStage.setResizable(true);
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("home.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         primaryStage.setTitle("Login_Screen");
         primaryStage.setScene(scene);

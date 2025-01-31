@@ -6,16 +6,18 @@ public class User {
 
     private final String id;
     private final String username;
+    private final String email;
     private RoleBehavior roleBehavior;
     //private final List<CharacterSheet> characterSheets;  // Riferimento ai fogli dei personaggi
     private final List<it.uniroma2.marchidori.maininterface.entity.Lobby> favouriteLobbies;  // Riferimento alle lobby preferite
     // private final List<Notification> notificationPlayer;  // Riferimento alle notifiche
 
     // Costruttore immutabile
-    public User(String id, String username,
-                  List<it.uniroma2.marchidori.maininterface.entity.Lobby> favouriteLobbies)/*,List<CharacterSheet> characterSheets, List<Notification> notificationPlayer)*/ {
+    public User(String id, String username, String email,
+                List<it.uniroma2.marchidori.maininterface.entity.Lobby> favouriteLobbies)/*,List<CharacterSheet> characterSheets, List<Notification> notificationPlayer)*/ {
         this.id = id;
         this.username = username;
+        this.email = email;
         this.favouriteLobbies = favouriteLobbies;
         this.roleBehavior = new PlayerRole(); // Default come Player
 
@@ -27,9 +29,10 @@ public class User {
     /**
      * Se vuoi poter assegnare direttamente un ruolo esterno:
      */
-    public User(String id, String username, RoleBehavior initialRole, List<Lobby> favouriteLobbies) {
+    public User(String id, String username, String email, RoleBehavior initialRole, List<Lobby> favouriteLobbies) {
         this.id = id;
         this.username = username;
+        this.email = email;
         this.roleBehavior = initialRole;
         this.favouriteLobbies = favouriteLobbies;
     }
@@ -76,6 +79,10 @@ public class User {
             // Da DM a Player
             this.roleBehavior = new PlayerRole();
         }
+    }
+
+    public String getEmail() {
+        return email;
     }
     //DA IMPLEMENTARE
     /*public List<Notification> getNotificationPlayer() {

@@ -1,6 +1,5 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
-import it.uniroma2.marchidori.maininterface.entity.PlayerRole;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import javafx.event.ActionEvent;
@@ -13,53 +12,101 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class UserBoundary {
 
     @FXML
-    private Button consultRules;
+    protected Button consultRules;
 
     @FXML
-    private Button joinLobby;
+    protected Button joinLobby;
 
     @FXML
-    private Button manageLobby;
+    protected Button manageLobby;
 
     @FXML
-    private Button myChar;
+    protected Button myChar;
 
     @FXML
-    private VBox vBox;
+    protected VBox vBox;
 
     @FXML
-    private TextField emailUser;
+    protected TextField emailUser;
 
     @FXML
-    private Button goToHome;
+    protected Button goToHome;
 
     @FXML
-    private Button logOutButton;
+    protected Button logOutButton;
 
     @FXML
-    private TextField roleUser;
+    protected TextField roleUser;
 
     @FXML
-    private Button userButton;
+    protected Button userButton;
 
     @FXML
-    private TextField userName;
+    protected TextField userName;
 
     @FXML
-    private AnchorPane userPane;
-
-    private User currentUser;
-    private static final Logger LOGGER = Logger.getLogger(UserBoundary.class.getName());
+    protected AnchorPane userPane;
 
     @FXML
-    void onClickGoToConsultRules(ActionEvent event) {
+    protected Button switchRoleButton;
+
+
+
+    protected User currentUser = new User("123", "Mario", "@lol@", null);
+
+    /**
+     * Invocato automaticamente da JavaFX dopo l'iniezione dei nodi @FXML.
+     */
+    @FXML
+    protected void initialize() {
+        configureUI();
+    }
+
+    /**
+     * Configurazione di base. Le sottoclassi la possono sovrascrivere.
+     */
+    protected void configureUI() {
+        if (currentUser != null) {
+            userName.setText(currentUser.getUsername());
+            roleUser.setText(currentUser.getRoleBehavior().getRoleName());
+            emailUser.setText(currentUser.getEmail());
+        }
+    }
+
+    /**
+     * Metodo per passare l'oggetto User da fuori (es. quando si carica questo controller).
+     */
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    // ------------------------------------------------------------
+    // I metodi generici di cambio scena (usati magari per altre pagine)
+    // ------------------------------------------------------------
+
+    @FXML
+    protected void changeScene(String fxml) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml));
+        Parent root = loader.load();
+
+        // Passa l'utente anche al nuovo controller (se è un UserBoundary).
+        Object ctrl = loader.getController();
+        if (ctrl instanceof UserBoundary) {
+            ((UserBoundary) ctrl).setCurrentUser(this.currentUser);
+        }
+
+        Stage stage = (Stage) userPane.getScene().getWindow();
+        stage.setScene(new Scene(root));
+    }
+
+    @FXML
+    protected void onClickGoToConsultRules(ActionEvent event) {
         try {
             changeScene("consultRules.fxml");
         } catch (IOException e) {
@@ -68,7 +115,7 @@ public class UserBoundary {
     }
 
     @FXML
-    void onClickGoToHome(ActionEvent event) {
+    protected void onClickGoToHome(ActionEvent event) {
         try {
             changeScene("home.fxml");
         } catch (IOException e) {
@@ -77,7 +124,7 @@ public class UserBoundary {
     }
 
     @FXML
-    void onClickGoToJoinLobby(ActionEvent event) {
+    protected void onClickGoToJoinLobby(ActionEvent event) {
         try {
             changeScene("joinLobby.fxml");
         } catch (IOException e) {
@@ -86,7 +133,7 @@ public class UserBoundary {
     }
 
     @FXML
-    void onClickGoToManageLobby(ActionEvent event) {
+    protected void onClickGoToManageLobby(ActionEvent event) {
         try {
             changeScene("manageLobbyList.fxml");
         } catch (IOException e) {
@@ -95,7 +142,7 @@ public class UserBoundary {
     }
 
     @FXML
-    void onClickLogOut(ActionEvent event) {
+    protected void onClickLogOut(ActionEvent event) {
         try {
             changeScene("login.fxml");
         } catch (IOException e) {
@@ -104,7 +151,7 @@ public class UserBoundary {
     }
 
     @FXML
-    void onClickMyCharacter(ActionEvent event) {
+    protected void onClickMyCharacter(ActionEvent event) {
         try {
             changeScene("characterList.fxml");
         } catch (IOException e) {
@@ -113,7 +160,7 @@ public class UserBoundary {
     }
 
     @FXML
-    void onClickUser(ActionEvent event) {
+    protected void onClickUser(ActionEvent event) {
         try {
             changeScene("user.fxml");
         } catch (IOException e) {
@@ -121,26 +168,11 @@ public class UserBoundary {
         }
     }
 
-
+    // ------------------------------------------------------------
+    // Il metodo di switch ruolo qui è "vuoto". Lo gestiamo nelle sottoclassi.
+    // ------------------------------------------------------------
     @FXML
-    void onClickSwitchRole(ActionEvent event) throws IOException {
-        currentUser.switchRole();
-        LOGGER.log(Level.INFO, () -> "Player esegue l'azione: " + currentUser.getRoleBehavior().getRoleName());
-        changeScene("userDM.fxml");
-        //creare differenziazione userDM.fxml e userPlayer.fxml
-    }
-
-    @FXML
-    private void changeScene(String fxml) throws IOException {
-        // Carica il file FXML della seconda scena
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/" + fxml));
-        Parent root = loader.load();
-
-        // Ottieni lo stage attuale
-        Stage stage = (Stage) userPane.getScene().getWindow();
-
-        // Crea una nuova scena e impostala nello stage
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+    protected void onClickSwitchRole(ActionEvent event) throws IOException {
+        // Verrà override in UserPlayerBoundary e UserDMBoundary
     }
 }
