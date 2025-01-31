@@ -2,7 +2,7 @@ package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.bean.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
-import it.uniroma2.marchidori.maininterface.sceneManager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException; // <<-- IMPORT ECCEZIONE DEDICATA
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;

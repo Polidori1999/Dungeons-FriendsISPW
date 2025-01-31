@@ -3,25 +3,26 @@ package it.uniroma2.marchidori.maininterface.boundary;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
-import it.uniroma2.marchidori.maininterface.bean.UserBean;  // Importa UserBean
+import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class ManageLobbyListBoundary {
+public class ManageLobbyListBoundary{
 
     @FXML
-    private AnchorPane manageLobbyListPane;
+    protected AnchorPane manageLobbyListPane;
 
     @FXML
     private Button consultRules;
@@ -42,7 +43,7 @@ public class ManageLobbyListBoundary {
     private Button goToHome;
 
     @FXML
-    private Button newLobbyButton;
+    protected Button newLobbyButton;
 
     @FXML
     private TableColumn<LobbyBean, String> tableViewDuration;
@@ -54,10 +55,10 @@ public class ManageLobbyListBoundary {
     private TableView<LobbyBean> tableViewLobby;
 
     @FXML
-    private TableColumn<LobbyBean, Void> tableViewLobbyDelete;
+    private TableColumn<LobbyBean, Button> tableViewLobbyDelete;
 
     @FXML
-    private TableColumn<LobbyBean, Void> tableViewLobbyEdit;
+    protected TableColumn<LobbyBean, Button> tableViewLobbyEdit;
 
     @FXML
     private TableColumn<LobbyBean, String> tableViewLobbyName;
@@ -68,11 +69,59 @@ public class ManageLobbyListBoundary {
     @FXML
     private Button userButton;
 
-    private UserBean currentUser;  // Variabile per gestire l'utente corrente
+    // Variabile per gestire l'utente corrente
+    protected UserBean currentUser;
+
+    /**
+     * Invocato automaticamente da JavaFX dopo l'iniezione dei nodi @FXML.
+     */
+    @FXML
+    protected void initialize(URL url, ResourceBundle rb) {
+        configureUI();
+    }
+
+    /**
+     * Configurazione di base: inizializzazione della TableView e delle colonne.
+     */
+    protected void configureUI() {
+        initCommonTableView();
+    }
+
+    /**
+     * Metodo che inizializza la TableView e configura le colonne.
+     */
+    private void initCommonTableView() {
+        // Imposta il PropertyValueFactory per le colonne basate sulle proprietà di LobbyBean.
+        tableViewLobbyName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tableViewMaxPlayers.setCellValueFactory(new PropertyValueFactory<>("maxPlayers"));
+        tableViewDuration.setCellValueFactory(new PropertyValueFactory<>("duration"));
+        tableViewLiveOrNot.setCellValueFactory(new PropertyValueFactory<>("liveOrNot"));
+
+
+        tableViewLobbyDelete.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(Button item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(item);
+                    item.setOnAction(e -> {
+                        // Rimuoviamo il Bean dalla tabella
+                        LobbyBean selectedLobby = getTableView().getItems().get(getIndex());
+                        getTableView().getItems().remove(selectedLobby);
+                    });
+                }
+            }
+        });
+
+        // Se necessario, imposta i dati nella TableView (ad es. da un ObservableList)
+        // tableViewLobby.setItems(...);
+    }
 
     @FXML
     public void setCurrentUser(UserBean currentUser) {
-        this.currentUser = currentUser;  // Metodo per settare currentUser
+        this.currentUser = currentUser;
     }
 
     @FXML
@@ -140,9 +189,7 @@ public class ManageLobbyListBoundary {
 
     @FXML
     private void changeScene(String fxml) throws IOException {
-        // Usa SceneSwitcher per cambiare scena
         Stage currentStage = (Stage) manageLobbyListPane.getScene().getWindow();
-        SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher passando currentUser
+        SceneSwitcher.changeScene(currentStage, fxml, currentUser);
     }
-
 }
