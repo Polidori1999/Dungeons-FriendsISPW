@@ -11,14 +11,6 @@ public class Pair<K, V> {
         this.value = value;
     }
 
-    public K getKey() {
-        return key;
-    }
-
-    public V getValue() {
-        return value;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
