@@ -1,9 +1,9 @@
-package it.uniroma2.marchidori.maininterface.boundary;
+package it.uniroma2.marchidori.maininterface.boundary.manageLobby;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 
 
-public class ManageLobbyListPlayerBoundary extends ManageLobbyListBoundary{
+public class ManageLobbyListPlayerBoundary extends ManageLobbyListBoundary {
 
     private UserBean currentUser;
 

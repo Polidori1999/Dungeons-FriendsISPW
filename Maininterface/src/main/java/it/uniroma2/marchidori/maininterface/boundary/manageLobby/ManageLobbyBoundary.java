@@ -1,4 +1,4 @@
-package it.uniroma2.marchidori.maininterface.boundary;
+package it.uniroma2.marchidori.maininterface.boundary.manageLobby;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
@@ -146,6 +146,6 @@ public class ManageLobbyBoundary {
         stage.setScene(scene);
     }
 
-    public void seCurrentUser(UserBean currentUser) {
+    public void setCurrentUser(UserBean currentUser) {
     }
 }

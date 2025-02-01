@@ -1,4 +1,4 @@
-package it.uniroma2.marchidori.maininterface.boundary;
+package it.uniroma2.marchidori.maininterface.boundary.manageLobby;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;

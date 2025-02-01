@@ -1,6 +1,6 @@
-package it.uniroma2.marchidori.maininterface.boundary;
+package it.uniroma2.marchidori.maininterface.boundary.characterSheet;
 
-import it.uniroma2.marchidori.maininterface.bean.CharacterSheetBean;
+import it.uniroma2.marchidori.maininterface.bean.characterSheet.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class CharacterListPlayerBoundary extends CharacterListBoundary{
+public class CharacterListPlayerBoundary extends CharacterListBoundary {
 
     private CharacterSheetController controller;
 

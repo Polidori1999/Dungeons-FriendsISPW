@@ -1,17 +1,13 @@
 package it.uniroma2.marchidori.maininterface.control;
 
-import it.uniroma2.marchidori.maininterface.bean.CharacterStatsBean;
-import it.uniroma2.marchidori.maininterface.bean.CharacterInfoBean;
-import it.uniroma2.marchidori.maininterface.bean.CharacterSheetBean;
+import it.uniroma2.marchidori.maininterface.bean.characterSheet.CharacterStatsBean;
+import it.uniroma2.marchidori.maininterface.bean.characterSheet.CharacterInfoBean;
+import it.uniroma2.marchidori.maininterface.bean.characterSheet.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.entity.CharacterInfo;
 import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
 import it.uniroma2.marchidori.maininterface.entity.CharacterStats;
-import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
-import javafx.fxml.FXML;
-import javafx.stage.Stage;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

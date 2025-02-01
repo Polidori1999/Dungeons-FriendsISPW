@@ -18,4 +18,15 @@ module it.uniroma2.marchidori.maininterface {
     opens it.uniroma2.marchidori.maininterface.bean to javafx.base;
     exports it.uniroma2.marchidori.maininterface.boundary;
     opens it.uniroma2.marchidori.maininterface.boundary to javafx.fxml;
+    exports it.uniroma2.marchidori.maininterface.boundary.characterSheet;
+    opens it.uniroma2.marchidori.maininterface.boundary.characterSheet to javafx.fxml;
+    exports it.uniroma2.marchidori.maininterface.boundary.joinLobby;
+    opens it.uniroma2.marchidori.maininterface.boundary.joinLobby to javafx.fxml;
+    exports it.uniroma2.marchidori.maininterface.boundary.manageLobby;
+    opens it.uniroma2.marchidori.maininterface.boundary.manageLobby to javafx.fxml;
+    exports it.uniroma2.marchidori.maininterface.boundary.login;
+    opens it.uniroma2.marchidori.maininterface.boundary.login to javafx.fxml;
+    opens it.uniroma2.marchidori.maininterface.bean.characterSheet to javafx.base;
+    exports it.uniroma2.marchidori.maininterface.boundary.user;
+    opens it.uniroma2.marchidori.maininterface.boundary.user to javafx.fxml;
 }
