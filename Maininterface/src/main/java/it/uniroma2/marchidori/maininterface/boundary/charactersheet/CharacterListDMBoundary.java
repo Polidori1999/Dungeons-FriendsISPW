@@ -1,4 +1,4 @@
-package it.uniroma2.marchidori.maininterface.boundary.characterSheet;
+package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
 public class CharacterListDMBoundary extends CharacterListBoundary {
 

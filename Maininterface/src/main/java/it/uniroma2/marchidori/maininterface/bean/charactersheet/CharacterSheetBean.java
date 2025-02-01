@@ -1,4 +1,4 @@
-package it.uniroma2.marchidori.maininterface.bean.characterSheet;
+package it.uniroma2.marchidori.maininterface.bean.charactersheet;
 
 
 public class CharacterSheetBean {

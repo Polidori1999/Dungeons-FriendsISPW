@@ -1,4 +1,4 @@
-package it.uniroma2.marchidori.maininterface.boundary.joinLobby;
+package it.uniroma2.marchidori.maininterface.boundary.joinlobby;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;

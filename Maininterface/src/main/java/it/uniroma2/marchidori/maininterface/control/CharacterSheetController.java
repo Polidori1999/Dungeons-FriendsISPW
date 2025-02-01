@@ -1,8 +1,8 @@
 package it.uniroma2.marchidori.maininterface.control;
 
-import it.uniroma2.marchidori.maininterface.bean.characterSheet.CharacterStatsBean;
-import it.uniroma2.marchidori.maininterface.bean.characterSheet.CharacterInfoBean;
-import it.uniroma2.marchidori.maininterface.bean.characterSheet.CharacterSheetBean;
+import it.uniroma2.marchidori.maininterface.bean.charactersheet.CharacterStatsBean;
+import it.uniroma2.marchidori.maininterface.bean.charactersheet.CharacterInfoBean;
+import it.uniroma2.marchidori.maininterface.bean.charactersheet.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.entity.CharacterInfo;
 import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
 import it.uniroma2.marchidori.maininterface.entity.CharacterStats;

@@ -1,6 +1,6 @@
-package it.uniroma2.marchidori.maininterface.boundary.characterSheet;
+package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
-import it.uniroma2.marchidori.maininterface.bean.characterSheet.CharacterSheetBean;
+import it.uniroma2.marchidori.maininterface.bean.charactersheet.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
