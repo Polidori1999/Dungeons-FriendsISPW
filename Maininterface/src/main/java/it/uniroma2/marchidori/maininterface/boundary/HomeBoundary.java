@@ -16,16 +16,16 @@ public class HomeBoundary {
     private AnchorPane homePane;
 
     @FXML
-    private Button Consult_rules;
+    private Button consultRules;
 
     @FXML
-    private Button Joinlobby;
+    private Button joinLobby;
 
     @FXML
-    private Button ManageLobby;
+    private Button manageLobby;
 
     @FXML
-    private Button Mychar;
+    private Button myChar;
 
     @FXML
     private Button goToHome;
@@ -33,7 +33,7 @@ public class HomeBoundary {
     @FXML
     private Button userButton;
 
-    public UserBean currentUser = new UserBean("123", "Mario", "@lol@", null);
+    public final UserBean currentUser = new UserBean("123", "Mario", "@lol@", null);
 
     @FXML
     void onClickGoToConsultRules(ActionEvent event) throws IOException {

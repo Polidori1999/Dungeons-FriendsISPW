@@ -26,22 +26,22 @@
             <Font name="System Bold" size="30.0" />
          </font>
       </Button>
-      <Button fx:id="Mychar" layoutX="320.0" layoutY="180.0" mnemonicParsing="false" onAction="#onclickGoToMyCharList" prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
+      <Button fx:id="myChar" layoutX="320.0" layoutY="180.0" mnemonicParsing="false" onAction="#onclickGoToMyCharList" prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
       </Button>
-      <Button fx:id="Joinlobby" layoutX="640.0" layoutY="180.0" mnemonicParsing="false" onAction="#onClickGoToJoinLobby" prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
+      <Button fx:id="joinLobby" layoutX="640.0" layoutY="180.0" mnemonicParsing="false" onAction="#onClickGoToJoinLobby" prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
       </Button>
-      <Button fx:id="ManageLobby" layoutX="320.0" layoutY="360.0" mnemonicParsing="false" onAction="#onClickGoToManageLobby" prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
+      <Button fx:id="manageLobby" layoutX="320.0" layoutY="360.0" mnemonicParsing="false" onAction="#onClickGoToManageLobby" prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
       </Button>
-      <Button fx:id="Consult_rules" layoutX="640.0" layoutY="360.0" mnemonicParsing="false" onAction="#onClickGoToConsultRules" prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
+      <Button fx:id="consultRules" layoutX="640.0" layoutY="360.0" mnemonicParsing="false" onAction="#onClickGoToConsultRules" prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>

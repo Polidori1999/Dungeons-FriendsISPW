@@ -98,7 +98,7 @@ public class SceneSwitcher {
 
             // 2) Se implementa "ManageLobbyBoundary", facciamo un init differente
             if (controller instanceof ManageLobbyBoundary mlBoundary) {
-                mlBoundary.seCurrentUser(currentUser);
+                mlBoundary.setCurrentUser(currentUser);
             }
 
             // 3) Se implementa "JoinLobbyBoundary", facciamo altre operazioni
