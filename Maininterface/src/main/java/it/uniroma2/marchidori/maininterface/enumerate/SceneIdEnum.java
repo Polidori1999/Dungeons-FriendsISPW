@@ -9,6 +9,6 @@ public enum SceneIdEnum {
     HOME,
     LOGIN,
     REGISTER,
-    MANAGE_LOBBY;
+    MANAGE_LOBBY
     // Aggiungi altre scene se necessario
 }
