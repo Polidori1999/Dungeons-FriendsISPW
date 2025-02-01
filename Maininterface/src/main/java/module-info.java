@@ -26,7 +26,7 @@ module it.uniroma2.marchidori.maininterface {
     opens it.uniroma2.marchidori.maininterface.boundary.managelobby to javafx.fxml;
     exports it.uniroma2.marchidori.maininterface.boundary.login;
     opens it.uniroma2.marchidori.maininterface.boundary.login to javafx.fxml;
-    opens it.uniroma2.marchidori.maininterface.bean.charactersheet to javafx.base;
+    opens it.uniroma2.marchidori.maininterface.bean.charactersheetb to javafx.base;
     exports it.uniroma2.marchidori.maininterface.boundary.user;
     opens it.uniroma2.marchidori.maininterface.boundary.user to javafx.fxml;
 }

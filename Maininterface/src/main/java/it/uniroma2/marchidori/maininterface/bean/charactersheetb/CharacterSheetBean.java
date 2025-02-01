@@ -1,6 +1,7 @@
-package it.uniroma2.marchidori.maininterface.bean.charactersheet;
+package it.uniroma2.marchidori.maininterface.bean.charactersheetb;
 
-
+import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBean;
+import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsBean;
 public class CharacterSheetBean {
 
     private CharacterInfoBean infoBean;
