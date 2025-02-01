@@ -3,6 +3,7 @@ package it.uniroma2.marchidori.maininterface.bean.charactersheetb;
 
 public class CharacterStatsBean {
 
+
     private int strength;
     private int dexterity;
     private int intelligence;
