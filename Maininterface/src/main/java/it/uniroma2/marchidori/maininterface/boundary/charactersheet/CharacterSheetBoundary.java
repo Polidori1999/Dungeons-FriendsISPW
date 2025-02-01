@@ -4,6 +4,7 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBe
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
 
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
@@ -20,7 +21,7 @@ import java.io.IOException;
  * Boundary per mostrare/creare/modificare i dati di un CharacterSheet
  * in forma "spezzata" (info + statsScores).
  */
-public class CharacterSheetBoundary {
+public class CharacterSheetBoundary implements UserAwareInterface {
 
     @FXML
     private AnchorPane characterSheetPane;
@@ -54,7 +55,7 @@ public class CharacterSheetBoundary {
     // Flag: true se stiamo creando, false se stiamo modificando
     private boolean creationMode;
 
-    protected UserBean currentUser = new UserBean("123", "Mario", "@lol@", null);
+    protected UserBean currentUser;
 
 
     // Bean esistente (in caso di modifica)
@@ -302,4 +303,10 @@ public class CharacterSheetBoundary {
         Stage currentStage = (Stage) characterSheetPane.getScene().getWindow();
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher
     }
+
+    @Override
+    public void setCurrentUser(UserBean user) {
+        this.currentUser = user;
+    }
+
 }

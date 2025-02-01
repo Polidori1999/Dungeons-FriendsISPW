@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException; // <<-- IMPORT ECCEZIONE DEDICATA
@@ -17,7 +18,7 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 
-public class CharacterListBoundary{
+public class CharacterListBoundary implements UserAwareInterface {
 
     @FXML
     protected AnchorPane characterPane;
@@ -46,7 +47,7 @@ public class CharacterListBoundary{
     @FXML
     protected Button newCharacterButton;
 
-    protected UserBean currentUser = new UserBean("123", "Mario", "@lol@", null);
+    protected UserBean currentUser;
 
     // La lista di Bean
     protected ObservableList<CharacterSheetBean> data = FXCollections.observableArrayList();
@@ -169,4 +170,10 @@ public class CharacterListBoundary{
             return new ReadOnlyObjectWrapper<>("???");
         }
     }
+
+    @Override
+    public void setCurrentUser(UserBean user) {
+        this.currentUser = user;
+    }
+
 }

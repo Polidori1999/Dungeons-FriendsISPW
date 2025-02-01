@@ -1,6 +1,7 @@
 package it.uniroma2.marchidori.maininterface.boundary.user;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import javafx.event.ActionEvent;
@@ -13,7 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class UserBoundary {
+public class UserBoundary implements UserAwareInterface {
 
     @FXML
     protected Button consultRules;
@@ -80,9 +81,6 @@ public class UserBoundary {
     /**
      * Metodo per passare l'oggetto User da fuori (es. quando si carica questo controller).
      */
-    public void setCurrentUser(UserBean currentUser) {
-        this.currentUser = currentUser;
-    }
 
     // ------------------------------------------------------------
     // Metodi generici di cambio scena
@@ -162,5 +160,10 @@ public class UserBoundary {
         // Usa SceneSwitcher per cambiare scena
         Stage currentStage = (Stage) userPane.getScene().getWindow();
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher
+    }
+
+    @Override
+    public void setCurrentUser(UserBean user) {
+        this.currentUser = user;
     }
 }

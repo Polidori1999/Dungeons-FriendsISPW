@@ -1,6 +1,7 @@
 package it.uniroma2.marchidori.maininterface.boundary.managelobby;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
+import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
@@ -19,7 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ManageLobbyListBoundary{
+public class ManageLobbyListBoundary implements UserAwareInterface {
 
     @FXML
     protected AnchorPane manageLobbyListPane;
@@ -120,11 +121,6 @@ public class ManageLobbyListBoundary{
     }
 
     @FXML
-    public void setCurrentUser(UserBean currentUser) {
-        this.currentUser = currentUser;
-    }
-
-    @FXML
     void onClickGoToConsultRules(ActionEvent event) {
         try {
             changeScene("consultRules.fxml");
@@ -192,4 +188,9 @@ public class ManageLobbyListBoundary{
         Stage currentStage = (Stage) manageLobbyListPane.getScene().getWindow();
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);
     }
+    @Override
+    public void setCurrentUser(UserBean user) {
+        this.currentUser = user;
+    }
+
 }

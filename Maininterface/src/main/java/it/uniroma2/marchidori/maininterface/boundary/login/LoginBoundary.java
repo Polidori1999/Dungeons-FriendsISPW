@@ -43,8 +43,7 @@ public class LoginBoundary {
     private Label wrongLogin;
 
     private AuthController authentication;
-    public UserBean currentUser = new UserBean("123", "Mario", "@lol@", null);
-
+    public UserBean currentUser;
 
     public LoginBoundary() {
         this.authentication = new AuthController();
@@ -59,7 +58,9 @@ public class LoginBoundary {
     @FXML
     void clickLogin(ActionEvent event) throws IOException {
         try {
-            if (checkLogin()) {// Ottieni lo Stage corrente
+            UserBean authenticatedUser = checkLogin();
+            if (authenticatedUser != null) {
+                currentUser = authenticatedUser; // Salva l'utente corrente
                 changeScene("home.fxml");
             } else {
                 wrongLogin.setText("Wrong email or password!");
@@ -78,31 +79,31 @@ public class LoginBoundary {
         }
     }
 
-    private boolean checkLogin() {
+    private UserBean checkLogin() {
         String userEmail = email.getText();
         String userPassword = password.getText();
 
         if (userEmail.isEmpty() || userPassword.isEmpty()) {
             wrongLogin.setText("Please enter your data!");
-            return false;
+            return null;
         }
 
         // Delego l'autenticazione al servizio
-        boolean authenticated = authentication.authenticate(userEmail, userPassword);
+        UserBean authenticatedUser = authentication.authenticate(userEmail, userPassword);
 
-        if (authenticated) {
+        if (authenticatedUser != null) {
             wrongLogin.setText("Success!");
+            return authenticatedUser;
         } else {
             wrongLogin.setText("Wrong email or password!");
+            return null;
         }
-
-        return authenticated;
     }
 
     @FXML
     private void changeScene(String fxml) throws IOException {
+        System.out.println(currentUser.getRoleBehavior());
         Stage currentStage = (Stage) anchorLoginPane.getScene().getWindow();  // Ottieni lo Stage corrente
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Usa SceneSwitcher per cambiare scena
     }
-
 }

@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.scenemanager;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.*;
+import it.uniroma2.marchidori.maininterface.boundary.charactersheet.CharacterListBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.charactersheet.CharacterListDMBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.charactersheet.CharacterListPlayerBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.charactersheet.CharacterSheetBoundary;
@@ -11,6 +12,7 @@ import it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyPlayerBo
 import it.uniroma2.marchidori.maininterface.boundary.login.LoginBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.login.RegisterBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.managelobby.ManageLobbyBoundary;
+import it.uniroma2.marchidori.maininterface.boundary.managelobby.ManageLobbyListBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.managelobby.ManageLobbyListDMBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.managelobby.ManageLobbyListPlayerBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.user.UserBoundary;
@@ -58,6 +60,8 @@ public class SceneSwitcher {
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.REGISTER), RegisterBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.MANAGE_LOBBY), ManageLobbyBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.MANAGE_LOBBY), ManageLobbyBoundary.class);
+        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.NONE, SceneIdEnum.LOGIN), LoginBoundary.class);
+
     }
 
     private SceneSwitcher() {
@@ -67,8 +71,9 @@ public class SceneSwitcher {
     public static void changeScene(Stage currentStage, String fxmlPath, UserBean currentUser) throws IOException {
 
         SceneIdEnum sceneId = getSceneIdFromFxml(fxmlPath);
-        // Se currentUser è null oppure se la scena non richiede un ruolo, utilizziamo RoleEnum.NONE
-        RoleEnum role = currentUser.getRoleBehavior();
+
+        // Se currentUser è null, utilizziamo RoleEnum.NONE
+        RoleEnum role = (currentUser != null) ? currentUser.getRoleBehavior() : RoleEnum.NONE;
 
         // Otteniamo la classe associata alla coppia (ruolo, scena)
         Class<?> controllerClass = ROLE_SCENE_MAP.get(new Pair<>(role, sceneId));
@@ -89,8 +94,28 @@ public class SceneSwitcher {
         // =======================
         // CHECK RUNTIME MULTIPLI
         // =======================
-        // Se currentUser non è null, possiamo effettuare i runtime checks
+        // Se currentUser non è null, passalo al controller
         if (currentUser != null) {
+            if(controller instanceof HomeBoundary homeBoundary) {
+                homeBoundary.setCurrentUser(currentUser);
+            }
+
+            if(controller instanceof RegisterBoundary registerBoundary) {
+                registerBoundary.setCurrentUser(currentUser);
+            }
+
+            if(controller instanceof CharacterSheetBoundary charBoundary) {
+                charBoundary.setCurrentUser(currentUser);
+            }
+
+            if(controller instanceof CharacterListBoundary charLBoundary) {
+                charLBoundary.setCurrentUser(currentUser);
+            }
+
+            if(controller instanceof ManageLobbyListBoundary manageLobbyListBoundary) {
+                manageLobbyListBoundary.setCurrentUser(currentUser);
+            }
+
             // 1) Se implementa un'interfaccia "UserBoundary", passiamo l'utente
             if (controller instanceof UserBoundary userBoundary) {
                 userBoundary.setCurrentUser(currentUser);
@@ -104,10 +129,8 @@ public class SceneSwitcher {
             // 3) Se implementa "JoinLobbyBoundary", facciamo altre operazioni
             if (controller instanceof JoinLobbyBoundary jlBoundary) {
                 jlBoundary.setCurrentUser(currentUser);
-                // Esempio
             }
         }
-        // Altrimenti (se currentUser è null) non vengono effettuati runtime check relativi all'utente
 
         // Ora carichiamo l'FXML
         FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource(
@@ -131,7 +154,7 @@ public class SceneSwitcher {
             case "home.fxml"            -> SceneIdEnum.HOME;
             case "user.fxml"            -> SceneIdEnum.USER;
             case "register.fxml"        -> SceneIdEnum.REGISTER;
-            case "login.fxml"        -> SceneIdEnum.LOGIN;
+            case "login.fxml"           -> SceneIdEnum.LOGIN;
             default -> throw new IllegalArgumentException("FXML non riconosciuto: " + fxmlPath);
         };
     }

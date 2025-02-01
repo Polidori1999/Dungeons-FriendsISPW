@@ -1,6 +1,7 @@
 package it.uniroma2.marchidori.maininterface.boundary.managelobby;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,7 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ManageLobbyBoundary {
+public class ManageLobbyBoundary implements UserAwareInterface {
 
     @FXML
     private Button consultRules;
@@ -58,6 +59,8 @@ public class ManageLobbyBoundary {
 
     @FXML
     private Button userButton;
+
+    private UserBean currentUser;
 
     @FXML
     void onClickGoBackToListOfLobbies(ActionEvent event) {
@@ -146,6 +149,8 @@ public class ManageLobbyBoundary {
         stage.setScene(scene);
     }
 
-    public void setCurrentUser(UserBean currentUser) {
+    @Override
+    public void setCurrentUser(UserBean user) {
+        this.currentUser = user;
     }
 }

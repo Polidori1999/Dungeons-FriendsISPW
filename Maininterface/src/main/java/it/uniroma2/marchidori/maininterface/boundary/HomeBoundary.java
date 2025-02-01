@@ -4,13 +4,14 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HomeBoundary {
+public class HomeBoundary implements UserAwareInterface {
 
     @FXML
     private AnchorPane homePane;
@@ -33,7 +34,8 @@ public class HomeBoundary {
     @FXML
     private Button userButton;
 
-    public final UserBean currentUser = new UserBean("123", "Mario", "@lol@", null);
+    private UserBean currentUser;
+
 
     @FXML
     void onClickGoToConsultRules(ActionEvent event) throws IOException {
@@ -74,6 +76,8 @@ public class HomeBoundary {
     @FXML
     void onClickUser(ActionEvent event) throws IOException {
         try {
+
+            System.out.println(currentUser.getRoleBehavior());
             changeScene("user.fxml");
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -96,4 +100,8 @@ public class HomeBoundary {
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher
     }
 
+    @Override
+    public void setCurrentUser(UserBean user) {
+        this.currentUser = user;
+    }
 }
