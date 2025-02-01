@@ -1,6 +1,7 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,11 +37,18 @@ public class HomeBoundary implements UserAwareInterface {
 
     private UserBean currentUser;
 
+    private static final String CHARACTERLIST = "characterList.fxml";
+    private static final String USER = "user.fxml";
+    private static final String MANAGELOBBYLIST = "manageLobbyList.fxml";
+    private static final String JOINLOBBY = "joinLobby.fxml";
+    private static final String HOME = "home.fxml";
+    private static final String CONSULTRULES = "consultRules.fxml";
+
 
     @FXML
     void onClickGoToConsultRules(ActionEvent event) throws IOException {
         try {
-            changeScene("consultRules.fxml");
+            changeScene(CONSULTRULES);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -49,27 +57,27 @@ public class HomeBoundary implements UserAwareInterface {
     @FXML
     void onClickGoToHome(ActionEvent event) {
         try {
-            changeScene("home.fxml");
+            changeScene(HOME);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Errore nel cambio scena verso home.fxml", e);
         }
     }
 
     @FXML
     void onClickGoToJoinLobby(ActionEvent event) {
         try {
-            changeScene("joinLobby.fxml");
+            changeScene(JOINLOBBY);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Errore nel cambio scena verso joinLobby.fxml", e);
         }
     }
 
     @FXML
     void onClickGoToManageLobby(ActionEvent event) {
         try {
-            changeScene("manageLobbyList.fxml");
+            changeScene(MANAGELOBBYLIST);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Errore nel cambio scena verso manageLobbyList.fxml", e);
         }
     }
 
@@ -78,18 +86,18 @@ public class HomeBoundary implements UserAwareInterface {
         try {
 
             System.out.println(currentUser.getRoleBehavior());
-            changeScene("user.fxml");
+            changeScene(USER);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Errore nel cambio scena verso user.fxml", e);
         }
     }
 
     @FXML
     void onclickGoToMyCharList(ActionEvent event) {
         try {
-            changeScene("characterList.fxml");
+            changeScene(CHARACTERLIST);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Errore nel cambio scena verso characterList.fxml", e);
         }
     }
 
