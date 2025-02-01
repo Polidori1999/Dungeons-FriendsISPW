@@ -62,6 +62,18 @@ public class User {
         return id;
     }
 
+    public RoleEnum getRoleBehavior() {
+        return roleBehavior;
+    }
+
+    public void setRoleBehavior(RoleEnum roleBehavior) {
+        this.roleBehavior = roleBehavior;
+    }
+
+    public List<Lobby> getFavouriteLobbies() {
+        return favouriteLobbies;
+    }
+
     //DA IMPLEMENTARE
     /*public List<Notification> getNotificationPlayer() {
         return notificationPlayer;

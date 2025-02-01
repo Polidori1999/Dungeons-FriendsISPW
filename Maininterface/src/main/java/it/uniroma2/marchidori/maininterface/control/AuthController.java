@@ -5,9 +5,9 @@ import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 
 public class AuthController {
 
-    public UserBean authenticate(String email, String password) {
+    public UserBean authenticate(String email, String passString) {
         // Simula l'autenticazione
-        if ("Mario".equals(email) && "123".equals(password)) {
+        if ("Mario".equals(email) && "123".equals(passString)) {
             // Restituisce un UserBean con i dati dell'utente
             return new UserBean("1", "Mario", email, RoleEnum.PLAYER ,null);
         }

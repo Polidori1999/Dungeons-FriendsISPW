@@ -13,8 +13,8 @@ module it.uniroma2.marchidori.maininterface {
     // Apre / esporta l'entity
     exports it.uniroma2.marchidori.maininterface.entity;
     opens it.uniroma2.marchidori.maininterface.entity to javafx.fxml;
-
     // Aggiungi questa riga per permettere a javafx.base di riflettere sulle classi nel package .bean
+    exports it.uniroma2.marchidori.maininterface.bean;
     opens it.uniroma2.marchidori.maininterface.bean to javafx.base;
     exports it.uniroma2.marchidori.maininterface.boundary;
     opens it.uniroma2.marchidori.maininterface.boundary to javafx.fxml;
@@ -29,4 +29,7 @@ module it.uniroma2.marchidori.maininterface {
     opens it.uniroma2.marchidori.maininterface.bean.charactersheetb to javafx.base;
     exports it.uniroma2.marchidori.maininterface.boundary.user;
     opens it.uniroma2.marchidori.maininterface.boundary.user to javafx.fxml;
+    exports it.uniroma2.marchidori.maininterface.enumerate;
+    opens it.uniroma2.marchidori.maininterface.enumerate to javafx.fxml;
+
 }

@@ -1,6 +1,9 @@
 package it.uniroma2.marchidori.maininterface.utils;
 
 public class SceneNames {
+
+    private SceneNames() {}
+
     public static final String CHARACTER_LIST = "characterList.fxml";
     public static final String USER = "user.fxml";
     public static final String MANAGE_LOBBY_LIST = "manageLobbyList.fxml";
