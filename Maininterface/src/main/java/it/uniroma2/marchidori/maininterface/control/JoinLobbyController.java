@@ -5,10 +5,14 @@ import it.uniroma2.marchidori.maininterface.entity.Lobby;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class JoinLobbyController {
 
     private List<Lobby> allLobbies;
+
+    private static final Logger logger = Logger.getLogger(JoinLobbyController.class.getName());
+
 
     public JoinLobbyController() {
         // Simuliamo qualche Lobby con valori che coincidano con i ComboBox:
@@ -55,9 +59,10 @@ public class JoinLobbyController {
         return true;
     }
 
-    public void saveChanges(LobbyBean bean){
-        System.out.println("Salvataggio della lobby: " + bean.getName());
+    public void saveChanges(LobbyBean bean) {
+        logger.info("Salvataggio della lobby: " + bean.getName());
     }
+
 
     // Conversione da Entity -> Bean
     private LobbyBean entityToBean(Lobby lob) {

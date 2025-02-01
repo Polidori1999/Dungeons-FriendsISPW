@@ -6,6 +6,7 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsB
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
 
+import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -64,6 +65,9 @@ public class CharacterSheetBoundary {
 
     // Riferimento alla finestra di lista (se vogliamo avvisarla di aggiornamenti)
     private CharacterListPlayerBoundary parentBoundary;
+
+
+    private static final String CHARACTERLIST = "characterList.fxml"; //stringa per evitare code smell ripetizione
 
     // -------------------------------------------------------------
     //            METODI DI CONFIGURAZIONE DELLA BOUNDARY
@@ -140,7 +144,7 @@ public class CharacterSheetBoundary {
     //                 SALVATAGGIO (BOTTONE SAVE)
     // -------------------------------------------------------------
     @FXML
-    void onClickSaveCharacter(ActionEvent event) throws IOException {
+    void onClickSaveCharacter(ActionEvent event) {
         setController(controller);
         if (controller == null) {
             // Se serve, gestisci l'errore qui (es. un alert)
@@ -148,6 +152,7 @@ public class CharacterSheetBoundary {
         }
         // Semplifichiamo la logica: se creationMode è true, creiamo; altrimenti, aggiorniamo
         if (creationMode) {
+            createNewCharacter();
         } else {
             updateExistingCharacter();
         }
@@ -205,10 +210,11 @@ public class CharacterSheetBoundary {
             parentBoundary.refreshTable();
         }
         try {
-            changeScene("characterList.fxml");
+            changeScene(CHARACTERLIST);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Errore durante il cambio scena verso characterList.fxml", e);
         }
+
     }
 
     // -------------------------------------------------------------
@@ -253,10 +259,11 @@ public class CharacterSheetBoundary {
     @FXML
     void onClickGoBackToList(ActionEvent event) throws IOException {
         try {
-            changeScene("characterList.fxml");
+            changeScene(CHARACTERLIST);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Errore durante il cambio scena verso characterList.fxml", e);
         }
+
     }
 
     @FXML
@@ -286,7 +293,7 @@ public class CharacterSheetBoundary {
 
     @FXML
     void onclickGoToMyCharList(ActionEvent event) throws IOException {
-        changeScene("characterList.fxml");
+        changeScene(CHARACTERLIST);
     }
 
     @FXML

@@ -2,7 +2,7 @@ package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
-import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
+
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -17,10 +17,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public class CharacterListPlayerBoundary extends CharacterListBoundary {
 
-    private CharacterSheetController controller;
+    private static final Logger logger = Logger.getLogger(CharacterListPlayerBoundary.class.getName());
 
     @Override
     public void initialize(){
@@ -28,7 +29,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
         newCharacterButton.setVisible(true);
         newCharacterButton.setDisable(false);
         if (controller == null) {
-            System.err.println("Errore: controller non inizializzato!");
+            logger.severe("Errore: controller non inizializzato!");
             return;
         }
         data.addAll(controller.getAllCharacters());
@@ -122,7 +123,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
     private void openCreateCharacterModal() {
         try {
             changeScene("characterSheet.fxml");
-            //sheetController.setCreationMode(true);
+
 
 
             // Refresh della tabella dopo la chiusura della finestra
@@ -134,6 +135,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
         }
     }
     @FXML
+    @Override
     void onClickMyCharacter(ActionEvent event) {
         try {
             changeScene("characterList.fxml");
