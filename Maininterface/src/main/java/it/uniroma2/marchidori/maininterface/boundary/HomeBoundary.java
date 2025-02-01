@@ -33,7 +33,7 @@ public class HomeBoundary {
     @FXML
     private Button userButton;
 
-    public UserBean currentUser = new UserBean("123", "Mario", "@lol@", null);
+    private UserBean currentUser = new UserBean("123", "Mario", "@lol@", null);
 
     @FXML
     void onClickGoToConsultRules(ActionEvent event) throws IOException {
