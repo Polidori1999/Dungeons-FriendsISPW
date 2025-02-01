@@ -3,6 +3,7 @@ package it.uniroma2.marchidori.maininterface.boundary.managelobby;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -47,7 +48,7 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
         newLobbyButton.setOnAction(e -> {
             // Definisci qui cosa deve fare il bottone "New Lobby"
             try {
-                changeScene("ManageLobby");
+                changeScene(SceneNames.MANAGE_LOBBY);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -58,7 +59,7 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
     @FXML
     void onClickNewLobby(ActionEvent event) {
         try {
-            changeScene("newLobby.fxml");
+            changeScene(SceneNames.NEW_LOBBY);
         } catch (IOException e) {
             throw new SceneChangeException("Errore nel cambiare scena a newLobby.fxml", e);
         }

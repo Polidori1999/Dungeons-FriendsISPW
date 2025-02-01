@@ -5,6 +5,7 @@ import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -123,7 +124,7 @@ public class ManageLobbyListBoundary implements UserAwareInterface {
     @FXML
     void onClickGoToConsultRules(ActionEvent event) {
         try {
-            changeScene("consultRules.fxml");
+            changeScene(SceneNames.CONSULT_RULES);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from manage lobby to consult rules.", e);
         }
@@ -132,7 +133,7 @@ public class ManageLobbyListBoundary implements UserAwareInterface {
     @FXML
     void onClickGoToHome(ActionEvent event) {
         try {
-            changeScene("home.fxml");
+            changeScene(SceneNames.HOME);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from manage lobby to home.", e);
         }
@@ -141,7 +142,7 @@ public class ManageLobbyListBoundary implements UserAwareInterface {
     @FXML
     void onClickGoToJoinLobby(ActionEvent event) {
         try {
-            changeScene("joinLobby.fxml");
+            changeScene(SceneNames.JOIN_LOBBY);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from manage lobby list to join lobby.", e);
         }
@@ -150,7 +151,7 @@ public class ManageLobbyListBoundary implements UserAwareInterface {
     @FXML
     void onClickGoToManageLobby(ActionEvent event) {
         try {
-            changeScene("manageLobbyList.fxml");
+            changeScene(SceneNames.MANAGE_LOBBY_LIST);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from manage lobby list to manage lobby.", e);
         }
@@ -159,7 +160,7 @@ public class ManageLobbyListBoundary implements UserAwareInterface {
     @FXML
     void onClickMyCharacter(ActionEvent event) {
         try {
-            changeScene("characterList.fxml");
+            changeScene(SceneNames.CHARACTER_LIST);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from manage lobby list to character list.", e);
         }
@@ -169,7 +170,7 @@ public class ManageLobbyListBoundary implements UserAwareInterface {
     @FXML
     void onClickUser(ActionEvent event) {
         try {
-            changeScene("user.fxml");
+            changeScene(SceneNames.USER);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from manage lobby list to user.", e);
         }
@@ -177,7 +178,7 @@ public class ManageLobbyListBoundary implements UserAwareInterface {
     @FXML
     void onClickNewLobby(ActionEvent event) {
         try {
-            changeScene("newLobby.fxml");
+            changeScene(SceneNames.NEW_LOBBY);
         } catch (IOException e) {
             throw new SceneChangeException("Errore nel cambiare scena a newLobby.fxml", e);
         }

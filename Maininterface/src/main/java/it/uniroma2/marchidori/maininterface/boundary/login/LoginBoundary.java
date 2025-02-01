@@ -4,6 +4,7 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.control.AuthController;
+import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -61,7 +62,7 @@ public class LoginBoundary {
             UserBean authenticatedUser = checkLogin();
             if (authenticatedUser != null) {
                 currentUser = authenticatedUser; // Salva l'utente corrente
-                changeScene("home.fxml");
+                changeScene(SceneNames.HOME);
             } else {
                 wrongLogin.setText("Wrong email or password!");
             }
@@ -73,7 +74,7 @@ public class LoginBoundary {
     @FXML
     void onClickCreate(ActionEvent event) throws IOException {
         try {
-            changeScene("register.fxml");
+            changeScene(SceneNames.REGISTER);
         } catch (IOException e) {
             throw new SceneChangeException("Error during scene change from login to register.", e);
         }

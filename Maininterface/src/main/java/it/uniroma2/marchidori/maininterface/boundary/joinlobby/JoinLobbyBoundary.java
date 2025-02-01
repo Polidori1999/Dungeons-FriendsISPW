@@ -6,6 +6,7 @@ import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher; // Importa SceneSwitcher
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
+import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -177,7 +178,7 @@ public class JoinLobbyBoundary implements Initializable, UserAwareInterface {
     @FXML
     void onClickGoToConsultRules(ActionEvent event) throws IOException {
         try {
-            changeScene("consultRules.fxml");
+            changeScene(SceneNames.CONSULT_RULES);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from join lobby to consult rules.", e);
         }
@@ -186,7 +187,7 @@ public class JoinLobbyBoundary implements Initializable, UserAwareInterface {
     @FXML
     void onClickGoToHome(ActionEvent event) throws IOException {
         try {
-            changeScene("home.fxml");
+            changeScene(SceneNames.HOME);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from join lobby to home.", e);
         }
@@ -195,7 +196,7 @@ public class JoinLobbyBoundary implements Initializable, UserAwareInterface {
     @FXML
     void onClickGoToJoinLobby(ActionEvent event) throws IOException {
         try {
-            changeScene("joinLobby.fxml");
+            changeScene(SceneNames.JOIN_LOBBY);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from join lobby to join lobby.", e);
         }
@@ -204,7 +205,7 @@ public class JoinLobbyBoundary implements Initializable, UserAwareInterface {
     @FXML
     void onClickGoToManageLobby(ActionEvent event) throws IOException {
         try {
-            changeScene("manageLobbyList.fxml");
+            changeScene(SceneNames.MANAGE_LOBBY);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from join lobby to manage lobby list.", e);
         }
@@ -213,7 +214,7 @@ public class JoinLobbyBoundary implements Initializable, UserAwareInterface {
     @FXML
     void onClickUser(ActionEvent event) throws IOException {
         try {
-            changeScene("user.fxml");
+            changeScene(SceneNames.USER);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from join lobby to user.", e);
         }
@@ -222,7 +223,7 @@ public class JoinLobbyBoundary implements Initializable, UserAwareInterface {
     @FXML
     void onClickMyCharacter(ActionEvent event) throws IOException {
         try {
-            changeScene("characterList.fxml");
+            changeScene(SceneNames.CHARACTER_LIST);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from join lobby to character list.", e);
         }
