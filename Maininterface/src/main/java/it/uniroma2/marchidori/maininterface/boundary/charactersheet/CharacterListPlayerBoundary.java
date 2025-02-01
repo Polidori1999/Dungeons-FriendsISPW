@@ -5,6 +5,7 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -122,7 +123,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
     // Apertura finestra secondaria per creare
     private void openCreateCharacterModal() {
         try {
-            changeScene("characterSheet.fxml");
+            changeScene(SceneNames.CHARACTER_SHEET);
 
 
 
@@ -138,7 +139,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
     @Override
     void onClickMyCharacter(ActionEvent event) {
         try {
-            changeScene("characterList.fxml");
+            changeScene(SceneNames.CHARACTER_LIST);
         } catch (IOException e) {
             throw new SceneChangeException("Errore nel cambiare scena a characterList.fxml", e);
         }

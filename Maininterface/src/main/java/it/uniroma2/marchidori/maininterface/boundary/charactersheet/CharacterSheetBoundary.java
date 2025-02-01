@@ -9,6 +9,7 @@ import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
 
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -68,7 +69,6 @@ public class CharacterSheetBoundary implements UserAwareInterface {
     private CharacterListPlayerBoundary parentBoundary;
 
 
-    private static final String CHARACTERLIST = "characterList.fxml"; //stringa per evitare code smell ripetizione
 
     // -------------------------------------------------------------
     //            METODI DI CONFIGURAZIONE DELLA BOUNDARY
@@ -211,7 +211,7 @@ public class CharacterSheetBoundary implements UserAwareInterface {
             parentBoundary.refreshTable();
         }
         try {
-            changeScene(CHARACTERLIST);
+            changeScene(SceneNames.CHARACTER_LIST);
         } catch (IOException e) {
             throw new SceneChangeException("Errore durante il cambio scena verso characterList.fxml", e);
         }
@@ -260,7 +260,7 @@ public class CharacterSheetBoundary implements UserAwareInterface {
     @FXML
     void onClickGoBackToList(ActionEvent event) throws IOException {
         try {
-            changeScene(CHARACTERLIST);
+            changeScene(SceneNames.CHARACTER_LIST);
         } catch (IOException e) {
             throw new SceneChangeException("Errore durante il cambio scena verso characterList.fxml", e);
         }
@@ -269,32 +269,32 @@ public class CharacterSheetBoundary implements UserAwareInterface {
 
     @FXML
     void onClickGoToConsultRules(ActionEvent event) throws IOException {
-        changeScene("consultRules.fxml");
+        changeScene(SceneNames.CONSULT_RULES);
     }
 
     @FXML
     void onClickGoToHome(ActionEvent event) throws IOException {
-        changeScene("home.fxml");
+        changeScene(SceneNames.HOME);
     }
 
     @FXML
     void onClickGoToJoinLobby(ActionEvent event) throws IOException {
-        changeScene("joinLobby.fxml");
+        changeScene(SceneNames.JOIN_LOBBY);
     }
 
     @FXML
     void onClickGoToManageLobby(ActionEvent event) throws IOException {
-        changeScene("manageLobby.fxml");
+        changeScene(SceneNames.MANAGE_LOBBY);
     }
 
     @FXML
     void onClickUser(ActionEvent event) throws IOException {
-        changeScene("user.fxml");
+        changeScene(SceneNames.USER);
     }
 
     @FXML
     void onclickGoToMyCharList(ActionEvent event) throws IOException {
-        changeScene(CHARACTERLIST);
+        changeScene(SceneNames.CHARACTER_LIST);
     }
 
     @FXML
