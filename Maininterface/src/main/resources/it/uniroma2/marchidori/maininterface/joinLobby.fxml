@@ -53,9 +53,9 @@
                             </effect>
                         </ImageView>
                     </graphic>
-               <VBox.margin>
-                  <Insets left="1.0" />
-               </VBox.margin>
+                    <VBox.margin>
+                        <Insets left="1.0" />
+                    </VBox.margin>
                 </Button>
                 <!-- Pulsante Manage Lobby -->
                 <Button fx:id="manageLobby" mnemonicParsing="false" onAction="#onClickGoToManageLobby" prefHeight="45.0" prefWidth="181.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
@@ -72,9 +72,9 @@
                             </effect>
                         </ImageView>
                     </graphic>
-               <VBox.margin>
-                  <Insets left="4.0" />
-               </VBox.margin>
+                    <VBox.margin>
+                        <Insets left="4.0" />
+                    </VBox.margin>
                 </Button>
                 <!-- Pulsante Consult Rules -->
                 <Button fx:id="consultRules" mnemonicParsing="false" onAction="#onClickGoToConsultRules" prefHeight="45.0" prefWidth="151.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
@@ -151,7 +151,7 @@
 
                 <!-- Seconda colonna: Pulsante 'Join' -->
                 <TableColumn fx:id="joinButtonColumn" prefWidth="160.0" text="Join" />
-            <TableColumn fx:id="favouriteButton" prefWidth="160.0" text="Favourite" />
+                <TableColumn fx:id="favouriteButton" prefWidth="160.0" text="Favourite" />
             </columns>
         </TableView>
 
@@ -167,6 +167,6 @@
                 </ImageView>
             </graphic>
         </Button>
-      <Pane layoutX="8.0" layoutY="237.0" prefHeight="15.0" prefWidth="15.0" style="-fx-background-color: #e90000;" />
+        <Pane layoutX="8.0" layoutY="237.0" prefHeight="15.0" prefWidth="15.0" style="-fx-background-color: #e90000;" />
     </children>
 </AnchorPane>
