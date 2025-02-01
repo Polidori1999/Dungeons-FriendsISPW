@@ -6,7 +6,7 @@ import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -43,7 +43,7 @@ public class HomeBoundary implements UserAwareInterface {
         try {
             changeScene(SceneNames.CONSULT_RULES);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Errore nel cambio scena verso CONSULT_RULES.fxml", e);
         }
     }
 

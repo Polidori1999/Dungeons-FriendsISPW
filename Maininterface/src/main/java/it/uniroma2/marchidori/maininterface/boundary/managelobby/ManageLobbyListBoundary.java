@@ -118,7 +118,7 @@ public class ManageLobbyListBoundary implements UserAwareInterface {
         });
 
         // Se necessario, imposta i dati nella TableView (ad es. da un ObservableList)
-        // tableViewLobby.setItems(...);
+
     }
 
     @FXML

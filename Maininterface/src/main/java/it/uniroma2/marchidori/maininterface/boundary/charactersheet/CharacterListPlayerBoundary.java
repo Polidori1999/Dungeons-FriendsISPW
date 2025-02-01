@@ -152,7 +152,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher
     }
 
-
+    @Override
     public void setCurrentUser(UserBean currentUser){
         this.currentUser = currentUser;
     }

@@ -1,6 +1,6 @@
 package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
-import java.util.logging.Logger;
+
 
 public class CharacterListDMBoundary extends CharacterListBoundary {
 
