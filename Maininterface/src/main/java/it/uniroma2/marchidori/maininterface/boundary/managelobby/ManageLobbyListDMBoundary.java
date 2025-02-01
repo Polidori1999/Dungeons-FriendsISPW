@@ -50,14 +50,13 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
             try {
                 changeScene(SceneNames.MANAGE_LOBBY);
             } catch (IOException ex) {
-                throw new SceneChangeException("Errore nel cambio scena verso Managelobby.fxml", ex);
+                throw new RuntimeException(ex);
             }
             // Ad esempio, potresti cambiare scena oppure aprire un form per creare una nuova lobby
         });
     }
 
     @FXML
-    @Override
     void onClickNewLobby(ActionEvent event) {
         try {
             changeScene(SceneNames.NEW_LOBBY);
