@@ -66,4 +66,6 @@ public class CharacterStats {
     public void setConstitution(int constitution) {
         this.constitution = constitution;
     }
+
+
 }

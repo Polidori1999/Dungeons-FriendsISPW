@@ -1,8 +1,10 @@
 package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
+import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 
+import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsBean;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
@@ -27,6 +29,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
     @Override
     public void initialize(){
         super.initialize();
+
         newCharacterButton.setVisible(true);
         newCharacterButton.setDisable(false);
         if (controller == null) {
@@ -34,6 +37,8 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
             return;
         }
         data.addAll(controller.getAllCharacters());
+        // **DEBUG: Verifica che la tabella venga popolata**
+        System.out.println(">>> DEBUG: Numero di personaggi nella tabella: " + data.size());
         // Colonna EDIT
         tableViewCharButton.setCellValueFactory(cellData -> {
             Button editBtn = new Button("Edit");
@@ -49,6 +54,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
                     setGraphic(item);
                     item.setOnAction(e -> {
                         CharacterSheetBean selectedChar = getTableView().getItems().get(getIndex());
+                        System.out.println(">>> DEBUG: Bottone Edit premuto per personaggio: " + selectedChar.getInfoBean().getName());
                         openEditCharacterModal(selectedChar);
                     });
                 }
@@ -79,20 +85,28 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
         });
     }
 
-    // Apertura finestra secondaria per edit
     private void openEditCharacterModal(CharacterSheetBean beanToEdit) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/characterSheet.fxml"));
-            Parent root = loader.load();
+            System.out.println(">>> DEBUG: Avvio modifica personaggio: " + beanToEdit.getInfoBean().getName());
 
-            CharacterSheetBoundary sheetController = loader.getController();
-            // No creationMode
-            sheetController.setCreationMode(false);
-            // Passiamo il Bean esistente
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/characterSheet.fxml"));
+
+            // **Crea manualmente il Controller e assegna PRIMA di caricare**
+            CharacterSheetBoundary sheetController = new CharacterSheetBoundary();
+            loader.setController(sheetController); // <- ASSEGNA IL CONTROLLER PRIMA DI CARICARE L'FXML
+
+            Parent root = loader.load(); // **Ora carica il file FXML**
+
+            // **Verifica che il controller sia stato assegnato**
+            if (sheetController == null) {
+                System.err.println(">>> ERRORE: Il controller non è stato caricato correttamente!");
+                return;
+            }
+
+            // **PASSA I DATI AL CONTROLLER**
             sheetController.setCharacterSheetBean(beanToEdit);
-            // Passiamo il controller BCE
+            sheetController.setCreationMode(false);
             sheetController.setController(controller);
-            // Passiamo la boundary
             sheetController.setParentBoundary(this);
 
             Stage modalStage = new Stage();
@@ -100,9 +114,12 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
             modalStage.initOwner(characterPane.getScene().getWindow());
             modalStage.initModality(Modality.WINDOW_MODAL);
             modalStage.setScene(new Scene(root));
+
+            System.out.println(">>> DEBUG: Finestra di modifica aperta!");
+
             modalStage.showAndWait();
 
-            // Refresh
+            // **Aggiorna la tabella dopo la modifica**
             tableViewChar.refresh();
 
         } catch (IOException e) {
@@ -110,31 +127,94 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
         }
     }
 
+
+
     public void addNewCharacterBean(CharacterSheetBean newBean) {
-        data.add(newBean);
-        tableViewChar.refresh();
+        if (newBean != null) {
+            System.out.println(">>> Aggiungendo il nuovo personaggio alla tabella...");
+            data.add(newBean);  // **AGGIUNGIAMO IL PERSONAGGIO ALLA LISTA**
+            tableViewChar.refresh(); // **FORZIAMO IL REFRESH DELLA TABELLA**
+        } else {
+            System.err.println(">>> ERRORE: newBean è NULL in addNewCharacterBean()!");
+        }
     }
+
+
 
     @FXML
     void onClickNewCharacter(ActionEvent event) {
         openCreateCharacterModal();
     }
 
-    // Apertura finestra secondaria per creare
     private void openCreateCharacterModal() {
         try {
-            changeScene(SceneNames.CHARACTER_SHEET);
+            System.out.println(">>> DEBUG: Avvio caricamento finestra modale per nuovo personaggio...");
 
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/characterSheet.fxml"));
 
+            // **IMPORTANTE: SETTA IL CONTROLLER PRIMA DI CARICARE**
+            CharacterSheetBoundary sheetController = new CharacterSheetBoundary();
+            loader.setController(sheetController);
 
-            // Refresh della tabella dopo la chiusura della finestra
+            Parent root = loader.load();
+            System.out.println(">>> DEBUG: FXML caricato correttamente!");
+
+            // **Ora assegniamo il controller in modo manuale**
+            sheetController.setCreationMode(true);
+            sheetController.setCharacterSheetBean(new CharacterSheetBean(
+                    new CharacterInfoBean("", "", 0, "", 1),
+                    new CharacterStatsBean(10, 10, 10, 10, 10, 10)
+            ));
+            sheetController.setController(controller);
+            sheetController.setParentBoundary(this);
+
+            // **Creiamo la finestra modale**
+            Stage modalStage = new Stage();
+            modalStage.setTitle("Crea Nuovo Personaggio");
+            modalStage.initOwner(characterPane.getScene().getWindow());
+            modalStage.initModality(Modality.WINDOW_MODAL);
+            modalStage.setScene(new Scene(root));
+
+            System.out.println(">>> DEBUG: Mostro la finestra modale...");
+            modalStage.showAndWait();
+
+            System.out.println(">>> DEBUG: Finestra modale chiusa, aggiorno la tabella...");
             tableViewChar.refresh();
 
         } catch (IOException e) {
-            // Usare la "dedicated exception" SceneChangeException
+            System.err.println(">>> ERRORE: IOException durante il caricamento di characterSheet.fxml!");
+            e.printStackTrace();
             throw new SceneChangeException("Errore nel cambio scena (nuovo personaggio).", e);
         }
     }
+
+    // Aggiunge un nuovo personaggio alla tabella
+    public void addCharacterToTable(CharacterSheetBean character) {
+        data.add(character);
+        tableViewChar.refresh();
+        System.out.println(">>> DEBUG: Personaggio aggiunto alla tabella: " + character.getInfoBean().getName());
+    }
+
+    // Aggiorna un personaggio esistente nella tabella
+    public void updateExistingCharacterInTable(CharacterSheetBean updatedCharacter) {
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).getInfoBean().getName().equals(updatedCharacter.getInfoBean().getName())) { // Usa un identificatore univoco
+                data.set(i, updatedCharacter);
+                break;
+            }
+        }
+        tableViewChar.refresh();
+        System.out.println(">>> DEBUG: Personaggio aggiornato nella tabella: " + updatedCharacter.getInfoBean().getName());
+    }
+
+    // Ricarica completamente la tabella
+    public void refreshTable() {
+        tableViewChar.refresh();
+    }
+
+
+
+
     @FXML
     @Override
     void onClickMyCharacter(ActionEvent event) {

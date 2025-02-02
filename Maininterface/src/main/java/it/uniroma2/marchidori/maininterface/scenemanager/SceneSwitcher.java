@@ -98,6 +98,12 @@ public class SceneSwitcher {
     }
 
     private static void injectCurrentUser(Object controller, UserBean currentUser) {
+
+        if (controller instanceof CharacterSheetBoundary charBoundary) {
+            System.out.println("Injecting User into CharacterSheetBoundary");
+                charBoundary.setCurrentUser(currentUser);
+        }
+
         if (currentUser == null) {
             return;
         }

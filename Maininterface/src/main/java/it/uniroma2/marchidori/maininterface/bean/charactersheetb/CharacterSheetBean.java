@@ -21,6 +21,7 @@ public class CharacterSheetBean {
     }
 
     public void setInfoBean(CharacterInfoBean infoBean) {
+
         this.infoBean = infoBean;
     }
 

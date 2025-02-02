@@ -35,13 +35,7 @@ public class CharacterSheet {
         this.characterStats = characterStats;
     }
 
-    /**
-     * Metodi delegati per comodità, così se il Controller fa
-     * existing.setRace(...) funziona senza creare da zero
-     * un CharacterInfo e un CharacterStats.
-     */
-
-    // ---------- INFO ----------
+    // ---------- METODI DELEGATI PER LA PARTE "INFO" ----------
     public String getName() {
         return characterInfo.getName();
     }
@@ -77,7 +71,7 @@ public class CharacterSheet {
         characterInfo.setLevel(level);
     }
 
-    // ---------- STATS ----------
+    // ---------- METODI DELEGATI PER LA PARTE "STATS" ----------
     public int getStrength() {
         return characterStats.getStrength();
     }
@@ -118,5 +112,10 @@ public class CharacterSheet {
     }
     public void setConstitution(int constitution) {
         characterStats.setConstitution(constitution);
+    }
+
+    @Override
+    public String toString() {
+        return "CharacterSheet [name=" + getName() + ", classe=" + getClasse() + ", level=" + getLevel() + "]";
     }
 }

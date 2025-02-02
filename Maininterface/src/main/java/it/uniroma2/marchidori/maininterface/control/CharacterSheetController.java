@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.control;
 
+import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
@@ -16,22 +17,24 @@ import java.util.List;
  * di CharacterSheet, mantenendo una lista in memoria.
  */
 public class CharacterSheetController {
-
-    private final List<CharacterSheet> allCharacters;
-
-    public CharacterSheetController() {
-        // Carichiamo qualche personaggio di esempio (Entity pura)
-        allCharacters = new ArrayList<>();
-        // 1) Aragorn
-        CharacterInfo infoAragorn = new CharacterInfo("Aragorn", "Human", 25, "Ranger", 5);
-        CharacterStats statsAragorn = new CharacterStats(16, 14, 12, 10, 8, 13);
-        allCharacters.add(new CharacterSheet(infoAragorn, statsAragorn));
-
-        // 2) Legolas
-        CharacterInfo infoLegolas = new CharacterInfo("Legolas", "Elf", 90, "Archer", 7);
-        CharacterStats statsLegolas = new CharacterStats(14, 18, 10, 12, 16, 10);
-        allCharacters.add(new CharacterSheet(infoLegolas, statsLegolas));
+    private UserBean currentUser;
+    public CharacterSheetController(UserBean currentUser) {
+        if (currentUser == null) {
+            throw new IllegalArgumentException("UserBean passato a CharacterSheetController è NULL!");
+        }
+        this.currentUser = currentUser;
+        System.out.println("CharacterSheetController creato con UserBean: " + this.currentUser);
     }
+
+    //commentato per debug
+    /*// Riferimento allo userBean corrente (che contiene i characterSheets dell'utente)
+    private UserBean currentUser;
+
+    // Costruttore che riceve lo UserBean corrente
+    public CharacterSheetController(UserBean currentUser) {
+        this.currentUser = currentUser;
+    }*/
+
 
     /**
      * Restituisce tutti i personaggi come Bean (per la UI).
@@ -40,8 +43,10 @@ public class CharacterSheetController {
      */
     public List<CharacterSheetBean> getAllCharacters() {
         List<CharacterSheetBean> beans = new ArrayList<>();
-        for (CharacterSheet cs : allCharacters) {
-            beans.add(entityToBean(cs));
+        if (currentUser != null && currentUser.getCharacterSheets() != null) {
+            for (CharacterSheet cs : currentUser.getCharacterSheets()) {
+                beans.add(entityToBean(cs));
+            }
         }
         return beans;
     }
@@ -52,31 +57,49 @@ public class CharacterSheetController {
      * in una Entity "CharacterSheet" e la aggiunge alla lista in memoria.
      */
     public void createCharacter(CharacterSheetBean bean) {
+        if (bean == null || bean.getInfoBean() == null) {
+            System.err.println(">>> ERRORE: Il Bean passato a createCharacter() è NULL!");
+            return;
+        }
+
         CharacterSheet newCS = beanToEntity(bean);
-        allCharacters.add(newCS);
+        if (currentUser != null) {
+            System.out.println(">>> Aggiungendo personaggio a UserBean: " + newCS.getName());
+            currentUser.addCharacterSheet(newCS);
+            System.out.println(">>> Lista attuale personaggi: " + currentUser.getCharacterSheets());
+        } else {
+            System.err.println(">>> ERRORE: currentUser è NULL in createCharacter()!");
+        }
     }
+
+
+
+
+
+
 
     /**
      * Aggiorna un personaggio esistente (cerca per nome).
      * Usa i campi di CharacterSheetBean (spezzati in info e ability).
      */
     public void updateCharacter(CharacterSheetBean bean) {
-        // Troviamo la Entity esistente basandoci sul nome
-        CharacterSheet existing = findByName(bean.getInfoBean().getName());
-        if (existing != null) {
-            // Aggiorniamo la parte "info"
-            existing.setRace(bean.getInfoBean().getRace());
-            existing.setAge(bean.getInfoBean().getAge());
-            existing.setClasse(bean.getInfoBean().getClasse());
-            existing.setLevel(bean.getInfoBean().getLevel());
+        if (currentUser != null && currentUser.getCharacterSheets() != null) {
+            CharacterSheet existing = findByName(bean.getInfoBean().getName());
+            if (existing != null) {
+                // Aggiorniamo la parte "info"
+                existing.setRace(bean.getInfoBean().getRace());
+                existing.setAge(bean.getInfoBean().getAge());
+                existing.setClasse(bean.getInfoBean().getClasse());
+                existing.setLevel(bean.getInfoBean().getLevel());
 
-            // Aggiorniamo la parte "abilityScores"
-            existing.setStrength(bean.getStatsBean().getStrength());
-            existing.setDexterity(bean.getStatsBean().getDexterity());
-            existing.setIntelligence(bean.getStatsBean().getIntelligence());
-            existing.setWisdom(bean.getStatsBean().getWisdom());
-            existing.setCharisma(bean.getStatsBean().getCharisma());
-            existing.setConstitution(bean.getStatsBean().getConstitution());
+                // Aggiorniamo la parte "abilityScores"
+                existing.setStrength(bean.getStatsBean().getStrength());
+                existing.setDexterity(bean.getStatsBean().getDexterity());
+                existing.setIntelligence(bean.getStatsBean().getIntelligence());
+                existing.setWisdom(bean.getStatsBean().getWisdom());
+                existing.setCharisma(bean.getStatsBean().getCharisma());
+                existing.setConstitution(bean.getStatsBean().getConstitution());
+            }
         }
     }
 
@@ -143,12 +166,13 @@ public class CharacterSheetController {
      * Cerca un personaggio (Entity) in base al nome.
      */
     private CharacterSheet findByName(String name) {
-        for (CharacterSheet cs : allCharacters) {
-            if (cs.getName().equals(name)) {
-                return cs;
+        if (currentUser != null && currentUser.getCharacterSheets() != null) {
+            for (CharacterSheet cs : currentUser.getCharacterSheets()) {
+                if (cs.getName().equals(name)) {
+                    return cs;
+                }
             }
         }
         return null;
     }
-
 }

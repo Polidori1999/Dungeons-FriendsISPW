@@ -60,10 +60,11 @@ public class CharacterSheetBoundary implements UserAwareInterface {
 
 
     // Bean esistente (in caso di modifica)
+
     private CharacterSheetBean currentBean;
 
-    // Riferimento al controller BCE
-    private CharacterSheetController controller = new CharacterSheetController();
+    // Controller aggiornato: verrà creato in setCurrentUser()
+    private CharacterSheetController controller;
 
     // Riferimento alla finestra di lista (se vogliamo avvisarla di aggiornamenti)
     private CharacterListPlayerBoundary parentBoundary;
@@ -88,20 +89,57 @@ public class CharacterSheetBoundary implements UserAwareInterface {
      */
     public void setCreationMode(boolean creationMode) {
         this.creationMode = creationMode;
+        System.out.println(">>> Modalità creazione impostata a: " + creationMode);
+
         if (creationMode) {
             clearFields();
             currentBean = null;
         }
     }
 
+
     /**
      * Popola i campi dalla Bean, in modalità modifica.
      */
     public void setCharacterSheetBean(CharacterSheetBean bean) {
-        this.currentBean = bean;
-        this.creationMode = false;
-        populateFieldsFromBean(bean);
+        if (bean == null) {
+            System.err.println(">>> ERRORE: setCharacterSheetBean() ha ricevuto un bean NULL!");
+            return;
+        }
+
+        this.currentBean = bean;  // ASSEGNA IL BEAN
+
+        System.out.println(">>> DEBUG: Personaggio caricato nel form: " + bean.getInfoBean().getName());
+
+        // Popola i campi del form con i dati del personaggio
+        if (bean.getInfoBean() != null) {
+            charName.setText(bean.getInfoBean().getName());
+            charAge.setText(String.valueOf(bean.getInfoBean().getAge()));
+            charClass.setText(bean.getInfoBean().getClasse());
+            charLevel.setText(String.valueOf(bean.getInfoBean().getLevel()));
+            charRace.setText(bean.getInfoBean().getRace());
+        } else {
+            System.err.println(">>> ERRORE: CharacterInfoBean è NULL!");
+        }
+
+        if (bean.getStatsBean() != null) {
+            charStrenght.setText(String.valueOf(bean.getStatsBean().getStrength()));
+            charDexerity.setText(String.valueOf(bean.getStatsBean().getDexterity()));
+            charIntelligence.setText(String.valueOf(bean.getStatsBean().getIntelligence()));
+            charWisdom.setText(String.valueOf(bean.getStatsBean().getWisdom()));
+            charCharisma.setText(String.valueOf(bean.getStatsBean().getCharisma()));
+            charConstitution.setText(String.valueOf(bean.getStatsBean().getConstitution()));
+        } else {
+            System.err.println(">>> ERRORE: CharacterStatsBean è NULL!");
+        }
     }
+
+
+
+
+
+
+
 
     // -------------------------------------------------------------
     //                   METODI DI UTILITÀ
@@ -144,34 +182,92 @@ public class CharacterSheetBoundary implements UserAwareInterface {
     // -------------------------------------------------------------
     //                 SALVATAGGIO (BOTTONE SAVE)
     // -------------------------------------------------------------
+    //aggiorno manualmente
     @FXML
-    void onClickSaveCharacter(ActionEvent event) {
-        setController(controller);
-        if (controller == null) {
-            // Se serve, gestisci l'errore qui (es. un alert)
+    private void onClickSaveCharacter(ActionEvent event) {
+        System.out.println(">> onClickSaveCharacter() INVOCATO!");
+        System.out.println(">>> creationMode attuale: " + creationMode);
+
+        if (currentBean == null) {
+            System.err.println(">>> ERRORE: currentBean è NULL! Non posso aggiornare.");
             return;
         }
-        // Semplifichiamo la logica: se creationMode è true, creiamo; altrimenti, aggiorniamo
+
+        // **AGGIORNA I DATI DEL BEAN ESISTENTE INVECE DI CREARE UN NUOVO OGGETTO**
+        currentBean.getInfoBean().setName(charName.getText());
+        currentBean.getInfoBean().setAge(parseIntOrZero(charAge.getText()));
+        currentBean.getInfoBean().setClasse(charClass.getText());
+        currentBean.getInfoBean().setLevel(parseIntOrZero(charLevel.getText()));
+        currentBean.getInfoBean().setRace(charRace.getText());
+
+        currentBean.getStatsBean().setStrength(parseIntOrZero(charStrenght.getText()));
+        currentBean.getStatsBean().setDexterity(parseIntOrZero(charDexerity.getText()));
+        currentBean.getStatsBean().setIntelligence(parseIntOrZero(charIntelligence.getText()));
+        currentBean.getStatsBean().setWisdom(parseIntOrZero(charWisdom.getText()));
+        currentBean.getStatsBean().setCharisma(parseIntOrZero(charCharisma.getText()));
+        currentBean.getStatsBean().setConstitution(parseIntOrZero(charConstitution.getText()));
+
+        System.out.println(">>> Personaggio aggiornato con successo: " + currentBean.getInfoBean().getName());
+
+        // **Se è un nuovo personaggio, aggiungilo alla lista, altrimenti aggiorna**
         if (creationMode) {
-            createNewCharacter();
+            System.out.println(">>> AGGIUNGO nuovo personaggio alla lista");
+            controller.createCharacter(currentBean);
+            if (parentBoundary != null) {
+                parentBoundary.addCharacterToTable(currentBean);
+            }
         } else {
-            updateExistingCharacter();
+            System.out.println(">>> MODIFICO personaggio esistente");
+            controller.updateCharacter(currentBean);
+            if (parentBoundary != null) {
+                parentBoundary.updateExistingCharacterInTable(currentBean);
+            }
         }
+
+        // **CHIUDI LA FINESTRA MODALE DOPO IL SALVATAGGIO**
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        stage.close();
     }
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Crea un nuovo personaggio.
      */
     private void createNewCharacter() {
+        System.out.println(">>> createNewCharacter() chiamato!");
+
         CharacterInfoBean infoBean = buildInfoBeanFromFields();
         CharacterStatsBean statsBean = buildStatsBeanFromFields();
-
         CharacterSheetBean newBean = new CharacterSheetBean(infoBean, statsBean);
+
+        if (newBean == null || newBean.getInfoBean() == null) {
+            System.err.println(">>> ERRORE: Il Bean creato è NULL!");
+            return;
+        }
+
+        System.out.println(">>> Personaggio creato: " + newBean.getInfoBean().getName() +
+                ", Classe: " + newBean.getInfoBean().getClasse() +
+                ", Livello: " + newBean.getInfoBean().getLevel());
+
         controller.createCharacter(newBean);
 
-        if (parentBoundary != null) parentBoundary.addNewCharacterBean(newBean);
-
+        System.out.println(">>> Dopo creazione, personaggi utente = " + currentUser.getCharacterSheets());
     }
+
+
+
+
+
 
     /**
      * Aggiorna un personaggio esistente (currentBean), se presente.
@@ -306,7 +402,17 @@ public class CharacterSheetBoundary implements UserAwareInterface {
 
     @Override
     public void setCurrentUser(UserBean user) {
+        System.out.println("SetCurrentUser chiamato con: " + user);
         this.currentUser = user;
+        this.controller = new CharacterSheetController(currentUser);
+
+        if (this.controller == null) {
+            System.err.println("ERRORE: controller non è stato inizializzato!");
+        } else {
+            System.out.println("Controller inizializzato correttamente: " + this.controller);
+        }
     }
+
+
 
 }

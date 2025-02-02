@@ -16,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class LoginBoundary {
 
@@ -62,23 +63,35 @@ public class LoginBoundary {
             UserBean authenticatedUser = checkLogin();
             if (authenticatedUser != null) {
                 currentUser = authenticatedUser; // Salva l'utente corrente
+                System.out.println(">>> Login avvenuto con successo. UserBean: " + currentUser);
                 changeScene(SceneNames.HOME);
             } else {
                 wrongLogin.setText("Wrong email or password!");
+                System.err.println(">>> ERRORE: Login fallito. UserBean è NULL!");
             }
         } catch (IOException e) {
             throw new SceneChangeException("Error during scene change from login to home.", e);
         }
     }
 
+
     @FXML
-    void onClickCreate(ActionEvent event) throws IOException {
+    void onClickCreate(ActionEvent event) {
+        System.out.println(">>> onClickCreate() chiamato!");
+
+        // Verifica che currentUser non sia null
+        if (currentUser == null) {
+            System.err.println(">>> ERRORE: currentUser è NULL prima di cambiare scena!");
+            return;
+        }
+
         try {
-            changeScene(SceneNames.REGISTER);
+            changeScene(SceneNames.HOME);
         } catch (IOException e) {
-            throw new SceneChangeException("Error during scene change from login to register.", e);
+            e.printStackTrace();
         }
     }
+
 
     private UserBean checkLogin() {
         String userEmail = email.getText();
@@ -103,8 +116,14 @@ public class LoginBoundary {
 
     @FXML
     private void changeScene(String fxml) throws IOException {
-        System.out.println(currentUser.getRoleBehavior());
-        Stage currentStage = (Stage) anchorLoginPane.getScene().getWindow();  // Ottieni lo Stage corrente
-        SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Usa SceneSwitcher per cambiare scena
+        if (currentUser == null) {
+            System.err.println(">>> ERRORE: currentUser è NULL! Creazione di un UserBean di fallback.");
+            currentUser = new UserBean("guest", "Guest", "guest@example.com", new ArrayList<>(), new ArrayList<>());
+        }
+
+        System.out.println(">>> Cambiando scena: " + fxml + " con UserBean: " + currentUser);
+        Stage currentStage = (Stage) anchorLoginPane.getScene().getWindow();
+        SceneSwitcher.changeScene(currentStage, fxml, currentUser);
     }
+
 }

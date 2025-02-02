@@ -12,6 +12,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -60,6 +62,9 @@ public class CharacterListBoundary implements UserAwareInterface {
     protected void initialize() {
         // Inizializzo il controller
 
+        if (controller == null && currentUser != null) {
+            this.controller = new CharacterSheetController(currentUser);
+        }
         // Carico i personaggi iniziali (sotto forma di Bean)
 
 
@@ -171,10 +176,21 @@ public class CharacterListBoundary implements UserAwareInterface {
             return new ReadOnlyObjectWrapper<>("???");
         }
     }
-
+    //eliminare la systemout poichè debug ok
     @Override
     public void setCurrentUser(UserBean user) {
+        System.out.println("SetCurrentUser chiamato con: " + user);
         this.currentUser = user;
+        this.controller = new CharacterSheetController(currentUser);
+
+        if (this.controller == null) {
+            System.err.println("ERRORE: controller non è stato inizializzato!");
+        } else {
+            System.out.println("Controller inizializzato correttamente: " + this.controller);
+        }
     }
+
+
+
 
 }
