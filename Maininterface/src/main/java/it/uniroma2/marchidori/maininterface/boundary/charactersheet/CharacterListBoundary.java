@@ -12,8 +12,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -30,22 +28,38 @@ public class CharacterListBoundary implements UserAwareInterface {
     protected TableView<CharacterSheetBean> tableViewChar;
 
     @FXML
-    private TableColumn<CharacterSheetBean, String> tableViewCharName;
+    protected TableColumn<CharacterSheetBean, String> tableViewCharName;
 
     @FXML
-    private TableColumn<CharacterSheetBean, String> tableViewCharRace;
+    protected TableColumn<CharacterSheetBean, String> tableViewCharRace;
 
     @FXML
-    private TableColumn<CharacterSheetBean, String> tableViewCharAge;
+    protected TableColumn<CharacterSheetBean, String> tableViewCharAge;
 
     @FXML
-    private TableColumn<CharacterSheetBean, String> tableViewCharClass;
+    protected TableColumn<CharacterSheetBean, String> tableViewCharClass;
 
     @FXML
     protected TableColumn<CharacterSheetBean, Button> tableViewCharButton;  // colonna "Edit"
 
     @FXML
     protected TableColumn<CharacterSheetBean, Button> tableViewCharDelete; // colonna "Delete"
+
+    @FXML
+    protected AnchorPane confirmationPane;
+
+    @FXML
+    protected Button noButton;
+
+    @FXML
+    protected Button yesButton;
+
+    @FXML
+    protected Label timerLabel;
+
+    @FXML
+    protected Label confirmationLabel;
+
 
     @FXML
     protected Button newCharacterButton;
@@ -67,7 +81,15 @@ public class CharacterListBoundary implements UserAwareInterface {
         }
         // Carico i personaggi iniziali (sotto forma di Bean)
 
-
+        confirmationPane.setVisible(false);
+        confirmationLabel.setVisible(false);
+        yesButton.setVisible(false);
+        yesButton.setDisable(true);
+        noButton.setVisible(false);
+        noButton.setDisable(true);
+        timerLabel.setVisible(false);
+        newCharacterButton.setVisible(false);
+        newCharacterButton.setDisable(true);
         // Associazioni colonne -> campi del Bean
         tableViewCharName.setCellValueFactory(new ReadOnlyObjectWrapperFactory<>("name"));
         tableViewCharRace.setCellValueFactory(new ReadOnlyObjectWrapperFactory<>("race"));
@@ -124,7 +146,7 @@ public class CharacterListBoundary implements UserAwareInterface {
     @FXML
     void onClickGoToManageLobby(ActionEvent event) {
         try {
-            changeScene(SceneNames.MANAGE_LOBBY);
+            changeScene(SceneNames.MANAGE_LOBBY_LIST);
         } catch (IOException e) {
             throw new SceneChangeException("Errore nel cambiare scena a manageLobby.fxml", e);
         }

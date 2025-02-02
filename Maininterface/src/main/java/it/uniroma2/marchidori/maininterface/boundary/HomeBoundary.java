@@ -77,7 +77,6 @@ public class HomeBoundary implements UserAwareInterface {
     @FXML
     void onClickUser(ActionEvent event) throws IOException {
         try {
-            System.out.println(currentUser.getRoleBehavior());
             changeScene(SceneNames.USER);
         } catch (IOException e) {
             throw new SceneChangeException("Errore nel cambio scena verso user.fxml", e);

@@ -205,7 +205,7 @@ public class JoinLobbyBoundary implements Initializable, UserAwareInterface {
     @FXML
     void onClickGoToManageLobby(ActionEvent event) throws IOException {
         try {
-            changeScene(SceneNames.MANAGE_LOBBY);
+            changeScene(SceneNames.MANAGE_LOBBY_LIST);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from join lobby to manage lobby list.", e);
         }

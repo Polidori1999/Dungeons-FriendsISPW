@@ -45,7 +45,7 @@ public class LoginBoundary {
     private Label wrongLogin;
 
     private AuthController authentication;
-    public UserBean currentUser;
+    private UserBean currentUser;
 
     public LoginBoundary() {
         this.authentication = new AuthController();
@@ -86,7 +86,7 @@ public class LoginBoundary {
         }
 
         try {
-            changeScene(SceneNames.HOME);
+            changeScene(SceneNames.REGISTER);
         } catch (IOException e) {
             e.printStackTrace();
         }

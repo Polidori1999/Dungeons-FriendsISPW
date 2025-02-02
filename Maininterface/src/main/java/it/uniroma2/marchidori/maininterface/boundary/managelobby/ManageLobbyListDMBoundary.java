@@ -1,15 +1,10 @@
 package it.uniroma2.marchidori.maininterface.boundary.managelobby;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
-import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
-import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
-import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
-import javafx.stage.Stage;
+
 
 import java.io.IOException;
 
@@ -45,31 +40,7 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
         // Imposta il bottone newLobbyButton (definito nella superclasse) come visibile e cliccabile
         newLobbyButton.setVisible(true);
         newLobbyButton.setDisable(false);
-        newLobbyButton.setOnAction(e -> {
-            // Definisci qui cosa deve fare il bottone "New Lobby"
-            try {
-                changeScene(SceneNames.MANAGE_LOBBY);
-            } catch (IOException ex) {
-                throw new SceneChangeException("Errore nel cambiare scena a managelobby.fxml", ex);
-            }
-            // Ad esempio, potresti cambiare scena oppure aprire un form per creare una nuova lobby
-        });
     }
 
-    @FXML
-    @Override
-    void onClickNewLobby(ActionEvent event) {
-        try {
-            changeScene(SceneNames.NEW_LOBBY);
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambiare scena a newLobby.fxml", e);
-        }
-    }
-
-    @FXML
-    private void changeScene(String fxml) throws IOException {
-        Stage currentStage = (Stage) manageLobbyListPane.getScene().getWindow();
-        SceneSwitcher.changeScene(currentStage, fxml, currentUser);
-    }
 
 }

@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
@@ -9,14 +10,11 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="characterPane" minHeight="720.0" minWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
-
     <children>
-
         <!-- Pulsante principale -->
         <Button fx:id="goToHome" alignment="TOP_LEFT" layoutX="-8.0" layoutY="-3.0" mnemonicParsing="false" onAction="#onClickGoToHome" prefHeight="65.0" prefWidth="349.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE">
             <font>
@@ -24,6 +22,7 @@
             </font>
         </Button>
 
+        <!-- Bottone utente -->
         <Button fx:id="userButton" layoutX="1219.0" layoutY="11.0" mnemonicParsing="false" onAction="#onClickUser" prefHeight="41.0" prefWidth="45.0" style="-fx-background-color: transparent;" textFill="#f80606">
             <graphic>
                 <ImageView blendMode="MULTIPLY" fitHeight="53.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
@@ -37,36 +36,35 @@
             </graphic>
         </Button>
 
-        <Pane layoutX="8.0" layoutY="189.0" prefHeight="15.0" prefWidth="15.0" style="-fx-background-color: #e90000;" />
+        <!-- Elemento decorativo -->
+        <AnchorPane layoutX="8.0" layoutY="189.0" prefHeight="15.0" prefWidth="15.0" style="-fx-background-color: #e90000;" />
 
+        <!-- Tabella dei personaggi -->
         <TableView fx:id="tableViewChar" layoutX="235.0" layoutY="64.0" prefHeight="522.0" prefWidth="858.0" style="-fx-background-color: #292932;">
             <columns>
-                <TableColumn fx:id="tableViewCharName" minWidth="0.0" prefWidth="170.00006103515625" text="Name" />
-                <TableColumn fx:id="tableViewCharAge" prefWidth="80.6666259765625" text="Age" />
-                <TableColumn fx:id="tableViewCharClass" prefWidth="171.333251953125" text="Class" />
-                <TableColumn fx:id="tableViewCharRace" prefWidth="128.6666259765625" text="Race" />
-
+                <TableColumn fx:id="tableViewCharName" minWidth="0.0" prefWidth="170.0" text="Name" />
+                <TableColumn fx:id="tableViewCharAge" prefWidth="80.67" text="Age" />
+                <TableColumn fx:id="tableViewCharClass" prefWidth="171.33" text="Class" />
+                <TableColumn fx:id="tableViewCharRace" prefWidth="128.67" text="Race" />
                 <!-- Colonna Edit -->
                 <TableColumn fx:id="tableViewCharButton" prefWidth="152.5" text="Edit">
-                    <!-- AGGIUNTA -->
                     <cellValueFactory>
-                        <!--
-                             'editButton' deve corrispondere a una proprietà nel tuo
-                             model o a un valore gestito dal tuo Controller tramite
-                             setCellFactory (vedremo dopo come).
-                        -->
                         <PropertyValueFactory property="editButton" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="tableViewCharDelete" prefWidth="152.6666259765625" text="Delete" />
+                <!-- Colonna Delete -->
+                <TableColumn fx:id="tableViewCharDelete" prefWidth="152.67" text="Delete" />
             </columns>
         </TableView>
 
+        <!-- Bottone per creare un nuovo personaggio -->
         <Button fx:id="newCharacterButton" layoutX="611.0" layoutY="621.0" mnemonicParsing="false" onAction="#onClickNewCharacter" text="New Character">
             <font>
                 <Font size="15.0" />
             </font>
         </Button>
+
+        <!-- VBox laterale con altri bottoni -->
         <VBox fx:id="Vbox" layoutX="27.0" layoutY="171.0" prefHeight="245.0" prefWidth="151.0">
             <children>
                 <Button fx:id="Mychar" mnemonicParsing="false" onAction="#onClickMyCharacter" prefHeight="51.0" prefWidth="150.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
@@ -137,5 +135,16 @@
                 </Button>
             </children>
         </VBox>
+      <AnchorPane fx:id="confirmationPane" layoutX="490.0" layoutY="160.0" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: #ffffff;">
+         <children>
+                        <Button fx:id="yesButton" layoutX="45.0" layoutY="300.0" onAction="#onClickYes" prefHeight="20.0" prefWidth="60.0" style="-fx-background-color: #e90000;" text="Yes" />
+                        <Button fx:id="noButton" layoutX="200.0" layoutY="300.0" onAction="#onClickNo" prefHeight="20.0" prefWidth="60.0" style="-fx-background-color: #e90000;" text="No" AnchorPane.rightAnchor="45.0" />
+                      <!-- Label timer -->
+                      <Label fx:id="timerLabel" layoutX="120.0" layoutY="210.0" prefHeight="20.0" prefWidth="60.0" style="-fx-font-size: 14px;" />
+                      <!-- Label di conferma -->
+                      <Label fx:id="confirmationLabel" layoutX="45.0" layoutY="110.0" prefHeight="25.0" prefWidth="225.0" style="-fx-font-size: 16px;" text="Are u sure u want to delete it?" wrapText="true" />
+         </children>
+      </AnchorPane>
+
     </children>
 </AnchorPane>

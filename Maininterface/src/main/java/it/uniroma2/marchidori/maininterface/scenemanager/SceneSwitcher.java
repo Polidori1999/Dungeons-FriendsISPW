@@ -60,6 +60,8 @@ public class SceneSwitcher {
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.MANAGE_LOBBY), ManageLobbyBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.MANAGE_LOBBY), ManageLobbyBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.NONE, SceneIdEnum.LOGIN), LoginBoundary.class);
+        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.CONSULT_RULES), ConsultRulesBoundary.class);
+        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.CONSULT_RULES), ConsultRulesBoundary.class);
     }
 
     // Private constructor to prevent instantiation.
@@ -98,14 +100,11 @@ public class SceneSwitcher {
     }
 
     private static void injectCurrentUser(Object controller, UserBean currentUser) {
-
-        if (controller instanceof CharacterSheetBoundary charBoundary) {
-            System.out.println("Injecting User into CharacterSheetBoundary");
-                charBoundary.setCurrentUser(currentUser);
-        }
-
         if (currentUser == null) {
             return;
+        }
+        if (controller instanceof CharacterSheetBoundary charBoundary) {
+                charBoundary.setCurrentUser(currentUser);
         }
         // We use the "instanceof" operator to verify and pass the currentUser.
         if (controller instanceof HomeBoundary homeBoundary) {
@@ -132,6 +131,9 @@ public class SceneSwitcher {
         if (controller instanceof JoinLobbyBoundary jlBoundary) {
             jlBoundary.setCurrentUser(currentUser);
         }
+        if (controller instanceof ConsultRulesBoundary consultRulesBoundary) {
+            consultRulesBoundary.setCurrentUser(currentUser);
+        }
     }
 
     private static Parent loadFXML(String fxmlPath, Object controller) throws IOException {
@@ -152,6 +154,7 @@ public class SceneSwitcher {
             case "user.fxml"            -> SceneIdEnum.USER;
             case "register.fxml"        -> SceneIdEnum.REGISTER;
             case "login.fxml"           -> SceneIdEnum.LOGIN;
+            case "consultRules.fxml"    -> SceneIdEnum.CONSULT_RULES;
             default -> throw new IllegalArgumentException("FXML not recognized: " + fxmlPath);
         };
     }

@@ -1,6 +1,5 @@
 package it.uniroma2.marchidori.maininterface.bean;
 
-import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
