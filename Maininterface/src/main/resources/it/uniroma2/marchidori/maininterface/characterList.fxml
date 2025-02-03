@@ -58,19 +58,19 @@
         </TableView>
 
         <!-- Bottone per creare un nuovo personaggio -->
-        <Button fx:id="newCharacterButton" layoutX="611.0" layoutY="621.0" mnemonicParsing="false" onAction="#onClickNewCharacter" text="New Character">
+        <Button fx:id="newCharacterButton" layoutX="611.0" layoutY="621.0" mnemonicParsing="false" onAction="#onClickNewCharacter" style="-fx-background-color: #e90000;" text="New Character" textFill="WHITE">
             <font>
                 <Font size="15.0" />
             </font>
         </Button>
-      <AnchorPane fx:id="confirmationPane" layoutX="490.0" layoutY="160.0" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: #ffffff;">
+      <AnchorPane fx:id="confirmationPane" layoutX="490.0" layoutY="160.0" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: #292932;">
          <children>
-                        <Button fx:id="yesButton" layoutX="45.0" layoutY="300.0" onAction="#onClickYes" prefHeight="20.0" prefWidth="60.0" style="-fx-background-color: #e90000;" text="Yes" />
-                        <Button fx:id="noButton" layoutX="200.0" layoutY="300.0" onAction="#onClickNo" prefHeight="20.0" prefWidth="60.0" style="-fx-background-color: #e90000;" text="No" AnchorPane.rightAnchor="45.0" />
+                        <Button fx:id="yesButton" layoutX="45.0" layoutY="300.0" onAction="#onClickYes" prefHeight="20.0" prefWidth="60.0" style="-fx-background-color: #e90000;" text="Yes" textFill="WHITE" />
+                        <Button fx:id="noButton" layoutX="200.0" layoutY="300.0" onAction="#onClickNo" prefHeight="20.0" prefWidth="60.0" style="-fx-background-color: #e90000;" text="No" textFill="WHITE" AnchorPane.rightAnchor="45.0" />
                       <!-- Label timer -->
                       <Label fx:id="timerLabel" layoutX="120.0" layoutY="210.0" prefHeight="20.0" prefWidth="60.0" style="-fx-font-size: 14px;" />
                       <!-- Label di conferma -->
-                      <Label fx:id="confirmationLabel" layoutX="45.0" layoutY="110.0" prefHeight="25.0" prefWidth="225.0" style="-fx-font-size: 16px;" text="Are u sure u want to delete it?" wrapText="true" />
+                      <Label fx:id="confirmationLabel" layoutX="45.0" layoutY="110.0" prefHeight="25.0" prefWidth="225.0" style="-fx-font-size: 16px;" text="Are u sure u want to delete it?" textFill="WHITE" wrapText="true" />
          </children>
       </AnchorPane>
       <VBox fx:id="vBox" layoutX="-2.0" layoutY="171.0" prefHeight="219.0" prefWidth="260.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="1025.3">

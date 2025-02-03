@@ -78,21 +78,7 @@ public class ManageLobbyListBoundary implements UserAwareInterface {
      * Invocato automaticamente da JavaFX dopo l'iniezione dei nodi @FXML.
      */
     @FXML
-    protected void initialize(URL url, ResourceBundle rb) {
-        configureUI();
-    }
-
-    /**
-     * Configurazione di base: inizializzazione della TableView e delle colonne.
-     */
-    protected void configureUI() {
-        initCommonTableView();
-    }
-
-    /**
-     * Metodo che inizializza la TableView e configura le colonne.
-     */
-    private void initCommonTableView() {
+    protected void initialize() {
         // Imposta il PropertyValueFactory per le colonne basate sulle proprietà di LobbyBean.
         tableViewLobbyName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tableViewMaxPlayers.setCellValueFactory(new PropertyValueFactory<>("maxPlayers"));
@@ -118,6 +104,11 @@ public class ManageLobbyListBoundary implements UserAwareInterface {
             }
         });
     }
+
+
+    /**
+     * Metodo che inizializza la TableView e configura le colonne.
+     */
 
     @FXML
     void onClickGoToConsultRules(ActionEvent event) {

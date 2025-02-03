@@ -6,6 +6,9 @@ import it.uniroma2.marchidori.maininterface.boundary.charactersheet.CharacterLis
 import it.uniroma2.marchidori.maininterface.boundary.charactersheet.CharacterListDMBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.charactersheet.CharacterListPlayerBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.charactersheet.CharacterSheetBoundary;
+import it.uniroma2.marchidori.maininterface.boundary.consultrules.ConsultRulesBoundary;
+import it.uniroma2.marchidori.maininterface.boundary.consultrules.ConsultRulesDMORPlayerBoundary;
+import it.uniroma2.marchidori.maininterface.boundary.consultrules.ConsultRulesGuestBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyDMBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyGuestBoundary;
@@ -36,53 +39,79 @@ import java.util.Map;
 
 public class SceneSwitcher {
 
-    // Map (role, scene) -> controller class.
+    // Map (ruolo, scena) -> classe del controller
     private static final Map<Pair<RoleEnum, SceneIdEnum>, Class<?>> ROLE_SCENE_MAP = new HashMap<>();
 
     static {
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.MANAGE_LOBBY_LIST), ManageLobbyListDMBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.MANAGE_LOBBY_LIST), ManageLobbyListPlayerBoundary.class);
+        // Se l'utente è guest e richiede la scena MANAGE_LOBBY_LIST, verrà indirizzato a LoginBoundary
+        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.MANAGE_LOBBY_LIST), LoginBoundary.class);
+
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.JOIN_LOBBY), JoinLobbyDMBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.JOIN_LOBBY), JoinLobbyPlayerBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.JOIN_LOBBY), JoinLobbyGuestBoundary.class);
+
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.CHARACTER_LIST), CharacterListDMBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.CHARACTER_LIST), CharacterListPlayerBoundary.class);
+
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.USER), UserDMBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.USER), UserPlayerBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.USER), UserGuestBoundary.class);
+
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.CHARACTER_SHEET), CharacterSheetBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.CHARACTER_SHEET), CharacterSheetBoundary.class);
+
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.HOME), HomeBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.HOME), HomeBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.HOME), HomeBoundary.class);
+
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.LOGIN), LoginBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.LOGIN), LoginBoundary.class);
+        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.LOGIN), LoginBoundary.class);
+
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.REGISTER), RegisterBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.REGISTER), RegisterBoundary.class);
+
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.MANAGE_LOBBY), ManageLobbyBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.MANAGE_LOBBY), ManageLobbyBoundary.class);
+
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.NONE, SceneIdEnum.LOGIN), LoginBoundary.class);
-        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.LOGIN), LoginBoundary.class);
+
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.CONSULT_RULES), ConsultRulesBoundary.class);
-        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.CONSULT_RULES), ConsultRulesBoundary.class);
+        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.CONSULT_RULES), ConsultRulesDMORPlayerBoundary.class);
+        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.CONSULT_RULES), ConsultRulesGuestBoundary.class);
     }
 
     private SceneSwitcher() {}
 
     public static void changeScene(Stage currentStage, String fxmlPath, UserBean currentUser) throws IOException {
+        // Ottieni lo SceneIdEnum corrispondente al file FXML richiesto
         SceneIdEnum sceneId = getSceneIdFromFxml(fxmlPath);
         RoleEnum role = (currentUser != null) ? currentUser.getRoleBehavior() : RoleEnum.NONE;
 
         System.out.println(">>> [SceneSwitcher] Cambio scena a " + fxmlPath + " con ruolo: " + role);
 
+        // Caso speciale: se l'utente è guest e richiede la scena MANAGE_LOBBY_LIST,
+        // forziamo il cambio scena al login (cambiando sia il percorso FXML che lo SceneIdEnum).
+        if (role == RoleEnum.GUEST && sceneId == SceneIdEnum.MANAGE_LOBBY_LIST) {
+            System.out.println(">>> [SceneSwitcher] Utente Guest richiede MANAGE_LOBBY_LIST: cambio forzato a login.fxml");
+            fxmlPath = "login.fxml";
+            sceneId = SceneIdEnum.LOGIN;
+        }
+
+        // Risolvi il controller in base al mapping
         Class<?> controllerClass = getControllerClass(role, sceneId);
         System.out.println(">>> [SceneSwitcher] Controller risolto: " + controllerClass.getSimpleName());
 
+        // Istanzia il controller
         Object controller = instantiateController(controllerClass);
         System.out.println(">>> [SceneSwitcher] Istanza del controller creata: " + controller.getClass().getSimpleName());
 
+        // Inietta il currentUser nel controller, se applicabile
         injectCurrentUser(controller, currentUser);
 
+        // Carica il file FXML con il controller specificato
         Parent root = loadFXML(fxmlPath, controller);
         Scene newScene = new Scene(root);
         currentStage.setScene(newScene);

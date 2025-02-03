@@ -31,5 +31,7 @@ module it.uniroma2.marchidori.maininterface {
     opens it.uniroma2.marchidori.maininterface.boundary.user to javafx.fxml;
     exports it.uniroma2.marchidori.maininterface.enumerate;
     opens it.uniroma2.marchidori.maininterface.enumerate to javafx.fxml;
+    exports it.uniroma2.marchidori.maininterface.boundary.consultrules;
+    opens it.uniroma2.marchidori.maininterface.boundary.consultrules to javafx.fxml;
 
 }
