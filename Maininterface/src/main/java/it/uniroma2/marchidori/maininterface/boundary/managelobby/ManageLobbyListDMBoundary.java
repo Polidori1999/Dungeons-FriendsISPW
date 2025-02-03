@@ -11,9 +11,9 @@ import java.io.IOException;
 public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
 
     @Override
-    protected void configureUI() {
+    protected void initialize() {
         // Chiama la configurazione di base definita nella superclasse
-        super.configureUI();
+        super.initialize();
 
         // Configurazione della colonna "Edit"
         tableViewLobbyEdit.setCellValueFactory(cellData -> {

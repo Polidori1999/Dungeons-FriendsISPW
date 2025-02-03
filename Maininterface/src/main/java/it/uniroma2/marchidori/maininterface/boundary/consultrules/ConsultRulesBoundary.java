@@ -1,7 +1,8 @@
-package it.uniroma2.marchidori.maininterface.boundary;
+package it.uniroma2.marchidori.maininterface.boundary.consultrules;
 
 import it.uniroma2.marchidori.maininterface.bean.RuleBookBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
@@ -18,8 +19,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class ConsultRulesBoundary implements UserAwareInterface {
 
@@ -29,10 +28,10 @@ public class ConsultRulesBoundary implements UserAwareInterface {
     private AnchorPane consultRulesPane;
 
     @FXML
-    private TableColumn<RuleBookBean, Void> buyButton;
+    protected TableColumn<RuleBookBean, Void> buyButton;
 
     @FXML
-    private TableColumn<RuleBookBean, Void> consultButton;
+    protected TableColumn<RuleBookBean, Void> consultButton;
 
     @FXML
     private Button consultRules;
@@ -50,13 +49,13 @@ public class ConsultRulesBoundary implements UserAwareInterface {
     private Button myChar;
 
     @FXML
-    private TableColumn<RuleBookBean, String> ownedColumn;
+    protected TableColumn<RuleBookBean, String> ownedColumn;
 
     @FXML
-    private TableColumn<RuleBookBean, String> rulesBookNameColumn;
+    protected TableColumn<RuleBookBean, String> rulesBookNameColumn;
 
     @FXML
-    private TableView<RuleBookBean> rulesBookTableView;
+    protected TableView<RuleBookBean> rulesBookTableView;
 
     @FXML
     private Button userButton;
@@ -67,14 +66,7 @@ public class ConsultRulesBoundary implements UserAwareInterface {
     private ObservableList<RuleBookBean> rulesBook;
 
     @FXML
-    public void initialize(URL url, ResourceBundle rb) {
-        initTableView();
-    }
-
-    /**
-     * Inizializza la TableView, le sue colonne e collega la ObservableList.
-     */
-    private void initTableView() {
+    public void initialize() {
         // Colonna "Lobby Name"
         // Usa "name" perché in LobbyBean esiste getName()
         rulesBookNameColumn.setCellValueFactory(new PropertyValueFactory<>("Rule's book name"));
@@ -92,12 +84,11 @@ public class ConsultRulesBoundary implements UserAwareInterface {
                     setGraphic(null);
                     return;
                 }
-
-                initFavouriteButtonIfNeeded();
+                initBuyButtonIfNeeded();
                 setGraphic(buyBtn);
             }
 
-            private void initFavouriteButtonIfNeeded() {
+            private void initBuyButtonIfNeeded() {
                 if (buyBtn == null) {
                     buyBtn = new Button("buy now!");
                     buyBtn.setOnAction(event -> handleBuyAction());
@@ -199,7 +190,7 @@ public class ConsultRulesBoundary implements UserAwareInterface {
     }
 
     @FXML
-    private void changeScene(String fxml) throws IOException {
+    protected void changeScene(String fxml) throws IOException {
         // Usa SceneSwitcher per cambiare scena
         Stage currentStage = (Stage) consultRulesPane.getScene().getWindow();
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher
