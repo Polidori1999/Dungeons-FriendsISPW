@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
+import java.util.List;
 
 public class CharacterListBoundary implements UserAwareInterface {
 
@@ -105,9 +106,19 @@ public class CharacterListBoundary implements UserAwareInterface {
     }
 
 
+
+
     public void refreshTable() {
-        tableViewChar.refresh();
+        if (currentUser != null) {
+            data.clear();
+            List<CharacterSheetBean> updatedList = controller.getAllCharacters(); // Prendi i dati aggiornati
+            data.addAll(updatedList); // Riaggiungi i dati aggiornati
+            tableViewChar.refresh();
+            System.out.println(">>> DEBUG: Tabella aggiornata con personaggi aggiornati.");
+        }
     }
+
+
 
     @FXML
     void onClickMyCharacter(ActionEvent event) {
@@ -167,13 +178,14 @@ public class CharacterListBoundary implements UserAwareInterface {
 
     @FXML
     private void changeScene(String fxml) throws IOException {
-        // Usa SceneSwitcher per cambiare scena
         Stage currentStage = (Stage) characterPane.getScene().getWindow();
-        SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher
+        SceneSwitcher.changeScene(currentStage, fxml, currentUser);
+
         if (fxml.equals(SceneNames.CHARACTER_LIST)) {
-            reloadCharacterList();
+            reloadCharacterList(); // Forza il caricamento dei dati aggiornati quando torni alla tabella
         }
     }
+
 
     // -------------- Utility --------------
 
@@ -221,11 +233,14 @@ public class CharacterListBoundary implements UserAwareInterface {
     public void reloadCharacterList() {
         if (currentUser != null) {
             data.clear();
-            data.addAll(controller.getAllCharacters());
+            data.addAll(controller.getAllCharacters()); // Carica i dati aggiornati dallo UserBean
             tableViewChar.refresh();
             System.out.println(">>> DEBUG: Tabella ricaricata con personaggi aggiornati.");
         }
     }
+
+
+
 
 
 
