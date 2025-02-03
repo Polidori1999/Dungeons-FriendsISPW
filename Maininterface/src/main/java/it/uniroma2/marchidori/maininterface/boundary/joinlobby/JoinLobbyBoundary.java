@@ -11,18 +11,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import javax.swing.text.html.ImageView;
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
-public class JoinLobbyBoundary implements Initializable, UserAwareInterface {
+public class JoinLobbyBoundary implements UserAwareInterface {
 
     @FXML
     private AnchorPane joinLobbyPane;
@@ -34,6 +32,12 @@ public class JoinLobbyBoundary implements Initializable, UserAwareInterface {
     private ComboBox<String> comboBox2; // "Singola"/"Campagna"
     @FXML
     private ComboBox<String> comboBox3; // "2..8"
+
+    @FXML
+    protected ImageView joinLobbyImage;
+
+    @FXML
+    protected ImageView manageLobbyImage;
 
     @FXML
     private Button consultRules;
@@ -65,7 +69,7 @@ public class JoinLobbyBoundary implements Initializable, UserAwareInterface {
     private ObservableList<LobbyBean> filteredLobbies;
 
     @FXML
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize() {
         // 1) Inizializziamo il JoinLobbyController
         joinLobbyController = new JoinLobbyController();
 
