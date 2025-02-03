@@ -65,6 +65,8 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
                     setGraphic(item);
                     item.setOnAction(e -> {
                         CharacterSheetBean selectedChar = getTableView().getItems().get(getIndex());
+                        System.out.println(">>> DEBUG: Bottone Edit premuto per personaggio: " + selectedChar.getInfoBean().getName());
+                        openEditCharacterModal(selectedChar);
                     });
                 }
             }
