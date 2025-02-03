@@ -393,9 +393,10 @@ public class CharacterSheetBoundary implements UserAwareInterface {
     }
 
     @FXML
-    void onclickGoToMyCharList(ActionEvent event) throws IOException {
+    void onClickMyCharacter(ActionEvent event) throws IOException {
         changeScene(SceneNames.CHARACTER_LIST);
     }
+
 
     @FXML
     private void changeScene(String fxml) throws IOException {
