@@ -360,13 +360,15 @@ public class CharacterSheetBoundary implements UserAwareInterface {
      */
     private int parseIntOrZero(String input) {
         try {
-            int value = Integer.parseInt(input.trim());
-            return Math.max(1, value);  // Impedisce che il valore sia minore di 1
+            return Integer.parseInt(input.trim());
         } catch (NumberFormatException e) {
             System.err.println(">>> ERRORE: Il valore inserito non è un numero valido: " + input);
-            return 1;  // Se non è un numero, restituisce 1 come default valido
+            return 0;  // Restituisce 0 se il parsing fallisce, il controllo avverrà nella validazione
         }
     }
+
+
+
 
 
     // -------------------------------------------------------------
