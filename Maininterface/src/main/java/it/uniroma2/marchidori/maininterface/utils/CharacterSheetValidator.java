@@ -19,6 +19,12 @@ public class CharacterSheetValidator {
             errors.append("Il livello deve essere almeno 1.\n");
         }
 
+        if (characterSheet.getInfoBean().getLevel() < 1) {
+            errors.append("l'età deve essere almeno 1.\n");
+        }if (characterSheet.getInfoBean().getLevel() >300 ) {
+            errors.append("l'età deve essere minore di 300.\n");
+        }
+
         // Controllo sugli attributi (devono essere tra 1 e 20)
         if (characterSheet.getStatsBean().getStrength() < 1 || characterSheet.getStatsBean().getStrength() > 20) {
             errors.append("La forza deve essere tra 1 e 20.\n");
@@ -40,6 +46,10 @@ public class CharacterSheetValidator {
         }
         if (characterSheet.getInfoBean().getLevel() < 1 || characterSheet.getInfoBean().getLevel() > 20) {
             errors.append("Il livello deve essere tra 1 e 20.\n");
+        }
+
+        if (characterSheet.getInfoBean().getAge() < 1 || characterSheet.getInfoBean().getAge() > 300) {
+            errors.append("l'età deve essere tra 1 e 300.\n");
         }
 
 
