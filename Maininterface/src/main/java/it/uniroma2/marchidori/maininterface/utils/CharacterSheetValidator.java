@@ -15,15 +15,15 @@ public class CharacterSheetValidator {
         validateNotEmpty(characterSheet.getInfoBean().getClasse(), "La classe", errors);
 
         // Validazione del livello (tra 1 e 20)
-        validateRange(characterSheet.getInfoBean().getLevel(), 1, 20, "Il livello", errors);
+        validateRange(characterSheet.getInfoBean().getLevel(), "Il livello", errors);
 
         // Validazione degli attributi (devono essere tra 1 e 20)
-        validateRange(characterSheet.getStatsBean().getStrength(), 1, 20, "La forza", errors);
-        validateRange(characterSheet.getStatsBean().getDexterity(), 1, 20, "La destrezza", errors);
-        validateRange(characterSheet.getStatsBean().getIntelligence(), 1, 20, "L'intelligenza", errors);
-        validateRange(characterSheet.getStatsBean().getWisdom(), 1, 20, "La saggezza", errors);
-        validateRange(characterSheet.getStatsBean().getCharisma(), 1, 20, "Il carisma", errors);
-        validateRange(characterSheet.getStatsBean().getConstitution(), 1, 20, "La costituzione", errors);
+        validateRange(characterSheet.getStatsBean().getStrength(), "La forza", errors);
+        validateRange(characterSheet.getStatsBean().getDexterity(), "La destrezza", errors);
+        validateRange(characterSheet.getStatsBean().getIntelligence(), "L'intelligenza", errors);
+        validateRange(characterSheet.getStatsBean().getWisdom(), "La saggezza", errors);
+        validateRange(characterSheet.getStatsBean().getCharisma(), "Il carisma", errors);
+        validateRange(characterSheet.getStatsBean().getConstitution(), "La costituzione", errors);
 
         return errors.toString();
     }
@@ -44,19 +44,17 @@ public class CharacterSheetValidator {
     /**
      * Verifica che un valore numerico sia compreso tra min e max (inclusi).
      *
-     * @param value il valore da controllare
-     * @param min il valore minimo ammesso
-     * @param max il valore massimo ammesso
+     * @param value     il valore da controllare
      * @param fieldName il nome del campo (per il messaggio di errore)
-     * @param errors lo StringBuilder su cui appendere eventuali errori
+     * @param errors    lo StringBuilder su cui appendere eventuali errori
      */
-    private static void validateRange(int value, int min, int max, String fieldName, StringBuilder errors) {
-        if (value < min || value > max) {
+    private static void validateRange(int value, String fieldName, StringBuilder errors) {
+        if (value < 1 || value > 20) {
             errors.append(fieldName)
                     .append(" deve essere tra ")
-                    .append(min)
+                    .append(1)
                     .append(" e ")
-                    .append(max)
+                    .append(20)
                     .append(".\n");
         }
     }

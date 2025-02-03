@@ -15,10 +15,7 @@ import it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyGuestBou
 import it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyPlayerBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.login.LoginBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.login.RegisterBoundary;
-import it.uniroma2.marchidori.maininterface.boundary.managelobby.ManageLobbyBoundary;
-import it.uniroma2.marchidori.maininterface.boundary.managelobby.ManageLobbyListBoundary;
-import it.uniroma2.marchidori.maininterface.boundary.managelobby.ManageLobbyListDMBoundary;
-import it.uniroma2.marchidori.maininterface.boundary.managelobby.ManageLobbyListPlayerBoundary;
+import it.uniroma2.marchidori.maininterface.boundary.managelobby.*;
 import it.uniroma2.marchidori.maininterface.boundary.user.UserBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.user.UserDMBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.user.UserGuestBoundary;
@@ -46,7 +43,7 @@ public class SceneSwitcher {
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.MANAGE_LOBBY_LIST), ManageLobbyListDMBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.MANAGE_LOBBY_LIST), ManageLobbyListPlayerBoundary.class);
         // Se l'utente è guest e richiede la scena MANAGE_LOBBY_LIST, verrà indirizzato a LoginBoundary
-        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.MANAGE_LOBBY_LIST), LoginBoundary.class);
+        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.MANAGE_LOBBY_LIST), ManageLobbyListGuestBoundary.class);
 
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.JOIN_LOBBY), JoinLobbyDMBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.JOIN_LOBBY), JoinLobbyPlayerBoundary.class);
@@ -94,11 +91,7 @@ public class SceneSwitcher {
 
         // Caso speciale: se l'utente è guest e richiede la scena MANAGE_LOBBY_LIST,
         // forziamo il cambio scena al login (cambiando sia il percorso FXML che lo SceneIdEnum).
-        if (role == RoleEnum.GUEST && sceneId == SceneIdEnum.MANAGE_LOBBY_LIST) {
-            System.out.println(">>> [SceneSwitcher] Utente Guest richiede MANAGE_LOBBY_LIST: cambio forzato a login.fxml");
-            fxmlPath = "login.fxml";
-            sceneId = SceneIdEnum.LOGIN;
-        }
+
 
         // Risolvi il controller in base al mapping
         Class<?> controllerClass = getControllerClass(role, sceneId);
