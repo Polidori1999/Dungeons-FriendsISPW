@@ -1,6 +1,7 @@
 package it.uniroma2.marchidori.maininterface.boundary.login;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.control.AuthController;
@@ -62,8 +63,8 @@ public class LoginBoundary {
         try {
             UserBean authenticatedUser = checkLogin();
             if (authenticatedUser != null) {
-                currentUser = authenticatedUser; // Salva l'utente corrente
-                System.out.println(">>> Login avvenuto con successo. UserBean: " + currentUser);
+                currentUser = authenticatedUser;
+                System.out.println(">>> Login avvenuto con successo. Ruolo: " + currentUser.getRoleBehavior());
                 changeScene(SceneNames.HOME);
             } else {
                 wrongLogin.setText("Wrong email or password!");
@@ -74,24 +75,26 @@ public class LoginBoundary {
         }
     }
 
+    @FXML
+    void onClickGuest(ActionEvent event) throws IOException {
+        try {
+            currentUser = new UserBean("guest", "Guest", "guest@example.com", RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>());
+            System.out.println(">>> Utente impostato come Guest. Ruolo: " + currentUser.getRoleBehavior());
+
+            changeScene(SceneNames.HOME);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
-    void onClickCreate(ActionEvent event) {
-        System.out.println(">>> onClickCreate() chiamato!");
-
-        // Verifica che currentUser non sia null
-        if (currentUser == null) {
-            System.err.println(">>> ERRORE: currentUser è NULL prima di cambiare scena!");
-            return;
-        }
-
+    void onClickCreate(ActionEvent event) throws IOException {
         try {
             changeScene(SceneNames.REGISTER);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
     private UserBean checkLogin() {
         String userEmail = email.getText();
@@ -102,28 +105,18 @@ public class LoginBoundary {
             return null;
         }
 
-        // Delego l'autenticazione al servizio
-        UserBean authenticatedUser = authentication.authenticate(userEmail, userPassword);
-
-        if (authenticatedUser != null) {
-            wrongLogin.setText("Success!");
-            return authenticatedUser;
-        } else {
-            wrongLogin.setText("Wrong email or password!");
-            return null;
-        }
+        return authentication.authenticate(userEmail, userPassword);
     }
 
     @FXML
     private void changeScene(String fxml) throws IOException {
         if (currentUser == null) {
             System.err.println(">>> ERRORE: currentUser è NULL! Creazione di un UserBean di fallback.");
-            currentUser = new UserBean("guest", "Guest", "guest@example.com", new ArrayList<>(), new ArrayList<>());
+            currentUser = new UserBean("guest", "Guest", "guest@example.com", RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>());
         }
 
-        System.out.println(">>> Cambiando scena: " + fxml + " con UserBean: " + currentUser);
+        System.out.println(">>> Cambiando scena: " + fxml + " con UserBean ruolo: " + currentUser.getRoleBehavior());
         Stage currentStage = (Stage) anchorLoginPane.getScene().getWindow();
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);
     }
-
 }

@@ -75,6 +75,7 @@ public class UserBoundary implements UserAwareInterface {
         if (currentUser != null) {
             userName.setText(currentUser.getUsername());
             roleUser.setText(currentUser.getRoleBehavior().getRoleName());
+            System.out.println(currentUser.getRoleBehavior().getRoleName());
             emailUser.setText(currentUser.getEmail());
         }
     }
@@ -157,7 +158,7 @@ public class UserBoundary implements UserAwareInterface {
     }
 
     @FXML
-    private void changeScene(String fxml) throws IOException {
+    protected void changeScene(String fxml) throws IOException {
         // Usa SceneSwitcher per cambiare scena
         Stage currentStage = (Stage) userPane.getScene().getWindow();
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher

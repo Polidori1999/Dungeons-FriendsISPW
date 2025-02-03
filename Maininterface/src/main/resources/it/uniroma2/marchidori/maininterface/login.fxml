@@ -75,5 +75,15 @@
             <Image url="@login_img.jpg" />
          </image>
       </ImageView>
+      <Button fx:id="guestButton" layoutX="385.0" layoutY="432.0" mnemonicParsing="false" onAction="#onClickGuest" style="-fx-background-color: #292932;" text="Continue as a guest" textFill="#e90000">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Label layoutX="358.0" layoutY="439.0" text="OR" textFill="#e90000">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
