@@ -74,6 +74,7 @@ public class CharacterSheetBoundary implements UserAwareInterface {
 
     // Riferimento alla finestra di lista (se vogliamo avvisarla di aggiornamenti)
     private CharacterListPlayerBoundary parentBoundary;
+    private CharacterListGuestBoundary parentGuestBoundary;
 
 
 
@@ -86,6 +87,9 @@ public class CharacterSheetBoundary implements UserAwareInterface {
 
     public void setParentBoundary(CharacterListPlayerBoundary parentBoundary) {
         this.parentBoundary = parentBoundary;
+    }
+    public void setGuestParentBoundary(CharacterListGuestBoundary parentBoundary) {
+        this.parentGuestBoundary = parentBoundary;
     }
 
     ////////////////////////////////////////

@@ -2,10 +2,8 @@ package it.uniroma2.marchidori.maininterface.boundary.managelobby;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.utils.CustomTimer;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,19 +11,24 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.IOException;
 
 public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
 
     // Il pannello principale definito nel file FXML (deve essere presente in FXML con fx:id="manageLobbyListPane")
+    @FXML
+    private AnchorPane manageLobbyListPane;
 
     private AnchorPane redirectPane;
 
-    private int seconds = 5;
-    private Timeline timeline;
+    protected UserBean currentUser;
+
+    // Label per visualizzare il countdown
     private Label timerLabel = new Label();
+
+    // Timer custom per il countdown (5 secondi)
+    private CustomTimer timer;
 
     /**
      * Metodo di inizializzazione che richiama l'inizializzazione del parent e, subito dopo,
@@ -37,6 +40,8 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
     public void initialize() {
         // Richiama l'inizializzazione del parent
         super.initialize();
+
+        // (Opzionale) Nascondi o disabilita altre componenti, se necessario:
         tableViewLobby.setVisible(false);
         newLobbyButton.setDisable(true);
         newLobbyButton.setVisible(false);
@@ -45,11 +50,10 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
         redirectPane = new AnchorPane();
         redirectPane.setPrefWidth(300);
         redirectPane.setPrefHeight(150);
-        // Imposta lo sfondo del pannello al colore #292932
+        // Imposta lo sfondo del pannello (modifica il colore se necessario)
         redirectPane.setStyle("-fx-background-color: #ffffff;");
 
-        // Posizionamento: usa AnchorPane.setLeftAnchor e setTopAnchor,
-        // e aggiungi listener per aggiornare la posizione se il contenitore cambia dimensione.
+        // Posiziona il pannello al centro del manageLobbyListPane
         updateRedirectPanePosition();
         ChangeListener<Number> sizeListener = (obs, oldVal, newVal) -> updateRedirectPanePosition();
         manageLobbyListPane.widthProperty().addListener(sizeListener);
@@ -62,7 +66,7 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
         messageLabel.setStyle("-fx-text-fill: black;");
 
         // Inizializza la Label del timer
-        timerLabel.setText(seconds + "s");
+        timerLabel.setText("5s");
         timerLabel.setLayoutX(150);
         timerLabel.setLayoutY(60);
         timerLabel.setStyle("-fx-text-fill: black;");
@@ -80,8 +84,19 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
         // Aggiunge il pannello di reindirizzamento al manageLobbyListPane
         manageLobbyListPane.getChildren().add(redirectPane);
 
-        // Avvia il timer
-        startTimer();
+        // Crea e avvia il timer con 5 secondi di countdown
+        timer = new CustomTimer(5, new CustomTimer.TimerListener() {
+            @Override
+            public void onTick(int secondsRemaining) {
+                timerLabel.setText(secondsRemaining + "s");
+            }
+
+            @Override
+            public void onFinish() {
+                redirectToLogin();
+            }
+        });
+        timer.start();
     }
 
     /**
@@ -90,25 +105,9 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
     private void updateRedirectPanePosition() {
         double left = (manageLobbyListPane.getWidth() - redirectPane.getPrefWidth()) / 2;
         double top = (manageLobbyListPane.getHeight() - redirectPane.getPrefHeight()) / 2;
+        // Imposta le ancore per posizionare il pannello al centro
         AnchorPane.setLeftAnchor(redirectPane, left);
         AnchorPane.setTopAnchor(redirectPane, top);
-    }
-
-    private void startTimer() {
-        if (timeline != null) {
-            timeline.stop();
-        }
-        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            seconds--;
-            // Aggiorna la label sul thread JavaFX
-            Platform.runLater(() -> timerLabel.setText(seconds + "s"));
-            if (seconds <= 0) {
-                timeline.stop();
-                redirectToLogin();
-            }
-        }));
-        timeline.setCycleCount(5);
-        timeline.play();
     }
 
     /**

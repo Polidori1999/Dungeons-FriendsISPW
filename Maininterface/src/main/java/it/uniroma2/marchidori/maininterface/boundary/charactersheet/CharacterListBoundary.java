@@ -13,7 +13,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -42,7 +41,10 @@ public class CharacterListBoundary implements UserAwareInterface {
     protected TableColumn<CharacterSheetBean, String> tableViewCharClass;
 
     @FXML
-    protected TableColumn<CharacterSheetBean, Button> tableViewCharButton;  // colonna "Edit"
+    protected TableColumn<CharacterSheetBean, Button> tableViewCharButton;
+
+    @FXML
+    protected TableColumn<CharacterSheetBean, Button> tableViewCharDownloadButton;  // colonna "Edit"
 
     @FXML
     protected TableColumn<CharacterSheetBean, Button> tableViewCharDelete; // colonna "Delete"
@@ -99,10 +101,7 @@ public class CharacterListBoundary implements UserAwareInterface {
         tableViewCharRace.setCellValueFactory(new ReadOnlyObjectWrapperFactory<>("race"));
         tableViewCharLevel.setCellValueFactory(new ReadOnlyObjectWrapperFactory<>("level"));
 
-
         tableViewCharClass.setCellValueFactory(new ReadOnlyObjectWrapperFactory<>("classe"));
-
-
 
         // Impostiamo la lista
         tableViewChar.setItems(data);
@@ -241,12 +240,4 @@ public class CharacterListBoundary implements UserAwareInterface {
             System.out.println(">>> DEBUG: Tabella ricaricata con personaggi aggiornati.");
         }
     }
-
-
-
-
-
-
-
-
 }

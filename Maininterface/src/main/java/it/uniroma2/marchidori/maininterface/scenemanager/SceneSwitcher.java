@@ -2,10 +2,7 @@ package it.uniroma2.marchidori.maininterface.scenemanager;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.*;
-import it.uniroma2.marchidori.maininterface.boundary.charactersheet.CharacterListBoundary;
-import it.uniroma2.marchidori.maininterface.boundary.charactersheet.CharacterListDMBoundary;
-import it.uniroma2.marchidori.maininterface.boundary.charactersheet.CharacterListPlayerBoundary;
-import it.uniroma2.marchidori.maininterface.boundary.charactersheet.CharacterSheetBoundary;
+import it.uniroma2.marchidori.maininterface.boundary.charactersheet.*;
 import it.uniroma2.marchidori.maininterface.boundary.consultrules.ConsultRulesBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.consultrules.ConsultRulesDMORPlayerBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.consultrules.ConsultRulesGuestBoundary;
@@ -43,7 +40,6 @@ public class SceneSwitcher {
     static {
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.MANAGE_LOBBY_LIST), ManageLobbyListDMBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.MANAGE_LOBBY_LIST), ManageLobbyListPlayerBoundary.class);
-        // Se l'utente è guest e richiede la scena MANAGE_LOBBY_LIST, verrà indirizzato a LoginBoundary
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.MANAGE_LOBBY_LIST), ManageLobbyListGuestBoundary.class);
 
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.JOIN_LOBBY), JoinLobbyDMBoundary.class);
@@ -52,6 +48,7 @@ public class SceneSwitcher {
 
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.CHARACTER_LIST), CharacterListDMBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.CHARACTER_LIST), CharacterListPlayerBoundary.class);
+        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.CHARACTER_LIST), CharacterListGuestBoundary.class);
 
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.USER), UserDMBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.USER), UserPlayerBoundary.class);

@@ -4,15 +4,22 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.factory.CharacterSheetFactory;
+import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
 import it.uniroma2.marchidori.maininterface.utils.CustomTimer;
+import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
@@ -21,9 +28,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-public class CharacterListPlayerBoundary extends CharacterListBoundary {
+public class CharacterListGuestBoundary extends CharacterListBoundary {
 
-    private static final Logger logger = Logger.getLogger(CharacterListPlayerBoundary.class.getName());
+    private static final Logger logger = Logger.getLogger(CharacterListGuestBoundary.class.getName());
 
     // Bean selezionato per l'eliminazione
     private CharacterSheetBean pendingDeleteBean;
@@ -31,9 +38,95 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
     // Timer per la conferma di eliminazione
     private CustomTimer confirmationTimer;
 
+    private AnchorPane redirectPane;
+    private CustomTimer timer;
+
     @Override
     public void initialize() {
         super.initialize();
+
+
+
+
+
+        // Crea il pannello di reindirizzamento
+        redirectPane = new AnchorPane();
+        redirectPane.setPrefWidth(300);
+        redirectPane.setPrefHeight(150);
+        // Imposta lo sfondo del pannello (modifica il colore se necessario)
+        redirectPane.setStyle("-fx-background-color: #ffffff;");
+        redirectPane.setVisible(false);
+
+        // Posiziona il pannello al centro del manageLobbyListPane
+        updateRedirectPanePosition();
+        ChangeListener<Number> sizeListener = (obs, oldVal, newVal) -> updateRedirectPanePosition();
+        characterPane.widthProperty().addListener(sizeListener);
+        characterPane.heightProperty().addListener(sizeListener);
+
+        // Crea la Label con il messaggio
+        Label messageLabel = new Label("You are getting redirected to login");
+        messageLabel.setLayoutX(60);
+        messageLabel.setLayoutY(30);
+        messageLabel.setStyle("-fx-text-fill: black;");
+        messageLabel.setVisible(false);
+
+        // Inizializza la Label del timer
+        timerLabel.setText("5s");
+        timerLabel.setLayoutX(150);
+        timerLabel.setLayoutY(60);
+        timerLabel.setStyle("-fx-text-fill: black;");
+
+        // Crea il pulsante "Go to login"
+        Button goToLoginButton = new Button("Go to login");
+        goToLoginButton.setLayoutX(115);
+        goToLoginButton.setLayoutY(100);
+        goToLoginButton.setStyle("-fx-text-fill: white; -fx-background-color: #e90000;");
+        goToLoginButton.setOnAction((ActionEvent event) -> redirectToLogin());
+        goToLoginButton.setVisible(false);
+
+        // Aggiunge la Label, il timer e il pulsante al pannello di reindirizzamento
+        redirectPane.getChildren().addAll(messageLabel, timerLabel, goToLoginButton);
+
+        // Aggiunge il pannello di reindirizzamento al manageLobbyListPane
+        characterPane.getChildren().add(redirectPane);
+
+        // Crea e avvia il timer con 5 secondi di countdown
+        timer = new CustomTimer(5, new CustomTimer.TimerListener() {
+            @Override
+            public void onTick(int secondsRemaining) {
+                timerLabel.setText(secondsRemaining + "s");
+            }
+
+            @Override
+            public void onFinish() {
+                redirectToLogin();
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         newCharacterButton.setVisible(true);
         newCharacterButton.setDisable(false);
@@ -116,7 +209,11 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
                         // Ottieni il CharacterSheetBean dalla riga
                         CharacterSheetBean selectedChar = getTableView().getItems().get(getIndex());
                         // Avvia il download simulato
-                        downloadCharacter(selectedChar);
+                        messageLabel.setVisible(true);
+                        redirectPane.setVisible(true);
+                        goToLoginButton.setVisible(true);
+                        timerLabel.setVisible(true);
+                        timer.start();
                     });
                 }
             }
@@ -211,7 +308,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
             sheetController.setCharacterSheetBean(beanToEdit);
             sheetController.setCreationMode(false);
             sheetController.setController(controller);
-            sheetController.setParentBoundary(this);
+            sheetController.setGuestParentBoundary(this);
 
             Stage modalStage = new Stage();
             modalStage.setTitle("Modifica Personaggio");
@@ -254,7 +351,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
             sheetController.setCreationMode(true);
             sheetController.setCharacterSheetBean(CharacterSheetFactory.createCharacterSheet());
             sheetController.setController(controller);
-            sheetController.setParentBoundary(this);
+            sheetController.setGuestParentBoundary(this);
 
             Stage modalStage = new Stage();
             modalStage.setTitle("Crea Nuovo Personaggio");
@@ -317,53 +414,38 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
         this.currentUser = currentUser;
     }
 
-    // ===========================================================
-    //              LOGICA DI DOWNLOAD DEL PERSONAGGIO
-    // ===========================================================
-    /**
-     * Avvia il download simulato del CharacterSheetBean, creando un file di testo.
-     * Mostra una finestra con una ProgressBar che aggiorna l'avanzamento del download.
-     */
-    private void downloadCharacter(CharacterSheetBean bean) {
-        // Scegli la posizione e il nome del file
-        // (modifica se necessario o usa un file chooser)
-        String fileName = "character_" + bean.getInfoBean().getName() + ".txt";
-        String destinationPath = "C:/Users/edoar/IdeaProjects/Dungeons-FriendsISPW/Maininterface/src/main/java/download/" + fileName; // Esempio di percorso fisso
 
-        // Crea la finestra con la ProgressBar
-        ProgressBar progressBar = new ProgressBar(0);
-        Label infoLabel = new Label("Downloading " + bean.getInfoBean().getName() + "...");
-        infoLabel.setStyle("-fx-text-fill: black;");
 
-        VBox vbox = new VBox(10, infoLabel, progressBar);
-        vbox.setStyle("-fx-background-color: #ffffff; -fx-padding: 10;");
 
-        Stage downloadStage = new Stage();
-        downloadStage.setTitle("Download in progress...");
-        downloadStage.initModality(Modality.APPLICATION_MODAL);
-        downloadStage.initOwner(characterPane.getScene().getWindow());
-        downloadStage.setScene(new Scene(vbox, 300, 120));
 
-        // Crea il task di download
-        CharacterSheetDownloadTask downloadTask = new CharacterSheetDownloadTask(bean, destinationPath);
 
-        // Collega la ProgressBar al progresso del task
-        progressBar.progressProperty().bind(downloadTask.progressProperty());
 
-        // Quando il download termina con successo, chiudi la finestra
-        downloadTask.setOnSucceeded(evt -> {
-            downloadStage.close();
-            System.out.println("Download completato. File salvato in: " + destinationPath);
-        });
 
-        // Se fallisce, chiudi la finestra e stampa l'errore
-        downloadTask.setOnFailed(evt -> {
-            downloadStage.close();
-            System.err.println("Errore durante il download: " + downloadTask.getException());
-        });
 
-        // Mostra la finestra e avvia il task in un nuovo thread
-        downloadStage.show();
-        new Thread(downloadTask).start();
+
+
+
+
+
+
+
+
+
+
+    private void redirectToLogin() {
+        try {
+            Stage currentStage = (Stage) characterPane.getScene().getWindow();
+            SceneSwitcher.changeScene(currentStage, SceneNames.LOGIN, currentUser);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+    private void updateRedirectPanePosition() {
+        double left = (characterPane.getWidth() - redirectPane.getPrefWidth()) / 2;
+        double top = (characterPane.getHeight() - redirectPane.getPrefHeight()) / 2;
+        // Imposta le ancore per posizionare il pannello al centro
+        AnchorPane.setLeftAnchor(redirectPane, left);
+        AnchorPane.setTopAnchor(redirectPane, top);
+    }
+
 }
