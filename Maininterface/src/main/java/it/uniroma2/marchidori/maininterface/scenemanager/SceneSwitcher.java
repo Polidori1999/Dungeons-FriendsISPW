@@ -8,6 +8,7 @@ import it.uniroma2.marchidori.maininterface.boundary.charactersheet.CharacterLis
 import it.uniroma2.marchidori.maininterface.boundary.charactersheet.CharacterSheetBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyDMBoundary;
+import it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyGuestBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyPlayerBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.login.LoginBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.login.RegisterBoundary;
@@ -43,6 +44,7 @@ public class SceneSwitcher {
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.MANAGE_LOBBY_LIST), ManageLobbyListPlayerBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.JOIN_LOBBY), JoinLobbyDMBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.JOIN_LOBBY), JoinLobbyPlayerBoundary.class);
+        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.JOIN_LOBBY), JoinLobbyGuestBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.CHARACTER_LIST), CharacterListDMBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.CHARACTER_LIST), CharacterListPlayerBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.USER), UserDMBoundary.class);

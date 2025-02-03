@@ -15,6 +15,8 @@ public class UserGuestBoundary extends UserBoundary{
         // Cambia etichetta del bottone
         switchRoleButton.setText("Login");
         System.out.println("eccopmi qua sono u guest");
+        logOutButton.setDisable(true);
+        logOutButton.setVisible(false);
     }
 
     @FXML
