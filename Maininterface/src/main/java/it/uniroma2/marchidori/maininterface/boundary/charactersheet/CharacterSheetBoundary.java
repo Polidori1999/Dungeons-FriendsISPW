@@ -165,7 +165,7 @@ public class CharacterSheetBoundary implements UserAwareInterface {
         charCharisma.setText("");
     }
 
-    private void populateFieldsFromBean(CharacterSheetBean bean) {
+    /*private void populateFieldsFromBean(CharacterSheetBean bean) {
         if (bean.getInfoBean() != null) {
             charName.setText(bean.getInfoBean().getName());
             charRace.setText(bean.getInfoBean().getRace());
@@ -181,7 +181,7 @@ public class CharacterSheetBoundary implements UserAwareInterface {
             charWisdom.setText(String.valueOf(bean.getStatsBean().getWisdom()));
             charCharisma.setText(String.valueOf(bean.getStatsBean().getCharisma()));
         }
-    }
+    }*/
 
     // -------------------------------------------------------------
     //                 SALVATAGGIO (BOTTONE SAVE)
@@ -191,6 +191,12 @@ public class CharacterSheetBoundary implements UserAwareInterface {
     private void onClickSaveCharacter(ActionEvent event) {
         System.out.println(">> onClickSaveCharacter() INVOCATO!");
         System.out.println(">>> creationMode attuale: " + creationMode);
+
+        if (parentBoundary != null) {
+            parentBoundary.updateExistingCharacterInTable(currentBean);
+            parentBoundary.refreshTable(); // **Forza il refresh della tabella**
+        }
+
 
         if (currentBean == null) {
             System.err.println(">>> ERRORE: currentBean è NULL! Non posso aggiornare.");
@@ -224,19 +230,18 @@ public class CharacterSheetBoundary implements UserAwareInterface {
         System.out.println(">>> Personaggio aggiornato con successo: " + currentBean.getInfoBean().getName());
 
         // **SE È UN NUOVO PERSONAGGIO**
-        if (creationMode) {
-            System.out.println(">>> AGGIUNGO nuovo personaggio alla lista");
+        if (!creationMode) {  // Se stiamo modificando un personaggio esistente
+            controller.updateCharacter(oldName,currentBean); // Aggiorna nello UserBean
+            if (parentBoundary != null) {
+                parentBoundary.refreshTable(); // Ricarica la tabella dopo la modifica
+            }
+        } else {  // Se stiamo creando un nuovo personaggio
             controller.createCharacter(currentBean);
             if (parentBoundary != null) {
                 parentBoundary.addCharacterToTable(currentBean);
             }
-        } else {
-            System.out.println(">>> MODIFICO personaggio esistente");
-            controller.updateCharacter(currentBean);
-            if (parentBoundary != null) {
-                parentBoundary.updateExistingCharacterInTable(currentBean);
-            }
         }
+
 
         // **CHIUDI LA FINESTRA MODALE**
         Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
@@ -247,19 +252,10 @@ public class CharacterSheetBoundary implements UserAwareInterface {
 
 
 
-
-
-
-
-
-
-
-
-
     /**
      * Crea un nuovo personaggio.
      */
-    private void createNewCharacter() {
+    /*private void createNewCharacter() {
         System.out.println(">>> createNewCharacter() chiamato!");
 
         CharacterInfoBean infoBean = buildInfoBeanFromFields();
@@ -279,7 +275,7 @@ public class CharacterSheetBoundary implements UserAwareInterface {
 
         System.out.println(">>> Dopo creazione, personaggi utente = " + currentUser.getCharacterSheets());
     }
-
+    */
 
 
 
@@ -288,7 +284,7 @@ public class CharacterSheetBoundary implements UserAwareInterface {
     /**
      * Aggiorna un personaggio esistente (currentBean), se presente.
      */
-    private void updateExistingCharacter() {
+    /*private void updateExistingCharacter() {
         if (currentBean == null) {
             return; // non c'è nulla da aggiornare
         }
@@ -329,12 +325,12 @@ public class CharacterSheetBoundary implements UserAwareInterface {
         }
 
     }
-
+    */
     // -------------------------------------------------------------
     //         METODI DI COSTRUZIONE DEI DUE SOTTO-BEAN
     // -------------------------------------------------------------
 
-    private CharacterInfoBean buildInfoBeanFromFields() {
+    /*private CharacterInfoBean buildInfoBeanFromFields() {
         return new CharacterInfoBean(
                 charName.getText(),
                 charRace.getText(),
@@ -354,7 +350,7 @@ public class CharacterSheetBoundary implements UserAwareInterface {
                 parseIntOrZero(charCharisma.getText())
         );
     }
-
+    */
     /**
      * Helper: parse int con valore di default 0 in caso di errore.
      */

@@ -89,6 +89,9 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
                         // Salva il bean selezionato per cancellazione
                         pendingDeleteBean = getTableView().getItems().get(getIndex());
                         // Visualizza il confirmation panel e avvia il timer
+
+
+
                         showConfirmationPanel();
                     });
                 }
@@ -146,9 +149,10 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
         }
         if (pendingDeleteBean != null) {
             // Rimuove il bean dalla TableView
+            String characterName=pendingDeleteBean.getInfoBean().getName();
             tableViewChar.getItems().remove(pendingDeleteBean);
             // Se necessario, invoca anche il metodo sul controller per la cancellazione definitiva:
-            // controller.deleteCharacter(pendingDeleteBean);
+            controller.deleteCharacter(characterName);
             pendingDeleteBean = null;
         }
         hideConfirmationPanel();

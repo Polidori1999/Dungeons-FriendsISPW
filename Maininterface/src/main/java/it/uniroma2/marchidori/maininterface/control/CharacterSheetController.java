@@ -77,6 +77,20 @@ public class CharacterSheetController {
 
 
 
+    public void deleteCharacter(String characterName) {
+        if (currentUser != null && currentUser.getCharacterSheets() != null) {
+            for (int i = 0; i < currentUser.getCharacterSheets().size(); i++) {
+                if (currentUser.getCharacterSheets().get(i).getName().equals(characterName)) {
+                    currentUser.getCharacterSheets().remove(i);
+                    System.out.println(">>> DEBUG: Personaggio eliminato dallo UserBean: " + characterName);
+                    return;
+                }
+            }
+            System.err.println(">>> ERRORE: Nessun personaggio trovato con il nome: " + characterName);
+        } else {
+            System.err.println(">>> ERRORE: currentUser o lista personaggi NULL in deleteCharacter()");
+        }
+    }
 
 
 
@@ -84,32 +98,25 @@ public class CharacterSheetController {
      * Aggiorna un personaggio esistente (cerca per nome).
      * Usa i campi di CharacterSheetBean (spezzati in info e ability).
      */
-    public void updateCharacter(CharacterSheetBean bean) {
+    public void updateCharacter(String oldName, CharacterSheetBean bean) {
         if (currentUser != null && currentUser.getCharacterSheets() != null) {
             for (int i = 0; i < currentUser.getCharacterSheets().size(); i++) {
                 CharacterSheet cs = currentUser.getCharacterSheets().get(i);
-                if (cs.getName().equals(bean.getInfoBean().getName())) {
-                    // Aggiorniamo l'entità con i nuovi dati
-                    cs.setRace(bean.getInfoBean().getRace());
-                    cs.setAge(bean.getInfoBean().getAge());
-                    cs.setClasse(bean.getInfoBean().getClasse());
-                    cs.setLevel(bean.getInfoBean().getLevel());
-
-                    cs.setStrength(bean.getStatsBean().getStrength());
-                    cs.setDexterity(bean.getStatsBean().getDexterity());
-                    cs.setIntelligence(bean.getStatsBean().getIntelligence());
-                    cs.setWisdom(bean.getStatsBean().getWisdom());
-                    cs.setCharisma(bean.getStatsBean().getCharisma());
-                    cs.setConstitution(bean.getStatsBean().getConstitution());
-
-                    System.out.println(">>> Personaggio aggiornato con successo nel UserBean: " + cs.getName());
+                // Confronta utilizzando oldName (il nome originale)
+                if (cs.getName().equals(oldName)) {
+                    currentUser.getCharacterSheets().set(i, beanToEntity(bean));
+                    System.out.println(">>> DEBUG: Personaggio aggiornato nello UserBean: " + bean.getInfoBean().getName());
                     return;
                 }
             }
+            System.err.println(">>> ERRORE: Nessun personaggio trovato con il nome: " + oldName);
         } else {
             System.err.println(">>> ERRORE: currentUser o lista personaggi NULL in updateCharacter()");
         }
     }
+
+
+
 
 
 
@@ -177,7 +184,7 @@ public class CharacterSheetController {
     /**
      * Cerca un personaggio (Entity) in base al nome.
      */
-    private CharacterSheet findByName(String name) {
+    /*private CharacterSheet findByName(String name) {
         if (currentUser != null && currentUser.getCharacterSheets() != null) {
             for (CharacterSheet cs : currentUser.getCharacterSheets()) {
                 if (cs.getName().equals(name)) {
@@ -186,5 +193,5 @@ public class CharacterSheetController {
             }
         }
         return null;
-    }
+    }*/
 }
