@@ -26,7 +26,6 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
     private int seconds = 5;
     private Timeline timeline;
     private Label timerLabel = new Label();
-    public static final int INDEFINITE = -1;
 
     /**
      * Metodo di inizializzazione che richiama l'inizializzazione del parent e, subito dopo,
@@ -38,13 +37,16 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
     public void initialize() {
         // Richiama l'inizializzazione del parent
         super.initialize();
+        tableViewLobby.setVisible(false);
+        newLobbyButton.setDisable(true);
+        newLobbyButton.setVisible(false);
 
         // Crea il pannello di reindirizzamento
         redirectPane = new AnchorPane();
         redirectPane.setPrefWidth(300);
         redirectPane.setPrefHeight(150);
         // Imposta lo sfondo del pannello al colore #292932
-        redirectPane.setStyle("-fx-background-color: #292932;");
+        redirectPane.setStyle("-fx-background-color: #ffffff;");
 
         // Posizionamento: usa AnchorPane.setLeftAnchor e setTopAnchor,
         // e aggiungi listener per aggiornare la posizione se il contenitore cambia dimensione.
@@ -55,19 +57,19 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
 
         // Crea la Label con il messaggio
         Label messageLabel = new Label("You are getting redirected to login");
-        messageLabel.setLayoutX(20);
+        messageLabel.setLayoutX(60);
         messageLabel.setLayoutY(30);
-        messageLabel.setStyle("-fx-text-fill: white;");
+        messageLabel.setStyle("-fx-text-fill: black;");
 
         // Inizializza la Label del timer
         timerLabel.setText(seconds + "s");
-        timerLabel.setLayoutX(20);
+        timerLabel.setLayoutX(150);
         timerLabel.setLayoutY(60);
-        timerLabel.setStyle("-fx-text-fill: white;");
+        timerLabel.setStyle("-fx-text-fill: black;");
 
         // Crea il pulsante "Go to login"
         Button goToLoginButton = new Button("Go to login");
-        goToLoginButton.setLayoutX(20);
+        goToLoginButton.setLayoutX(115);
         goToLoginButton.setLayoutY(100);
         goToLoginButton.setStyle("-fx-text-fill: white; -fx-background-color: #e90000;");
         goToLoginButton.setOnAction((ActionEvent event) -> redirectToLogin());

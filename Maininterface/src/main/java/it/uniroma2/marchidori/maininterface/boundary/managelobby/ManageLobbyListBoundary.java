@@ -54,7 +54,7 @@ public class ManageLobbyListBoundary implements UserAwareInterface {
     private TableColumn<LobbyBean, String> tableViewLiveOrNot;
 
     @FXML
-    private TableView<LobbyBean> tableViewLobby;
+    protected TableView<LobbyBean> tableViewLobby;
 
     @FXML
     private TableColumn<LobbyBean, Button> tableViewLobbyDelete;
