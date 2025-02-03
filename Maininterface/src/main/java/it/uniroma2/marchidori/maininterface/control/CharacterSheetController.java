@@ -86,22 +86,31 @@ public class CharacterSheetController {
      */
     public void updateCharacter(CharacterSheetBean bean) {
         if (currentUser != null && currentUser.getCharacterSheets() != null) {
-
-            // Trova il personaggio esistente nella lista
             for (int i = 0; i < currentUser.getCharacterSheets().size(); i++) {
                 CharacterSheet cs = currentUser.getCharacterSheets().get(i);
                 if (cs.getName().equals(bean.getInfoBean().getName())) {
-                    // **Sostituiamo il personaggio esistente con i nuovi dati**
-                    currentUser.getCharacterSheets().set(i, beanToEntity(bean));
-                    System.out.println(">>> DEBUG: Personaggio aggiornato nella lista di UserBean!");
+                    // Aggiorniamo l'entità con i nuovi dati
+                    cs.setRace(bean.getInfoBean().getRace());
+                    cs.setAge(bean.getInfoBean().getAge());
+                    cs.setClasse(bean.getInfoBean().getClasse());
+                    cs.setLevel(bean.getInfoBean().getLevel());
+
+                    cs.setStrength(bean.getStatsBean().getStrength());
+                    cs.setDexterity(bean.getStatsBean().getDexterity());
+                    cs.setIntelligence(bean.getStatsBean().getIntelligence());
+                    cs.setWisdom(bean.getStatsBean().getWisdom());
+                    cs.setCharisma(bean.getStatsBean().getCharisma());
+                    cs.setConstitution(bean.getStatsBean().getConstitution());
+
+                    System.out.println(">>> Personaggio aggiornato con successo nel UserBean: " + cs.getName());
                     return;
                 }
             }
-            System.err.println(">>> ERRORE: Personaggio non trovato, nessuna modifica effettuata.");
         } else {
-            System.err.println(">>> ERRORE: currentUser o lista personaggi NULL!");
+            System.err.println(">>> ERRORE: currentUser o lista personaggi NULL in updateCharacter()");
         }
     }
+
 
 
 
