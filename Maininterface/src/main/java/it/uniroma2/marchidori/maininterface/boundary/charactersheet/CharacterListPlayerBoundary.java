@@ -5,8 +5,10 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetB
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsBean;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
+import it.uniroma2.marchidori.maininterface.factory.CharacterSheetFactory;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -249,10 +251,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
 
             // Imposta i dati nel controller
             sheetController.setCreationMode(true);
-            sheetController.setCharacterSheetBean(new CharacterSheetBean(
-                    new CharacterInfoBean("", "", 0, "", 1),
-                    new CharacterStatsBean(10, 10, 10, 10, 10, 10)
-            ));
+            sheetController.setCharacterSheetBean(CharacterSheetFactory.createCharacterSheet());
             sheetController.setController(controller);
             sheetController.setParentBoundary(this);
 
