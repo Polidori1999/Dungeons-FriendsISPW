@@ -4,7 +4,6 @@ import it.uniroma2.marchidori.maininterface.bean.RuleBookBean;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
 
 import java.io.IOException;
 

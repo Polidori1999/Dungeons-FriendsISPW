@@ -20,16 +20,13 @@ import java.io.IOException;
 public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
 
     // Il pannello principale definito nel file FXML (deve essere presente in FXML con fx:id="manageLobbyListPane")
-    @FXML
-    private AnchorPane manageLobbyListPane;
 
     private AnchorPane redirectPane;
-
-    protected UserBean currentUser;
 
     private int seconds = 5;
     private Timeline timeline;
     private Label timerLabel = new Label();
+    public static final int INDEFINITE = -1;
 
     /**
      * Metodo di inizializzazione che richiama l'inizializzazione del parent e, subito dopo,
@@ -103,13 +100,12 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
             seconds--;
             // Aggiorna la label sul thread JavaFX
             Platform.runLater(() -> timerLabel.setText(seconds + "s"));
-            System.out.println("Timer: " + seconds);
             if (seconds <= 0) {
                 timeline.stop();
                 redirectToLogin();
             }
         }));
-        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.setCycleCount(5);
         timeline.play();
     }
 
