@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -35,7 +36,7 @@ public class CharacterListBoundary implements UserAwareInterface {
     protected TableColumn<CharacterSheetBean, String> tableViewCharRace;
 
     @FXML
-    protected TableColumn<CharacterSheetBean, String> tableViewCharAge;
+    protected TableColumn<CharacterSheetBean, String> tableViewCharLevel;
 
     @FXML
     protected TableColumn<CharacterSheetBean, String> tableViewCharClass;
@@ -96,7 +97,9 @@ public class CharacterListBoundary implements UserAwareInterface {
         // Associazioni colonne -> campi del Bean
         tableViewCharName.setCellValueFactory(new ReadOnlyObjectWrapperFactory<>("name"));
         tableViewCharRace.setCellValueFactory(new ReadOnlyObjectWrapperFactory<>("race"));
-        tableViewCharAge.setCellValueFactory(new ReadOnlyObjectWrapperFactory<>("age"));
+        tableViewCharLevel.setCellValueFactory(new ReadOnlyObjectWrapperFactory<>("level"));
+
+
         tableViewCharClass.setCellValueFactory(new ReadOnlyObjectWrapperFactory<>("classe"));
 
 
@@ -206,7 +209,7 @@ public class CharacterListBoundary implements UserAwareInterface {
                 return switch (propertyName) {
                     case "name" -> new ReadOnlyObjectWrapper<>(bean.getInfoBean().getName());
                     case "race" -> new ReadOnlyObjectWrapper<>(bean.getInfoBean().getRace());
-                    case "age" -> new ReadOnlyObjectWrapper<>(String.valueOf(bean.getInfoBean().getAge()));
+                    case "level" -> new ReadOnlyObjectWrapper<>(String.valueOf(bean.getInfoBean().getLevel()));
                     case "classe" -> new ReadOnlyObjectWrapper<>(bean.getInfoBean().getClasse());
                     // se per qualche ragione arriva un propertyName sconosciuto, ritorna "???"
                     default -> new ReadOnlyObjectWrapper<>("???");

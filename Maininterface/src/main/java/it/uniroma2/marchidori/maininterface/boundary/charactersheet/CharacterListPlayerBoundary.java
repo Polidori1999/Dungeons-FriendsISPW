@@ -90,8 +90,6 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
                         pendingDeleteBean = getTableView().getItems().get(getIndex());
                         // Visualizza il confirmation panel e avvia il timer
 
-
-
                         showConfirmationPanel();
                     });
                 }

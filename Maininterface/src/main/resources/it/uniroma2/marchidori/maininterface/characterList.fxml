@@ -43,7 +43,7 @@
         <TableView fx:id="tableViewChar" layoutX="235.0" layoutY="64.0" prefHeight="522.0" prefWidth="858.0" style="-fx-background-color: #292932;">
             <columns>
                 <TableColumn fx:id="tableViewCharName" minWidth="0.0" prefWidth="170.0" text="Name" />
-                <TableColumn fx:id="tableViewCharAge" prefWidth="80.67" text="Age" />
+                <TableColumn fx:id="tableViewCharLevel" prefWidth="80.67" text="Level" />
                 <TableColumn fx:id="tableViewCharClass" prefWidth="171.33" text="Class" />
                 <TableColumn fx:id="tableViewCharRace" prefWidth="128.67" text="Race" />
                 <!-- Colonna Edit -->

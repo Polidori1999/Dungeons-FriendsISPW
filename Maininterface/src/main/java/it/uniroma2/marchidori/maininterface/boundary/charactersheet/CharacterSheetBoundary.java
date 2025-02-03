@@ -32,12 +32,15 @@ public class CharacterSheetBoundary implements UserAwareInterface {
     // ---------------------- FIELDS: sezione "info" ----------------------
     @FXML
     private TextField charName;
+
     @FXML
-    private TextField charRace;
+    private ComboBox<String> charRace;
+
+    @FXML
+    private ComboBox<String> charClass;
+
     @FXML
     private TextField charAge;
-    @FXML
-    private TextField charClass;
     @FXML
     private TextField charLevel;
 
@@ -85,6 +88,24 @@ public class CharacterSheetBoundary implements UserAwareInterface {
         this.parentBoundary = parentBoundary;
     }
 
+    ////////////////////////////////////////
+    @FXML
+    public void initialize() {
+        initializeComboBoxes();
+    }
+
+    private void initializeComboBoxes() {
+        // Aggiungi le razze
+        charRace.getItems().addAll("Elfo", "Nano", "Halfling", "Orco", "Tiefling");
+
+        // Aggiungi le classi
+        charClass.getItems().addAll(
+                "Barbaro", "Guerriero", "Ladro", "Monaco", "Paladino",
+                "Ranger", "Bardo", "Chierico", "Stregone", "Mago",
+                "Druido", "Warlock"
+        );
+    }
+///////////////////////////////////////////////////
     /**
      * Imposta la modalità "creazione". Se true, svuota i campi e
      * setta currentBean a null. Se false, vuol dire che setCharacterSheetBean()
@@ -119,9 +140,9 @@ public class CharacterSheetBoundary implements UserAwareInterface {
         if (bean.getInfoBean() != null) {
             charName.setText(bean.getInfoBean().getName());
             charAge.setText(String.valueOf(bean.getInfoBean().getAge()));
-            charClass.setText(bean.getInfoBean().getClasse());
+            charClass.setValue(bean.getInfoBean().getClasse());
             charLevel.setText(String.valueOf(bean.getInfoBean().getLevel()));
-            charRace.setText(bean.getInfoBean().getRace());
+            charRace.setValue(bean.getInfoBean().getRace());
         } else {
             System.err.println(">>> ERRORE: CharacterInfoBean è NULL!");
         }
@@ -151,9 +172,9 @@ public class CharacterSheetBoundary implements UserAwareInterface {
     private void clearFields() {
         // Sezione "info"
         charName.setText("");
-        charRace.setText("");
+        charRace.setValue("");
         charAge.setText("");
-        charClass.setText("");
+        charClass.setValue("");
         charLevel.setText("");
 
         // Sezione "stats"
@@ -206,9 +227,9 @@ public class CharacterSheetBoundary implements UserAwareInterface {
         // **AGGIORNA I DATI DEL BEAN ESISTENTE**
         currentBean.getInfoBean().setName(charName.getText());
         currentBean.getInfoBean().setAge(parseIntOrZero(charAge.getText()));
-        currentBean.getInfoBean().setClasse(charClass.getText());
+        currentBean.getInfoBean().setClasse(charClass.getValue());
         currentBean.getInfoBean().setLevel(parseIntOrZero(charLevel.getText()));
-        currentBean.getInfoBean().setRace(charRace.getText());
+        currentBean.getInfoBean().setRace(charRace.getValue());
 
         currentBean.getStatsBean().setStrength(parseIntOrZero(charStrenght.getText()));
         currentBean.getStatsBean().setDexterity(parseIntOrZero(charDexerity.getText()));
