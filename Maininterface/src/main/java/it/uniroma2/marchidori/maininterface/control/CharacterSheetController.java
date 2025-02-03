@@ -45,11 +45,13 @@ public class CharacterSheetController {
         List<CharacterSheetBean> beans = new ArrayList<>();
         if (currentUser != null && currentUser.getCharacterSheets() != null) {
             for (CharacterSheet cs : currentUser.getCharacterSheets()) {
-                beans.add(entityToBean(cs));
+                beans.add(entityToBean(cs)); // **Converte sempre i dati aggiornati**
             }
         }
         return beans;
     }
+
+
 
     /**
      * Crea un nuovo personaggio, partendo dal Bean.
@@ -84,24 +86,25 @@ public class CharacterSheetController {
      */
     public void updateCharacter(CharacterSheetBean bean) {
         if (currentUser != null && currentUser.getCharacterSheets() != null) {
-            CharacterSheet existing = findByName(bean.getInfoBean().getName());
-            if (existing != null) {
-                // Aggiorniamo la parte "info"
-                existing.setRace(bean.getInfoBean().getRace());
-                existing.setAge(bean.getInfoBean().getAge());
-                existing.setClasse(bean.getInfoBean().getClasse());
-                existing.setLevel(bean.getInfoBean().getLevel());
 
-                // Aggiorniamo la parte "abilityScores"
-                existing.setStrength(bean.getStatsBean().getStrength());
-                existing.setDexterity(bean.getStatsBean().getDexterity());
-                existing.setIntelligence(bean.getStatsBean().getIntelligence());
-                existing.setWisdom(bean.getStatsBean().getWisdom());
-                existing.setCharisma(bean.getStatsBean().getCharisma());
-                existing.setConstitution(bean.getStatsBean().getConstitution());
+            // Trova il personaggio esistente nella lista
+            for (int i = 0; i < currentUser.getCharacterSheets().size(); i++) {
+                CharacterSheet cs = currentUser.getCharacterSheets().get(i);
+                if (cs.getName().equals(bean.getInfoBean().getName())) {
+                    // **Sostituiamo il personaggio esistente con i nuovi dati**
+                    currentUser.getCharacterSheets().set(i, beanToEntity(bean));
+                    System.out.println(">>> DEBUG: Personaggio aggiornato nella lista di UserBean!");
+                    return;
+                }
             }
+            System.err.println(">>> ERRORE: Personaggio non trovato, nessuna modifica effettuata.");
+        } else {
+            System.err.println(">>> ERRORE: currentUser o lista personaggi NULL!");
         }
     }
+
+
+
 
     // -------------------------------------------------------------
     //                      METODI PRIVATI

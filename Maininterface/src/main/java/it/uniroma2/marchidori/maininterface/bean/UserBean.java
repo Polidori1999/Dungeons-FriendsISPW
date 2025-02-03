@@ -136,10 +136,16 @@ public class UserBean {
         }
     }
 
-
-
-
-
+    public void updateCharacterSheet(CharacterSheet updatedCharacter) {
+        for (int i = 0; i < characterSheets.size(); i++) {
+            if (characterSheets.get(i).getName().equals(updatedCharacter.getName())) {
+                characterSheets.set(i, updatedCharacter); // **Sostituisce il vecchio personaggio**
+                System.out.println(">>> DEBUG: Personaggio aggiornato nello UserBean: " + updatedCharacter.getName());
+                return;
+            }
+        }
+        characterSheets.add(updatedCharacter); // Se non esiste, lo aggiunge
+    }
 
 
 

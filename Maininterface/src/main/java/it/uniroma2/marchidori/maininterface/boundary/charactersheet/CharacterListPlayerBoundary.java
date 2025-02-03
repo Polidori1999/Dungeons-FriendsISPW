@@ -44,7 +44,10 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
             logger.severe("Errore: controller non inizializzato!");
             return;
         }
-        data.addAll(controller.getAllCharacters());
+        data.clear();
+        data.addAll(controller.getAllCharacters()); // Ritorna i Bean convertiti da entityToBean
+        tableViewChar.refresh();
+
         System.out.println(">>> DEBUG: Numero di personaggi nella tabella: " + data.size());
 
         // Colonna EDIT

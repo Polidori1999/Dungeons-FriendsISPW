@@ -79,6 +79,8 @@ public class CharacterListBoundary implements UserAwareInterface {
         if (controller == null && currentUser != null) {
             this.controller = new CharacterSheetController(currentUser);
         }
+        data.clear();
+        data.addAll(controller.getAllCharacters());
         // Carico i personaggi iniziali (sotto forma di Bean)
 
         confirmationPane.setVisible(false);
@@ -114,6 +116,7 @@ public class CharacterListBoundary implements UserAwareInterface {
         } catch (IOException e) {
             throw new SceneChangeException("Errore nel cambiare scena a characterList.fxml", e);
         }
+
     }
 
     @FXML
@@ -167,6 +170,9 @@ public class CharacterListBoundary implements UserAwareInterface {
         // Usa SceneSwitcher per cambiare scena
         Stage currentStage = (Stage) characterPane.getScene().getWindow();
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher
+        if (fxml.equals(SceneNames.CHARACTER_LIST)) {
+            reloadCharacterList();
+        }
     }
 
     // -------------- Utility --------------
@@ -211,6 +217,16 @@ public class CharacterListBoundary implements UserAwareInterface {
             System.out.println("Controller inizializzato correttamente: " + this.controller);
         }
     }
+
+    public void reloadCharacterList() {
+        if (currentUser != null) {
+            data.clear();
+            data.addAll(controller.getAllCharacters());
+            tableViewChar.refresh();
+            System.out.println(">>> DEBUG: Tabella ricaricata con personaggi aggiornati.");
+        }
+    }
+
 
 
 

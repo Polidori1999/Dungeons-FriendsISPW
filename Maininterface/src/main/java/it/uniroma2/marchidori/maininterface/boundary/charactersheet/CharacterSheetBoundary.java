@@ -58,6 +58,7 @@ public class CharacterSheetBoundary implements UserAwareInterface {
 
     protected UserBean currentUser;
 
+    private String oldName;
 
     // Bean esistente (in caso di modifica)
 
@@ -108,6 +109,7 @@ public class CharacterSheetBoundary implements UserAwareInterface {
         }
 
         this.currentBean = bean;  // ASSEGNA IL BEAN
+        this.oldName = bean.getInfoBean().getName(); // Nome originaleu
 
         System.out.println(">>> DEBUG: Personaggio caricato nel form: " + bean.getInfoBean().getName());
 
@@ -223,6 +225,8 @@ public class CharacterSheetBoundary implements UserAwareInterface {
                 parentBoundary.updateExistingCharacterInTable(currentBean);
             }
         }
+
+
 
         // **CHIUDI LA FINESTRA MODALE DOPO IL SALVATAGGIO**
         Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
