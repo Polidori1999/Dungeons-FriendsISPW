@@ -17,6 +17,7 @@ import it.uniroma2.marchidori.maininterface.boundary.managelobby.ManageLobbyList
 import it.uniroma2.marchidori.maininterface.boundary.managelobby.ManageLobbyListPlayerBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.user.UserBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.user.UserDMBoundary;
+import it.uniroma2.marchidori.maininterface.boundary.user.UserGuestBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.user.UserPlayerBoundary;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.enumerate.SceneIdEnum;
@@ -32,9 +33,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * SceneSwitcher: It manages the scene change based on the role and the scene ID.
- */
 public class SceneSwitcher {
 
     // Map (role, scene) -> controller class.
@@ -49,10 +47,12 @@ public class SceneSwitcher {
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.CHARACTER_LIST), CharacterListPlayerBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.USER), UserDMBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.USER), UserPlayerBoundary.class);
+        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.USER), UserGuestBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.CHARACTER_SHEET), CharacterSheetBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.CHARACTER_SHEET), CharacterSheetBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.HOME), HomeBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.HOME), HomeBoundary.class);
+        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.HOME), HomeBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.LOGIN), LoginBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.LOGIN), LoginBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.REGISTER), RegisterBoundary.class);
@@ -60,22 +60,28 @@ public class SceneSwitcher {
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.MANAGE_LOBBY), ManageLobbyBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.MANAGE_LOBBY), ManageLobbyBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.NONE, SceneIdEnum.LOGIN), LoginBoundary.class);
+        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.LOGIN), LoginBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.CONSULT_RULES), ConsultRulesBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.CONSULT_RULES), ConsultRulesBoundary.class);
     }
 
-    // Private constructor to prevent instantiation.
-    private SceneSwitcher() {
-    }
+    private SceneSwitcher() {}
 
     public static void changeScene(Stage currentStage, String fxmlPath, UserBean currentUser) throws IOException {
         SceneIdEnum sceneId = getSceneIdFromFxml(fxmlPath);
         RoleEnum role = (currentUser != null) ? currentUser.getRoleBehavior() : RoleEnum.NONE;
-        Class<?> controllerClass = getControllerClass(role, sceneId);
-        Object controller = instantiateController(controllerClass);
-        injectCurrentUser(controller, currentUser);
-        Parent root = loadFXML(fxmlPath, controller);
 
+        System.out.println(">>> [SceneSwitcher] Cambio scena a " + fxmlPath + " con ruolo: " + role);
+
+        Class<?> controllerClass = getControllerClass(role, sceneId);
+        System.out.println(">>> [SceneSwitcher] Controller risolto: " + controllerClass.getSimpleName());
+
+        Object controller = instantiateController(controllerClass);
+        System.out.println(">>> [SceneSwitcher] Istanza del controller creata: " + controller.getClass().getSimpleName());
+
+        injectCurrentUser(controller, currentUser);
+
+        Parent root = loadFXML(fxmlPath, controller);
         Scene newScene = new Scene(root);
         currentStage.setScene(newScene);
         currentStage.show();
@@ -83,6 +89,10 @@ public class SceneSwitcher {
 
     private static Class<?> getControllerClass(RoleEnum role, SceneIdEnum sceneId) {
         Class<?> controllerClass = ROLE_SCENE_MAP.get(new Pair<>(role, sceneId));
+
+        System.out.println(">>> [SceneSwitcher] Risolto controller per " + sceneId + " con ruolo " + role +
+                ": " + (controllerClass != null ? controllerClass.getSimpleName() : "NULL"));
+
         if (controllerClass == null) {
             throw new IllegalArgumentException("Nessun controller definito per ruolo = "
                     + role + " e scena = " + sceneId);
@@ -101,17 +111,18 @@ public class SceneSwitcher {
 
     private static void injectCurrentUser(Object controller, UserBean currentUser) {
         if (currentUser == null) {
+            System.out.println(">>> [SceneSwitcher] Nessun currentUser da iniettare.");
             return;
         }
-        if (controller instanceof CharacterSheetBoundary charBoundary) {
-                charBoundary.setCurrentUser(currentUser);
+
+        System.out.println(">>> [SceneSwitcher] Iniezione utente nel controller " + controller.getClass().getSimpleName() +
+                " con ruolo: " + currentUser.getRoleBehavior());
+
+        if (controller instanceof UserBoundary userBoundary) {
+            userBoundary.setCurrentUser(currentUser);
         }
-        // We use the "instanceof" operator to verify and pass the currentUser.
         if (controller instanceof HomeBoundary homeBoundary) {
             homeBoundary.setCurrentUser(currentUser);
-        }
-        if (controller instanceof RegisterBoundary registerBoundary) {
-            registerBoundary.setCurrentUser(currentUser);
         }
         if (controller instanceof CharacterSheetBoundary charBoundary) {
             charBoundary.setCurrentUser(currentUser);
@@ -121,12 +132,6 @@ public class SceneSwitcher {
         }
         if (controller instanceof ManageLobbyListBoundary manageLobbyListBoundary) {
             manageLobbyListBoundary.setCurrentUser(currentUser);
-        }
-        if (controller instanceof UserBoundary userBoundary) {
-            userBoundary.setCurrentUser(currentUser);
-        }
-        if (controller instanceof ManageLobbyBoundary mlBoundary) {
-            mlBoundary.setCurrentUser(currentUser);
         }
         if (controller instanceof JoinLobbyBoundary jlBoundary) {
             jlBoundary.setCurrentUser(currentUser);
@@ -140,7 +145,9 @@ public class SceneSwitcher {
         FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource(
                 "/it/uniroma2/marchidori/maininterface/" + fxmlPath));
         loader.setController(controller);
-        return loader.load();
+        Parent root = loader.load();
+        System.out.println(">>> [SceneSwitcher] FXML " + fxmlPath + " caricato con controller " + controller.getClass().getSimpleName());
+        return root;
     }
 
     private static SceneIdEnum getSceneIdFromFxml(String fxmlPath) {
