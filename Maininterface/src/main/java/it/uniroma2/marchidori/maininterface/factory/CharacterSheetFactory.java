@@ -8,6 +8,7 @@ public class CharacterSheetFactory {
 
     private CharacterSheetFactory() {}
 
+
     public static CharacterSheetBean createCharacterSheet() {
         return new CharacterSheetBean(new CharacterInfoBean("", "", 1, "", 1), new CharacterStatsBean(10, 10, 10, 10, 10, 10));
     }
