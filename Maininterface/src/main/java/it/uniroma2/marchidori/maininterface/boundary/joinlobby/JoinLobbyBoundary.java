@@ -23,15 +23,15 @@ import java.util.List;
 public class JoinLobbyBoundary implements UserAwareInterface {
 
     @FXML
-    private AnchorPane joinLobbyPane;
+    protected AnchorPane joinLobbyPane;
 
     // ComboBox per i filtri (type, durata, numPlayers)
     @FXML
-    private ComboBox<String> comboBox1; // "Online"/"Presenza"
+    protected ComboBox<String> comboBox1; // "Online"/"Presenza"
     @FXML
-    private ComboBox<String> comboBox2; // "Singola"/"Campagna"
+    protected ComboBox<String> comboBox2; // "Singola"/"Campagna"
     @FXML
-    private ComboBox<String> comboBox3; // "2..8"
+    protected ComboBox<String> comboBox3; // "2..8"
 
     @FXML
     protected ImageView joinLobbyImage;
@@ -52,18 +52,18 @@ public class JoinLobbyBoundary implements UserAwareInterface {
 
     // **TableView** e colonne
     @FXML
-    private TableView<LobbyBean> lobbyTableView;
+    protected TableView<LobbyBean> lobbyTableView;
     @FXML
-    private TableColumn<LobbyBean, String> lobbyNameColumn;
+    protected TableColumn<LobbyBean, String> lobbyNameColumn;
     @FXML
-    private TableColumn<LobbyBean, Void> joinButtonColumn;
+    protected TableColumn<LobbyBean, Void> joinButtonColumn;
     @FXML
-    private TableColumn<LobbyBean, Void> favouriteButton;
+    protected TableColumn<LobbyBean, Void> favouriteButton;// pulsante non inizializzato subito
 
     private UserBean currentUser;
 
     // Controller di logica per la gestione dei filtri e del join
-    private JoinLobbyController joinLobbyController;
+    protected JoinLobbyController joinLobbyController;
 
     // Lista osservabile contenente le lobby filtrate
     private ObservableList<LobbyBean> filteredLobbies;
@@ -135,7 +135,7 @@ public class JoinLobbyBoundary implements UserAwareInterface {
 
 
         joinButtonColumn.setCellFactory(col -> new TableCell<>() {
-            private Button joinBtn;  // pulsante non inizializzato subito
+            private Button joinBtn;
 
             @Override
             protected void updateItem(Void item, boolean empty) {
@@ -234,7 +234,7 @@ public class JoinLobbyBoundary implements UserAwareInterface {
     }
 
     @FXML
-    private void changeScene(String fxml) throws IOException {
+    protected void changeScene(String fxml) throws IOException {
         // Usa SceneSwitcher per cambiare scena
         Stage currentStage = (Stage) joinLobbyPane.getScene().getWindow();
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher
