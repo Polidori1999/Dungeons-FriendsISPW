@@ -3,6 +3,7 @@ package it.uniroma2.marchidori.maininterface.boundary.joinlobby;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
+import it.uniroma2.marchidori.maininterface.factory.ControllerFactory;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher; // Importa SceneSwitcher
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
@@ -63,16 +64,26 @@ public class JoinLobbyBoundary implements UserAwareInterface {
     private UserBean currentUser;
 
     // Controller di logica per la gestione dei filtri e del join
-    protected JoinLobbyController joinLobbyController;
+    private JoinLobbyController joinLobbyController;
 
     // Lista osservabile contenente le lobby filtrate
     private ObservableList<LobbyBean> filteredLobbies;
 
+    public JoinLobbyBoundary() {
+        this(ControllerFactory.createJoinLobbyController());
+    }
+
+    // Costruttore esplicito se vogliamo passare un controller specifico (utile per test)
+    public JoinLobbyBoundary(JoinLobbyController joinLobbyController) {
+        this.joinLobbyController = joinLobbyController;
+    }
+
     @FXML
     public void initialize() {
-        // 1) Inizializziamo il JoinLobbyController
-        joinLobbyController = new JoinLobbyController();
-
+        this.joinLobbyController= ControllerFactory.createJoinLobbyController();
+        // 1) Inizializziamo il JoinLobbyController (da togliere)
+        //joinLobbyController =  JoinLobbyController.Builder.build();
+        //vedere se controller è ==null
         // 2) Popoliamo i ComboBox
         comboBox1.setItems(FXCollections.observableArrayList("Online", "Presenza"));
         comboBox2.setItems(FXCollections.observableArrayList("Singola", "Campagna"));

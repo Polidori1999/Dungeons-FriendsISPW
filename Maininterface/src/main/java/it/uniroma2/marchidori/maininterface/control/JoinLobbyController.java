@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.control;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
+import it.uniroma2.marchidori.maininterface.factory.LobbyFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,16 +14,10 @@ public class JoinLobbyController {
 
     private static final Logger logger = Logger.getLogger(JoinLobbyController.class.getName());
 
-
     public JoinLobbyController() {
-        // Simuliamo qualche Lobby con valori che coincidano con i ComboBox:
-        // type: "Online"/"Presenza", duration: "Singola"/"Campagna"
-        allLobbies = new ArrayList<>();
-        allLobbies.add(new Lobby("GAY",          "Singola",   "Presenza", 3));
-        allLobbies.add(new Lobby("edogay",       "Campagna",  "Presenza", 2));
-        allLobbies.add(new Lobby("pisellonegro", "Campagna",  "Online",   8));
-        allLobbies.add(new Lobby("ciompisellone","Singola",   "Online",   6));
+        this.allLobbies = LobbyFactory.getLobbies();//usa la factory per i dati
     }
+
 
     /**
      * Filtro su type, duration, e numero di players.
@@ -81,5 +76,21 @@ public class JoinLobbyController {
             }
         }
         return null;
+    }
+    //come diceva dissan
+    /*public static class Builder{
+        private Builder(){
+          // cannot be instantiated
+        }
+        public static JoinLobbyController build() {
+            return new JoinLobbyController();
+        }
+        public static JoinLobbyController build(JoinLobbyConfiguration conf) {
+            return new JoinLobbyController();
+        }
+    }*/
+
+    public static class JoinLobbyConfiguration {
+
     }
 }

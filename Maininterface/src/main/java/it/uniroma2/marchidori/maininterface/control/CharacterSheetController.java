@@ -190,7 +190,7 @@ public class CharacterSheetController {
                 if (cs.getName().equals(name)) {
                     return cs;
                 }
-            }
+            }a
         }
         return null;
     }*/

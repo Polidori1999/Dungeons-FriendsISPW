@@ -23,6 +23,7 @@ import it.uniroma2.marchidori.maininterface.boundary.user.UserPlayerBoundary;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.enumerate.SceneIdEnum;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
+import it.uniroma2.marchidori.maininterface.factory.ControllerFactory;
 import it.uniroma2.marchidori.maininterface.utils.Pair;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -98,7 +99,7 @@ public class SceneSwitcher {
         System.out.println(">>> [SceneSwitcher] Controller risolto: " + controllerClass.getSimpleName());
 
         // Istanzia il controller
-        Object controller = instantiateController(controllerClass);
+        Object controller = instantiateController(controllerClass,sceneId);
         System.out.println(">>> [SceneSwitcher] Istanza del controller creata: " + controller.getClass().getSimpleName());
 
         // Inietta il currentUser nel controller, se applicabile
@@ -124,11 +125,13 @@ public class SceneSwitcher {
         return controllerClass;
     }
 
-    private static Object instantiateController(Class<?> controllerClass) {
+    private static Object instantiateController(Class<?> controllerClass, SceneIdEnum sceneId) {
         try {
+            if (sceneId == SceneIdEnum.JOIN_LOBBY) {
+                return new JoinLobbyBoundary();
+            }
             return controllerClass.getDeclaredConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException |
-                 InvocationTargetException | NoSuchMethodException e) {
+        } catch (Exception e) {
             throw new SceneChangeException("Impossibile creare il controller: " + controllerClass.getName(), e);
         }
     }
