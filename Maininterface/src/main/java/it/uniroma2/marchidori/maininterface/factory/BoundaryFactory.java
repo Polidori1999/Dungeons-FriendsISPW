@@ -1,5 +1,7 @@
 package it.uniroma2.marchidori.maininterface.factory;
 
+import it.uniroma2.marchidori.maininterface.exception.FactoryException;
+
 import java.lang.reflect.InvocationTargetException;
 
 public class BoundaryFactory {
@@ -12,8 +14,7 @@ public class BoundaryFactory {
             return controllerClass.getDeclaredConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException
                  | NoSuchMethodException | InvocationTargetException e) {
-            throw new RuntimeException("Errore nella creazione del controller: "
-                    + controllerClass.getName(), e);
+            throw new FactoryException(e.getMessage());
         }
     }
 }
