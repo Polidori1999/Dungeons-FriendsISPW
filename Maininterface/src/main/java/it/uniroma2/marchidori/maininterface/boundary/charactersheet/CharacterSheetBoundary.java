@@ -4,6 +4,7 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBe
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
 import it.uniroma2.marchidori.maininterface.utils.Alert;
@@ -24,7 +25,7 @@ import java.io.IOException;
  * Boundary per mostrare/creare/modificare i dati di un CharacterSheet
  * in forma "spezzata" (info + statsScores).
  */
-public class CharacterSheetBoundary implements UserAwareInterface {
+public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwareInterface {
 
     @FXML
     private AnchorPane characterSheetPane;
@@ -457,6 +458,10 @@ public class CharacterSheetBoundary implements UserAwareInterface {
         }
     }
 
+    @Override
+    public void setLogicController(Object logicController) {
+        this.controller = (CharacterSheetController) logicController;
+    }
 
 
 }

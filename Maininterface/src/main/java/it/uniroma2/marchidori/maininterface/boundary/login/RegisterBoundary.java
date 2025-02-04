@@ -1,7 +1,9 @@
 package it.uniroma2.marchidori.maininterface.boundary.login;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
+import it.uniroma2.marchidori.maininterface.control.RegisterController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import javafx.event.ActionEvent;
@@ -15,7 +17,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class RegisterBoundary implements UserAwareInterface {
+public class RegisterBoundary implements UserAwareInterface, ControllerAwareInterface {
 
     @FXML
     private Button register;
@@ -36,6 +38,7 @@ public class RegisterBoundary implements UserAwareInterface {
     private Label wrongLogin;
 
     private UserBean currentUser;
+    private RegisterController controller;
 
     @FXML
     void clickRegister(ActionEvent event) throws IOException {
@@ -66,5 +69,10 @@ public class RegisterBoundary implements UserAwareInterface {
     @Override
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;
+    }
+
+    @Override
+    public void setLogicController(Object logicController) {
+        this.controller = (RegisterController) logicController;
     }
 }
