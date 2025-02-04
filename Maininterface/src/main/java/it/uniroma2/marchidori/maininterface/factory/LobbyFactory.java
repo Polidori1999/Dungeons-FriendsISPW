@@ -2,7 +2,6 @@ package it.uniroma2.marchidori.maininterface.factory;
 
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 
-import java.util.List;
 
 public class LobbyFactory {
     private LobbyFactory() {

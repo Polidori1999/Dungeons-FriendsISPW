@@ -4,6 +4,7 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
+import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.entity.CharacterInfo;
 import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
 import it.uniroma2.marchidori.maininterface.entity.CharacterStats;
@@ -16,8 +17,17 @@ import java.util.List;
  * Control che gestisce la logica di manipolazione
  * di CharacterSheet, mantenendo una lista in memoria.
  */
-public class CharacterSheetController {
+public class CharacterSheetController implements UserAwareInterface {
+
     private UserBean currentUser;
+
+    @Override
+    public void setCurrentUser(UserBean user) {
+        this.currentUser = user;
+    }
+
+    public CharacterSheetController(){}
+
     public CharacterSheetController(UserBean currentUser) {
         if (currentUser == null) {
             throw new IllegalArgumentException("UserBean passato a CharacterSheetController è NULL!");

@@ -3,6 +3,8 @@ package it.uniroma2.marchidori.maininterface.boundary.consultrules;
 import it.uniroma2.marchidori.maininterface.bean.RuleBookBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
+import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
+import it.uniroma2.marchidori.maininterface.control.ConsultRulesController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
@@ -20,7 +22,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ConsultRulesBoundary implements UserAwareInterface {
+public class ConsultRulesBoundary implements UserAwareInterface, ControllerAwareInterface {
 
     private UserBean currentUser;
 
@@ -64,6 +66,7 @@ public class ConsultRulesBoundary implements UserAwareInterface {
     private VBox vBox;
 
     private ObservableList<RuleBookBean> rulesBook;
+    private ConsultRulesController controller;
 
     @FXML
     public void initialize() {
@@ -199,5 +202,10 @@ public class ConsultRulesBoundary implements UserAwareInterface {
     @Override
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;
+    }
+
+    @Override
+    public void setLogicController(Object logicController) {
+        this.controller = (ConsultRulesController) logicController;
     }
 }

@@ -18,8 +18,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public class LoginBoundary {
+    private static final Logger logger = Logger.getLogger(LoginBoundary.class.getName());
+
 
     @FXML
     private AnchorPane anchorLoginPane;
@@ -64,14 +69,14 @@ public class LoginBoundary {
             UserBean authenticatedUser = checkLogin();
             if (authenticatedUser != null) {
                 currentUser = authenticatedUser;
-                System.out.println(">>> Login avvenuto con successo. Ruolo: " + currentUser.getRoleBehavior());
+                logger.info(">>> Login avvenuto con successo. Ruolo: " + currentUser.getRoleBehavior());
                 changeScene(SceneNames.HOME);
             } else {
                 wrongLogin.setText("Wrong email or password!");
-                System.err.println(">>> ERRORE: Login fallito. UserBean è NULL!");
+                logger.info(">>> ERRORE: Login fallito. UserBean è NULL!");
             }
         } catch (IOException e) {
-            throw new SceneChangeException("Error during scene change from login to home.", e);
+            throw new SceneChangeException("Error during scene change from login to login.", e);
         }
     }
 
@@ -79,11 +84,11 @@ public class LoginBoundary {
     void onClickGuest(ActionEvent event) throws IOException {
         try {
             currentUser = new UserBean("guest", "Guest", "guest@example.com", RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>());
-            System.out.println(">>> Utente impostato come Guest. Ruolo: " + currentUser.getRoleBehavior());
+            logger.info(">>> Utente impostato come Guest. Ruolo: " + currentUser.getRoleBehavior());
 
             changeScene(SceneNames.HOME);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new SceneChangeException("Error during change scene from login to home.", e);
         }
     }
 
@@ -92,7 +97,7 @@ public class LoginBoundary {
         try {
             changeScene(SceneNames.REGISTER);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new SceneChangeException("Error during change scene from login to register.", e);
         }
     }
 
@@ -111,11 +116,12 @@ public class LoginBoundary {
     @FXML
     private void changeScene(String fxml) throws IOException {
         if (currentUser == null) {
-            System.err.println(">>> ERRORE: currentUser è NULL! Creazione di un UserBean di fallback.");
+            logger.info(">>> ERRORE: currentUser è NULL! Creazione di un UserBean di fallback.");
             currentUser = new UserBean("guest", "Guest", "guest@example.com", RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>());
         }
 
-        System.out.println(">>> Cambiando scena: " + fxml + " con UserBean ruolo: " + currentUser.getRoleBehavior());
+
+        logger.log(Level.FINE, "Cambiando scena: {0} con UserBean ruolo: {1}", new Object[]{fxml, currentUser.getRoleBehavior()});
         Stage currentStage = (Stage) anchorLoginPane.getScene().getWindow();
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);
     }

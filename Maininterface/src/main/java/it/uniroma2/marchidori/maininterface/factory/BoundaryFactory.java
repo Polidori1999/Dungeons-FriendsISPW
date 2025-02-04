@@ -4,11 +4,11 @@ import it.uniroma2.marchidori.maininterface.exception.FactoryException;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class ControllerFactory {
+public class BoundaryFactory {
 
-    private ControllerFactory(){}
+    private BoundaryFactory(){}
 
-    public static <T> T createController(Class<T> controllerClass) {
+    public static <T> T createBoundary(Class<T> controllerClass) {
         try {
             // Utilizza il costruttore no-arg per creare una nuova istanza
             return controllerClass.getDeclaredConstructor().newInstance();

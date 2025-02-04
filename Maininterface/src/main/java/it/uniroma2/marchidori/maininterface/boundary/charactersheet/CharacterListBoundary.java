@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
@@ -20,7 +21,7 @@ import javafx.util.Callback;
 import java.io.IOException;
 import java.util.List;
 
-public class CharacterListBoundary implements UserAwareInterface {
+public class CharacterListBoundary implements UserAwareInterface, ControllerAwareInterface {
 
     @FXML
     protected AnchorPane characterPane;
@@ -232,6 +233,11 @@ public class CharacterListBoundary implements UserAwareInterface {
         } else {
             System.out.println("Controller inizializzato correttamente: " + this.controller);
         }
+    }
+
+    @Override
+    public void setLogicController(Object logicController) {
+        this.controller = (CharacterSheetController) logicController;
     }
 
     public void reloadCharacterList() {
