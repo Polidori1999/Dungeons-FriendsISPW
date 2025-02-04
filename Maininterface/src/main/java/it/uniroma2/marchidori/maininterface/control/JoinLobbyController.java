@@ -3,6 +3,7 @@ package it.uniroma2.marchidori.maininterface.control;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.factory.LobbyFactory;
+import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +11,12 @@ import java.util.logging.Logger;
 
 public class JoinLobbyController {
 
-    private List<Lobby> allLobbies;
 
+    private final LobbyRepository lobbyRepository;
     private static final Logger logger = Logger.getLogger(JoinLobbyController.class.getName());
 
     public JoinLobbyController() {
-        this.allLobbies = LobbyFactory.getLobbies();//usa la factory per i dati
+        this.lobbyRepository = new LobbyRepository();//usa la factory per i dati
     }
 
 
@@ -26,7 +27,7 @@ public class JoinLobbyController {
     public List<LobbyBean> filterLobbies(String type, String duration, String numPlayersStr) {
         List<LobbyBean> result = new ArrayList<>();
 
-        for (Lobby lob : allLobbies) {
+        for (Lobby lob : lobbyRepository.getAllLobbies()) {
             boolean matchesType = (type == null || type.isEmpty() || lob.getType().equals(type));
             boolean matchesDuration = (duration == null || duration.isEmpty() || lob.getDuration().equals(duration));
             boolean matchesPlayers = true;
@@ -46,7 +47,10 @@ public class JoinLobbyController {
 
     // Esempio di logica "join"
     public boolean joinLobby(LobbyBean bean, String playerName) {
-        Lobby found = findLobbyByName(bean.getName());
+        Lobby found = lobbyRepository.findLobbyByName(bean.getName());
+
+        System.out.println("Join lobby " + found.getLobbyName() + " - players attuali: " + found.getPlayers().size());
+
         if (found == null) return false;
         if (found.isFull()) return false;
 
@@ -68,15 +72,15 @@ public class JoinLobbyController {
         bean.setNumberOfPlayers(lob.getPlayers().size());
         return bean;
     }
-
-    private Lobby findLobbyByName(String lobbyName) {
+    //da eliminare
+    /*private Lobby findLobbyByName(String lobbyName) {
         for (Lobby lob : allLobbies) {
             if (lob.getLobbyName().equals(lobbyName)) {
                 return lob;
             }
         }
         return null;
-    }
+    }*/
     //come diceva dissan
     /*public static class Builder{
         private Builder(){

@@ -146,14 +146,20 @@
         <!-- Sostituita la ListView con la TableView -->
         <TableView fx:id="lobbyTableView" layoutX="320.0" layoutY="180.0" prefHeight="360.0" prefWidth="640.0" AnchorPane.leftAnchor="320.33" AnchorPane.rightAnchor="320.33">
             <columns>
-                <!-- Prima colonna: Nome della lobby -->
-                <TableColumn fx:id="lobbyNameColumn" prefWidth="320.0" text="Lobby Name" />
+                <!-- Colonna: Nome della lobby -->
+                <TableColumn fx:id="lobbyNameColumn" prefWidth="240.0" text="Lobby Name" />
 
-                <!-- Seconda colonna: Pulsante 'Join' -->
-                <TableColumn fx:id="joinButtonColumn" prefWidth="160.0" text="Join" />
-                <TableColumn fx:id="favouriteButton" prefWidth="160.0" text="Favourite" />
+                <!-- Nuova colonna: Giocatori correnti/Max (es. 3/8) -->
+                <TableColumn fx:id="playersColumn" prefWidth="160.0" text="Players" />
+
+                <!-- Colonna con il pulsante "Join" -->
+                <TableColumn fx:id="joinButtonColumn" prefWidth="120.0" text="Join" />
+
+                <!-- Colonna con il pulsante "Favourite" -->
+                <TableColumn fx:id="favouriteButton" prefWidth="120.0" text="Favourite" />
             </columns>
         </TableView>
+
 
         <Button fx:id="userButton" layoutX="1219.0" layoutY="11.0" mnemonicParsing="false" onAction="#onClickUser" prefHeight="41.0" prefWidth="45.0" style="-fx-background-color: transparent;" textFill="#f80606">
             <graphic>
