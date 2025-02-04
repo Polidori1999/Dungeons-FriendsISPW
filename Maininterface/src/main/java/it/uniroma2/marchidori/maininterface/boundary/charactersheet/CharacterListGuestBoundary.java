@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 
 public class CharacterListGuestBoundary extends CharacterListBoundary {
 
+
     private static final Logger logger = Logger.getLogger(CharacterListGuestBoundary.class.getName());
 
     // Bean selezionato per l'eliminazione

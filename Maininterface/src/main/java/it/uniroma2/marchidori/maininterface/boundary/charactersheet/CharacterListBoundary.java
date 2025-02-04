@@ -87,6 +87,8 @@ public class CharacterListBoundary implements UserAwareInterface {
         data.addAll(controller.getAllCharacters());
         // Carico i personaggi iniziali (sotto forma di Bean)
 
+
+
         confirmationPane.setVisible(false);
         confirmationLabel.setVisible(false);
         yesButton.setVisible(false);

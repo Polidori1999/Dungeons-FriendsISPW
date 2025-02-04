@@ -41,6 +41,8 @@ public class CharacterSheetController {
      * Ogni Entity viene convertita in un CharacterSheetBean
      * che a sua volta contiene un CharacterInfoBean e un AbilityScoresBean.
      */
+
+
     public List<CharacterSheetBean> getAllCharacters() {
         List<CharacterSheetBean> beans = new ArrayList<>();
         if (currentUser != null && currentUser.getCharacterSheets() != null) {

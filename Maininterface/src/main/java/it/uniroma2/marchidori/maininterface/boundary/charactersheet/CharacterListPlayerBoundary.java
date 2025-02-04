@@ -25,6 +25,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
 
     private static final Logger logger = Logger.getLogger(CharacterListPlayerBoundary.class.getName());
 
+
     // Bean selezionato per l'eliminazione
     private CharacterSheetBean pendingDeleteBean;
 

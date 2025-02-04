@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 public class CharacterListDMBoundary extends CharacterListBoundary {
 
 
+
     @Override
     public void initialize() {
         super.initialize();

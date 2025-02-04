@@ -111,6 +111,7 @@ public class CharacterSheetBoundary implements UserAwareInterface {
     }
 ///////////////////////////////////////////////////
     /**
+     *
      * Imposta la modalità "creazione". Se true, svuota i campi e
      * setta currentBean a null. Se false, vuol dire che setCharacterSheetBean()
      * verrà chiamato per popolare i campi.
