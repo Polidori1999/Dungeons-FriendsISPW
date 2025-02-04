@@ -4,6 +4,7 @@ import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.ManageLobbyController;
+import it.uniroma2.marchidori.maininterface.control.ManageLobbyListController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
@@ -75,7 +76,7 @@ public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAw
 
     // Variabile per gestire l'utente corrente
     protected UserBean currentUser;
-    private ManageLobbyController controller;
+    private ManageLobbyListController controller;
 
     /**
      * Invocato automaticamente da JavaFX dopo l'iniezione dei nodi @FXML.
@@ -188,7 +189,7 @@ public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAw
 
     @Override
     public void setLogicController(Object logicController) {
-        this.controller = (ManageLobbyController) logicController;
+        this.controller = (ManageLobbyListController) logicController;
     }
 
 }

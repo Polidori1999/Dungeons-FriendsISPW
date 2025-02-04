@@ -2,11 +2,11 @@ package it.uniroma2.marchidori.maininterface.factory;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class ControllerFactory {
+public class BoundaryFactory {
 
-    private ControllerFactory(){}
+    private BoundaryFactory(){}
 
-    public static <T> T createController(Class<T> controllerClass) {
+    public static <T> T createBoundary(Class<T> controllerClass) {
         try {
             // Utilizza il costruttore no-arg per creare una nuova istanza
             return controllerClass.getDeclaredConstructor().newInstance();

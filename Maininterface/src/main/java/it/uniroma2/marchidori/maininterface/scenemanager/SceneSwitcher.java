@@ -32,6 +32,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import static it.uniroma2.marchidori.maininterface.factory.BoundaryFactory.createBoundary;
+import static it.uniroma2.marchidori.maininterface.factory.ControllerFactory.createController;
+
 public class SceneSwitcher {
     private static final Logger logger = Logger.getLogger(SceneSwitcher.class.getName());
 
@@ -117,6 +120,7 @@ public class SceneSwitcher {
 
         ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.MANAGE_LOBBY), ManageLobbyController.class);
         ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.MANAGE_LOBBY), ManageLobbyController.class);
+        ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.MANAGE_LOBBY), ManageLobbyController.class);
 
         ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.NONE, SceneIdEnum.LOGIN), LoginBoundary.class);
 
@@ -140,7 +144,8 @@ public class SceneSwitcher {
         logger.info(">>> [SceneSwitcher] Boundary risolta: " + boundaryClass.getSimpleName());
 
         // Istanzia la boundary
-        Object boundaryInstance = instantiateBoundary(boundaryClass, sceneId);
+        Object boundaryInstance = createBoundary(boundaryClass);
+        //Object boundaryInstance = instantiateBoundary(boundaryClass, sceneId);
         logger.info(">>> [SceneSwitcher] Istanza della boundary creata: " + boundaryInstance.getClass().getSimpleName());
 
         injectCurrentUserBoundary(boundaryInstance, currentUser);
@@ -148,7 +153,9 @@ public class SceneSwitcher {
 
         Class<?> controllerClass = getControllerClass(role, sceneId);
 
-        Object controllerInstance = instantiateController(controllerClass, sceneId);
+
+        //Object controllerInstance = instantiateController(controllerClass, sceneId);
+        Object controllerInstance = createController(controllerClass);
         // Inietta l'utente corrente nella boundary (se applicabile)
         injectCurrentUserController(controllerInstance, currentUser);
 
