@@ -2,17 +2,21 @@ package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
+import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.factory.CharacterSheetFactory;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
-import it.uniroma2.marchidori.maininterface.utils.CustomTimer;
+import it.uniroma2.marchidori.maininterface.control.TimerController;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TableCell;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
@@ -25,12 +29,11 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
 
     private static final Logger logger = Logger.getLogger(CharacterListPlayerBoundary.class.getName());
 
-
     // Bean selezionato per l'eliminazione
     private CharacterSheetBean pendingDeleteBean;
 
-    // Timer per la conferma di eliminazione
-    private CustomTimer confirmationTimer;
+    // Controller per il popup di conferma con timer
+    private ConfirmationPopupController confirmationPopupController;
 
     @Override
     public void initialize() {
@@ -38,6 +41,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
 
         newCharacterButton.setVisible(true);
         newCharacterButton.setDisable(false);
+
         if (controller == null) {
             logger.severe("Errore: controller non inizializzato!");
             return;
@@ -47,6 +51,17 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
         tableViewChar.refresh();
 
         System.out.println(">>> DEBUG: Numero di personaggi nella tabella: " + data.size());
+
+        // Carica il popup di conferma dal file FXML e aggiungilo al contenitore principale
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/confirmationPopup.fxml"));
+            Parent popupRoot = loader.load();
+            // Si assume che "characterPane" (definito in CharacterListBoundary) sia il contenitore principale
+            characterPane.getChildren().add(popupRoot);
+            confirmationPopupController = loader.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // ---------------------------------------------------
         // Colonna EDIT (bottone "Edit")
@@ -89,10 +104,11 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
                 } else {
                     setGraphic(item);
                     item.setOnAction(e -> {
-                        // Salva il bean selezionato per cancellazione
+                        // Salva il bean selezionato per la cancellazione
                         pendingDeleteBean = getTableView().getItems().get(getIndex());
-                        // Visualizza il confirmation panel e avvia il timer
-                        showConfirmationPanel();
+                        // Mostra il popup di conferma con timer
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        showDeleteConfirmation();
                     });
                 }
             }
@@ -116,7 +132,6 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
                     item.setOnAction(e -> {
                         // Ottieni il CharacterSheetBean dalla riga
                         CharacterSheetBean selectedChar = getTableView().getItems().get(getIndex());
-                        // Avvia il download simulato
                         downloadCharacter(selectedChar);
                     });
                 }
@@ -124,73 +139,32 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
         });
     }
 
-    // ===========================================================
-    //                  HANDLER PER DELETE
-    // ===========================================================
     /**
-     * Mostra il confirmation panel e avvia un timer di 10 secondi.
+     * Mostra il popup di conferma per l'eliminazione del personaggio.
      */
-    private void showConfirmationPanel() {
-        confirmationPane.setVisible(true);
-        confirmationLabel.setVisible(true);
-        yesButton.setVisible(true);
-        yesButton.setDisable(false);
-        noButton.setVisible(true);
-        noButton.setDisable(false);
-        timerLabel.setVisible(true);
-
-        timerLabel.setText("10s");
-        timerLabel.setTextFill(Paint.valueOf("#ffffff"));
-
-        // Avvio un timer di 10 secondi con CustomTimer
-        if (confirmationTimer != null) {
-            confirmationTimer.stop();
+    private void showDeleteConfirmation() {
+        if (confirmationPopupController != null && pendingDeleteBean != null) {
+            String message = "Vuoi eliminare il personaggio '" + pendingDeleteBean.getInfoBean().getName() + "'?";
+            confirmationPopupController.show(message, 10,
+                    () -> onConfirmDelete(),
+                    () -> onCancelDelete());
+        } else {
+            System.err.println("Errore: ConfirmationPopupController non inizializzato o pendingDeleteBean è null");
         }
-        confirmationTimer = new CustomTimer(10, new CustomTimer.TimerListener() {
-            @Override
-            public void onTick(int secondsRemaining) {
-                timerLabel.setText(secondsRemaining + "s");
-            }
-            @Override
-            public void onFinish() {
-                onClickNo(new ActionEvent());
-            }
-        });
-        confirmationTimer.start();
     }
 
-    @FXML
-    void onClickYes(ActionEvent event) {
-        if (confirmationTimer != null) {
-            confirmationTimer.stop();
-        }
+
+    private void onConfirmDelete() {
         if (pendingDeleteBean != null) {
             String characterName = pendingDeleteBean.getInfoBean().getName();
             tableViewChar.getItems().remove(pendingDeleteBean);
             controller.deleteCharacter(characterName);
             pendingDeleteBean = null;
         }
-        hideConfirmationPanel();
     }
 
-    @FXML
-    void onClickNo(ActionEvent event) {
-        if (confirmationTimer != null) {
-            confirmationTimer.stop();
-        }
+    private void onCancelDelete() {
         pendingDeleteBean = null;
-        hideConfirmationPanel();
-    }
-
-    /**
-     * Nasconde il confirmation panel.
-     */
-    private void hideConfirmationPanel() {
-        confirmationPane.setVisible(false);
-        confirmationLabel.setVisible(false);
-        yesButton.setVisible(false);
-        noButton.setVisible(false);
-        timerLabel.setVisible(false);
     }
 
     // ===========================================================
@@ -198,34 +172,24 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
     // ===========================================================
     private void openEditCharacterModal(CharacterSheetBean beanToEdit) {
         try {
-            System.out.println(">>> DEBUG: Avvio modifica personaggio: "
-                    + beanToEdit.getInfoBean().getName());
-
+            System.out.println(">>> DEBUG: Avvio modifica personaggio: " + beanToEdit.getInfoBean().getName());
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
                     "/it/uniroma2/marchidori/maininterface/characterSheet.fxml"));
-
             CharacterSheetBoundary sheetController = new CharacterSheetBoundary();
             loader.setController(sheetController);
-
             Parent root = loader.load();
-
             sheetController.setCharacterSheetBean(beanToEdit);
             sheetController.setCreationMode(false);
             sheetController.setController(controller);
             sheetController.setParentBoundary(this);
-
             Stage modalStage = new Stage();
             modalStage.setTitle("Modifica Personaggio");
             modalStage.initOwner(characterPane.getScene().getWindow());
             modalStage.initModality(Modality.WINDOW_MODAL);
             modalStage.setScene(new Scene(root));
-
             System.out.println(">>> DEBUG: Finestra di modifica aperta!");
             modalStage.showAndWait();
-
-            // Aggiorna la tabella
             tableViewChar.refresh();
-
         } catch (IOException e) {
             throw new SceneChangeException("Errore nel cambio scena (modifica personaggio).", e);
         }
@@ -242,33 +206,25 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
     private void openCreateCharacterModal() {
         try {
             System.out.println(">>> DEBUG: Avvio caricamento finestra modale per nuovo personaggio...");
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
                     "/it/uniroma2/marchidori/maininterface/characterSheet.fxml"));
-
             CharacterSheetBoundary sheetController = new CharacterSheetBoundary();
             loader.setController(sheetController);
-
             Parent root = loader.load();
             System.out.println(">>> DEBUG: FXML caricato correttamente!");
-
             sheetController.setCreationMode(true);
             sheetController.setCharacterSheetBean(CharacterSheetFactory.createCharacterSheet());
             sheetController.setController(controller);
             sheetController.setParentBoundary(this);
-
             Stage modalStage = new Stage();
             modalStage.setTitle("Crea Nuovo Personaggio");
             modalStage.initOwner(characterPane.getScene().getWindow());
             modalStage.initModality(Modality.WINDOW_MODAL);
             modalStage.setScene(new Scene(root));
-
             System.out.println(">>> DEBUG: Mostro la finestra modale...");
             modalStage.showAndWait();
-
             System.out.println(">>> DEBUG: Finestra modale chiusa, aggiorno la tabella...");
             tableViewChar.refresh();
-
         } catch (IOException e) {
             System.err.println(">>> ERRORE: IOException durante il caricamento di characterSheet.fxml!");
             e.printStackTrace();
@@ -326,44 +282,28 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
      * Mostra una finestra con una ProgressBar che aggiorna l'avanzamento del download.
      */
     private void downloadCharacter(CharacterSheetBean bean) {
-        // Scegli la posizione e il nome del file
-        // (modifica se necessario o usa un file chooser)
         String fileName = "character_" + bean.getInfoBean().getName() + ".txt";
-        String destinationPath = "C:/Users/edoar/IdeaProjects/Dungeons-FriendsISPW/Maininterface/src/main/java/download/" + fileName; // Esempio di percorso fisso
-
-        // Crea la finestra con la ProgressBar
+        String destinationPath = "C:/Users/edoar/IdeaProjects/Dungeons-FriendsISPW/Maininterface/src/main/java/download/" + fileName;
         ProgressBar progressBar = new ProgressBar(0);
         Label infoLabel = new Label("Downloading " + bean.getInfoBean().getName() + "...");
         infoLabel.setStyle("-fx-text-fill: black;");
-
         VBox vbox = new VBox(10, infoLabel, progressBar);
         vbox.setStyle("-fx-background-color: #ffffff; -fx-padding: 10;");
-
         Stage downloadStage = new Stage();
         downloadStage.setTitle("Download in progress...");
         downloadStage.initModality(Modality.APPLICATION_MODAL);
         downloadStage.initOwner(characterPane.getScene().getWindow());
         downloadStage.setScene(new Scene(vbox, 300, 120));
-
-        // Crea il task di download
         CharacterSheetDownloadTask downloadTask = new CharacterSheetDownloadTask(bean, destinationPath);
-
-        // Collega la ProgressBar al progresso del task
         progressBar.progressProperty().bind(downloadTask.progressProperty());
-
-        // Quando il download termina con successo, chiudi la finestra
         downloadTask.setOnSucceeded(evt -> {
             downloadStage.close();
             System.out.println("Download completato. File salvato in: " + destinationPath);
         });
-
-        // Se fallisce, chiudi la finestra e stampa l'errore
         downloadTask.setOnFailed(evt -> {
             downloadStage.close();
             System.err.println("Errore durante il download: " + downloadTask.getException());
         });
-
-        // Mostra la finestra e avvia il task in un nuovo thread
         downloadStage.show();
         new Thread(downloadTask).start();
     }
