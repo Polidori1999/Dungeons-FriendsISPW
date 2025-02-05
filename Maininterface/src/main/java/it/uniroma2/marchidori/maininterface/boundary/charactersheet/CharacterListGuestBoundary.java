@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
+import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.factory.CharacterSheetFactory;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
@@ -28,6 +29,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import static it.uniroma2.marchidori.maininterface.factory.BoundaryFactory.createBoundary;
+import static it.uniroma2.marchidori.maininterface.factory.ControllerFactory.createController;
+
 public class CharacterListGuestBoundary extends CharacterListBoundary {
 
 
@@ -42,13 +46,11 @@ public class CharacterListGuestBoundary extends CharacterListBoundary {
     private AnchorPane redirectPane;
     private CustomTimer timer;
 
+    private CharacterSheetController modalController;
+
     @Override
     public void initialize() {
         super.initialize();
-
-
-
-
 
         // Crea il pannello di reindirizzamento
         redirectPane = new AnchorPane();
@@ -103,28 +105,6 @@ public class CharacterListGuestBoundary extends CharacterListBoundary {
                 redirectToLogin();
             }
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -301,14 +281,15 @@ public class CharacterListGuestBoundary extends CharacterListBoundary {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
                     "/it/uniroma2/marchidori/maininterface/characterSheet.fxml"));
 
-            CharacterSheetBoundary sheetController = new CharacterSheetBoundary();
+            CharacterSheetBoundary sheetController = createBoundary(CharacterSheetBoundary.class);
             loader.setController(sheetController);
 
             Parent root = loader.load();
 
             sheetController.setCharacterSheetBean(beanToEdit);
             sheetController.setCreationMode(false);
-            sheetController.setController(controller);
+            modalController = createController(CharacterSheetController.class);
+            sheetController.setSheetController(modalController);
             sheetController.setGuestParentBoundary(this);
 
             Stage modalStage = new Stage();
@@ -343,7 +324,7 @@ public class CharacterListGuestBoundary extends CharacterListBoundary {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
                     "/it/uniroma2/marchidori/maininterface/characterSheet.fxml"));
 
-            CharacterSheetBoundary sheetController = new CharacterSheetBoundary();
+            CharacterSheetBoundary sheetController = createBoundary(CharacterSheetBoundary.class);
             loader.setController(sheetController);
 
             Parent root = loader.load();
@@ -351,7 +332,8 @@ public class CharacterListGuestBoundary extends CharacterListBoundary {
 
             sheetController.setCreationMode(true);
             sheetController.setCharacterSheetBean(CharacterSheetFactory.createCharacterSheet());
-            sheetController.setController(controller);
+            modalController = createController(CharacterSheetController.class);
+            sheetController.setSheetController(modalController);
             sheetController.setGuestParentBoundary(this);
 
             Stage modalStage = new Stage();
@@ -414,23 +396,6 @@ public class CharacterListGuestBoundary extends CharacterListBoundary {
     public void setCurrentUser(UserBean currentUser) {
         this.currentUser = currentUser;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     private void redirectToLogin() {

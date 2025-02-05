@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
+import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
 import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.factory.CharacterSheetFactory;
@@ -25,12 +26,16 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import static it.uniroma2.marchidori.maininterface.factory.BoundaryFactory.createBoundary;
+import static it.uniroma2.marchidori.maininterface.factory.ControllerFactory.createController;
+
 public class CharacterListPlayerBoundary extends CharacterListBoundary {
 
     private static final Logger logger = Logger.getLogger(CharacterListPlayerBoundary.class.getName());
 
     // Bean selezionato per l'eliminazione
     private CharacterSheetBean pendingDeleteBean;
+    private CharacterSheetController modalController;
 
     // Controller per il popup di conferma con timer
     private ConfirmationPopupController confirmationPopupController;
@@ -172,15 +177,17 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
     // ===========================================================
     private void openEditCharacterModal(CharacterSheetBean beanToEdit) {
         try {
+
             System.out.println(">>> DEBUG: Avvio modifica personaggio: " + beanToEdit.getInfoBean().getName());
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
                     "/it/uniroma2/marchidori/maininterface/characterSheet.fxml"));
-            CharacterSheetBoundary sheetController = new CharacterSheetBoundary();
+            CharacterSheetBoundary sheetController = createBoundary(CharacterSheetBoundary.class);
             loader.setController(sheetController);
             Parent root = loader.load();
             sheetController.setCharacterSheetBean(beanToEdit);
             sheetController.setCreationMode(false);
-            sheetController.setController(controller);
+            modalController = createController(CharacterSheetController.class);
+            sheetController.setSheetController(modalController);
             sheetController.setParentBoundary(this);
             Stage modalStage = new Stage();
             modalStage.setTitle("Modifica Personaggio");
@@ -208,13 +215,14 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
             System.out.println(">>> DEBUG: Avvio caricamento finestra modale per nuovo personaggio...");
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
                     "/it/uniroma2/marchidori/maininterface/characterSheet.fxml"));
-            CharacterSheetBoundary sheetController = new CharacterSheetBoundary();
+            CharacterSheetBoundary sheetController = createBoundary(CharacterSheetBoundary.class);
             loader.setController(sheetController);
             Parent root = loader.load();
             System.out.println(">>> DEBUG: FXML caricato correttamente!");
             sheetController.setCreationMode(true);
             sheetController.setCharacterSheetBean(CharacterSheetFactory.createCharacterSheet());
-            sheetController.setController(controller);
+            modalController = createController(CharacterSheetController.class);
+            sheetController.setSheetController(modalController);
             sheetController.setParentBoundary(this);
             Stage modalStage = new Stage();
             modalStage.setTitle("Crea Nuovo Personaggio");

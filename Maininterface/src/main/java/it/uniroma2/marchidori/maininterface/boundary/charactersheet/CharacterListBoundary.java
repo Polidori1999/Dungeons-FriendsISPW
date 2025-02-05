@@ -4,6 +4,7 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetB
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
+import it.uniroma2.marchidori.maininterface.control.CharacterListController;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException; // <<-- IMPORT ECCEZIONE DEDICATA
@@ -75,28 +76,17 @@ public class CharacterListBoundary implements UserAwareInterface, ControllerAwar
     protected ObservableList<CharacterSheetBean> data = FXCollections.observableArrayList();
 
     // Controller
-    protected CharacterSheetController controller;
+    protected CharacterListController controller;
 
 
     protected void initialize() {
         // Inizializzo il controller
 
-        if (controller == null && currentUser != null) {
-            this.controller = new CharacterSheetController(currentUser);
-        }
+
         data.clear();
         data.addAll(controller.getAllCharacters());
         // Carico i personaggi iniziali (sotto forma di Bean)
 
-
-
-        confirmationPane.setVisible(false);
-        confirmationLabel.setVisible(false);
-        yesButton.setVisible(false);
-        yesButton.setDisable(true);
-        noButton.setVisible(false);
-        noButton.setDisable(true);
-        timerLabel.setVisible(false);
         newCharacterButton.setVisible(false);
         newCharacterButton.setDisable(true);
         // Associazioni colonne -> campi del Bean
@@ -182,7 +172,7 @@ public class CharacterListBoundary implements UserAwareInterface, ControllerAwar
     }
 
     @FXML
-    private void changeScene(String fxml) throws IOException {
+    protected void changeScene(String fxml) throws IOException {
         Stage currentStage = (Stage) characterPane.getScene().getWindow();
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);
 
@@ -221,23 +211,13 @@ public class CharacterListBoundary implements UserAwareInterface, ControllerAwar
             return new ReadOnlyObjectWrapper<>("???");
         }
     }
-    //eliminare la systemout poichè debug ok
-    @Override
     public void setCurrentUser(UserBean user) {
-        System.out.println("SetCurrentUser chiamato con: " + user);
         this.currentUser = user;
-        this.controller = new CharacterSheetController(currentUser);
-
-        if (this.controller == null) {
-            System.err.println("ERRORE: controller non è stato inizializzato!");
-        } else {
-            System.out.println("Controller inizializzato correttamente: " + this.controller);
-        }
     }
 
     @Override
     public void setLogicController(Object logicController) {
-        this.controller = (CharacterSheetController) logicController;
+        this.controller = (CharacterListController) logicController;
     }
 
     public void reloadCharacterList() {

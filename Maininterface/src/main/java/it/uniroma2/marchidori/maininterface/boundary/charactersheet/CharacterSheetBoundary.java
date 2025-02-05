@@ -82,7 +82,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
     // -------------------------------------------------------------
     //            METODI DI CONFIGURAZIONE DELLA BOUNDARY
     // -------------------------------------------------------------
-    public void setController(CharacterSheetController controller) {
+    public void setSheetController(CharacterSheetController controller) {
         this.controller = controller;
     }
 

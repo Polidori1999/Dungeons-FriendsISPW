@@ -53,15 +53,7 @@ public class CharacterSheetController implements UserAwareInterface {
      */
 
 
-    public List<CharacterSheetBean> getAllCharacters() {
-        List<CharacterSheetBean> beans = new ArrayList<>();
-        if (currentUser != null && currentUser.getCharacterSheets() != null) {
-            for (CharacterSheet cs : currentUser.getCharacterSheets()) {
-                beans.add(entityToBean(cs)); // **Converte sempre i dati aggiornati**
-            }
-        }
-        return beans;
-    }
+
 
 
 
@@ -89,20 +81,7 @@ public class CharacterSheetController implements UserAwareInterface {
 
 
 
-    public void deleteCharacter(String characterName) {
-        if (currentUser != null && currentUser.getCharacterSheets() != null) {
-            for (int i = 0; i < currentUser.getCharacterSheets().size(); i++) {
-                if (currentUser.getCharacterSheets().get(i).getName().equals(characterName)) {
-                    currentUser.getCharacterSheets().remove(i);
-                    System.out.println(">>> DEBUG: Personaggio eliminato dallo UserBean: " + characterName);
-                    return;
-                }
-            }
-            System.err.println(">>> ERRORE: Nessun personaggio trovato con il nome: " + characterName);
-        } else {
-            System.err.println(">>> ERRORE: currentUser o lista personaggi NULL in deleteCharacter()");
-        }
-    }
+
 
 
 

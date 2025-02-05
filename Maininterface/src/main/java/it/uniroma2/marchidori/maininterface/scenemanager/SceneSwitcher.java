@@ -95,9 +95,9 @@ public class SceneSwitcher {
         ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.JOIN_LOBBY), JoinLobbyController.class);
         ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.JOIN_LOBBY), JoinLobbyController.class);
 
-        ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.CHARACTER_LIST), CharacterSheetController.class);
-        ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.CHARACTER_LIST), CharacterSheetController.class);
-        ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.CHARACTER_LIST), CharacterSheetController.class);
+        ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.CHARACTER_LIST), CharacterListController.class);
+        ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.CHARACTER_LIST), CharacterListController.class);
+        ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.CHARACTER_LIST), CharacterListController.class);
 
         ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.USER), UserController.class);
         ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.USER), UserController.class);
