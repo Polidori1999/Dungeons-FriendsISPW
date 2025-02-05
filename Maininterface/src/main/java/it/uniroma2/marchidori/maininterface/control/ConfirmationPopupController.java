@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 /**
  * Controller per il popup di conferma con timer.
@@ -14,6 +15,7 @@ public class ConfirmationPopupController {
 
     @FXML
     private AnchorPane popupPane;
+
 
     @FXML
     private Label messageLabel;
@@ -54,6 +56,9 @@ public class ConfirmationPopupController {
 
         messageLabel.setText(message);
         popupPane.setVisible(true);
+
+
+
 
         // Avvia il TimerController
         timerController = new TimerController(timerLabel, duration, this::onTimeOut);

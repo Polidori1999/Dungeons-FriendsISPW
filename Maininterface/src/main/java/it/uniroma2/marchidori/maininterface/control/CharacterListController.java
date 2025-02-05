@@ -8,7 +8,9 @@ import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.entity.CharacterInfo;
 import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
 import it.uniroma2.marchidori.maininterface.entity.CharacterStats;
+import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,6 +93,28 @@ public class CharacterListController implements UserAwareInterface {
             System.err.println(">>> ERRORE: Nessun personaggio trovato con il nome: " + characterName);
         } else {
             System.err.println(">>> ERRORE: currentUser o lista personaggi NULL in deleteCharacter()");
+        }
+    }
+
+    ///////down
+    public CharacterSheetDownloadTask getDownloadTask(CharacterSheetBean bean) {
+        try {
+            // Ottieni la cartella di download dinamica
+            String userHome = System.getProperty("user.home");
+            String downloadFolder = Paths.get(userHome, "Downloads").toString();
+
+            // Crea il nome del file
+            String fileName = "character_" + bean.getInfoBean().getName() + ".txt";
+            String destinationPath = Paths.get(downloadFolder, fileName).toString();
+
+            System.out.println(">>> DEBUG: Percorso di download: " + destinationPath);
+
+            // Crea e restituisci il task di download
+            return new CharacterSheetDownloadTask(bean, destinationPath);
+
+        } catch (Exception e) {
+            System.err.println("Errore durante il download: " + e.getMessage());
+            return null;
         }
     }
 

@@ -8,8 +8,10 @@ import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.entity.CharacterInfo;
 import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
 import it.uniroma2.marchidori.maininterface.entity.CharacterStats;
+import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
 
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -175,6 +177,9 @@ public class CharacterSheetController implements UserAwareInterface {
     /**
      * Cerca un personaggio (Entity) in base al nome.
      */
+
+
+
     /*private CharacterSheet findByName(String name) {
         if (currentUser != null && currentUser.getCharacterSheets() != null) {
             for (CharacterSheet cs : currentUser.getCharacterSheets()) {

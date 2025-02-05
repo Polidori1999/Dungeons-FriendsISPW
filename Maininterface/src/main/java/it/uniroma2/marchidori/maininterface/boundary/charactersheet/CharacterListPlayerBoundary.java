@@ -8,7 +8,9 @@ import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.factory.CharacterSheetFactory;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
 import it.uniroma2.marchidori.maininterface.control.TimerController;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +25,7 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javafx.event.EventHandler;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -38,7 +41,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
     private CharacterSheetController modalController;
 
     // Controller per il popup di conferma con timer
-    private ConfirmationPopupController confirmationPopupController;
+    protected ConfirmationPopupController confirmationPopupController;
 
     @Override
     public void initialize() {
@@ -289,30 +292,52 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
      * Avvia il download simulato del CharacterSheetBean, creando un file di testo.
      * Mostra una finestra con una ProgressBar che aggiorna l'avanzamento del download.
      */
-    private void downloadCharacter(CharacterSheetBean bean) {
-        String fileName = "character_" + bean.getInfoBean().getName() + ".txt";
-        String destinationPath = "C:/Users/edoar/IdeaProjects/Dungeons-FriendsISPW/Maininterface/src/main/java/download/" + fileName;
-        ProgressBar progressBar = new ProgressBar(0);
-        Label infoLabel = new Label("Downloading " + bean.getInfoBean().getName() + "...");
-        infoLabel.setStyle("-fx-text-fill: black;");
+
+
+    protected void downloadCharacter(CharacterSheetBean bean) {
+        if (controller != null) {
+            CharacterSheetDownloadTask downloadTask = controller.getDownloadTask(bean);
+            if (downloadTask != null) {
+                showDownloadProgressWindow(downloadTask);
+                new Thread(downloadTask).start();
+            } else {
+                System.err.println("Errore: Task di download non disponibile.");
+            }
+        } else {
+            System.err.println("Errore: Controller non inizializzato.");
+        }
+    }
+
+    private void showDownloadProgressWindow(CharacterSheetDownloadTask downloadTask) {
+        // Crea una nuova finestra di avanzamento
+        Stage progressStage = new Stage();
+        progressStage.initModality(Modality.APPLICATION_MODAL);
+        progressStage.setTitle("Download in corso...");
+
+        // Creazione UI
+        Label infoLabel = new Label("Scaricamento in corso...");
+        ProgressBar progressBar = new ProgressBar();
+        progressBar.progressProperty().bind(downloadTask.progressProperty());
+
         VBox vbox = new VBox(10, infoLabel, progressBar);
         vbox.setStyle("-fx-background-color: #ffffff; -fx-padding: 10;");
-        Stage downloadStage = new Stage();
-        downloadStage.setTitle("Download in progress...");
-        downloadStage.initModality(Modality.APPLICATION_MODAL);
-        downloadStage.initOwner(characterPane.getScene().getWindow());
-        downloadStage.setScene(new Scene(vbox, 300, 120));
-        CharacterSheetDownloadTask downloadTask = new CharacterSheetDownloadTask(bean, destinationPath);
-        progressBar.progressProperty().bind(downloadTask.progressProperty());
-        downloadTask.setOnSucceeded(evt -> {
-            downloadStage.close();
-            System.out.println("Download completato. File salvato in: " + destinationPath);
+        progressStage.setScene(new Scene(vbox, 350, 100));
+
+        // Chiudi la finestra automaticamente al completamento del download
+        downloadTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+
+            public void handle(WorkerStateEvent event) {
+                progressStage.close();
+                System.out.println(">>> Download completato.");
+            }
         });
-        downloadTask.setOnFailed(evt -> {
-            downloadStage.close();
+
+        downloadTask.setOnFailed(event -> {
+            progressStage.close();
             System.err.println("Errore durante il download: " + downloadTask.getException());
         });
-        downloadStage.show();
-        new Thread(downloadTask).start();
+
+        // Mostra la finestra
+        Platform.runLater(progressStage::show);
     }
 }

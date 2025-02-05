@@ -100,7 +100,7 @@ public class LoginBoundary {
             throw new SceneChangeException("Error during change scene from login to register.", e);
         }
     }
-
+    //////////////////da implementare
     private UserBean checkLogin() {
         String userEmail = email.getText();
         String userPassword = password.getText();
