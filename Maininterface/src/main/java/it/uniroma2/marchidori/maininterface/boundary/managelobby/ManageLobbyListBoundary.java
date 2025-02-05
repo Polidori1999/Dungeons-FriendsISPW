@@ -1,14 +1,16 @@
 package it.uniroma2.marchidori.maininterface.boundary.managelobby;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
+import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
-import it.uniroma2.marchidori.maininterface.control.ManageLobbyController;
 import it.uniroma2.marchidori.maininterface.control.ManageLobbyListController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -21,8 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
+
 
 public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAwareInterface {
 
@@ -77,6 +78,7 @@ public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAw
     // Variabile per gestire l'utente corrente
     protected UserBean currentUser;
     private ManageLobbyListController controller;
+    protected ObservableList<LobbyBean> data = FXCollections.observableArrayList();
 
     /**
      * Invocato automaticamente da JavaFX dopo l'iniezione dei nodi @FXML.
@@ -107,6 +109,11 @@ public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAw
 
             }
         });
+
+
+        data.clear();
+        data.addAll(controller.getAllLobbies());
+        tableViewLobby.setItems(data);
     }
 
 
@@ -171,7 +178,7 @@ public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAw
     @FXML
     void onClickNewLobby(ActionEvent event) {
         try {
-            changeScene(SceneNames.NEW_LOBBY);
+            changeScene(SceneNames.MANAGE_LOBBY);
         } catch (IOException e) {
             throw new SceneChangeException("Errore nel cambiare scena a newLobby.fxml", e);
         }

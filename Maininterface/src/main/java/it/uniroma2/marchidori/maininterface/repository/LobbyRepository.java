@@ -12,10 +12,10 @@ public class LobbyRepository {
     public LobbyRepository() {
         this.lobbyList = new ArrayList<>();
         // Inizializziamo con lobby statiche per ora
-        lobbyList.add(LobbyFactory.createLobby("edogay", "Singola", "Presenza", 3));
-        lobbyList.add(LobbyFactory.createLobby("edonegro", "Campagna", "Online", 5));
-        lobbyList.add(LobbyFactory.createLobby("edomerda", "Campagna", "Online", 8));
-        lobbyList.add(LobbyFactory.createLobby("Gay Legends", "Singola", "Online", 6));
+        lobbyList.add(LobbyFactory.createLobby("edogay", "Singola", "Presenza", 3, false));
+        lobbyList.add(LobbyFactory.createLobby("edonegro", "Campagna", "Online", 5, false));
+        lobbyList.add(LobbyFactory.createLobby("edomerda", "Campagna", "Online", 8, false));
+        lobbyList.add(LobbyFactory.createLobby("Gay Legends", "Singola", "Online", 6, false));
     }
 
     /**

@@ -11,18 +11,18 @@ public class Lobby {
     private final String lobbyName;
     private final String duration;  // "Singola"/"Campagna"
     private final String type;      // "Online"/"Presenza"
+    private final boolean owned;
     private List<String> players;
+    private int numberOfPlayers;
 
     // costruttore
-    public Lobby(String lobbyName, String duration, String type, int initialPlayersCount) {
+    public Lobby(String lobbyName, String duration, String type, boolean owned, int numberOfPlayers) {
         this.lobbyName = lobbyName;
         this.duration = duration;
         this.type = type;
+        this.owned = owned;
+        this.numberOfPlayers = numberOfPlayers;
         this.players = new ArrayList<>();
-        // Per test, potresti aggiungere 'initialPlayersCount' giocatori fittizi
-        for (int i = 0; i < initialPlayersCount; i++) {
-            this.players.add("Player"+(i+1));
-        }
     }
 
     public String getLobbyName() {
@@ -45,5 +45,15 @@ public class Lobby {
 
     public boolean isFull(){
         return players.size() >= 8;
+    }
+
+    public int getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+    public void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
+    }
+    public boolean isOwned() {
+        return owned;
     }
 }

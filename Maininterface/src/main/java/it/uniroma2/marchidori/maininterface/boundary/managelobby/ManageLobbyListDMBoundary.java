@@ -6,7 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 
 
-import java.io.IOException;
 
 public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
 

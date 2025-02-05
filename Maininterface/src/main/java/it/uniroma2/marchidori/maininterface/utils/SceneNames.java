@@ -13,7 +13,6 @@ public class SceneNames {
     public static final String MANAGE_LOBBY = "manageLobby.fxml";
     public static final String CHARACTER_SHEET = "characterSheet.fxml";
     public static final String REGISTER = "register.fxml";
-    public static final String NEW_LOBBY = "newLobby.fxml";
     public static final String LOGIN = "login.fxml";
 
 }

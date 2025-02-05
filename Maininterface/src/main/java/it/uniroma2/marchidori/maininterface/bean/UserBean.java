@@ -17,16 +17,18 @@ public class UserBean {
     private String email;
     private RoleEnum roleBehavior;
     private List<Lobby> favouriteLobbies;
+    private List<Lobby> joinedLobbies;
     private List<CharacterSheet> characterSheets; // Lista di personaggi associati all'utente
     // Aggiungi anche notifiche, se necessario:
     // private List<Notification> notificationPlayer;
 
     // Costruttore che include i personaggi
-    public UserBean(String id, String username, String email, List<Lobby> favouriteLobbies, List<CharacterSheet> characterSheets) {
+    public UserBean(String id, String username, String email, List<Lobby> favouriteLobbies, List<Lobby> joinedLobbies, List<CharacterSheet> characterSheets) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.favouriteLobbies = favouriteLobbies;
+        this.joinedLobbies = joinedLobbies;
         this.roleBehavior = PLAYER; // Default come Player
         // Se characterSheets è null, inizializzala a una nuova ArrayList
         this.characterSheets = (characterSheets != null) ? characterSheets : new ArrayList<>();
@@ -92,6 +94,13 @@ public class UserBean {
 
     public void setCharacterSheets(List<CharacterSheet> characterSheets) {
         this.characterSheets = characterSheets;
+    }
+
+    public List<Lobby> getJoinedLobbies() {
+        return joinedLobbies;
+    }
+    public void setJoinedLobbies(List<Lobby> joinedLobbies) {
+        this.joinedLobbies = joinedLobbies;
     }
 
     // Metodo per aggiungere un nuovo personaggio
