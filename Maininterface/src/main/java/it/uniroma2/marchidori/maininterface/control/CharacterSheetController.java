@@ -8,12 +8,6 @@ import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.entity.CharacterInfo;
 import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
 import it.uniroma2.marchidori.maininterface.entity.CharacterStats;
-import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
-
-
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Control che gestisce la logica di manipolazione
@@ -38,27 +32,6 @@ public class CharacterSheetController implements UserAwareInterface {
         System.out.println("CharacterSheetController creato con UserBean: " + this.currentUser);
     }
 
-    //commentato per debug
-    /*// Riferimento allo userBean corrente (che contiene i characterSheets dell'utente)
-    private UserBean currentUser;
-
-    // Costruttore che riceve lo UserBean corrente
-    public CharacterSheetController(UserBean currentUser) {
-        this.currentUser = currentUser;
-    }*/
-
-
-    /**
-     * Restituisce tutti i personaggi come Bean (per la UI).
-     * Ogni Entity viene convertita in un CharacterSheetBean
-     * che a sua volta contiene un CharacterInfoBean e un AbilityScoresBean.
-     */
-
-
-
-
-
-
     /**
      * Crea un nuovo personaggio, partendo dal Bean.
      * Converte il CharacterSheetBean (spezzato in info e ability)
@@ -79,12 +52,6 @@ public class CharacterSheetController implements UserAwareInterface {
             System.err.println(">>> ERRORE: currentUser è NULL in createCharacter()!");
         }
     }
-
-
-
-
-
-
 
 
     /**
@@ -173,21 +140,4 @@ public class CharacterSheetController implements UserAwareInterface {
         );
         return new CharacterSheet(infoEntity, statsEntity);
     }
-
-    /**
-     * Cerca un personaggio (Entity) in base al nome.
-     */
-
-
-
-    /*private CharacterSheet findByName(String name) {
-        if (currentUser != null && currentUser.getCharacterSheets() != null) {
-            for (CharacterSheet cs : currentUser.getCharacterSheets()) {
-                if (cs.getName().equals(name)) {
-                    return cs;
-                }
-            }a
-        }
-        return null;
-    }*/
 }

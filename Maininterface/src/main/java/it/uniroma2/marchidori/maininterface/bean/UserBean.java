@@ -17,6 +17,7 @@ public class UserBean {
     private String email;
     private RoleEnum roleBehavior;
     private List<Lobby> favouriteLobbies;
+    private String selectedLobbyName;
     private List<Lobby> joinedLobbies;
     private List<CharacterSheet> characterSheets; // Lista di personaggi associati all'utente
     // Aggiungi anche notifiche, se necessario:
@@ -46,6 +47,13 @@ public class UserBean {
     }
 
 
+    public String getSelectedLobbyName() {
+        return selectedLobbyName;
+    }
+
+    public void setSelectedLobbyName(String selectedLobbyName) {
+        this.selectedLobbyName = selectedLobbyName;
+    }
     // Getter e Setter
 
     public String getEmail() {
@@ -111,6 +119,16 @@ public class UserBean {
         }
         this.characterSheets.add(characterSheet);
         System.out.println(">>> Personaggio aggiunto! Lista aggiornata: " + this.characterSheets);
+    }
+
+    // Metodo per aggiungere un nuovo personaggio
+    public void addLobby(Lobby characterSheet) {
+        if (this.joinedLobbies == null) {
+            System.err.println(">>> ERRORE: Lista lobby è NULL!");
+            this.joinedLobbies = new ArrayList<>();
+        }
+        this.joinedLobbies.add(characterSheet);
+        System.out.println(">>> lobbyo aggiunto! Lista aggiornata: " + this.joinedLobbies);
     }
 
 

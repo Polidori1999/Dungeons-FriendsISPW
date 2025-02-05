@@ -192,24 +192,6 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         charCharisma.setText("");
     }
 
-    /*private void populateFieldsFromBean(CharacterSheetBean bean) {
-        if (bean.getInfoBean() != null) {
-            charName.setText(bean.getInfoBean().getName());
-            charRace.setText(bean.getInfoBean().getRace());
-            charAge.setText(String.valueOf(bean.getInfoBean().getAge()));
-            charClass.setText(bean.getInfoBean().getClasse());
-            charLevel.setText(String.valueOf(bean.getInfoBean().getLevel()));
-        }
-        if (bean.getStatsBean() != null) {
-            charStrenght.setText(String.valueOf(bean.getStatsBean().getStrength()));
-            charDexerity.setText(String.valueOf(bean.getStatsBean().getDexterity()));
-            charConstitution.setText(String.valueOf(bean.getStatsBean().getConstitution()));
-            charIntelligence.setText(String.valueOf(bean.getStatsBean().getIntelligence()));
-            charWisdom.setText(String.valueOf(bean.getStatsBean().getWisdom()));
-            charCharisma.setText(String.valueOf(bean.getStatsBean().getCharisma()));
-        }
-    }*/
-
     // -------------------------------------------------------------
     //                 SALVATAGGIO (BOTTONE SAVE)
     // -------------------------------------------------------------
@@ -220,6 +202,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         System.out.println(">>> creationMode attuale: " + creationMode);
 
         if (parentBoundary != null) {
+            System.out.println("qui parent non è NULL DIOPORCO");
             parentBoundary.updateExistingCharacterInTable(currentBean);
             parentBoundary.refreshTable(); // **Forza il refresh della tabella**
         }
@@ -277,107 +260,6 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
 
 
 
-
-
-    /**
-     * Crea un nuovo personaggio.
-     */
-    /*private void createNewCharacter() {
-        System.out.println(">>> createNewCharacter() chiamato!");
-
-        CharacterInfoBean infoBean = buildInfoBeanFromFields();
-        CharacterStatsBean statsBean = buildStatsBeanFromFields();
-        CharacterSheetBean newBean = new CharacterSheetBean(infoBean, statsBean);
-
-        if (newBean == null || newBean.getInfoBean() == null) {
-            System.err.println(">>> ERRORE: Il Bean creato è NULL!");
-            return;
-        }
-
-        System.out.println(">>> Personaggio creato: " + newBean.getInfoBean().getName() +
-                ", Classe: " + newBean.getInfoBean().getClasse() +
-                ", Livello: " + newBean.getInfoBean().getLevel());
-
-        controller.createCharacter(newBean);
-
-        System.out.println(">>> Dopo creazione, personaggi utente = " + currentUser.getCharacterSheets());
-    }
-    */
-
-
-
-
-
-    /**
-     * Aggiorna un personaggio esistente (currentBean), se presente.
-     */
-    /*private void updateExistingCharacter() {
-        if (currentBean == null) {
-            return; // non c'è nulla da aggiornare
-        }
-
-        // Se mancano i sub-bean, li creiamo
-        if (currentBean.getInfoBean() == null) {
-            currentBean.setInfoBean(new CharacterInfoBean());
-        }
-        if (currentBean.getStatsBean() == null) {
-            currentBean.setStatsBean(new CharacterStatsBean());
-        }
-
-        // Aggiorniamo la parte "info"
-        CharacterInfoBean infoB = currentBean.getInfoBean();
-        infoB.setName(charName.getText());
-        infoB.setRace(charRace.getText());
-        infoB.setAge(parseIntOrZero(charAge.getText()));
-        infoB.setLevel(parseIntOrZero(charLevel.getText()));
-
-        // Aggiorniamo la parte "stats"
-        CharacterStatsBean statsB = currentBean.getStatsBean();
-        statsB.setStrength(parseIntOrZero(charStrenght.getText()));
-        statsB.setDexterity(parseIntOrZero(charDexerity.getText()));
-        statsB.setConstitution(parseIntOrZero(charConstitution.getText()));
-        statsB.setIntelligence(parseIntOrZero(charIntelligence.getText()));
-        statsB.setWisdom(parseIntOrZero(charWisdom.getText()));
-        statsB.setCharisma(parseIntOrZero(charCharisma.getText()));
-
-        controller.updateCharacter(currentBean);
-
-        if (parentBoundary != null) {
-            parentBoundary.refreshTable();
-        }
-        try {
-            changeScene(SceneNames.CHARACTER_LIST);
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore durante il cambio scena verso characterList.fxml", e);
-        }
-
-    }
-    */
-    // -------------------------------------------------------------
-    //         METODI DI COSTRUZIONE DEI DUE SOTTO-BEAN
-    // -------------------------------------------------------------
-
-    /*private CharacterInfoBean buildInfoBeanFromFields() {
-        return new CharacterInfoBean(
-                charName.getText(),
-                charRace.getText(),
-                parseIntOrZero(charAge.getText()),
-                charClass.getText(),
-                parseIntOrZero(charLevel.getText())
-        );
-    }
-
-    private CharacterStatsBean buildStatsBeanFromFields() {
-        return new CharacterStatsBean(
-                parseIntOrZero(charStrenght.getText()),
-                parseIntOrZero(charDexerity.getText()),
-                parseIntOrZero(charConstitution.getText()),
-                parseIntOrZero(charIntelligence.getText()),
-                parseIntOrZero(charWisdom.getText()),
-                parseIntOrZero(charCharisma.getText())
-        );
-    }
-    */
     /**
      * Helper: parse int con valore di default 0 in caso di errore.
      */
@@ -389,10 +271,6 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
             return 0;  // Restituisce 0 se il parsing fallisce, il controllo avverrà nella validazione
         }
     }
-
-
-
-
 
     // -------------------------------------------------------------
     //                     NAVIGAZIONE (RESTO)

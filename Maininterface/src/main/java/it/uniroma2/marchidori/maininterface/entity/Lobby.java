@@ -56,4 +56,6 @@ public class Lobby {
     public boolean isOwned() {
         return owned;
     }
+
+
 }

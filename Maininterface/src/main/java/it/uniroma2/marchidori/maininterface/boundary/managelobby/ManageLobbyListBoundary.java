@@ -14,7 +14,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -31,53 +30,53 @@ public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAw
     protected AnchorPane manageLobbyListPane;
 
     @FXML
-    private Button consultRules;
+    protected Button consultRules;
 
     @FXML
-    private Button joinlobby;
+    protected Button joinlobby;
 
     @FXML
-    private Button manageLobby;
+    protected Button manageLobby;
 
     @FXML
-    private Button myChar;
+    protected Button myChar;
 
     @FXML
-    private VBox vBox;
+    protected VBox vBox;
 
     @FXML
-    private Button goToHome;
+    protected Button goToHome;
 
     @FXML
     protected Button newLobbyButton;
 
     @FXML
-    private TableColumn<LobbyBean, String> tableViewDuration;
+    protected TableColumn<LobbyBean, String> tableViewDuration;
 
     @FXML
-    private TableColumn<LobbyBean, String> tableViewLiveOrNot;
+    protected TableColumn<LobbyBean, String> tableViewLiveOrNot;
 
     @FXML
     protected TableView<LobbyBean> tableViewLobby;
 
     @FXML
-    private TableColumn<LobbyBean, Button> tableViewLobbyDelete;
+    protected TableColumn<LobbyBean, Button> tableViewLobbyDelete;
 
     @FXML
     protected TableColumn<LobbyBean, Button> tableViewLobbyEdit;
 
     @FXML
-    private TableColumn<LobbyBean, String> tableViewLobbyName;
+    protected TableColumn<LobbyBean, String> tableViewLobbyName;
 
     @FXML
-    private TableColumn<LobbyBean, String> tableViewMaxPlayers;
+    protected TableColumn<LobbyBean, String> tableViewMaxPlayers;
 
     @FXML
-    private Button userButton;
+    protected Button userButton;
 
     // Variabile per gestire l'utente corrente
     protected UserBean currentUser;
-    private ManageLobbyListController controller;
+    protected ManageLobbyListController controller;
     protected ObservableList<LobbyBean> data = FXCollections.observableArrayList();
 
     /**
@@ -85,34 +84,17 @@ public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAw
      */
     @FXML
     protected void initialize() {
-        // Imposta il PropertyValueFactory per le colonne basate sulle proprietà di LobbyBean.
-        tableViewLobbyName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tableViewMaxPlayers.setCellValueFactory(new PropertyValueFactory<>("maxPlayers"));
-        tableViewDuration.setCellValueFactory(new PropertyValueFactory<>("duration"));
-        tableViewLiveOrNot.setCellValueFactory(new PropertyValueFactory<>("liveOrNot"));
-
-
-        tableViewLobbyDelete.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Button item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(item);
-                    item.setOnAction(e -> {
-                        // Rimuoviamo il Bean dalla tabella
-                        LobbyBean selectedLobby = getTableView().getItems().get(getIndex());
-                        getTableView().getItems().remove(selectedLobby);
-                    });
-                }
-
-            }
-        });
-
-
         data.clear();
         data.addAll(controller.getAllLobbies());
+        // Imposta il PropertyValueFactory per le colonne basate sulle proprietà di LobbyBean.
+        tableViewLobbyName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tableViewMaxPlayers.setCellValueFactory(new PropertyValueFactory<>("numberOfPlayers"));
+        tableViewDuration.setCellValueFactory(new PropertyValueFactory<>("duration"));
+        tableViewLiveOrNot.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+
+
+
         tableViewLobby.setItems(data);
     }
 
