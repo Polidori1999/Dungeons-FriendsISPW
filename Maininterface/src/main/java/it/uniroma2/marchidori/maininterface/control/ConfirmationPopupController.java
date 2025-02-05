@@ -93,13 +93,7 @@ public class ConfirmationPopupController {
     private void hide() {
         Platform.runLater(() -> popupPane.setVisible(false));
     }
-    @FXML
-    public void onClickYes(ActionEvent event) {
-        if (confirmAction != null) {
-            confirmAction.run();
-        }
-        hide();
-    }
+
 
 
 }
