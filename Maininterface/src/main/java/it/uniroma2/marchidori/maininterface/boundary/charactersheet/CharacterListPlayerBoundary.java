@@ -7,7 +7,6 @@ import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.factory.CharacterSheetFactory;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
-import it.uniroma2.marchidori.maininterface.control.TimerController;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,7 +18,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableCell;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 

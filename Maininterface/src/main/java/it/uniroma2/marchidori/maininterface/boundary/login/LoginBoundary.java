@@ -1,6 +1,7 @@
 package it.uniroma2.marchidori.maininterface.boundary.login;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
@@ -22,7 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class LoginBoundary {
+public class LoginBoundary implements UserAwareInterface {
     private static final Logger logger = Logger.getLogger(LoginBoundary.class.getName());
 
 
@@ -69,6 +70,7 @@ public class LoginBoundary {
             UserBean authenticatedUser = checkLogin();
             if (authenticatedUser != null) {
                 currentUser = authenticatedUser;
+                //setCurrentUser(currentUser);
                 logger.info(">>> Login avvenuto con successo. Ruolo: " + currentUser.getRoleBehavior());
                 changeScene(SceneNames.HOME);
             } else {
@@ -124,5 +126,10 @@ public class LoginBoundary {
         logger.log(Level.FINE, "Cambiando scena: {0} con UserBean ruolo: {1}", new Object[]{fxml, currentUser.getRoleBehavior()});
         Stage currentStage = (Stage) anchorLoginPane.getScene().getWindow();
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);
+    }
+
+    @Override
+    public void setCurrentUser(UserBean user) {
+        this.currentUser = user;
     }
 }

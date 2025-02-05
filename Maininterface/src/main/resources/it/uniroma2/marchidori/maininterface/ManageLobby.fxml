@@ -36,14 +36,14 @@
       <Button fx:id="saveButton" layoutX="982.0" layoutY="615.0" mnemonicParsing="false" onAction="#onClickSaveLobby" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #e90000;" text="Save" textFill="WHITE" />
       <Pane layoutX="238.0" layoutY="131.0" prefHeight="472.0" prefWidth="813.0" style="-fx-background-color: #ffffff;">
          <children>
-            <TextField fx:id="charName" layoutX="90.0" layoutY="77.0" promptText="Name of the lobby" />
-            <TextField fx:id="charAge" layoutX="475.0" layoutY="75.0" prefHeight="25.0" prefWidth="69.0" promptText="Duration" />
-            <TextField fx:id="charClass" layoutX="313.0" layoutY="77.0" prefHeight="25.0" prefWidth="78.0" promptText="Live/Online">
+            <TextField fx:id="lobbyName" layoutX="90.0" layoutY="77.0" promptText="Name of the lobby" />
+            <TextField fx:id="lobbyDuration" layoutX="475.0" layoutY="75.0" prefHeight="25.0" prefWidth="69.0" promptText="Duration" />
+            <TextField fx:id="lobbyType" layoutX="313.0" layoutY="77.0" prefHeight="25.0" prefWidth="78.0" promptText="Live/Online">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
             </TextField>
-            <TextField fx:id="charLevel" layoutX="645.0" layoutY="74.0" prefHeight="25.0" prefWidth="78.0" promptText="MaxPlayers" />
+            <TextField fx:id="lobbyMaxPlayers" layoutX="645.0" layoutY="74.0" prefHeight="25.0" prefWidth="78.0" promptText="MaxPlayers" />
             <TextArea layoutX="307.0" layoutY="154.0" prefHeight="200.0" prefWidth="200.0" promptText="Description of the lobby" />
          </children>
       </Pane>

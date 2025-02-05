@@ -234,6 +234,7 @@ public class SceneSwitcher {
             return;
         }
 
+
         if (boundary instanceof UserBoundary userBoundary) {
             userBoundary.setLogicController(controller);
         }
@@ -248,6 +249,9 @@ public class SceneSwitcher {
         }
         if (boundary instanceof ManageLobbyListBoundary manageLobbyListBoundary) {
             manageLobbyListBoundary.setLogicController(controller);
+        }
+        if(boundary instanceof ManageLobbyBoundary manageLobbyBoundary) {
+            manageLobbyBoundary.setLogicController(controller);
         }
         if (boundary instanceof JoinLobbyBoundary jlBoundary) {
             jlBoundary.setLogicController(controller);
@@ -285,6 +289,9 @@ public class SceneSwitcher {
         if (controller instanceof ManageLobbyListBoundary manageLobbyListBoundary) {
             manageLobbyListBoundary.setCurrentUser(currentUser);
         }
+        if(controller instanceof ManageLobbyBoundary manageLobbyBoundary) {
+            manageLobbyBoundary.setCurrentUser(currentUser);
+        }
         if (controller instanceof JoinLobbyBoundary jlBoundary) {
             jlBoundary.setCurrentUser(currentUser);
         }
@@ -317,6 +324,9 @@ public class SceneSwitcher {
         }
         if (controller instanceof ManageLobbyListController manageLobbyListController) {
             manageLobbyListController.setCurrentUser(currentUser);
+        }
+        if(controller instanceof ManageLobbyController manageLobbyController) {
+            manageLobbyController.setCurrentUser(currentUser);
         }
         if (controller instanceof JoinLobbyController jlController) {
             jlController.setCurrentUser(currentUser);

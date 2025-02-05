@@ -5,7 +5,6 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.CharacterListController;
-import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException; // <<-- IMPORT ECCEZIONE DEDICATA
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
@@ -93,7 +92,6 @@ public class CharacterListBoundary implements UserAwareInterface, ControllerAwar
         tableViewCharName.setCellValueFactory(new ReadOnlyObjectWrapperFactory<>("name"));
         tableViewCharRace.setCellValueFactory(new ReadOnlyObjectWrapperFactory<>("race"));
         tableViewCharLevel.setCellValueFactory(new ReadOnlyObjectWrapperFactory<>("level"));
-
         tableViewCharClass.setCellValueFactory(new ReadOnlyObjectWrapperFactory<>("classe"));
 
         // Impostiamo la lista

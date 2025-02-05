@@ -60,7 +60,7 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
 
     // --> Usiamo SOLO qui la variabile currentUser: le sottoclassi la ereditano
     // Meglio "protected" se le sottoclassi devono accedervi direttamente
-    protected UserBean currentUser;
+    public UserBean currentUser;
     private UserController controller;
 
     /**
