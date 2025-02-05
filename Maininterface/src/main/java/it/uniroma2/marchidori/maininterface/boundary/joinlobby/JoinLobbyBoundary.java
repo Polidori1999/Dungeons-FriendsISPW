@@ -7,7 +7,6 @@ import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
-import it.uniroma2.marchidori.maininterface.factory.ControllerFactory;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.beans.property.SimpleStringProperty;
@@ -36,7 +35,9 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     @FXML
     protected ComboBox<String> comboBox2; // "Singola"/"Campagna"
     @FXML
-    protected ComboBox<String> comboBox3; // "2..8"
+    protected ComboBox<String> comboBox3; // "2", "3", ... "8"
+    @FXML
+    protected ComboBox<String> comboBox4;
 
     @FXML
     protected ImageView joinLobbyImage;
@@ -66,25 +67,25 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     @FXML
     protected TableColumn<LobbyBean, Void> favouriteButton;
 
-    private UserBean currentUser;
-    private static final int MAX_PLAYERS = 8;
+    @FXML
+    protected Button resetButton;
+
+    protected UserBean currentUser;
+    // La variabile maxPlayers non serve più in quanto si legge dal bean
+    // private int maxPlayers;
 
     // Controller per logica di join
-    private JoinLobbyController controller;
+    protected JoinLobbyController controller;
 
     // Controller del popup di conferma con timer
-    private ConfirmationPopupController confirmationPopupController;
+    protected ConfirmationPopupController confirmationPopupController;
 
     // Observable list delle lobby filtrate
     private ObservableList<LobbyBean> filteredLobbies;
 
-
     @FXML
     public void initialize() {
-        // Inizializza il JoinLobbyController
-
-        // Carica il file FXML del popup di conferma e aggiungilo al pannello principale
-        // Carica il file FXML del popup di conferma e aggiungilo al pannello principale
+        // Inizializza il JoinLobbyController e il popup di conferma
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/confirmationPopup.fxml"));
             if (loader.getLocation() == null) {
@@ -104,69 +105,22 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         comboBox1.setItems(FXCollections.observableArrayList("Online", "Presenza"));
         comboBox2.setItems(FXCollections.observableArrayList("Singola", "Campagna"));
         comboBox3.setItems(FXCollections.observableArrayList("2", "3", "4", "5", "6", "7", "8"));
+        //comboBox4.setItems(FXCollections.observableArrayList("Favourite","Else"));
 
         // Listener per i filtri
         comboBox1.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
         comboBox2.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
         comboBox3.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
+        //comboBox4.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
 
         // Carica le lobby iniziali
         List<LobbyBean> initial = controller.filterLobbies(null, null, null);
         filteredLobbies = FXCollections.observableArrayList(initial);
 
-        // Inizializza la TableView
-        initTableView();
-    }
-
-    private void initTableView() {
         lobbyNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        // Modifica qui: leggi il numero massimo dal bean, ad esempio con getMaxPlayers()
         playersColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getNumberOfPlayers() + "/" + MAX_PLAYERS));
-
-        // Colonna "Add to Favourite"
-        favouriteButton.setCellFactory(col -> new TableCell<>() {
-            private final Button favouriteBtn = new Button("Add to Favourite");
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    favouriteBtn.setOnAction(event -> {
-                        LobbyBean lobby = getTableView().getItems().get(getIndex());
-                        controller.joinLobby(lobby, currentUser != null ? currentUser.getUsername() : "");
-                    });
-                    setGraphic(favouriteBtn);
-                }
-            }
-        });
-
-        // Colonna "Join"
-        joinButtonColumn.setCellFactory(col -> new TableCell<>() {
-            private final Button joinBtn = new Button("Join");
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    LobbyBean lobby = getTableView().getItems().get(getIndex());
-                    joinBtn.setOnAction(event -> {
-                        String message = "Vuoi entrare nella lobby '" + lobby.getName() + "'?";
-                        // Mostra il popup con countdown di 10 secondi
-                        confirmationPopupController.show(
-                                message,
-                                10,
-                                () -> joinLobby(lobby), // azione da eseguire se conferma
-                                () -> System.out.println("Azione annullata o scaduta.") // azione da eseguire se annulla o scade
-                        );
-                    });
-                    setGraphic(joinBtn);
-                }
-            }
-        });
+                new SimpleStringProperty(cellData.getValue().getNumberOfPlayers() + "/" + cellData.getValue().getNumberOfPlayers()));
 
         lobbyTableView.setItems(filteredLobbies);
     }
@@ -179,6 +133,16 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         filteredLobbies.setAll(result);
     }
 
+    @FXML
+    public void resetFilters(ActionEvent event) {
+        // Resetta i ComboBox
+        comboBox1.setValue(null);
+        comboBox2.setValue(null);
+        comboBox3.setValue(null);
+        //comboBox4.setValue(null);
+        doFilter();
+    }
+
     private void joinLobby(LobbyBean lobby) {
         boolean joined = controller.joinLobby(lobby, currentUser != null ? currentUser.getUsername() : "");
         if (!joined) {
@@ -186,7 +150,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
             alert.showAndWait();
         }
     }
-    //cambi scena
+
     @FXML
     void onClickGoToConsultRules(ActionEvent event) throws IOException {
         try {

@@ -122,13 +122,31 @@ public class UserBean {
     }
 
     // Metodo per aggiungere un nuovo personaggio
-    public void addLobby(Lobby characterSheet) {
+    public void addLobby(Lobby lobby) {
         if (this.joinedLobbies == null) {
             System.err.println(">>> ERRORE: Lista lobby è NULL!");
             this.joinedLobbies = new ArrayList<>();
         }
-        this.joinedLobbies.add(characterSheet);
+        this.joinedLobbies.add(lobby);
         System.out.println(">>> lobbyo aggiunto! Lista aggiornata: " + this.joinedLobbies);
+    }
+
+    // Metodo per aggiungere un nuovo personaggio
+    public void addLobbyToFavourite(Lobby lobby) {
+        if (this.favouriteLobbies == null) {
+            System.err.println(">>> ERRORE: Lista lobby è NULL!");
+            this.favouriteLobbies = new ArrayList<>();
+        }
+        this.favouriteLobbies.add(lobby);
+        System.out.println(">>> lobbyo aggiunto! Lista aggiornata: " + this.favouriteLobbies);
+    }
+
+    public boolean removeLobbyByName(String name) {
+        if (this.favouriteLobbies == null || name == null) {
+            return false;
+        }
+        // removeIf restituisce true se almeno un elemento è stato rimosso
+        return favouriteLobbies.removeIf(lobby -> lobby.getLobbyName().equals(name));
     }
 
 
@@ -139,6 +157,8 @@ public class UserBean {
     public void removeCharacterSheet(String characterName) {
         characterSheets.removeIf(cs -> cs.getName().equals(characterName));
     }
+    // Metodo per rimuovere un personaggio (per nome, per esempio)
+
 
     // Verifica se l'utente è un DM
     public boolean accessDMTool(){

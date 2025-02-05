@@ -3,6 +3,7 @@ package it.uniroma2.marchidori.maininterface.control;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
+import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 
@@ -34,6 +35,7 @@ public class ManageLobbyController implements UserAwareInterface {
         }
 
         Lobby newlobby = beanToEntity(bean);
+        LobbyRepository.addLobby(newlobby);
         if (currentUser != null) {
             System.out.println(">>> Aggiungendo lobby a UserBean: " + newlobby.getLobbyName());
             currentUser.addLobby(newlobby);
@@ -46,19 +48,30 @@ public class ManageLobbyController implements UserAwareInterface {
 
     public void updateLobby(String oldName, LobbyBean bean) {
         if (currentUser != null && currentUser.getJoinedLobbies() != null) {
+            // Cerca la lobby nella lista dello user
             for (int i = 0; i < currentUser.getJoinedLobbies().size(); i++) {
                 Lobby lobby = currentUser.getJoinedLobbies().get(i);
-                // Confronta utilizzando oldName (il nome originale)
+                // Confronta usando oldName (il nome originale)
                 if (lobby.getLobbyName().equals(oldName)) {
-                    currentUser.getJoinedLobbies().set(i, beanToEntity(bean));
+                    // Converte il bean aggiornato in un'entità Lobby
+                    Lobby updatedLobby = beanToEntity(bean);
+                    // Aggiorna la lobby nella lista dello user
+                    currentUser.getJoinedLobbies().set(i, updatedLobby);
+
+                    // Aggiorna anche la repository:
+                    // Rimuove la vecchia lobby e aggiunge quella aggiornata.
+                    LobbyRepository.removeLobby(oldName);
+                    LobbyRepository.addLobby(updatedLobby);
+                    System.out.println(">>> Lobby aggiornata correttamente in UserBean e Repository.");
                     return;
                 }
             }
-            System.err.println(">>> ERRORE: Nessun personaggio trovato con il nome: " + oldName);
+            System.err.println(">>> ERRORE: Nessuna lobby trovata con il nome: " + oldName);
         } else {
-            System.err.println(">>> ERRORE: currentUser o lista personaggi NULL in updateCharacter()");
+            System.err.println(">>> ERRORE: currentUser o la lista delle lobby è NULL in updateLobby().");
         }
     }
+
 
     private LobbyBean entityToBean(Lobby cs) {
         // Infine crea il bean complessivo
