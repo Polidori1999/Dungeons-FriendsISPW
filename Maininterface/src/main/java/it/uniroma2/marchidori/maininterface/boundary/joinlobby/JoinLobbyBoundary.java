@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.boundary.joinlobby;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
@@ -24,7 +25,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
 
-public class JoinLobbyBoundary implements UserAwareInterface {
+public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInterface {
 
     @FXML
     protected AnchorPane joinLobbyPane;
@@ -69,7 +70,7 @@ public class JoinLobbyBoundary implements UserAwareInterface {
     private static final int MAX_PLAYERS = 8;
 
     // Controller per logica di join
-    private JoinLobbyController joinLobbyController;
+    private JoinLobbyController controller;
 
     // Controller del popup di conferma con timer
     private ConfirmationPopupController confirmationPopupController;
@@ -77,18 +78,10 @@ public class JoinLobbyBoundary implements UserAwareInterface {
     // Observable list delle lobby filtrate
     private ObservableList<LobbyBean> filteredLobbies;
 
-    public JoinLobbyBoundary() {
-        this(ControllerFactory.createJoinLobbyController());
-    }
-
-    public JoinLobbyBoundary(JoinLobbyController joinLobbyController) {
-        this.joinLobbyController = joinLobbyController;
-    }
 
     @FXML
     public void initialize() {
         // Inizializza il JoinLobbyController
-        this.joinLobbyController = ControllerFactory.createJoinLobbyController();
 
         // Carica il file FXML del popup di conferma e aggiungilo al pannello principale
         // Carica il file FXML del popup di conferma e aggiungilo al pannello principale
@@ -118,7 +111,7 @@ public class JoinLobbyBoundary implements UserAwareInterface {
         comboBox3.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
 
         // Carica le lobby iniziali
-        List<LobbyBean> initial = joinLobbyController.filterLobbies(null, null, null);
+        List<LobbyBean> initial = controller.filterLobbies(null, null, null);
         filteredLobbies = FXCollections.observableArrayList(initial);
 
         // Inizializza la TableView
@@ -142,7 +135,7 @@ public class JoinLobbyBoundary implements UserAwareInterface {
                 } else {
                     favouriteBtn.setOnAction(event -> {
                         LobbyBean lobby = getTableView().getItems().get(getIndex());
-                        joinLobbyController.joinLobby(lobby, currentUser != null ? currentUser.getUsername() : "");
+                        controller.joinLobby(lobby, currentUser != null ? currentUser.getUsername() : "");
                     });
                     setGraphic(favouriteBtn);
                 }
@@ -182,12 +175,12 @@ public class JoinLobbyBoundary implements UserAwareInterface {
         String type = comboBox1.getValue();
         String duration = comboBox2.getValue();
         String numPlayers = comboBox3.getValue();
-        List<LobbyBean> result = joinLobbyController.filterLobbies(type, duration, numPlayers);
+        List<LobbyBean> result = controller.filterLobbies(type, duration, numPlayers);
         filteredLobbies.setAll(result);
     }
 
     private void joinLobby(LobbyBean lobby) {
-        boolean joined = joinLobbyController.joinLobby(lobby, currentUser != null ? currentUser.getUsername() : "");
+        boolean joined = controller.joinLobby(lobby, currentUser != null ? currentUser.getUsername() : "");
         if (!joined) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Impossibile entrare nella lobby.", ButtonType.OK);
             alert.showAndWait();
@@ -257,5 +250,10 @@ public class JoinLobbyBoundary implements UserAwareInterface {
     @Override
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;
+    }
+
+    @Override
+    public void setLogicController(Object logicController) {
+        this.controller = (JoinLobbyController) logicController;
     }
 }

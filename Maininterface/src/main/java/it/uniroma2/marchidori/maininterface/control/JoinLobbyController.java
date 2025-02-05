@@ -1,6 +1,8 @@
 package it.uniroma2.marchidori.maininterface.control;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
+import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.factory.LobbyFactory;
 import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
@@ -9,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class JoinLobbyController {
+public class JoinLobbyController implements UserAwareInterface {
+    private UserBean currentUser;
 
 
     private final LobbyRepository lobbyRepository;
@@ -24,6 +27,12 @@ public class JoinLobbyController {
      * Filtro su type, duration, e numero di players.
      * Se un parametro è null/empty => ignoriamo quel filtro.
      */
+
+    @Override
+    public void setCurrentUser(UserBean user) {
+        this.currentUser = user;
+    }
+
     public List<LobbyBean> filterLobbies(String type, String duration, String numPlayersStr) {
         List<LobbyBean> result = new ArrayList<>();
 
