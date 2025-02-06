@@ -40,10 +40,6 @@ public class Lobby {
         return players;
     }
 
-    public void addPlayer(String player){
-        players.add(player);
-    }
-
     public boolean isFull(){
         return players.size() >= 8;
     }

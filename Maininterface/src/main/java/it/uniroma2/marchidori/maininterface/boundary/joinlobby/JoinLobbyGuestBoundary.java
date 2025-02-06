@@ -8,7 +8,7 @@ import javafx.scene.control.TableCell;
 
 import java.io.IOException;
 
-public class JoinLobbyGuestBoundary extends JoinLobbyBoundary {
+public class JoinLobbyGuestBoundary extends JoinLobbyPlayerBoundary {
 
     @Override
     public void initialize() {

@@ -39,10 +39,10 @@ public class ManageLobbyController implements UserAwareInterface {
 
         Lobby newlobby = beanToEntity(bean);
         LobbyRepository.addLobby(newlobby);
-        if (currentUser != null) {
+        if (currentUser != null && currentUser.getJoinedLobbies() != null) {
             System.out.println(">>> Aggiungendo lobby a UserBean: " + newlobby.getLobbyName());
-            currentUser.addLobby(bean);
-            currentEntity.addLobby(newlobby);
+            currentUser.getJoinedLobbies().add(bean);
+            currentEntity.getJoinedLobbies().add(newlobby);
             System.out.println(">>> Lista attuale personaggi: " + currentUser.getJoinedLobbies());
         } else {
             System.err.println(">>> ERRORE: currentUser è NULL in createlobby()!");

@@ -18,7 +18,7 @@ import java.util.UUID;
 public class AuthController {
     private User currentEntity = Session.getCurrentUser();
 
-    private static final String DIRECTORY_PATH = "src/main/java/it/uniroma2/marchidori/maininterface/userrepository";
+    private static final String DIRECTORY_PATH = "src/main/java/it/uniroma2/marchidori/maininterface/userpsw";
     private static final String FILE_PATH = DIRECTORY_PATH + "/users.txt";
 
 

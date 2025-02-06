@@ -9,8 +9,6 @@ import it.uniroma2.marchidori.maininterface.entity.*;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
 
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CharacterListController implements UserAwareInterface {
     private User currentEntity = Session.getCurrentUser();
@@ -19,18 +17,6 @@ public class CharacterListController implements UserAwareInterface {
     public CharacterListController() {
         //empty
     }
-
-
-
-//    public List<CharacterSheetBean> getAllCharacters() {
-//        List<CharacterSheetBean> beans = new ArrayList<>();
-//        if (currentUser != null && currentUser.getCharacterSheets() != null) {
-//            for (CharacterSheet cs : currentUser.getCharacterSheets()) {
-//                beans.add(entityToBean(cs)); // **Converte sempre i dati aggiornati**
-//            }
-//        }
-//        return beans;
-//    }
 
 
     private CharacterSheetBean entityToBean(CharacterSheet cs) {
@@ -88,6 +74,7 @@ public class CharacterListController implements UserAwareInterface {
             for (int i = 0; i < currentUser.getCharacterSheets().size(); i++) {
                 if (currentUser.getCharacterSheets().get(i).getInfoBean().getName().equals(characterName)) {
                     currentUser.getCharacterSheets().remove(i);
+                    currentEntity.getCharacterSheets().remove(i);
                     System.out.println(">>> DEBUG: Personaggio eliminato dallo UserBean: " + characterName);
                     return;
                 }
@@ -98,7 +85,6 @@ public class CharacterListController implements UserAwareInterface {
         }
     }
 
-    ///////down
     public CharacterSheetDownloadTask getDownloadTask(CharacterSheetBean bean) {
         try {
             // Ottieni la cartella di download dinamica

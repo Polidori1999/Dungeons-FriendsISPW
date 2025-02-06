@@ -4,6 +4,8 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.UserController;
+import it.uniroma2.marchidori.maininterface.entity.Session;
+import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
@@ -59,10 +61,9 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
     @FXML
     protected Button switchRoleButton;
 
-    // --> Usiamo SOLO qui la variabile currentUser: le sottoclassi la ereditano
-    // Meglio "protected" se le sottoclassi devono accedervi direttamente
-    public UserBean currentUser;
-    private UserController controller;
+    protected User currentEntity = Session.getCurrentUser();
+    protected UserBean currentUser;
+    protected UserController controller;
 
     /**
      * Invocato automaticamente da JavaFX dopo l'iniezione dei nodi @FXML.

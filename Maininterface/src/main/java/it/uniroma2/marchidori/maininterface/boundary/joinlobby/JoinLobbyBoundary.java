@@ -6,6 +6,8 @@ import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
+import it.uniroma2.marchidori.maininterface.entity.Session;
+import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
@@ -72,6 +74,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     protected Button resetButton;
 
     protected UserBean currentUser;
+    protected User currentEntity = Session.getCurrentUser();
     // La variabile maxPlayers non serve più in quanto si legge dal bean
     // private int maxPlayers;
 
@@ -106,13 +109,11 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         comboBox1.setItems(FXCollections.observableArrayList("Online", "Presenza"));
         comboBox2.setItems(FXCollections.observableArrayList("Singola", "Campagna"));
         comboBox3.setItems(FXCollections.observableArrayList("2", "3", "4", "5", "6", "7", "8"));
-        //comboBox4.setItems(FXCollections.observableArrayList("Favourite","Else"));
 
         // Listener per i filtri
         comboBox1.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
         comboBox2.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
         comboBox3.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
-        //comboBox4.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
 
         // Carica le lobby iniziali
         List<LobbyBean> initial = controller.filterLobbies(null, null, null);
@@ -136,20 +137,10 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
 
     @FXML
     public void resetFilters(ActionEvent event) {
-        // Resetta i ComboBox
         comboBox1.setValue(null);
         comboBox2.setValue(null);
         comboBox3.setValue(null);
-        //comboBox4.setValue(null);
         doFilter();
-    }
-
-    private void joinLobby(LobbyBean lobby) {
-        boolean joined = controller.joinLobby(lobby, currentUser != null ? currentUser.getEmail() : "");
-        if (!joined) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Impossibile entrare nella lobby.", ButtonType.OK);
-            alert.showAndWait();
-        }
     }
 
     @FXML

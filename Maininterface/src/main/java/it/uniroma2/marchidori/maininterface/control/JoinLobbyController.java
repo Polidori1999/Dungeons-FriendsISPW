@@ -14,15 +14,17 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class JoinLobbyController implements UserAwareInterface {
-    public UserBean currentUser;
-    public User currentEntity = Session.getCurrentUser();
+    private UserBean currentUser;
+    private User currentEntity = Session.getCurrentUser();
 
 
 
     private static final Logger logger = Logger.getLogger(JoinLobbyController.class.getName());
 
 
-    public JoinLobbyController() {}
+    public JoinLobbyController() {
+        //empty
+    }
 
 
     /**
@@ -60,19 +62,6 @@ public class JoinLobbyController implements UserAwareInterface {
         return result;
     }
 
-    // Esempio di logica "join"
-    public boolean joinLobby(LobbyBean bean, String playerName) {
-        Lobby found = LobbyRepository.findLobbyByName(bean.getName());
-
-        System.out.println("Join lobby " + found.getLobbyName() + " - players attuali: " + found.getPlayers().size());
-
-        if (found == null) return false;
-        if (found.isFull()) return false;
-
-        found.addPlayer(playerName);
-        return true;
-    }
-
     public void saveChanges(LobbyBean bean) {
         logger.info("Salvataggio della lobby: " + bean.getName());
     }
@@ -87,30 +76,45 @@ public class JoinLobbyController implements UserAwareInterface {
         bean.setNumberOfPlayers(lob.getPlayers().size());
         return bean;
     }
-    //da eliminare
-    /*private Lobby findLobbyByName(String lobbyName) {
-        for (Lobby lob : allLobbies) {
-            if (lob.getLobbyName().equals(lobbyName)) {
-                return lob;
-            }
-        }
-        return null;
-    }*/
-    //come diceva dissan
-    /*public static class Builder{
-        private Builder(){
-          // cannot be instantiated
-        }
-        public static JoinLobbyController build() {
-            return new JoinLobbyController();
-        }
-        public static JoinLobbyController build(JoinLobbyConfiguration conf) {
-            return new JoinLobbyController();
-        }
-    }*/
 
-    public static class JoinLobbyConfiguration {
+    // Metodo per aggiungere un nuovo personaggio
+    public void addLobbyToFavourite(LobbyBean lobby) {
+        if (currentUser.getFavouriteLobbies() == null) {
+            currentUser.setFavouriteLobbies(new ArrayList<>());
+        }
+        if(currentEntity.getFavouriteLobbies() == null) {
+            currentEntity.setFavouriteLobbies(new ArrayList<>());
+        }
+        currentUser.getFavouriteLobbies().add(lobby);
+        currentEntity.getFavouriteLobbies().add(beanToEntity(lobby));
 
+    }
+
+    public boolean removeLobbyByName(String name) {
+        if (currentUser.getFavouriteLobbies() == null || name == null || currentEntity.getFavouriteLobbies() == null) {
+            return false;
+        }
+        // removeIf restituisce true se almeno un elemento è stato rimosso
+        currentUser.getFavouriteLobbies().removeIf(lobby -> lobby.getName().equals(name));
+        currentEntity.getFavouriteLobbies().removeIf(lobby -> lobby.getLobbyName().equals(name));
+        return true;
+    }
+
+    public void addLobby(LobbyBean lobby) {
+        if (currentUser.getJoinedLobbies() == null) {
+            System.err.println(">>> ERRORE: Lista lobby è NULL!");
+            currentUser.setJoinedLobbies(new ArrayList<>());
+        }
+        currentUser.getJoinedLobbies().add(lobby);
+
+        System.out.println(">>> lobbyo aggiunto! Lista aggiornata: " + this.joinedLobbies);
+    }
+    public void addLobby(Lobby lobby) {
+        if (currentEntity.getJoinedLobbies() == null) {
+            System.err.println(">>> ERRORE: Lista lobby è NULL!");
+            currentEntity.setJoinedLobbies(new ArrayList<>());
+        }
+        currentEntity.getJoinedLobbies().add(lobby);
     }
 
 

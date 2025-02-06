@@ -45,11 +45,6 @@ public class User {
         this.joinedLobbies = joinedLobbies;
     }
 
-    //DA IMPLEMENTARE
-    /*public List<CharacterSheet> getCharacterSheets() {
-        return characterSheets;
-    }*/
-
     /**
      * Esempio di metodo per passare da Player a DM
      * o viceversa a runtime.
@@ -85,6 +80,10 @@ public class User {
         return joinedLobbies;
     }
 
+    public void setFavouriteLobbies(List<Lobby> favouriteLobbies) {
+        this.favouriteLobbies = favouriteLobbies;
+    }
+
     // Metodo per aggiungere un nuovo personaggio
     public void addCharacterSheet(CharacterSheet characterSheet) {
         if (this.characterSheets == null) {
@@ -103,27 +102,5 @@ public class User {
         return favouriteLobbies.removeIf(lobby -> lobby.getLobbyName().equals(name));
     }
 
-    // Metodo per aggiungere un nuovo personaggio
-    public void addLobbyToFavourite(Lobby lobby) {
-        if (this.favouriteLobbies == null) {
-            System.err.println(">>> ERRORE: Lista lobby è NULL!");
-            this.favouriteLobbies = new ArrayList<>();
-        }
-        this.favouriteLobbies.add(lobby);
-        System.out.println(">>> lobbyo aggiunto! Lista aggiornata: " + this.favouriteLobbies);
-    }
 
-    public void addLobby(Lobby lobby) {
-        if (this.joinedLobbies == null) {
-            System.err.println(">>> ERRORE: Lista lobby è NULL!");
-            this.joinedLobbies = new ArrayList<>();
-        }
-        this.joinedLobbies.add(lobby);
-        System.out.println(">>> lobbyo aggiunto! Lista aggiornata: " + this.joinedLobbies);
-    }
-
-    //DA IMPLEMENTARE
-    /*public List<Notification> getNotificationPlayer() {
-        return notificationPlayer;
-    }*/
 }
