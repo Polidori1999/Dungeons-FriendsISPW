@@ -2,25 +2,29 @@ package it.uniroma2.marchidori.maininterface.entity;
 
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
 
     private final String id;
-    private final String username;
     private final String email;
     private RoleEnum roleBehavior;
-    //private final List<CharacterSheet> characterSheets;  // Riferimento ai fogli dei personaggi
-    private final List<it.uniroma2.marchidori.maininterface.entity.Lobby> favouriteLobbies;  // Riferimento alle lobby preferite
+    private List<CharacterSheet> characterSheets;  // Riferimento ai fogli dei personaggi
+    private List<Lobby> favouriteLobbies;  // Riferimento alle lobby preferite
+    private List<Lobby> joinedLobbies;
+
+    // Riferimento alle lobby preferite
     // private final List<Notification> notificationPlayer;  // Riferimento alle notifiche
 
     // Costruttore immutabile
-    public User(String id, String username, String email,
-                List<it.uniroma2.marchidori.maininterface.entity.Lobby> favouriteLobbies)/*,List<CharacterSheet> characterSheets, List<Notification> notificationPlayer)*/ {
+    public User(String id, String email, List<CharacterSheet> characterSheets,
+                List<it.uniroma2.marchidori.maininterface.entity.Lobby> favouriteLobbies, List<Lobby> joinedLobbies)/*,List<CharacterSheet> characterSheets, List<Notification> notificationPlayer)*/ {
         this.id = id;
-        this.username = username;
         this.email = email;
+        this.characterSheets = characterSheets;
         this.favouriteLobbies = favouriteLobbies;
+        this.joinedLobbies = joinedLobbies;
         this.roleBehavior = RoleEnum.PLAYER; // Default come Player
 
         //DA IMPLEMENTARE
@@ -31,12 +35,13 @@ public class User {
     /**
      * Se vuoi poter assegnare direttamente un ruolo esterno:
      */
-    public User(String id, String username, String email, RoleEnum initialRole, List<Lobby> favouriteLobbies) {
+    public User(String id, String email, RoleEnum initialRole, List<CharacterSheet> characterSheets, List<Lobby> favouriteLobbies, List<Lobby> joinedLobbies) {
         this.id = id;
-        this.username = username;
         this.email = email;
         this.roleBehavior = initialRole;
+        this.characterSheets = characterSheets;
         this.favouriteLobbies = favouriteLobbies;
+        this.joinedLobbies = joinedLobbies;
     }
 
     //DA IMPLEMENTARE
@@ -72,6 +77,51 @@ public class User {
 
     public List<Lobby> getFavouriteLobbies() {
         return favouriteLobbies;
+    }
+
+    public List<CharacterSheet> getCharacterSheets() {
+        return characterSheets;
+    }
+
+    public List<Lobby> getJoinedLobbies() {
+        return joinedLobbies;
+    }
+
+    // Metodo per aggiungere un nuovo personaggio
+    public void addCharacterSheet(CharacterSheet characterSheet) {
+        if (this.characterSheets == null) {
+            System.err.println(">>> ERRORE: Lista personaggi è NULL!");
+            this.characterSheets = new ArrayList<>();
+        }
+        this.characterSheets.add(characterSheet);
+        System.out.println(">>> Personaggio aggiunto! Lista aggiornata: " + this.characterSheets);
+    }
+
+    public boolean removeLobbyByName(String name) {
+        if (this.favouriteLobbies == null || name == null) {
+            return false;
+        }
+        // removeIf restituisce true se almeno un elemento è stato rimosso
+        return favouriteLobbies.removeIf(lobby -> lobby.getLobbyName().equals(name));
+    }
+
+    // Metodo per aggiungere un nuovo personaggio
+    public void addLobbyToFavourite(Lobby lobby) {
+        if (this.favouriteLobbies == null) {
+            System.err.println(">>> ERRORE: Lista lobby è NULL!");
+            this.favouriteLobbies = new ArrayList<>();
+        }
+        this.favouriteLobbies.add(lobby);
+        System.out.println(">>> lobbyo aggiunto! Lista aggiornata: " + this.favouriteLobbies);
+    }
+
+    public void addLobby(Lobby lobby) {
+        if (this.joinedLobbies == null) {
+            System.err.println(">>> ERRORE: Lista lobby è NULL!");
+            this.joinedLobbies = new ArrayList<>();
+        }
+        this.joinedLobbies.add(lobby);
+        System.out.println(">>> lobbyo aggiunto! Lista aggiornata: " + this.joinedLobbies);
     }
 
     //DA IMPLEMENTARE

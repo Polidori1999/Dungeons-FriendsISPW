@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.bean;
 
+import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
@@ -13,20 +14,18 @@ import static it.uniroma2.marchidori.maininterface.enumerate.RoleEnum.DM;
 public class UserBean {
 
     private String id;
-    private String username;
     private String email;
     private RoleEnum roleBehavior;
-    private List<Lobby> favouriteLobbies;
+    private List<LobbyBean> favouriteLobbies;
     private String selectedLobbyName;
-    private List<Lobby> joinedLobbies;
-    private List<CharacterSheet> characterSheets; // Lista di personaggi associati all'utente
+    private List<LobbyBean> joinedLobbies;
+    private List<CharacterSheetBean> characterSheets; // Lista di personaggi associati all'utente
     // Aggiungi anche notifiche, se necessario:
     // private List<Notification> notificationPlayer;
 
     // Costruttore che include i personaggi
-    public UserBean(String id, String username, String email, List<Lobby> favouriteLobbies, List<Lobby> joinedLobbies, List<CharacterSheet> characterSheets) {
+    public UserBean(String id, String email, List<LobbyBean> favouriteLobbies, List<LobbyBean> joinedLobbies, List<CharacterSheetBean> characterSheets) {
         this.id = id;
-        this.username = username;
         this.email = email;
         this.favouriteLobbies = favouriteLobbies;
         this.joinedLobbies = joinedLobbies;
@@ -37,9 +36,9 @@ public class UserBean {
 
 
     // Costruttore con ruolo esterno
-    public UserBean(String id, String username, String email, RoleEnum initialRole, List<Lobby> favouriteLobbies, List<CharacterSheet> characterSheets) {
+    public UserBean(String id, String email, RoleEnum initialRole, List<LobbyBean> joinedLobbies, List<LobbyBean> favouriteLobbies, List<CharacterSheetBean> characterSheets) {
         this.id = id;
-        this.username = username;
+
         this.email = email;
         this.roleBehavior = initialRole;
         this.favouriteLobbies = favouriteLobbies;
@@ -64,13 +63,6 @@ public class UserBean {
         this.email = email;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getId() {
         return id;
@@ -80,11 +72,11 @@ public class UserBean {
         this.id = id;
     }
 
-    public List<Lobby> getFavouriteLobbies() {
+    public List<LobbyBean> getFavouriteLobbies() {
         return favouriteLobbies;
     }
 
-    public void setFavouriteLobbies(List<Lobby> favouriteLobbies) {
+    public void setFavouriteLobbies(List<LobbyBean> favouriteLobbies) {
         this.favouriteLobbies = favouriteLobbies;
     }
 
@@ -96,23 +88,23 @@ public class UserBean {
         this.roleBehavior = roleBehavior;
     }
 
-    public List<CharacterSheet> getCharacterSheets() {
+    public List<CharacterSheetBean> getCharacterSheets() {
         return characterSheets;
     }
 
-    public void setCharacterSheets(List<CharacterSheet> characterSheets) {
+    public void setCharacterSheets(List<CharacterSheetBean> characterSheets) {
         this.characterSheets = characterSheets;
     }
 
-    public List<Lobby> getJoinedLobbies() {
+    public List<LobbyBean> getJoinedLobbies() {
         return joinedLobbies;
     }
-    public void setJoinedLobbies(List<Lobby> joinedLobbies) {
+    public void setJoinedLobbies(List<LobbyBean> joinedLobbies) {
         this.joinedLobbies = joinedLobbies;
     }
 
     // Metodo per aggiungere un nuovo personaggio
-    public void addCharacterSheet(CharacterSheet characterSheet) {
+    public void addCharacterSheet(CharacterSheetBean characterSheet) {
         if (this.characterSheets == null) {
             System.err.println(">>> ERRORE: Lista personaggi è NULL!");
             this.characterSheets = new ArrayList<>();
@@ -122,7 +114,7 @@ public class UserBean {
     }
 
     // Metodo per aggiungere un nuovo personaggio
-    public void addLobby(Lobby lobby) {
+    public void addLobby(LobbyBean lobby) {
         if (this.joinedLobbies == null) {
             System.err.println(">>> ERRORE: Lista lobby è NULL!");
             this.joinedLobbies = new ArrayList<>();
@@ -132,7 +124,7 @@ public class UserBean {
     }
 
     // Metodo per aggiungere un nuovo personaggio
-    public void addLobbyToFavourite(Lobby lobby) {
+    public void addLobbyToFavourite(LobbyBean lobby) {
         if (this.favouriteLobbies == null) {
             System.err.println(">>> ERRORE: Lista lobby è NULL!");
             this.favouriteLobbies = new ArrayList<>();
@@ -146,7 +138,7 @@ public class UserBean {
             return false;
         }
         // removeIf restituisce true se almeno un elemento è stato rimosso
-        return favouriteLobbies.removeIf(lobby -> lobby.getLobbyName().equals(name));
+        return favouriteLobbies.removeIf(lobby -> lobby.getName().equals(name));
     }
 
 
@@ -155,7 +147,7 @@ public class UserBean {
 
     // Metodo per rimuovere un personaggio (per nome, per esempio)
     public void removeCharacterSheet(String characterName) {
-        characterSheets.removeIf(cs -> cs.getName().equals(characterName));
+        characterSheets.removeIf(cs -> cs.getInfoBean().getName().equals(characterName));
     }
     // Metodo per rimuovere un personaggio (per nome, per esempio)
 
@@ -179,15 +171,15 @@ public class UserBean {
         if (characterSheets.isEmpty()) {
             System.out.println("L'utente non ha personaggi.");
         } else {
-            characterSheets.forEach(cs -> System.out.println("Personaggio: " + cs.getName()));
+            characterSheets.forEach(cs -> System.out.println("Personaggio: " + cs.getInfoBean().getName()));
         }
     }
 
-    public void updateCharacterSheet(CharacterSheet updatedCharacter) {
+    public void updateCharacterSheet(CharacterSheetBean updatedCharacter) {
         for (int i = 0; i < characterSheets.size(); i++) {
-            if (characterSheets.get(i).getName().equals(updatedCharacter.getName())) {
+            if (characterSheets.get(i).getInfoBean().getName().equals(updatedCharacter.getInfoBean().getName())) {
                 characterSheets.set(i, updatedCharacter); // **Sostituisce il vecchio personaggio**
-                System.out.println(">>> DEBUG: Personaggio aggiornato nello UserBean: " + updatedCharacter.getName());
+                System.out.println(">>> DEBUG: Personaggio aggiornato nello UserBean: " + updatedCharacter.getInfoBean().getName());
                 return;
             }
         }

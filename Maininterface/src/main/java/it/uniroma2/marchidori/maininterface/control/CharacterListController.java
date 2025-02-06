@@ -5,9 +5,7 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBe
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
-import it.uniroma2.marchidori.maininterface.entity.CharacterInfo;
-import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
-import it.uniroma2.marchidori.maininterface.entity.CharacterStats;
+import it.uniroma2.marchidori.maininterface.entity.*;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
 
 import java.nio.file.Paths;
@@ -15,20 +13,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CharacterListController implements UserAwareInterface {
+    private User currentEntity = Session.getCurrentUser();
     private UserBean currentUser;
 
-    public CharacterListController() {}
-
-
-    public List<CharacterSheetBean> getAllCharacters() {
-        List<CharacterSheetBean> beans = new ArrayList<>();
-        if (currentUser != null && currentUser.getCharacterSheets() != null) {
-            for (CharacterSheet cs : currentUser.getCharacterSheets()) {
-                beans.add(entityToBean(cs)); // **Converte sempre i dati aggiornati**
-            }
-        }
-        return beans;
+    public CharacterListController() {
+        //empty
     }
+
+
+//    public List<CharacterSheetBean> getAllCharacters() {
+//        List<CharacterSheetBean> beans = new ArrayList<>();
+//        if (currentUser != null && currentUser.getCharacterSheets() != null) {
+//            for (CharacterSheet cs : currentUser.getCharacterSheets()) {
+//                beans.add(entityToBean(cs)); // **Converte sempre i dati aggiornati**
+//            }
+//        }
+//        return beans;
+//    }
 
 
     private CharacterSheetBean entityToBean(CharacterSheet cs) {
@@ -84,7 +85,7 @@ public class CharacterListController implements UserAwareInterface {
     public void deleteCharacter(String characterName) {
         if (currentUser != null && currentUser.getCharacterSheets() != null) {
             for (int i = 0; i < currentUser.getCharacterSheets().size(); i++) {
-                if (currentUser.getCharacterSheets().get(i).getName().equals(characterName)) {
+                if (currentUser.getCharacterSheets().get(i).getInfoBean().getName().equals(characterName)) {
                     currentUser.getCharacterSheets().remove(i);
                     System.out.println(">>> DEBUG: Personaggio eliminato dallo UserBean: " + characterName);
                     return;
@@ -123,4 +124,5 @@ public class CharacterListController implements UserAwareInterface {
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;
     }
+
 }

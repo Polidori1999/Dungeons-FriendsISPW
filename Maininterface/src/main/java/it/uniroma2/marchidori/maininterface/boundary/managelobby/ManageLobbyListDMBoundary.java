@@ -2,7 +2,6 @@ package it.uniroma2.marchidori.maininterface.boundary.managelobby;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
-import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
@@ -33,7 +32,7 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
             return;
         }
         data.clear();
-        data.addAll(controller.getAllLobbies());
+        data.addAll(currentUser.getJoinedLobbies());
         tableViewLobby.refresh();
 
         System.out.println(">>> DEBUG: Numero di personaggi nella tabella: " + data.size());
@@ -151,7 +150,7 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
         // Invece di aprire un modal, usiamo la scena "manageLobby.fxml"
         // e settiamo selectedLobbyName = null => creazione
         currentUser.setSelectedLobbyName(null);
-        System.out.println(currentUser.getUsername());
+        System.out.println(currentUser.getEmail());
         try {
             SceneSwitcher.changeScene(
                     (Stage) manageLobbyListPane.getScene().getWindow(),

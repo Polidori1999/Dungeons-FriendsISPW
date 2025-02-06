@@ -38,7 +38,7 @@ import static it.uniroma2.marchidori.maininterface.factory.ControllerFactory.cre
 
 public class SceneSwitcher {
     public static final Logger logger = Logger.getLogger(SceneSwitcher.class.getName());
-
+    
 
     // Mappa (ruolo, scena) -> classe della boundary
     private static final Map<Pair<RoleEnum, SceneIdEnum>, Class<?>> ROLE_SCENE_MAP = new HashMap<>();
@@ -169,6 +169,7 @@ public class SceneSwitcher {
         // Inietta l'utente corrente nella boundary (se applicabile)
         injectCurrentUserController(controllerInstance, currentUser);
 
+
         // Inietta il controller associato, passando currentUser al suo costruttore
         injectControllerIntoBoundary(controllerInstance,boundaryInstance);
 
@@ -203,27 +204,6 @@ public class SceneSwitcher {
                     + role + " e scena = " + sceneId);
         }
         return controllerClass;
-    }
-
-    private static Object instantiateBoundary(Class<?> boundaryClass, SceneIdEnum sceneId) {
-        try {
-            // Caso speciale: se la scena è JOIN_LOBBY, potrebbe esserci una logica diversa
-            if (sceneId == SceneIdEnum.JOIN_LOBBY) {
-                return new JoinLobbyBoundary();
-            }
-            return boundaryClass.getDeclaredConstructor().newInstance();
-        } catch (Exception e) {
-            throw new SceneChangeException("Impossibile creare la boundary: " + boundaryClass.getName(), e);
-        }
-    }
-
-
-    private static Object instantiateController(Class<?> controllerClass, SceneIdEnum sceneId) {
-        try {
-            return controllerClass.getDeclaredConstructor().newInstance();
-        } catch (Exception e) {
-            throw new SceneChangeException("Impossibile creare la boundary: " + controllerClass.getName(), e);
-        }
     }
 
     /**
@@ -359,6 +339,10 @@ public class SceneSwitcher {
         }
     }
 
+
+
+
+
     private static Parent loadFXML(String fxmlPath, Object controller) throws IOException {
         FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource(
                 "/it/uniroma2/marchidori/maininterface/" + fxmlPath));
@@ -385,42 +369,5 @@ public class SceneSwitcher {
 
 
 
-    /*private static void injectCurrentUserController(Object controller, User currentUser) {
-        if (currentUser == null) {
-            logger.info(X);
-            return;
-        }
 
-        logger.info(">>> [SceneSwitcher] Iniezione utente nel controller " + controller.getClass().getSimpleName() +
-                Y + currentUser.getRoleBehavior());
-
-        if (controller instanceof RegisterController registerController) {
-            registerController.setCurrentEntity(currentUser);
-        }
-
-        if (controller instanceof UserController userController) {
-            userController.setCurrentEntity(currentUser);
-        }
-        if (controller instanceof HomeController homeController) {
-            homeController.setCurrentEntity(currentUser);
-        }
-        if (controller instanceof CharacterSheetController charController) {
-            charController.setCurrentEntity(currentUser);
-        }
-        if (controller instanceof CharacterListController charLController) {
-            charLController.setCurrentEntity(currentUser);
-        }
-        if (controller instanceof ManageLobbyListController manageLobbyListController) {
-            manageLobbyListController.setCurrentEntity(currentUser);
-        }
-        if(controller instanceof ManageLobbyController manageLobbyController) {
-            manageLobbyController.setCurrentEntity(currentUser);
-        }
-        if (controller instanceof JoinLobbyController jlController) {
-            jlController.setCurrentEntity(currentUser);
-        }
-        if (controller instanceof ConsultRulesController consultRulesController) {
-            consultRulesController.setCurrentUser(currentUser);
-        }
-    }*/
 }

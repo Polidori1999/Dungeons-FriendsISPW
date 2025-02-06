@@ -3,13 +3,15 @@ package it.uniroma2.marchidori.maininterface.control;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
+import it.uniroma2.marchidori.maininterface.entity.Session;
+import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 
 public class ManageLobbyController implements UserAwareInterface {
-    private UserBean currentUser;
-
+    public UserBean currentUser;
+    public User currentEntity = Session.getCurrentUser();
     public ManageLobbyController(){}
 
     @Override
@@ -38,7 +40,8 @@ public class ManageLobbyController implements UserAwareInterface {
         LobbyRepository.addLobby(newlobby);
         if (currentUser != null) {
             System.out.println(">>> Aggiungendo lobby a UserBean: " + newlobby.getLobbyName());
-            currentUser.addLobby(newlobby);
+            currentUser.addLobby(bean);
+            currentEntity.addLobby(newlobby);
             System.out.println(">>> Lista attuale personaggi: " + currentUser.getJoinedLobbies());
         } else {
             System.err.println(">>> ERRORE: currentUser è NULL in createlobby()!");
@@ -50,13 +53,14 @@ public class ManageLobbyController implements UserAwareInterface {
         if (currentUser != null && currentUser.getJoinedLobbies() != null) {
             // Cerca la lobby nella lista dello user
             for (int i = 0; i < currentUser.getJoinedLobbies().size(); i++) {
-                Lobby lobby = currentUser.getJoinedLobbies().get(i);
+                LobbyBean lobbyBean = currentUser.getJoinedLobbies().get(i);
                 // Confronta usando oldName (il nome originale)
-                if (lobby.getLobbyName().equals(oldName)) {
+                if (lobbyBean.getName().equals(oldName)) {
                     // Converte il bean aggiornato in un'entità Lobby
                     Lobby updatedLobby = beanToEntity(bean);
                     // Aggiorna la lobby nella lista dello user
-                    currentUser.getJoinedLobbies().set(i, updatedLobby);
+                    currentUser.getJoinedLobbies().set(i, bean);
+                    currentEntity.getJoinedLobbies().set(i, updatedLobby);
 
                     // Aggiorna anche la repository:
                     // Rimuove la vecchia lobby e aggiunge quella aggiornata.
@@ -88,5 +92,6 @@ public class ManageLobbyController implements UserAwareInterface {
     private Lobby beanToEntity(LobbyBean bean) {
         return new Lobby(bean.getName(), bean.getDuration(), bean.getType(), bean.isOwned(), bean.getNumberOfPlayers());
     }
+
 
 }

@@ -144,7 +144,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     }
 
     private void joinLobby(LobbyBean lobby) {
-        boolean joined = controller.joinLobby(lobby, currentUser != null ? currentUser.getUsername() : "");
+        boolean joined = controller.joinLobby(lobby, currentUser != null ? currentUser.getEmail() : "");
         if (!joined) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Impossibile entrare nella lobby.", ButtonType.OK);
             alert.showAndWait();

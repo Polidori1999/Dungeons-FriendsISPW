@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.control;
 
+import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.utils.CustomTimer;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -50,4 +51,5 @@ public class TimerController {
             timer.stop();
         }
     }
+
 }
