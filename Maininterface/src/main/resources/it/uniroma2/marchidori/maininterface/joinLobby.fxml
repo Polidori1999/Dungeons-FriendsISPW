@@ -147,7 +147,7 @@
         <TableView fx:id="lobbyTableView" layoutX="320.0" layoutY="180.0" prefHeight="360.0" prefWidth="640.0">
             <columns>
                 <TableColumn fx:id="lobbyNameColumn" prefWidth="200.0" text="Lobby Name" />
-                <TableColumn fx:id="playersColumn" prefWidth="160.0" text="Players" />
+                <TableColumn fx:id="numberOfPlayersColumn" prefWidth="160.0" text="NumberOfPlayers" />
                 <TableColumn fx:id="joinButtonColumn" prefWidth="140.0" text="Join" />
                 <TableColumn fx:id="favouriteButton" prefWidth="140.0" text="Favourite" />
             </columns>

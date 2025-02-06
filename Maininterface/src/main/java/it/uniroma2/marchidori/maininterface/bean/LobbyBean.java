@@ -3,8 +3,9 @@ package it.uniroma2.marchidori.maininterface.bean;
 public class LobbyBean {
     private String duration;       // "Singola"/"Campagna"
     private String name;           // nome lobby
-    private String type;           // "Online"/"Presenza"
-    private int numberOfPlayers;// # di giocatori
+    private String type;// "Online"/"Presenza"
+    private int currentNumberOfPlayers;
+    private int maxOfPlayers;// # di giocatori
     private boolean owned;
 
 
@@ -15,7 +16,8 @@ public class LobbyBean {
         this.duration = duration;
         this.name = name;
         this.type = type;
-        this.numberOfPlayers = numberOfPlayers;
+        this.maxOfPlayers = numberOfPlayers;
+        this.currentNumberOfPlayers = 0;
         this.owned = owned;
     }
 
@@ -41,10 +43,10 @@ public class LobbyBean {
     }
 
     public int getNumberOfPlayers() {
-        return numberOfPlayers;
+        return maxOfPlayers;
     }
     public void setNumberOfPlayers(int numberOfPlayers) {
-        this.numberOfPlayers = numberOfPlayers;
+        this.maxOfPlayers = numberOfPlayers;
     }
 
     public boolean isOwned() {
@@ -53,11 +55,20 @@ public class LobbyBean {
     public void setOwned(boolean owned) {
         this.owned = owned;
     }
+    public int getCurrentNumberOfPlayers() {
+        return currentNumberOfPlayers;
+    }
+    public void setCurrentNumberOfPlayers(int currentNumberOfPlayers) {
+        this.currentNumberOfPlayers = currentNumberOfPlayers;
+    }
+    public String getPlayers() {
+        return currentNumberOfPlayers + "/" + maxOfPlayers;
+    }
 
 
     @Override
     public String toString() {
-        return "[LobbyBean] " + name + " (" + type + ") - Duration: " + duration + " - players: " + numberOfPlayers;
+        return "[LobbyBean] " + name + " (" + type + ") - Duration: " + duration + " - players: " + maxOfPlayers;
     }
 
 }

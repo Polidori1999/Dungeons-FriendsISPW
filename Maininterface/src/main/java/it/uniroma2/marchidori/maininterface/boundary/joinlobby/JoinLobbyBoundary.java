@@ -9,9 +9,9 @@ import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
+import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,7 +22,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
 
 import java.io.IOException;
 import java.util.List;
@@ -64,7 +63,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     @FXML
     protected TableColumn<LobbyBean, String> lobbyNameColumn;
     @FXML
-    protected TableColumn<LobbyBean, String> playersColumn;
+    protected TableColumn<LobbyBean, String> numberOfPlayersColumn;
     @FXML
     protected TableColumn<LobbyBean, Void> joinButtonColumn;
     @FXML
@@ -75,8 +74,6 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
 
     protected UserBean currentUser;
     protected User currentEntity = Session.getCurrentUser();
-    // La variabile maxPlayers non serve più in quanto si legge dal bean
-    // private int maxPlayers;
 
     // Controller per logica di join
     protected JoinLobbyController controller;
@@ -116,15 +113,26 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         comboBox3.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
 
         // Carica le lobby iniziali
-        List<LobbyBean> initial = controller.filterLobbies(null, null, null);
+        List<LobbyBean> initial = controller.getList(LobbyRepository.getAllLobbies());
         filteredLobbies = FXCollections.observableArrayList(initial);
 
+        // Imposta le colonne: usa una lambda per la colonna "players"
         lobbyNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        // Modifica qui: leggi il numero massimo dal bean, ad esempio con getMaxPlayers()
-        playersColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getNumberOfPlayers() + "/" + cellData.getValue().getNumberOfPlayers()));
+        numberOfPlayersColumn.setCellValueFactory(new PropertyValueFactory<>("players"));
 
         lobbyTableView.setItems(filteredLobbies);
+        refreshTable();
+    }
+
+
+
+    public void refreshTable() {
+        if (currentUser != null) {
+            filteredLobbies.clear();
+            List<LobbyBean> updatedList = controller.getList(LobbyRepository.getAllLobbies()); // Prendi i dati aggiornati
+            filteredLobbies.addAll(updatedList); // Riaggiungi i dati aggiornati
+            lobbyTableView.refresh();
+        }
     }
 
     private void doFilter() {

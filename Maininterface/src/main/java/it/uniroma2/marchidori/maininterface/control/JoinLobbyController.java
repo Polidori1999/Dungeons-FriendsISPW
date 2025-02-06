@@ -27,6 +27,14 @@ public class JoinLobbyController implements UserAwareInterface {
     }
 
 
+
+    public List<LobbyBean> getList(List<Lobby> lobbyList){
+        List<LobbyBean> beans = new ArrayList<>();
+        for(Lobby lobby : lobbyList){
+            beans.add(entityToBean(lobby));
+        }
+        return beans;
+    }
     /**
      * Filtro su type, duration, e numero di players.
      * Se un parametro è null/empty => ignoriamo quel filtro.
@@ -67,13 +75,15 @@ public class JoinLobbyController implements UserAwareInterface {
     }
 
 
+
+
     // Conversione da Entity -> Bean
     private LobbyBean entityToBean(Lobby lob) {
         LobbyBean bean = new LobbyBean();
         bean.setName(lob.getLobbyName());
         bean.setType(lob.getType());
         bean.setDuration(lob.getDuration());
-        bean.setNumberOfPlayers(lob.getPlayers().size());
+        bean.setNumberOfPlayers(lob.getNumberOfPlayers());
         return bean;
     }
 
@@ -101,15 +111,19 @@ public class JoinLobbyController implements UserAwareInterface {
     }
 
     public void addLobby(LobbyBean lobby) {
+        // Incrementa il numero corrente di giocatori
+        lobby.setCurrentNumberOfPlayers(lobby.getCurrentNumberOfPlayers() + 1);
+
         if (currentUser.getJoinedLobbies() == null) {
             System.err.println(">>> ERRORE: Lista lobby è NULL!");
             currentUser.setJoinedLobbies(new ArrayList<>());
         }
         currentUser.getJoinedLobbies().add(lobby);
 
-        System.out.println(">>> lobbyo aggiunto! Lista aggiornata: " + currentUser.getJoinedLobbies());
+        System.out.println(">>> Lobby aggiunta! Lista aggiornata: " + currentUser.getJoinedLobbies());
     }
     public void addLobby(Lobby lobby) {
+
         if (currentEntity.getJoinedLobbies() == null) {
             System.err.println(">>> ERRORE: Lista lobby è NULL!");
             currentEntity.setJoinedLobbies(new ArrayList<>());

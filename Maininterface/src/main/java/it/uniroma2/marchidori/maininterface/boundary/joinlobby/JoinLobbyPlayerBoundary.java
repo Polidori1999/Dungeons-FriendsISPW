@@ -2,18 +2,12 @@ package it.uniroma2.marchidori.maininterface.boundary.joinlobby;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
-import it.uniroma2.marchidori.maininterface.entity.Session;
-import it.uniroma2.marchidori.maininterface.entity.User;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
-import javafx.scene.control.TableView;
 
 import java.util.List;
 
 public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
-
-    // User corrente: se risulta null lo recuperiamo dalla Session
-
 
     public JoinLobbyPlayerBoundary() {
         super(); // Usa il costruttore di JoinLobbyBoundary
@@ -39,7 +33,7 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
                     setGraphic(null);
                     return;
                 }
-                LobbyBean lobby = getTableView().getItems().get(getIndex());
+                LobbyBean lobby = lobbyTableView.getItems().get(getIndex());
                 if (isLobbyJoined(lobby)) {
                     setGraphic(null);
                 } else {
@@ -82,7 +76,7 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
                     setGraphic(null);
                     return;
                 }
-                LobbyBean lobby = getTableView().getItems().get(getIndex());
+                LobbyBean lobby = lobbyTableView.getItems().get(getIndex());
                 configureFavouriteButton(favBtn, lobby);
                 setGraphic(favBtn);
             }
@@ -99,7 +93,6 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
                     System.out.println("Lobby rimossa dai preferiti.");
                 }
             } else {
-                Lobby temp = controller.beanToEntity(lobby);
                 controller.addLobbyToFavourite(lobby);
                 btn.setText("Remove from Favourite");
                 System.out.println("Lobby aggiunta ai preferiti.");
@@ -120,13 +113,7 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
         controller.addLobby(lobby);
         controller.addLobby(temp);
         // Refresh della TableView per aggiornare la visualizzazione
-        getTableView().refresh();
+        lobbyTableView.refresh();
     }
 
-
-    // Presumiamo che getTableView() sia disponibile (se non lo è, usa il riferimento corretto)
-    private TableView<LobbyBean> getTableView() {
-        // Se il campo lobbyTableView è definito in JoinLobbyBoundary, puoi semplicemente:
-        return lobbyTableView;
-    }
 }
