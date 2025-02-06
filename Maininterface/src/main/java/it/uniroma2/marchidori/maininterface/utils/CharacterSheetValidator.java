@@ -6,6 +6,7 @@ public class CharacterSheetValidator {
 
     private CharacterSheetValidator() {}
 
+
     public static String validate(CharacterSheetBean characterSheet) {
         StringBuilder errors = new StringBuilder();
 

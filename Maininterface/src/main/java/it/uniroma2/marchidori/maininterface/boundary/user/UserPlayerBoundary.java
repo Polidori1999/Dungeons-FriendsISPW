@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 public class UserPlayerBoundary extends UserBoundary {
 
     private static final Logger LOGGER = Logger.getLogger(UserPlayerBoundary.class.getName());

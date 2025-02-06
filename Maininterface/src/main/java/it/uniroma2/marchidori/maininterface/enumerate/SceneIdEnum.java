@@ -13,3 +13,4 @@ public enum SceneIdEnum {
     CONSULT_RULES
     // Aggiungi altre scene se necessario
 }
+

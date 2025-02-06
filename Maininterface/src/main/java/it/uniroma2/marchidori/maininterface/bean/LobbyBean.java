@@ -7,6 +7,7 @@ public class LobbyBean {
     private int numberOfPlayers;// # di giocatori
     private boolean owned;
 
+
     public LobbyBean(){
     }
 

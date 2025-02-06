@@ -28,6 +28,7 @@ import javafx.event.EventHandler;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+
 public class CharacterListPlayerBoundary extends CharacterListBoundary {
 
     private static final Logger logger = Logger.getLogger(CharacterListPlayerBoundary.class.getName());

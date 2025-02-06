@@ -10,6 +10,7 @@ import javafx.util.Duration;
  */
 public class CustomTimer {
 
+
     private int seconds;
     private final int initialSeconds;
     private Timeline timeline;

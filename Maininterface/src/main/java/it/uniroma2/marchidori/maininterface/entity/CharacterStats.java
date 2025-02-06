@@ -9,6 +9,7 @@ public class CharacterStats {
     private int charisma;
     private int constitution;
 
+
     // Costruttore vuoto (per riflessione / framework)
     public CharacterStats() {
     }

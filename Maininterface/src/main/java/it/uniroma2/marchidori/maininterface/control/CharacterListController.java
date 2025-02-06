@@ -21,6 +21,7 @@ public class CharacterListController implements UserAwareInterface {
     }
 
 
+
 //    public List<CharacterSheetBean> getAllCharacters() {
 //        List<CharacterSheetBean> beans = new ArrayList<>();
 //        if (currentUser != null && currentUser.getCharacterSheets() != null) {

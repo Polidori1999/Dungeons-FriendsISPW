@@ -5,6 +5,7 @@ import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 
+
 import java.io.IOException;
 
 public class JoinLobbyGuestBoundary extends JoinLobbyBoundary {

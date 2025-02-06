@@ -22,6 +22,7 @@ import java.io.IOException;
 
 public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareInterface {
 
+
     // -------------------------------------------------------------
     //                      VARIABILI FXML
     // -------------------------------------------------------------

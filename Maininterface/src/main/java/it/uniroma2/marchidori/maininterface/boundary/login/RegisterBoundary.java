@@ -24,6 +24,7 @@ import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.lo
 
 public class RegisterBoundary implements UserAwareInterface, ControllerAwareInterface {
 
+
     @FXML
     private Button register;
 

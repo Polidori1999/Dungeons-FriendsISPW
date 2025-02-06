@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
+
 public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAwareInterface {
 
     @FXML

@@ -7,6 +7,7 @@ import javafx.scene.control.TableCell;
 
 import java.io.IOException;
 
+
 public class ConsultRulesGuestBoundary extends ConsultRulesBoundary {
 
     @Override

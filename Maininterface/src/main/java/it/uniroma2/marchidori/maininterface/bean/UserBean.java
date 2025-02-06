@@ -14,6 +14,7 @@ import static it.uniroma2.marchidori.maininterface.enumerate.RoleEnum.DM;
 public class UserBean {
 
     private String id;
+
     private String email;
     private RoleEnum roleBehavior;
     private List<LobbyBean> favouriteLobbies;

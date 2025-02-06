@@ -17,3 +17,4 @@ public class LobbyFactory {
         return new Lobby(name, duration, type, owned, initialPlayers);
     }
 }
+

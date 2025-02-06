@@ -14,6 +14,7 @@ import java.io.IOException;
  */
 public class CharacterSheetDownloadTask extends Task<Void> {
 
+
     private final CharacterSheetBean bean;
     private final String destinationPath;
     private final int totalSteps = 50; // numero di "passi" simulati per il download

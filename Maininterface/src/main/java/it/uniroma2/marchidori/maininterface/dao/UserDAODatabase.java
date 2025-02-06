@@ -10,6 +10,7 @@ public class UserDAODatabase implements UserDAO {
     }
 
 
+
     public UserBean authenticate(String email, String password) {
         // Logica per autenticare utente da database
         return null;

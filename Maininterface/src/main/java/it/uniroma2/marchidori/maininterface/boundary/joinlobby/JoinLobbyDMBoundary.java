@@ -5,6 +5,7 @@ public class JoinLobbyDMBoundary extends JoinLobbyBoundary {
     public void initialize(){
         super.initialize();
         //joinLobbyImage.setImage("lucchetto.png");
+
     }
 
 }

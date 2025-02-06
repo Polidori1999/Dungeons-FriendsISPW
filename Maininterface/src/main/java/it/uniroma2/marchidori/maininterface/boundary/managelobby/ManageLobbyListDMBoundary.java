@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+
 public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
     private static final Logger logger = Logger.getLogger(ManageLobbyListDMBoundary.class.getName());
 

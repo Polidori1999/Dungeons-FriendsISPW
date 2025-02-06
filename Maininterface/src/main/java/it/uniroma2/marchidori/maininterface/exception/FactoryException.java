@@ -5,3 +5,4 @@ public class FactoryException extends RuntimeException {
         super(message);
     }
 }
+

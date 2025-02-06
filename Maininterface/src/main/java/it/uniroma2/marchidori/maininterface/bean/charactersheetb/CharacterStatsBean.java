@@ -6,6 +6,7 @@ public class CharacterStatsBean {
 
     private int strength;
     private int dexterity;
+
     private int intelligence;
     private int wisdom;
     private int charisma;

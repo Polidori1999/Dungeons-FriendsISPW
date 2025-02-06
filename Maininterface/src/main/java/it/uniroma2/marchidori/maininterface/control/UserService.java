@@ -8,6 +8,7 @@ class UserService {
     private final UserDAO userDAO;
     private AuthController authController;
 
+
     public UserService(boolean useDatabase) {
         this.userDAO = UserDAOFactory.getUserDAO(useDatabase);
     }

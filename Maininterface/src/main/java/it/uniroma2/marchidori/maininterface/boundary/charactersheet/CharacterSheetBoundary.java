@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+
 /**
  * Boundary per mostrare/creare/modificare i dati di un CharacterSheet
  * in forma "spezzata" (info + statsScores).

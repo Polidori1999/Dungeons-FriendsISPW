@@ -36,6 +36,7 @@ import java.util.logging.Logger;
 import static it.uniroma2.marchidori.maininterface.factory.BoundaryFactory.createBoundary;
 import static it.uniroma2.marchidori.maininterface.factory.ControllerFactory.createController;
 
+
 public class SceneSwitcher {
     public static final Logger logger = Logger.getLogger(SceneSwitcher.class.getName());
     

@@ -8,6 +8,7 @@ import javafx.scene.control.TableColumn;
 
 import java.io.IOException;
 
+
 public class ConsultRulesDMORPlayerBoundary extends ConsultRulesBoundary {
 
     @Override
