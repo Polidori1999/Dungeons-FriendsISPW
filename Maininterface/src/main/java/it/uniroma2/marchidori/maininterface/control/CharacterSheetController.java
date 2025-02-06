@@ -45,8 +45,8 @@ public class CharacterSheetController implements UserAwareInterface {
         CharacterSheet newChar = beanToEntity(bean);
         if (currentUser != null) {
             System.out.println(">>> Aggiungendo lobby a UserBean: " + newChar.getCharacterInfo().getName());
-            currentUser.addCharacterSheet(bean);
-            currentEntity.addCharacterSheet(newChar);
+            currentUser.getCharacterSheets().add(bean);
+            currentEntity.getCharacterSheets().add(newChar);
             System.out.println(">>> Lista attuale personaggi: " + currentUser.getJoinedLobbies());
         } else {
             System.err.println(">>> ERRORE: currentUser è NULL in createlobby()!");

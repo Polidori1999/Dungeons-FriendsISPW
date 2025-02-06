@@ -39,11 +39,24 @@ public class CharacterListGuestBoundary extends CharacterListPlayerBoundary {
 
     @Override
     protected void downloadCharacter(CharacterSheetBean bean) {
-        redirectToLogin();
+        if (confirmationPopupController != null) {
+            String message = "you are getting redirected to login";
+            confirmationPopupController.show(message, 10,
+                    () -> redirectToLogin(),
+                    () -> onCancelDelete());
+        } else {
+            System.err.println("Errore: ConfirmationPopupController non inizializzato o pendingDeleteBean è null");
+        }
     }
+
+    private void onCancelDelete() {
+        //empty
+    }
+
 
     private void redirectToLogin() {
         try {
+
             SceneSwitcher.changeScene((Stage) characterPane.getScene().getWindow(), "login.fxml", currentUser);
         } catch (IOException e) {
             logger.severe("Errore nel reindirizzamento al login: " + e.getMessage());

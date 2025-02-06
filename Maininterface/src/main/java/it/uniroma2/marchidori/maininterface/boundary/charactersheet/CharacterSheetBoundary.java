@@ -60,19 +60,19 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
     private TextField charCharisma;     // CHA
 
     // Flag: true se stiamo creando, false se stiamo modificando
-    private boolean creationMode;
+    protected boolean creationMode;
 
     // Variabile per gestire l'utente corrente
     protected UserBean currentUser;
 
     // Variabile per mantenere lo stato precedente (es. il nome vecchio per aggiornamenti)
-    private String oldName;
+    protected String oldName;
 
     // Il bean che rappresenta il CharacterSheet (diviso in info e stats)
-    private CharacterSheetBean currentBean;
+    protected CharacterSheetBean currentBean;
 
     // Controller associato, iniettato tramite setLogicController
-    private CharacterSheetController controller;
+    protected CharacterSheetController controller;
 
     @FXML
     public void initialize() {
