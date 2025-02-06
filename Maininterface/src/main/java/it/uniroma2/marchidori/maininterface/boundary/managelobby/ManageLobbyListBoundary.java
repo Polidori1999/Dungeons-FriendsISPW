@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
 
 public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAwareInterface {
@@ -86,9 +87,17 @@ public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAw
     @FXML
     protected void initialize() {
 
-        if (currentUser.getJoinedLobbies() == null) {
+        /*if (currentUser.getJoinedLobbies() == null) {
             // Assicurati di avere un setter o un modo per assegnare la lista,
             // oppure crea un fallback direttamente
+            currentUser.setJoinedLobbies(new ArrayList<>());
+        }*/
+        if (currentUser == null) {
+            logger.severe(">>> ERRORE: currentUser è null in ManageLobbyListBoundary.");
+            return;  // Interrompi l'esecuzione se currentUser è null
+        }
+
+        if (currentUser.getJoinedLobbies() == null) {
             currentUser.setJoinedLobbies(new ArrayList<>());
         }
         data.clear();

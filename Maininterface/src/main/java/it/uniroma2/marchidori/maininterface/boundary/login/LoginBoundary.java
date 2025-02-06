@@ -2,7 +2,9 @@ package it.uniroma2.marchidori.maininterface.boundary.login;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
+import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.control.LoginController;
+import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
@@ -94,6 +96,7 @@ public class LoginBoundary implements UserAwareInterface {
             currentUser = new UserBean("guest", "guest@example.com", RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
             logger.info(">>> Utente impostato come Guest. Ruolo: " + currentUser.getRoleBehavior());
 
+            Session.setCurrentUser(Converter.userBeanToEntity(currentUser));
             changeScene(SceneNames.HOME);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from login to home.", e);
@@ -114,18 +117,6 @@ public class LoginBoundary implements UserAwareInterface {
         }
     }
 
-    //////////////////da implementare
-    /*private UserBean checkLogin() {
-        String userEmail = email.getText();
-        String userPassword = password.getText();
-
-        if (userEmail.isEmpty() || userPassword.isEmpty()) {
-            wrongLogin.setText("Please enter your data!");
-            return null;
-        }
-
-        return authentication.authenticate(userEmail, userPassword);
-    }*/
 
 
     @FXML

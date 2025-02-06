@@ -6,7 +6,7 @@ import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
-
+import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 
 
 public class ManageLobbyListController implements UserAwareInterface {
@@ -28,20 +28,28 @@ public class ManageLobbyListController implements UserAwareInterface {
     }
 
     public void deleteLobby(String lobbyName) {
-        if (currentUser != null && currentUser.getJoinedLobbies() != null) {
+        // Se l'utente è un guest, non fare nulla con la lista delle lobby
+        if (currentUser == null || currentUser.getRoleBehavior() == RoleEnum.GUEST) {
+            System.err.println(">>> Errore: L'utente è un guest e non può gestire le lobby.");
+            return;  // Non fare nulla se l'utente è un guest
+        }
+
+        // Se l'utente non è un guest, prosegui con la logica normale
+        if (currentUser.getJoinedLobbies() != null) {
             for (int i = 0; i < currentUser.getJoinedLobbies().size(); i++) {
                 if (currentUser.getJoinedLobbies().get(i).getName().equals(lobbyName)) {
                     currentUser.getJoinedLobbies().remove(i);
                     currentEntity.getJoinedLobbies().remove(i);
-                    System.out.println(">>> DEBUG: Personaggio eliminato dallo UserBean: " + lobbyName);
+                    System.out.println(">>> DEBUG: Lobby eliminata dallo UserBean: " + lobbyName);
                     return;
                 }
             }
-            System.err.println(">>> ERRORE: Nessun personaggio trovato con il nome: " + lobbyName);
+            System.err.println(">>> ERRORE: Nessuna lobby trovata con il nome: " + lobbyName);
         } else {
-            System.err.println(">>> ERRORE: currentUser o lista personaggi NULL in deleteCharacter()");
+            System.err.println(">>> ERRORE: La lista delle lobby è null per l'utente " + currentUser.getRoleBehavior());
         }
     }
+
 
     /**
      * Converte da Bean "spezzato" a Entity pura.
