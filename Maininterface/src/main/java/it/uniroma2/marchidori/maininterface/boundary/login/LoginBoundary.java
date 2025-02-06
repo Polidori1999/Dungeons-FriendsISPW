@@ -117,18 +117,6 @@ public class LoginBoundary implements UserAwareInterface {
         }
     }
 
-    //////////////////da implementare
-    /*private UserBean checkLogin() {
-        String userEmail = email.getText();
-        String userPassword = password.getText();
-
-        if (userEmail.isEmpty() || userPassword.isEmpty()) {
-            wrongLogin.setText("Please enter your data!");
-            return null;
-        }
-
-        return authentication.authenticate(userEmail, userPassword);
-    }*/
 
 
     @FXML
