@@ -107,7 +107,7 @@ public class JoinLobbyController implements UserAwareInterface {
         }
         currentUser.getJoinedLobbies().add(lobby);
 
-        System.out.println(">>> lobbyo aggiunto! Lista aggiornata: " + this.joinedLobbies);
+        System.out.println(">>> lobbyo aggiunto! Lista aggiornata: " + currentUser.getJoinedLobbies());
     }
     public void addLobby(Lobby lobby) {
         if (currentEntity.getJoinedLobbies() == null) {

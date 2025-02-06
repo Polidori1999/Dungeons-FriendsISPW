@@ -103,4 +103,7 @@ public class User {
     }
 
 
+    public void setJoinedLobbies(ArrayList<Lobby> objects) {
+        this.joinedLobbies = objects;
+    }
 }
