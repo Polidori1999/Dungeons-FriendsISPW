@@ -5,9 +5,9 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetB
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
 import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
-import it.uniroma2.marchidori.maininterface.factory.CharacterSheetFactory;
+import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
-import it.uniroma2.marchidori.maininterface.control.TimerController;
+import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.concurrent.WorkerStateEvent;
@@ -21,16 +21,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableCell;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javafx.event.EventHandler;
 import java.io.IOException;
 import java.util.logging.Logger;
-
-import static it.uniroma2.marchidori.maininterface.factory.BoundaryFactory.createBoundary;
-import static it.uniroma2.marchidori.maininterface.factory.ControllerFactory.createController;
 
 public class CharacterListPlayerBoundary extends CharacterListBoundary {
 
@@ -55,7 +51,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
             return;
         }
         data.clear();
-        data.addAll(controller.getAllCharacters());
+        data.addAll(currentUser.getCharacterSheets());
         tableViewChar.refresh();
 
         System.out.println(">>> DEBUG: Numero di personaggi nella tabella: " + data.size());
@@ -90,7 +86,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
                         CharacterSheetBean selectedChar = getTableView().getItems().get(getIndex());
                         System.out.println(">>> DEBUG: Bottone Edit premuto per personaggio: "
                                 + selectedChar.getInfoBean().getName());
-                        openEditCharacterModal(selectedChar);
+                        editChar(selectedChar);
                     });
                 }
             }
@@ -175,33 +171,19 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
         pendingDeleteBean = null;
     }
 
-    // ===========================================================
-    //                 HANDLER PER EDIT
-    // ===========================================================
-    private void openEditCharacterModal(CharacterSheetBean beanToEdit) {
-        try {
 
-            System.out.println(">>> DEBUG: Avvio modifica personaggio: " + beanToEdit.getInfoBean().getName());
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                    "/it/uniroma2/marchidori/maininterface/characterSheet.fxml"));
-            CharacterSheetBoundary sheetController = createBoundary(CharacterSheetBoundary.class);
-            loader.setController(sheetController);
-            Parent root = loader.load();
-            sheetController.setCharacterSheetBean(beanToEdit);
-            sheetController.setCreationMode(false);
-            modalController = createController(CharacterSheetController.class);
-            sheetController.setSheetController(modalController);
-            sheetController.setParentBoundary(this);
-            Stage modalStage = new Stage();
-            modalStage.setTitle("Modifica Personaggio");
-            modalStage.initOwner(characterPane.getScene().getWindow());
-            modalStage.initModality(Modality.WINDOW_MODAL);
-            modalStage.setScene(new Scene(root));
-            System.out.println(">>> DEBUG: Finestra di modifica aperta!");
-            modalStage.showAndWait();
-            tableViewChar.refresh();
+    private void editChar(CharacterSheetBean beanToEdit) {
+        // Imposta in userBean il nome della lobby da editare
+        currentUser.setSelectedLobbyName(beanToEdit.getInfoBean().getName());
+        // Passo alla scena "manageLobby.fxml"
+        try {
+            SceneSwitcher.changeScene(
+                    (Stage) characterPane.getScene().getWindow(),
+                    SceneNames.CHARACTER_SHEET,
+                    currentUser
+            );
         } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena (modifica personaggio).", e);
+            throw new SceneChangeException("Errore nel cambio scena (modifica Lobby).", e);
         }
     }
 
@@ -210,36 +192,18 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
     // ===========================================================
     @FXML
     void onClickNewCharacter(ActionEvent event) {
-        openCreateCharacterModal();
-    }
-
-    private void openCreateCharacterModal() {
+        // Invece di aprire un modal, usiamo la scena "manageLobby.fxml"
+        // e settiamo selectedLobbyName = null => creazione
+        currentUser.setSelectedLobbyName(null);
+        System.out.println(currentUser.getUsername());
         try {
-            System.out.println(">>> DEBUG: Avvio caricamento finestra modale per nuovo personaggio...");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                    "/it/uniroma2/marchidori/maininterface/characterSheet.fxml"));
-            CharacterSheetBoundary sheetController = createBoundary(CharacterSheetBoundary.class);
-            loader.setController(sheetController);
-            Parent root = loader.load();
-            System.out.println(">>> DEBUG: FXML caricato correttamente!");
-            sheetController.setCreationMode(true);
-            sheetController.setCharacterSheetBean(CharacterSheetFactory.createCharacterSheet());
-            modalController = createController(CharacterSheetController.class);
-            sheetController.setSheetController(modalController);
-            sheetController.setParentBoundary(this);
-            Stage modalStage = new Stage();
-            modalStage.setTitle("Crea Nuovo Personaggio");
-            modalStage.initOwner(characterPane.getScene().getWindow());
-            modalStage.initModality(Modality.WINDOW_MODAL);
-            modalStage.setScene(new Scene(root));
-            System.out.println(">>> DEBUG: Mostro la finestra modale...");
-            modalStage.showAndWait();
-            System.out.println(">>> DEBUG: Finestra modale chiusa, aggiorno la tabella...");
-            tableViewChar.refresh();
+            SceneSwitcher.changeScene(
+                    (Stage) characterPane.getScene().getWindow(),
+                    SceneNames.CHARACTER_SHEET,
+                    currentUser
+            );
         } catch (IOException e) {
-            System.err.println(">>> ERRORE: IOException durante il caricamento di characterSheet.fxml!");
-            e.printStackTrace();
-            throw new SceneChangeException("Errore nel cambio scena (nuovo personaggio).", e);
+            throw new SceneChangeException("Errore nel cambio scena (nuova lobby).", e);
         }
     }
 

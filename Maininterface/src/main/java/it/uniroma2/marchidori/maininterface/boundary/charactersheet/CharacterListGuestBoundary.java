@@ -3,10 +3,6 @@ package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
-import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
-import it.uniroma2.marchidori.maininterface.utils.SceneNames;
-import javafx.fxml.FXML;
-import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
@@ -16,9 +12,6 @@ import javafx.stage.Stage;
 public class CharacterListGuestBoundary extends CharacterListPlayerBoundary {
 
     private static final Logger logger = Logger.getLogger(CharacterListGuestBoundary.class.getName());
-
-    @FXML
-    private AnchorPane characterPane;
 
     @Override
     public void initialize() {

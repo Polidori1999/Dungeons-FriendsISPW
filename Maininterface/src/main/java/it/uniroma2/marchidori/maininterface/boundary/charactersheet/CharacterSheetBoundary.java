@@ -1,21 +1,20 @@
 package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
-import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
-import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
-import it.uniroma2.marchidori.maininterface.utils.Alert;
-
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.utils.Alert;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetValidator;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -62,158 +61,128 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
     // Flag: true se stiamo creando, false se stiamo modificando
     private boolean creationMode;
 
+    // Variabile per gestire l'utente corrente
     protected UserBean currentUser;
 
+    // Variabile per mantenere lo stato precedente (es. il nome vecchio per aggiornamenti)
     private String oldName;
 
-    // Bean esistente (in caso di modifica)
-
+    // Il bean che rappresenta il CharacterSheet (diviso in info e stats)
     private CharacterSheetBean currentBean;
 
-    // Controller aggiornato: verrà creato in setCurrentUser()
+    // Controller associato, iniettato tramite setLogicController
     private CharacterSheetController controller;
 
-    // Riferimento alla finestra di lista (se vogliamo avvisarla di aggiornamenti)
-    private CharacterListPlayerBoundary parentBoundary;
-    private CharacterListGuestBoundary parentGuestBoundary;
-
-
-
-    // -------------------------------------------------------------
-    //            METODI DI CONFIGURAZIONE DELLA BOUNDARY
-    // -------------------------------------------------------------
-    public void setSheetController(CharacterSheetController controller) {
-        this.controller = controller;
-    }
-
-    public void setParentBoundary(CharacterListPlayerBoundary parentBoundary) {
-        this.parentBoundary = parentBoundary;
-    }
-    public void setGuestParentBoundary(CharacterListGuestBoundary parentBoundary) {
-        this.parentGuestBoundary = parentBoundary;
-    }
-
-    ////////////////////////////////////////
     @FXML
     public void initialize() {
-        initializeComboBoxes();
-    }
-
-    private void initializeComboBoxes() {
-        // Aggiungi le razze
+        // Inizializza le ComboBox con le opzioni disponibili
         charRace.getItems().addAll("Elfo", "Nano", "Halfling", "Orco", "Tiefling");
-
-        // Aggiungi le classi
         charClass.getItems().addAll(
                 "Barbaro", "Guerriero", "Ladro", "Monaco", "Paladino",
                 "Ranger", "Bardo", "Chierico", "Stregone", "Mago",
                 "Druido", "Warlock"
         );
-    }
-///////////////////////////////////////////////////
-    /**
-     *
-     * Imposta la modalità "creazione". Se true, svuota i campi e
-     * setta currentBean a null. Se false, vuol dire che setCharacterSheetBean()
-     * verrà chiamato per popolare i campi.
-     */
-    public void setCreationMode(boolean creationMode) {
-        this.creationMode = creationMode;
-        System.out.println(">>> Modalità creazione impostata a: " + creationMode);
 
+        // Stampa di debug per verificare l'iniezione dell'utente
+        System.out.println("User in CharacterSheetBoundary: " + (currentUser != null ? currentUser.getUsername() : "null"));
+
+        // Determina la modalità in base al campo selectedLobbyName del currentUser
+        // (Nel tuo caso probabilmente usi selectedLobbyName per determinare se si tratta di un update)
+        String selected = currentUser != null ? currentUser.getSelectedLobbyName() : null;
+        if (selected == null || selected.isEmpty()) {
+            creationMode = true;
+            currentBean = new CharacterSheetBean();
+            oldName = null;
+        } else {
+            creationMode = false;
+            currentBean = findCharByName(selected);
+            oldName = selected;
+            if (currentBean == null) {
+                System.err.println(">>> Non ho trovato il personaggio con nome: " + selected);
+                creationMode = true;
+                currentBean = new CharacterSheetBean();
+            }
+        }
         if (creationMode) {
             clearFields();
-            currentBean = null;
+            System.out.println(">>> Modalità creazione attiva.");
+        } else {
+            populateFields(currentBean);
+            System.out.println(">>> Modalità modifica attiva per personaggio: " + currentBean.getInfoBean().getName());
         }
     }
-
 
     /**
-     * Popola i campi dalla Bean, in modalità modifica.
+     * Popola i campi della UI con i dati presenti nel CharacterSheetBean.
      */
-    public void setCharacterSheetBean(CharacterSheetBean bean) {
-        if (bean == null) {
-            System.err.println(">>> ERRORE: setCharacterSheetBean() ha ricevuto un bean NULL!");
-            return;
+    private void populateFields(CharacterSheetBean currentBean) {
+        if (currentBean.getInfoBean() != null) {
+            charName.setText(currentBean.getInfoBean().getName());
+            charAge.setText(String.valueOf(currentBean.getInfoBean().getAge()));
+            charLevel.setText(String.valueOf(currentBean.getInfoBean().getLevel()));
+            charRace.setValue(currentBean.getInfoBean().getRace());
+            charClass.setValue(currentBean.getInfoBean().getClasse());
         }
-
-        this.currentBean = bean;  // ASSEGNA IL BEAN
-        this.oldName = bean.getInfoBean().getName(); // Nome originaleu
-
-        System.out.println(">>> DEBUG: Personaggio caricato nel form: " + bean.getInfoBean().getName());
-
-        // Popola i campi del form con i dati del personaggio
-        if (bean.getInfoBean() != null) {
-            charName.setText(bean.getInfoBean().getName());
-            charAge.setText(String.valueOf(bean.getInfoBean().getAge()));
-            charClass.setValue(bean.getInfoBean().getClasse());
-            charLevel.setText(String.valueOf(bean.getInfoBean().getLevel()));
-            charRace.setValue(bean.getInfoBean().getRace());
-        } else {
-            System.err.println(">>> ERRORE: CharacterInfoBean è NULL!");
-        }
-
-        if (bean.getStatsBean() != null) {
-            charStrenght.setText(String.valueOf(bean.getStatsBean().getStrength()));
-            charDexerity.setText(String.valueOf(bean.getStatsBean().getDexterity()));
-            charIntelligence.setText(String.valueOf(bean.getStatsBean().getIntelligence()));
-            charWisdom.setText(String.valueOf(bean.getStatsBean().getWisdom()));
-            charCharisma.setText(String.valueOf(bean.getStatsBean().getCharisma()));
-            charConstitution.setText(String.valueOf(bean.getStatsBean().getConstitution()));
-        } else {
-            System.err.println(">>> ERRORE: CharacterStatsBean è NULL!");
+        if (currentBean.getStatsBean() != null) {
+            charStrenght.setText(String.valueOf(currentBean.getStatsBean().getStrength()));
+            charDexerity.setText(String.valueOf(currentBean.getStatsBean().getDexterity()));
+            charConstitution.setText(String.valueOf(currentBean.getStatsBean().getConstitution()));
+            charIntelligence.setText(String.valueOf(currentBean.getStatsBean().getIntelligence()));
+            charWisdom.setText(String.valueOf(currentBean.getStatsBean().getWisdom()));
+            charCharisma.setText(String.valueOf(currentBean.getStatsBean().getCharisma()));
         }
     }
 
-
-
-
-
-
-
-
-    // -------------------------------------------------------------
-    //                   METODI DI UTILITÀ
-    // -------------------------------------------------------------
+    /**
+     * Pulisce tutti i campi della UI e imposta dei valori di default per i punteggi.
+     */
     private void clearFields() {
-        // Sezione "info"
-        charName.setText("");
-        charRace.setValue("");
-        charAge.setText("");
-        charClass.setValue("");
-        charLevel.setText("");
+        charName.clear();
+        charAge.clear();
+        charLevel.clear();
+        charStrenght.setText("10");
+        charDexerity.setText("10");
+        charConstitution.setText("10");
+        charIntelligence.setText("10");
+        charWisdom.setText("10");
+        charCharisma.setText("10");
+        charRace.setValue(null);
+        charClass.setValue(null);
+    }
 
-        // Sezione "stats"
-        charStrenght.setText("");
-        charDexerity.setText("");
-        charConstitution.setText("");
-        charIntelligence.setText("");
-        charWisdom.setText("");
-        charCharisma.setText("");
+    /**
+     * Cerca il CharacterSheetBean nella lista dell'utente in base al nome.
+     */
+    private CharacterSheetBean findCharByName(String charName) {
+        if (currentUser.getCharacterSheets() == null) {
+            return null;
+        }
+        return currentUser.getCharacterSheets().stream()
+                .filter(cs -> cs.getInfoBean().getName().equals(charName))
+                .findFirst()
+                .orElse(null);
     }
 
     // -------------------------------------------------------------
     //                 SALVATAGGIO (BOTTONE SAVE)
     // -------------------------------------------------------------
-    //aggiorno manualmente
     @FXML
     private void onClickSaveCharacter(ActionEvent event) {
-        System.out.println(">> onClickSaveCharacter() INVOCATO!");
-        System.out.println(">>> creationMode attuale: " + creationMode);
-
-        if (parentBoundary != null) {
-            System.out.println("qui parent non è NULL DIOPORCO");
-            parentBoundary.updateExistingCharacterInTable(currentBean);
-            parentBoundary.refreshTable(); // **Forza il refresh della tabella**
-        }
-
 
         if (currentBean == null) {
             System.err.println(">>> ERRORE: currentBean è NULL! Non posso aggiornare.");
             return;
         }
 
-        // **AGGIORNA I DATI DEL BEAN ESISTENTE**
+        // Se le parti del bean non sono inizializzate, creale.
+        if (currentBean.getInfoBean() == null) {
+            currentBean.setInfoBean(new it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBean());
+        }
+        if (currentBean.getStatsBean() == null) {
+            currentBean.setStatsBean(new it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsBean());
+        }
+
+        // Aggiorna i dati del bean con i valori presenti nei campi della UI
         currentBean.getInfoBean().setName(charName.getText());
         currentBean.getInfoBean().setAge(parseIntOrZero(charAge.getText()));
         currentBean.getInfoBean().setClasse(charClass.getValue());
@@ -227,8 +196,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         currentBean.getStatsBean().setCharisma(parseIntOrZero(charCharisma.getText()));
         currentBean.getStatsBean().setConstitution(parseIntOrZero(charConstitution.getText()));
 
-
-        // **VALIDAZIONE**
+        // Validazione del bean
         String validationErrors = CharacterSheetValidator.validate(currentBean);
         if (!validationErrors.isEmpty()) {
             System.out.println(">>> ERRORE DI VALIDAZIONE:\n" + validationErrors);
@@ -236,39 +204,38 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
             return;
         }
 
-
         System.out.println(">>> Personaggio aggiornato con successo: " + currentBean.getInfoBean().getName());
 
-        // **SE È UN NUOVO PERSONAGGIO**
-        if (!creationMode) {  // Se stiamo modificando un personaggio esistente
-            controller.updateCharacter(oldName,currentBean); // Aggiorna nello UserBean
-            if (parentBoundary != null) {
-                parentBoundary.refreshTable(); // Ricarica la tabella dopo la modifica
-            }
-        } else {  // Se stiamo creando un nuovo personaggio
-            controller.createCharacter(currentBean);
-            if (parentBoundary != null) {
-                parentBoundary.addCharacterToTable(currentBean);
-            }
+        // Chiamata alle funzioni di update o create in base alla modalità
+        if (!creationMode) {
+            controller.updateChar(oldName, currentBean);
+            // Dopo un update, puoi ripopolare i campi per riflettere i dati aggiornati
+            populateFields(currentBean);
+        } else {
+            controller.createChar(currentBean);
+            // Dopo una create, pulisci i campi per permettere l'inserimento di un nuovo personaggio
+            clearFields();
         }
 
-
-        // **CHIUDI LA FINESTRA MODALE**
-        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        stage.close();
+        // Dopo il salvataggio, resetta la selezione e torna alla lista dei personaggi
+        currentUser.setSelectedLobbyName(null);
+        try {
+            Stage currentStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            SceneSwitcher.changeScene(currentStage, SceneNames.CHARACTER_LIST, currentUser);
+        } catch (IOException e) {
+            throw new SceneChangeException("Errore nel cambiare scena a characterlist.fxml", e);
+        }
     }
 
-
-
     /**
-     * Helper: parse int con valore di default 0 in caso di errore.
+     * Helper: prova a convertire una stringa in int, restituisce 0 se il parsing fallisce.
      */
     private int parseIntOrZero(String input) {
         try {
             return Integer.parseInt(input.trim());
         } catch (NumberFormatException e) {
             System.err.println(">>> ERRORE: Il valore inserito non è un numero valido: " + input);
-            return 0;  // Restituisce 0 se il parsing fallisce, il controllo avverrà nella validazione
+            return 0;
         }
     }
 
@@ -280,66 +247,78 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         try {
             changeScene(SceneNames.CHARACTER_LIST);
         } catch (IOException e) {
-            throw new SceneChangeException("Errore durante il cambio scena verso characterList.fxml", e);
+            throw new SceneChangeException("Errore durante il cambio verso characterList.fxml", e);
         }
-
     }
 
     @FXML
     void onClickGoToConsultRules(ActionEvent event) throws IOException {
-        changeScene(SceneNames.CONSULT_RULES);
+        try {
+            changeScene(SceneNames.CONSULT_RULES);
+        } catch (IOException e) {
+            throw new SceneChangeException("Errore nel cambiare scena a consultRules.fxml", e);
+        }
     }
 
     @FXML
     void onClickGoToHome(ActionEvent event) throws IOException {
-        changeScene(SceneNames.HOME);
+        try {
+            changeScene(SceneNames.HOME);
+        } catch (IOException e) {
+            throw new SceneChangeException("Errore nel cambiare scena a home.fxml", e);
+        }
     }
 
     @FXML
     void onClickGoToJoinLobby(ActionEvent event) throws IOException {
-        changeScene(SceneNames.JOIN_LOBBY);
+        try {
+            changeScene(SceneNames.JOIN_LOBBY);
+        } catch (IOException e) {
+            throw new SceneChangeException("Errore nel cambiare scena a joinlobby.fxml", e);
+        }
     }
 
     @FXML
     void onClickGoToManageLobby(ActionEvent event) throws IOException {
-        changeScene(SceneNames.MANAGE_LOBBY);
+        try {
+            changeScene(SceneNames.MANAGE_LOBBY);
+        } catch (IOException e) {
+            throw new SceneChangeException("Errore nel cambiare scena a managelobby.fxml", e);
+        }
     }
 
     @FXML
     void onClickUser(ActionEvent event) throws IOException {
-        changeScene(SceneNames.USER);
+        try {
+            changeScene(SceneNames.USER);
+        } catch (IOException e) {
+            throw new SceneChangeException("Errore nel cambiare scena a user.fxml", e);
+        }
     }
 
     @FXML
     void onClickMyCharacter(ActionEvent event) throws IOException {
-        changeScene(SceneNames.CHARACTER_LIST);
+        try {
+            changeScene(SceneNames.CHARACTER_LIST);
+        } catch (IOException e) {
+            throw new SceneChangeException("Errore nel cambiare scena a mycharacter.fxml", e);
+        }
     }
-
 
     @FXML
     private void changeScene(String fxml) throws IOException {
-        // Usa SceneSwitcher per cambiare scena
         Stage currentStage = (Stage) characterSheetPane.getScene().getWindow();
-        SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher
+        SceneSwitcher.changeScene(currentStage, fxml, currentUser);
     }
 
     @Override
     public void setCurrentUser(UserBean user) {
         System.out.println("SetCurrentUser chiamato con: " + user);
         this.currentUser = user;
-        this.controller = new CharacterSheetController(currentUser);
-
-        if (this.controller == null) {
-            System.err.println("ERRORE: controller non è stato inizializzato!");
-        } else {
-            System.out.println("Controller inizializzato correttamente: " + this.controller);
-        }
     }
 
     @Override
     public void setLogicController(Object logicController) {
         this.controller = (CharacterSheetController) logicController;
     }
-
-
 }

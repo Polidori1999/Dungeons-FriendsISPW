@@ -6,7 +6,7 @@ import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.CharacterListController;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
-import it.uniroma2.marchidori.maininterface.exception.SceneChangeException; // <<-- IMPORT ECCEZIONE DEDICATA
+import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -20,6 +20,7 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class CharacterListBoundary implements UserAwareInterface, ControllerAwareInterface {
 
@@ -77,13 +78,16 @@ public class CharacterListBoundary implements UserAwareInterface, ControllerAwar
     // Controller
     protected CharacterListController controller;
 
+    private static final Logger logger = Logger.getLogger(CharacterListBoundary.class.getName());
+
+
 
     protected void initialize() {
         // Inizializzo il controller
 
 
         data.clear();
-        data.addAll(controller.getAllCharacters());
+        data.addAll(currentUser.getCharacterSheets());
         // Carico i personaggi iniziali (sotto forma di Bean)
 
         newCharacterButton.setVisible(false);
@@ -99,18 +103,15 @@ public class CharacterListBoundary implements UserAwareInterface, ControllerAwar
     }
 
 
-
-
     public void refreshTable() {
         if (currentUser != null) {
             data.clear();
-            List<CharacterSheetBean> updatedList = controller.getAllCharacters(); // Prendi i dati aggiornati
+            List<CharacterSheetBean> updatedList = currentUser.getCharacterSheets(); // Prendi i dati aggiornati
             data.addAll(updatedList); // Riaggiungi i dati aggiornati
             tableViewChar.refresh();
-            System.out.println(">>> DEBUG: Tabella aggiornata con personaggi aggiornati.");
+            logger.info(">>> DEBUG: Tabella aggiornata con personaggi aggiornati.");
         }
     }
-
 
 
     @FXML
@@ -221,9 +222,9 @@ public class CharacterListBoundary implements UserAwareInterface, ControllerAwar
     public void reloadCharacterList() {
         if (currentUser != null) {
             data.clear();
-            data.addAll(controller.getAllCharacters()); // Carica i dati aggiornati dallo UserBean
+            data.addAll(currentUser.getCharacterSheets()); // Carica i dati aggiornati dallo UserBean
             tableViewChar.refresh();
-            System.out.println(">>> DEBUG: Tabella ricaricata con personaggi aggiornati.");
+            logger.info(">>> DEBUG: Tabella ricaricata con personaggi aggiornati.");
         }
     }
 }

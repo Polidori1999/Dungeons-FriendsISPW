@@ -59,6 +59,8 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
     @FXML
     private Button myChar;
 
+
+
     // Metodi per il cambio scena (es. per JoinLobby, ConsultRules, ecc.)
     @FXML
     void onClickGoToJoinLobby(ActionEvent event) {
@@ -211,7 +213,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
         liveOnlineBox.setItems(FXCollections.observableArrayList("Live", "Online"));
 
         // Stampa di debug per verificare l'iniezione dell'utente
-        System.out.println("User in ManageLobbyBoundary: " + (currentUser != null ? currentUser.getUsername() : "null"));
+        System.out.println("User in ManageLobbyBoundary: " + (currentUser != null ? currentUser.getEmail() : "null"));
 
         // Determina la modalità in base al campo selectedLobbyName del currentUser
         String selected = currentUser != null ? currentUser.getSelectedLobbyName() : null;
@@ -242,8 +244,8 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
         if (currentUser.getJoinedLobbies() == null) {
             return null;
         }
-        it.uniroma2.marchidori.maininterface.entity.Lobby foundLobby = currentUser.getJoinedLobbies().stream()
-                .filter(l -> l.getLobbyName().equals(lobbyName))
+        LobbyBean foundLobby = currentUser.getJoinedLobbies().stream()
+                .filter(l -> l.getName().equals(lobbyName))
                 .findFirst()
                 .orElse(null);
         if (foundLobby == null) {
@@ -251,7 +253,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
         }
         return new LobbyBean(
                 foundLobby.getDuration(),
-                foundLobby.getLobbyName(),
+                foundLobby.getName(),
                 foundLobby.getType(),
                 foundLobby.getNumberOfPlayers(),
                 foundLobby.isOwned()

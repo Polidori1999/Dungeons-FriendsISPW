@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAwareInterface {
@@ -83,8 +84,14 @@ public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAw
      */
     @FXML
     protected void initialize() {
+
+        if (currentUser.getJoinedLobbies() == null) {
+            // Assicurati di avere un setter o un modo per assegnare la lista,
+            // oppure crea un fallback direttamente
+            currentUser.setJoinedLobbies(new ArrayList<>());
+        }
         data.clear();
-        data.addAll(controller.getAllLobbies());
+        data.addAll(currentUser.getJoinedLobbies());
         // Imposta il PropertyValueFactory per le colonne basate sulle proprietà di LobbyBean.
         tableViewLobbyName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tableViewMaxPlayers.setCellValueFactory(new PropertyValueFactory<>("numberOfPlayers"));

@@ -6,16 +6,14 @@ module it.uniroma2.marchidori.maininterface {
     requires java.desktop;
     requires java.logging;
 
-    // Apre il package principale ai file FXML (controller, ecc.)
     opens it.uniroma2.marchidori.maininterface to javafx.fxml;
     exports it.uniroma2.marchidori.maininterface;
-
-    // Apre / esporta l'entity
     exports it.uniroma2.marchidori.maininterface.entity;
     opens it.uniroma2.marchidori.maininterface.entity to javafx.fxml;
-    // Aggiungi questa riga per permettere a javafx.base di riflettere sulle classi nel package .bean
     exports it.uniroma2.marchidori.maininterface.bean;
     opens it.uniroma2.marchidori.maininterface.bean to javafx.base;
+    exports it.uniroma2.marchidori.maininterface.bean.charactersheetb;
+    opens it.uniroma2.marchidori.maininterface.bean.charactersheetb to javafx.base;
     exports it.uniroma2.marchidori.maininterface.boundary;
     opens it.uniroma2.marchidori.maininterface.boundary to javafx.fxml;
     exports it.uniroma2.marchidori.maininterface.boundary.charactersheet;
@@ -26,14 +24,14 @@ module it.uniroma2.marchidori.maininterface {
     opens it.uniroma2.marchidori.maininterface.boundary.managelobby to javafx.fxml;
     exports it.uniroma2.marchidori.maininterface.boundary.login;
     opens it.uniroma2.marchidori.maininterface.boundary.login to javafx.fxml;
-    opens it.uniroma2.marchidori.maininterface.bean.charactersheetb to javafx.base;
     exports it.uniroma2.marchidori.maininterface.boundary.user;
     opens it.uniroma2.marchidori.maininterface.boundary.user to javafx.fxml;
     exports it.uniroma2.marchidori.maininterface.enumerate;
     opens it.uniroma2.marchidori.maininterface.enumerate to javafx.fxml;
     exports it.uniroma2.marchidori.maininterface.boundary.consultrules;
     opens it.uniroma2.marchidori.maininterface.boundary.consultrules to javafx.fxml;
+    opens it.uniroma2.marchidori.maininterface.control;
+    exports it.uniroma2.marchidori.maininterface.control to javafx.fxml;
 
-    opens it.uniroma2.marchidori.maininterface.control to javafx.fxml;
 
 }

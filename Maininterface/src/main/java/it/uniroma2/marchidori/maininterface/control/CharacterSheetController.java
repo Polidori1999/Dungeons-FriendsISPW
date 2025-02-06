@@ -5,9 +5,7 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsB
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
-import it.uniroma2.marchidori.maininterface.entity.CharacterInfo;
-import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
-import it.uniroma2.marchidori.maininterface.entity.CharacterStats;
+import it.uniroma2.marchidori.maininterface.entity.*;
 
 /**
  * Control che gestisce la logica di manipolazione
@@ -16,7 +14,7 @@ import it.uniroma2.marchidori.maininterface.entity.CharacterStats;
 public class CharacterSheetController implements UserAwareInterface {
 
     private UserBean currentUser;
-
+    private User currentEntity = Session.getCurrentUser();
     @Override
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;
@@ -37,19 +35,20 @@ public class CharacterSheetController implements UserAwareInterface {
      * Converte il CharacterSheetBean (spezzato in info e ability)
      * in una Entity "CharacterSheet" e la aggiunge alla lista in memoria.
      */
-    public void createCharacter(CharacterSheetBean bean) {
-        if (bean == null || bean.getInfoBean() == null) {
+    public void createChar(CharacterSheetBean bean) {
+        if (bean == null) {
             System.err.println(">>> ERRORE: Il Bean passato a createCharacter() è NULL!");
             return;
         }
 
-        CharacterSheet newCS = beanToEntity(bean);
+        CharacterSheet newChar = beanToEntity(bean);
         if (currentUser != null) {
-            System.out.println(">>> Aggiungendo personaggio a UserBean: " + newCS.getName());
-            currentUser.addCharacterSheet(newCS);
-            System.out.println(">>> Lista attuale personaggi: " + currentUser.getCharacterSheets());
+            System.out.println(">>> Aggiungendo lobby a UserBean: " + newChar.getCharacterInfo().getName());
+            currentUser.addCharacterSheet(bean);
+            currentEntity.addCharacterSheet(newChar);
+            System.out.println(">>> Lista attuale personaggi: " + currentUser.getJoinedLobbies());
         } else {
-            System.err.println(">>> ERRORE: currentUser è NULL in createCharacter()!");
+            System.err.println(">>> ERRORE: currentUser è NULL in createlobby()!");
         }
     }
 
@@ -58,20 +57,27 @@ public class CharacterSheetController implements UserAwareInterface {
      * Aggiorna un personaggio esistente (cerca per nome).
      * Usa i campi di CharacterSheetBean (spezzati in info e ability).
      */
-    public void updateCharacter(String oldName, CharacterSheetBean bean) {
+    public void updateChar(String oldName, CharacterSheetBean bean) {
         if (currentUser != null && currentUser.getCharacterSheets() != null) {
+            // Cerca la lobby nella lista dello user
             for (int i = 0; i < currentUser.getCharacterSheets().size(); i++) {
-                CharacterSheet cs = currentUser.getCharacterSheets().get(i);
-                // Confronta utilizzando oldName (il nome originale)
-                if (cs.getName().equals(oldName)) {
-                    currentUser.getCharacterSheets().set(i, beanToEntity(bean));
-                    System.out.println(">>> DEBUG: Personaggio aggiornato nello UserBean: " + bean.getInfoBean().getName());
+                CharacterSheetBean cs = currentUser.getCharacterSheets().get(i);
+                // Confronta usando oldName (il nome originale)
+                if (cs.getInfoBean().getName().equals(oldName)) {
+                    // Converte il bean aggiornato in un'entità Lobby
+                    CharacterSheet updatedLobby = beanToEntity(bean);
+                    // Aggiorna la lobby nella lista dello user
+                    currentUser.getCharacterSheets().set(i, bean);
+                    currentEntity.getCharacterSheets().set(i, updatedLobby);
+                    // Aggiorna anche la repository:
+                    // Rimuove la vecchia lobby e aggiunge quella aggiornata.
+                    System.out.println(">>> Lobby aggiornata correttamente in UserBean e Repository.");
                     return;
                 }
             }
-            System.err.println(">>> ERRORE: Nessun personaggio trovato con il nome: " + oldName);
+            System.err.println(">>> ERRORE: Nessuna lobby trovata con il nome: " + oldName);
         } else {
-            System.err.println(">>> ERRORE: currentUser o lista personaggi NULL in updateCharacter()");
+            System.err.println(">>> ERRORE: currentUser o la lista delle lobby è NULL in updateLobby().");
         }
     }
 

@@ -4,26 +4,17 @@ import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
+import it.uniroma2.marchidori.maininterface.entity.Session;
+import it.uniroma2.marchidori.maininterface.entity.User;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class ManageLobbyListController implements UserAwareInterface {
-    private UserBean currentUser;
+    public UserBean currentUser;
+    public User currentEntity = Session.getCurrentUser();
 
     public ManageLobbyListController() {}
 
 
-
-    public List<LobbyBean> getAllLobbies() {
-        List<LobbyBean> beans = new ArrayList<>();
-        if (currentUser != null && currentUser.getJoinedLobbies() != null) {
-            for (Lobby cs : currentUser.getJoinedLobbies()) {
-                beans.add(entityToBean(cs)); // **Converte sempre i dati aggiornati**
-            }
-        }
-        return beans;
-    }
 
 
     private LobbyBean entityToBean(Lobby cs) {
@@ -38,8 +29,9 @@ public class ManageLobbyListController implements UserAwareInterface {
     public void deleteLobby(String lobbyName) {
         if (currentUser != null && currentUser.getJoinedLobbies() != null) {
             for (int i = 0; i < currentUser.getJoinedLobbies().size(); i++) {
-                if (currentUser.getJoinedLobbies().get(i).getLobbyName().equals(lobbyName)) {
+                if (currentUser.getJoinedLobbies().get(i).getName().equals(lobbyName)) {
                     currentUser.getJoinedLobbies().remove(i);
+                    currentEntity.getJoinedLobbies().remove(i);
                     System.out.println(">>> DEBUG: Personaggio eliminato dallo UserBean: " + lobbyName);
                     return;
                 }
@@ -61,4 +53,5 @@ public class ManageLobbyListController implements UserAwareInterface {
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;
     }
+
 }

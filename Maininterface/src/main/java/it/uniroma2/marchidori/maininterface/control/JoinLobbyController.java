@@ -4,6 +4,8 @@ import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
+import it.uniroma2.marchidori.maininterface.entity.Session;
+import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 
 import java.util.ArrayList;
@@ -11,11 +13,13 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class JoinLobbyController implements UserAwareInterface {
-    private UserBean currentUser;
+    public UserBean currentUser;
+    public User currentEntity = Session.getCurrentUser();
 
 
 
     private static final Logger logger = Logger.getLogger(JoinLobbyController.class.getName());
+
 
     public JoinLobbyController() {}
 
@@ -107,4 +111,6 @@ public class JoinLobbyController implements UserAwareInterface {
     public static class JoinLobbyConfiguration {
 
     }
+
+
 }

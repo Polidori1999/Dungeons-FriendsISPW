@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.control;
 
+import it.uniroma2.marchidori.maininterface.entity.User;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -32,6 +33,7 @@ public class ConfirmationPopupController {
     private TimerController timerController;
     private Runnable confirmAction;
     private Runnable cancelAction;
+    private User currentEntity;
 
     @FXML
     public void initialize() {
@@ -66,12 +68,14 @@ public class ConfirmationPopupController {
     }
 
     private void onConfirm(ActionEvent event) {
+        System.out.println(">>> DEBUG: onConfirm triggered");
         stopTimer();
         if (confirmAction != null) {
-            confirmAction.run();
+            confirmAction.run(); // Esegue join
         }
         hide();
     }
+
 
     private void onCancel(ActionEvent event) {
         stopTimer();
@@ -96,9 +100,9 @@ public class ConfirmationPopupController {
     }
 
     private void hide() {
-        Platform.runLater(() -> popupPane.setVisible(false));
+        Platform.runLater(() -> {
+            popupPane.setVisible(false);
+            popupPane.setManaged(false); // Se vuoi che scompaia anche dal layout
+        });
     }
-
-
-
 }

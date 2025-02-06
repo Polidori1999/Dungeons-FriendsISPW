@@ -15,7 +15,7 @@ public class CharacterListDMBoundary extends CharacterListBoundary {
 
             return;
         }
-        data.addAll(controller.getAllCharacters());
+        data.addAll(currentUser.getCharacterSheets());
         tableViewCharDelete.setVisible(false);
         tableViewCharButton.setVisible(false);
     }

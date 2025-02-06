@@ -76,7 +76,6 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
      */
     protected void configureUI() {
         if (currentUser != null) {
-            userName.setText(currentUser.getUsername());
             roleUser.setText(currentUser.getRoleBehavior().getRoleName());
             System.out.println(currentUser.getRoleBehavior().getRoleName());
             emailUser.setText(currentUser.getEmail());
