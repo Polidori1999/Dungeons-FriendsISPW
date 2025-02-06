@@ -6,6 +6,7 @@ import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.RegisterController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,6 +17,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.UUID;
+
+import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
 public class RegisterBoundary implements UserAwareInterface, ControllerAwareInterface {
 
@@ -40,19 +45,31 @@ public class RegisterBoundary implements UserAwareInterface, ControllerAwareInte
     private UserBean currentUser;
     private RegisterController controller;
 
+    public RegisterBoundary() {
+        logger.info(">>> RegisterBoundary creato");
+    }
+
     @FXML
     void clickRegister(ActionEvent event) throws IOException {
         try {
-            changeScene();
+            if (currentUser == null) {
+                // Se currentUser è NULL, creiamo un utente temporaneo
+                logger.info(">>> ERRORE: currentUser è NULL! Creazione di un UserBean di fallback.");
+                currentUser = new UserBean(UUID.randomUUID().toString(), "TempUser", "temp@example.com",
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            }
+
+            changeScene(SceneNames.REGISTER);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from register to login.", e);
         }
     }
 
+
     @FXML
     void onClickGoBackToLogin(ActionEvent event) throws IOException {
         try {
-            changeScene();
+            changeScene(SceneNames.LOGIN);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from user to login.", e);
         }
@@ -60,15 +77,16 @@ public class RegisterBoundary implements UserAwareInterface, ControllerAwareInte
 
 
     @FXML
-    private void changeScene() throws IOException {
+    private void changeScene(String fxml) throws IOException {
         // Usa SceneSwitcher per cambiare scena
         Stage currentStage = (Stage) registerPane.getScene().getWindow();
-        SceneSwitcher.changeScene(currentStage, "login.fxml", currentUser);  // Cambia scena con SceneSwitcher
+        SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher
     }
 
     @Override
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;
+        logger.info(">>> RegisterBoundary: currentUser ricevuto con ruolo: " + user.getRoleBehavior());
     }
 
     @Override

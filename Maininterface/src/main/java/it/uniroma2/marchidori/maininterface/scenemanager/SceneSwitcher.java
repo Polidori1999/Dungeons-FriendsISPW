@@ -36,7 +36,7 @@ import static it.uniroma2.marchidori.maininterface.factory.BoundaryFactory.creat
 import static it.uniroma2.marchidori.maininterface.factory.ControllerFactory.createController;
 
 public class SceneSwitcher {
-    private static final Logger logger = Logger.getLogger(SceneSwitcher.class.getName());
+    public static final Logger logger = Logger.getLogger(SceneSwitcher.class.getName());
 
 
     // Mappa (ruolo, scena) -> classe della boundary
@@ -118,6 +118,7 @@ public class SceneSwitcher {
         ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.REGISTER), RegisterController.class);
         ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.REGISTER), RegisterController.class);
 
+
         ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.MANAGE_LOBBY), ManageLobbyController.class);
         ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.MANAGE_LOBBY), ManageLobbyController.class);
         ROLE_CONTROLLER_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.MANAGE_LOBBY), ManageLobbyController.class);
@@ -133,10 +134,18 @@ public class SceneSwitcher {
 
     private static final String Y = " con ruolo: ";
 
+
     public static void changeScene(Stage currentStage, String fxmlPath, UserBean currentUser) throws IOException {
+        //evitare scene duplicate
+        if (currentStage.getScene() != null && fxmlPath.equals(currentStage.getScene().getUserData())) {
+            logger.info(">>> [SceneSwitcher] La scena " + fxmlPath + " è già attiva, non la ricarico.");
+            return; // Se la scena è già attiva, non fare nulla
+        }
         // Ottieni lo SceneIdEnum corrispondente al file FXML richiesto
         SceneIdEnum sceneId = getSceneIdFromFxml(fxmlPath);
+        //TOLTO PER MODIFICARE
         RoleEnum role = (currentUser != null) ? currentUser.getRoleBehavior() : RoleEnum.NONE;
+
 
 
         // Risolvi la classe boundary in base al mapping
@@ -260,6 +269,10 @@ public class SceneSwitcher {
             consultRulesBoundary.setLogicController(controller);
         }
 
+        if (boundary instanceof RegisterBoundary registerBoundary) {
+            registerBoundary.setLogicController(controller);
+        }
+
 
     }
 
@@ -268,11 +281,16 @@ public class SceneSwitcher {
     private static void injectCurrentUserBoundary(Object controller, UserBean currentUser) {
         if (currentUser == null) {
             logger.info(X);
+            logger.info(">>> ERRORE: currentUser è NULL! La scena potrebbe avere problemi.");
             return;
         }
 
         logger.info(">>> [SceneSwitcher] Iniezione utente nel controller " + controller.getClass().getSimpleName() +
                 Y + currentUser.getRoleBehavior());
+
+        if (controller instanceof RegisterBoundary registerBoundary) {
+            registerBoundary.setCurrentUser(currentUser);
+        }
 
         if (controller instanceof UserBoundary userBoundary) {
             userBoundary.setCurrentUser(currentUser);
@@ -309,6 +327,10 @@ public class SceneSwitcher {
 
         logger.info(">>> [SceneSwitcher] Iniezione utente nel controller " + controller.getClass().getSimpleName() +
                 Y + currentUser.getRoleBehavior());
+
+        if (controller instanceof RegisterController registerController) {
+            registerController.setCurrentUser(currentUser);
+        }
 
         if (controller instanceof UserController userController) {
             userController.setCurrentUser(currentUser);
