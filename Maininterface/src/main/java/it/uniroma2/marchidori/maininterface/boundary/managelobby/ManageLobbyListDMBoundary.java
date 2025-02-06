@@ -2,12 +2,16 @@ package it.uniroma2.marchidori.maininterface.boundary.managelobby;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
+import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
+import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
@@ -19,6 +23,8 @@ import java.util.logging.Logger;
 public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
     private static final Logger logger = Logger.getLogger(ManageLobbyListDMBoundary.class.getName());
 
+    protected ConfirmationPopupController confirmationPopupController;
+    private LobbyBean pendingDeleteBean;
     @Override
     protected void initialize() {
         super.initialize();
@@ -29,6 +35,19 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
         data.clear();
         data.addAll(controller.getAllLobbies());
         tableViewLobby.refresh();
+
+        System.out.println(">>> DEBUG: Numero di personaggi nella tabella: " + data.size());
+
+        // Carica il popup di conferma dal file FXML e aggiungilo al contenitore principale
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/confirmationPopup.fxml"));
+            Parent popupRoot = loader.load();
+            // Si assume che "characterPane" (definito in CharacterListBoundary) sia il contenitore principale
+            manageLobbyListPane.getChildren().add(popupRoot);
+            confirmationPopupController = loader.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // Configura colonna "Edit"
         tableViewLobbyEdit.setCellValueFactory(cellData -> {
@@ -50,8 +69,10 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
                 }
             }
         });
-
-        // Configura colonna "Delete" (ereditata dal genitore, suppongo)
+        tableViewLobbyDelete.setCellValueFactory(cellData -> {
+            Button deleteBtn = new Button("Delete");
+            return new ReadOnlyObjectWrapper<>(deleteBtn);
+        });
         tableViewLobbyDelete.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(Button item, boolean empty) {
@@ -61,9 +82,11 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
                 } else {
                     setGraphic(item);
                     item.setOnAction(e -> {
-                        // logica di delete
-                        LobbyBean pendingDeleteBean = getTableView().getItems().get(getIndex());
-                        deleteLobby(pendingDeleteBean);
+                        // Salva il bean selezionato per la cancellazione
+                        pendingDeleteBean = getTableView().getItems().get(getIndex());
+                        // Mostra il popup di conferma con timer
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        showDeleteConfirmation();
                     });
                 }
             }
@@ -72,6 +95,32 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
         // Rendo cliccabile il bottone "New Lobby"
         newLobbyButton.setVisible(true);
         newLobbyButton.setDisable(false);
+    }
+
+    private void showDeleteConfirmation() {
+        if (confirmationPopupController != null && pendingDeleteBean != null) {
+            String message = "Vuoi eliminare il personaggio '" + pendingDeleteBean.getName() + "'?";
+            confirmationPopupController.show(message, 10,
+                    () -> onConfirmDelete(),
+                    () -> onCancelDelete());
+        } else {
+            System.err.println("Errore: ConfirmationPopupController non inizializzato o pendingDeleteBean è null");
+        }
+    }
+
+
+    private void onConfirmDelete() {
+        if (pendingDeleteBean != null) {
+            String characterName = pendingDeleteBean.getName();
+            tableViewLobby.getItems().remove(pendingDeleteBean);
+            controller.deleteLobby(characterName);
+            LobbyRepository.removeLobby(pendingDeleteBean.getName());
+            pendingDeleteBean = null;
+        }
+    }
+
+    private void onCancelDelete() {
+        pendingDeleteBean = null;
     }
 
     private void editLobby(LobbyBean beanToEdit) {

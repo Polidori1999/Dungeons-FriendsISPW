@@ -4,7 +4,6 @@ import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
-import it.uniroma2.marchidori.maininterface.factory.LobbyFactory;
 import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 
 import java.util.ArrayList;
@@ -15,12 +14,10 @@ public class JoinLobbyController implements UserAwareInterface {
     private UserBean currentUser;
 
 
-    private final LobbyRepository lobbyRepository;
+
     private static final Logger logger = Logger.getLogger(JoinLobbyController.class.getName());
 
-    public JoinLobbyController() {
-        this.lobbyRepository = new LobbyRepository();//usa la factory per i dati
-    }
+    public JoinLobbyController() {}
 
 
     /**
@@ -33,10 +30,14 @@ public class JoinLobbyController implements UserAwareInterface {
         this.currentUser = user;
     }
 
+    public Lobby beanToEntity(LobbyBean bean) {
+        return new Lobby(bean.getName(), bean.getDuration(), bean.getType(), bean.isOwned(), bean.getNumberOfPlayers());
+    }
+
     public List<LobbyBean> filterLobbies(String type, String duration, String numPlayersStr) {
         List<LobbyBean> result = new ArrayList<>();
 
-        for (Lobby lob : lobbyRepository.getAllLobbies()) {
+        for (Lobby lob : LobbyRepository.getAllLobbies()) {
             boolean matchesType = (type == null || type.isEmpty() || lob.getType().equals(type));
             boolean matchesDuration = (duration == null || duration.isEmpty() || lob.getDuration().equals(duration));
             boolean matchesPlayers = true;
@@ -56,7 +57,7 @@ public class JoinLobbyController implements UserAwareInterface {
 
     // Esempio di logica "join"
     public boolean joinLobby(LobbyBean bean, String playerName) {
-        Lobby found = lobbyRepository.findLobbyByName(bean.getName());
+        Lobby found = LobbyRepository.findLobbyByName(bean.getName());
 
         System.out.println("Join lobby " + found.getLobbyName() + " - players attuali: " + found.getPlayers().size());
 

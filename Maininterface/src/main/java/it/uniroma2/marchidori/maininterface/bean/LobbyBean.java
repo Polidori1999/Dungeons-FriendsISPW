@@ -58,4 +58,5 @@ public class LobbyBean {
     public String toString() {
         return "[LobbyBean] " + name + " (" + type + ") - Duration: " + duration + " - players: " + numberOfPlayers;
     }
+
 }
