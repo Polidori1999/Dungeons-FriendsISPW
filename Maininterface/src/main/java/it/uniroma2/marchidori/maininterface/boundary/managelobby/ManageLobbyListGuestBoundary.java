@@ -3,23 +3,23 @@ package it.uniroma2.marchidori.maininterface.boundary.managelobby;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
+import it.uniroma2.marchidori.maininterface.exception.PopupLoadingException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
-import it.uniroma2.marchidori.maininterface.utils.CustomTimer;
+
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.event.ActionEvent;
+
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
+
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Logger;
+
 
 import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
@@ -27,16 +27,12 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
 
     // Il pannello principale definito nel file FXML (deve essere presente in FXML con fx:id="manageLobbyListPane")
     @FXML
-    private AnchorPane manageLobbyListPane;
 
-    protected UserBean currentUser;
+
+
     protected AnchorPane characterPane;
 
-    // Label per visualizzare il countdown
-    private Label timerLabel = new Label();
 
-    // Timer custom per il countdown (5 secondi)
-    private CustomTimer timer;
 
     protected ConfirmationPopupController confirmationPopupController;
 
@@ -84,7 +80,7 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
             });
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("Errore durante il caricamento del popup di conferma", e);
+            throw new PopupLoadingException("Errore durante il caricamento del popup di conferma");
         }
     }
 
