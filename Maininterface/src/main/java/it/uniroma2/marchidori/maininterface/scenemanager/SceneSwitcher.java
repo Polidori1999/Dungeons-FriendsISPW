@@ -18,6 +18,7 @@ import it.uniroma2.marchidori.maininterface.boundary.user.UserDMBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.user.UserGuestBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.user.UserPlayerBoundary;
 import it.uniroma2.marchidori.maininterface.control.*;
+import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.enumerate.SceneIdEnum;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
@@ -381,4 +382,45 @@ public class SceneSwitcher {
             default -> throw new IllegalArgumentException("FXML not recognized: " + fxmlPath);
         };
     }
+
+
+
+    /*private static void injectCurrentUserController(Object controller, User currentUser) {
+        if (currentUser == null) {
+            logger.info(X);
+            return;
+        }
+
+        logger.info(">>> [SceneSwitcher] Iniezione utente nel controller " + controller.getClass().getSimpleName() +
+                Y + currentUser.getRoleBehavior());
+
+        if (controller instanceof RegisterController registerController) {
+            registerController.setCurrentEntity(currentUser);
+        }
+
+        if (controller instanceof UserController userController) {
+            userController.setCurrentEntity(currentUser);
+        }
+        if (controller instanceof HomeController homeController) {
+            homeController.setCurrentEntity(currentUser);
+        }
+        if (controller instanceof CharacterSheetController charController) {
+            charController.setCurrentEntity(currentUser);
+        }
+        if (controller instanceof CharacterListController charLController) {
+            charLController.setCurrentEntity(currentUser);
+        }
+        if (controller instanceof ManageLobbyListController manageLobbyListController) {
+            manageLobbyListController.setCurrentEntity(currentUser);
+        }
+        if(controller instanceof ManageLobbyController manageLobbyController) {
+            manageLobbyController.setCurrentEntity(currentUser);
+        }
+        if (controller instanceof JoinLobbyController jlController) {
+            jlController.setCurrentEntity(currentUser);
+        }
+        if (controller instanceof ConsultRulesController consultRulesController) {
+            consultRulesController.setCurrentUser(currentUser);
+        }
+    }*/
 }
