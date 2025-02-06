@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class UserDAOFileSys implements UserDAO {
-    private static final String DIRECTORY_PATH = "src/main/java/it/uniroma2/marchidori/maininterface/userrepository";
+    private static final String DIRECTORY_PATH = "src/main/java/it/uniroma2/marchidori/maininterface/userps";
     private static final String FILE_PATH = DIRECTORY_PATH + "/users.txt";
 
     public UserDAOFileSys() {
