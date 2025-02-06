@@ -84,25 +84,6 @@ public class User {
         this.favouriteLobbies = favouriteLobbies;
     }
 
-    // Metodo per aggiungere un nuovo personaggio
-    public void addCharacterSheet(CharacterSheet characterSheet) {
-        if (this.characterSheets == null) {
-            System.err.println(">>> ERRORE: Lista personaggi è NULL!");
-            this.characterSheets = new ArrayList<>();
-        }
-        this.characterSheets.add(characterSheet);
-        System.out.println(">>> Personaggio aggiunto! Lista aggiornata: " + this.characterSheets);
-    }
-
-    public boolean removeLobbyByName(String name) {
-        if (this.favouriteLobbies == null || name == null) {
-            return false;
-        }
-        // removeIf restituisce true se almeno un elemento è stato rimosso
-        return favouriteLobbies.removeIf(lobby -> lobby.getLobbyName().equals(name));
-    }
-
-
     public void setJoinedLobbies(ArrayList<Lobby> objects) {
         this.joinedLobbies = objects;
     }

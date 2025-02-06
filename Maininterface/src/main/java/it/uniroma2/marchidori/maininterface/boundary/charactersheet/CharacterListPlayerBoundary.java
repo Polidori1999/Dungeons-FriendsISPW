@@ -34,8 +34,8 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
     private static final Logger logger = Logger.getLogger(CharacterListPlayerBoundary.class.getName());
 
     // Bean selezionato per l'eliminazione
-    private CharacterSheetBean pendingDeleteBean;
-    private CharacterSheetController modalController;
+    protected CharacterSheetBean pendingDeleteBean;
+    protected CharacterSheetController modalController;
 
     // Controller per il popup di conferma con timer
     protected ConfirmationPopupController confirmationPopupController;

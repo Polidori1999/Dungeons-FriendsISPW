@@ -104,14 +104,5 @@ public class UserBean {
         this.joinedLobbies = joinedLobbies;
     }
 
-    // Metodo per aggiungere un nuovo personaggio
-    public void addCharacterSheet(CharacterSheetBean characterSheet) {
-        if (this.characterSheets == null) {
-            System.err.println(">>> ERRORE: Lista personaggi è NULL!");
-            this.characterSheets = new ArrayList<>();
-        }
-        this.characterSheets.add(characterSheet);
-        System.out.println(">>> Personaggio aggiunto! Lista aggiornata: " + this.characterSheets);
-    }
 
 }
