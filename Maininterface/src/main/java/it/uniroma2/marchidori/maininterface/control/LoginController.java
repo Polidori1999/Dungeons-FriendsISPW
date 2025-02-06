@@ -6,6 +6,7 @@ import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
 
 public class LoginController {
 
+
     private UserService userService;
     private UserBean currentUser;
     private UserDAOFileSys userDAOFileSys;

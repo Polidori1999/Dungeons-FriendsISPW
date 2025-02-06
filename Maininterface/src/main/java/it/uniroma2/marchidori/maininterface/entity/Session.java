@@ -6,6 +6,7 @@ public class Session {
     // Campo statico che contiene l'utente corrente
     private static User currentUser;
 
+
     // Imposta l'utente corrente
     public static void setCurrentUser(User user) {
         currentUser = user;

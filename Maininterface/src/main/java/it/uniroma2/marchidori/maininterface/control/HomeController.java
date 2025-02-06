@@ -5,6 +5,7 @@ import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 
+
 public class HomeController implements UserAwareInterface {
     public UserBean currentUser;
     public User currentEntity = Session.getCurrentUser();

@@ -6,6 +6,7 @@ import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
+
 import java.util.List;
 
 public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {

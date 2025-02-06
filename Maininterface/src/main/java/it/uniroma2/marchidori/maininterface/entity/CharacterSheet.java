@@ -3,7 +3,7 @@ package it.uniroma2.marchidori.maininterface.entity;
 /**
  * Entity "CharacterSheet":
  * Aggrega i dati relativi a un personaggio,
- * suddivisi tra "CharacterInfo" e "CharacterStats".
+ * suddivisi tra "CharacterInfo" e "CharacterStats ".
  */
 public class CharacterSheet {
 

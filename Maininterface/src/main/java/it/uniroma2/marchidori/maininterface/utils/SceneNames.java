@@ -16,3 +16,4 @@ public class SceneNames {
     public static final String LOGIN = "login.fxml";
 
 }
+

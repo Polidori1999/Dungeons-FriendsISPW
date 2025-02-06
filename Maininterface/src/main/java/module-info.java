@@ -6,6 +6,7 @@ module it.uniroma2.marchidori.maininterface {
     requires java.desktop;
     requires java.logging;
 
+
     opens it.uniroma2.marchidori.maininterface to javafx.fxml;
     exports it.uniroma2.marchidori.maininterface;
     exports it.uniroma2.marchidori.maininterface.entity;

@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
  */
 public class TimerController {
 
+
     private CustomTimer timer;
     private final Label timerLabel;
     private final Runnable onFinishAction;

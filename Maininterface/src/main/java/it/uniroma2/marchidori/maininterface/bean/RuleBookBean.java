@@ -9,6 +9,7 @@ public class RuleBookBean {
     }
 
     public String getRulesBookName() {
+
         return rulesBookName;
     }
     public void setRulesBookName(String rulesBookName) {

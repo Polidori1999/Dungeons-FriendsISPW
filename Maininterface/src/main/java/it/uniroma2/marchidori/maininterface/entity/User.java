@@ -7,6 +7,7 @@ import java.util.List;
 
 public class User {
 
+
     private final String id;
     private final String email;
     private RoleEnum roleBehavior;

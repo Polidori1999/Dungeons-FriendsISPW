@@ -17,6 +17,7 @@ import java.util.UUID;
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;
     }
+
 }*/
 
 public class RegisterController implements UserAwareInterface {

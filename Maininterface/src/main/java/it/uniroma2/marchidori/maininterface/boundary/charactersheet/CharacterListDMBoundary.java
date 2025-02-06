@@ -8,6 +8,7 @@ public class CharacterListDMBoundary extends CharacterListBoundary {
 
 
 
+
     @Override
     public void initialize() {
         super.initialize();

@@ -8,6 +8,7 @@ import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 
 
+
 public class ManageLobbyListController implements UserAwareInterface {
     public UserBean currentUser;
     public User currentEntity = Session.getCurrentUser();

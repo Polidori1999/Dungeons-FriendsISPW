@@ -9,6 +9,7 @@ import it.uniroma2.marchidori.maininterface.entity.*;
 
 /**
  * Control che gestisce la logica di manipolazione
+ *
  * di CharacterSheet, mantenendo una lista in memoria.
  */
 public class CharacterSheetController implements UserAwareInterface {

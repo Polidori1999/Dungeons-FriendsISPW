@@ -10,6 +10,7 @@ public class UserController implements UserAwareInterface {
     public User currentEntity = Session.getCurrentUser();
     public UserController() {
         //boh
+
     }
 
     @Override

@@ -12,6 +12,7 @@ public class CharacterInfo {
     public CharacterInfo() {
     }
 
+
     // Costruttore con parametri
     public CharacterInfo(String name, String race, int age, String classe, int level) {
         this.name = name;

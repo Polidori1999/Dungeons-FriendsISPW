@@ -15,6 +15,7 @@ public class CharacterListGuestBoundary extends CharacterListPlayerBoundary {
 
     @Override
     public void initialize() {
+
         super.initialize();
 
         try {

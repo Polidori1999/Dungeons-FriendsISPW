@@ -25,4 +25,5 @@ package it.uniroma2.marchidori.maininterface.exception;
         public SceneChangeException(Throwable cause) {
             super(cause);
         }
+
     }

@@ -19,6 +19,7 @@ import java.io.IOException;
 
 public class UserBoundary implements UserAwareInterface, ControllerAwareInterface {
 
+
     @FXML
     protected Button consultRules;
 

@@ -7,6 +7,7 @@ public class CharacterSheetBean {
     private CharacterStatsBean statsBean;
 
     public CharacterSheetBean() {
+
         // costruttore vuoto
     }
 

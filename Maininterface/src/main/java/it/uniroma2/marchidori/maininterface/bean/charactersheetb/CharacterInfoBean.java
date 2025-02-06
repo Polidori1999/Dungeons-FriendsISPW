@@ -9,6 +9,7 @@ public class CharacterInfoBean {
     private int level;
 
 
+
     public CharacterInfoBean() {
         // costruttore vuoto
     }

@@ -5,7 +5,6 @@ import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class UserDAOFileSys implements UserDAO {
     private static final String DIRECTORY_PATH = "src/main/java/it/uniroma2/marchidori/maininterface/userps";

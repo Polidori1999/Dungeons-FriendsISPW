@@ -24,6 +24,7 @@ import java.io.IOException;
 
 public class ConsultRulesBoundary implements UserAwareInterface, ControllerAwareInterface {
 
+
     private UserBean currentUser;
 
     @FXML

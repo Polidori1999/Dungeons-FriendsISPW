@@ -17,6 +17,7 @@ import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Classe che fornisce i metodi di conversione da Bean a Entity.
  */

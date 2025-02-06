@@ -4,6 +4,7 @@ import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+
 import java.io.IOException;
 
 public class UserGuestBoundary extends UserBoundary{

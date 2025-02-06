@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 
 /**
  * Controller per il popup di conferma con timer.
+ *
  */
 public class ConfirmationPopupController {
 
