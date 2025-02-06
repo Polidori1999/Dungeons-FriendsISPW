@@ -8,32 +8,55 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class UserDAOFileSys implements UserDAO {
-    private static final String FILE_PATH = "users.txt";
+    private static final String DIRECTORY_PATH = "src/main/java/it/uniroma2/marchidori/maininterface/userrepository";
+    private static final String FILE_PATH = DIRECTORY_PATH + "/users.txt";
 
-    @Override
-    public void saveUser(UserBean user, String password) {
-        try (FileWriter fw = new FileWriter(FILE_PATH, true);
-             BufferedWriter bw = new BufferedWriter(fw);
-             PrintWriter out = new PrintWriter(bw)) {
-             out.println(user.getEmail() + "," + password);
-        } catch (IOException e) {
-            System.err.println("Errore nella scrittura del file: " + e.getMessage());
+    public UserDAOFileSys() {
+        createDirectory(); // Assicura che la cartella esista
+    }
+
+    private void createDirectory() {
+        File directory = new File(DIRECTORY_PATH);
+        if (!directory.exists()) {
+            if (directory.mkdirs()) {
+                System.out.println("Cartella creata: " + DIRECTORY_PATH);
+            } else {
+                System.err.println("Errore nella creazione della cartella: " + DIRECTORY_PATH);
+            }
         }
     }
 
-    @Override
-    public UserBean authenticate(String email, String password) {
-        try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 2 && parts[0].equals(email) && parts[1].equals(password)) {
-                    return new UserBean(UUID.randomUUID().toString(), email, email, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+
+    public void saveUser(String email, String password) {
+        System.out.println("🔍 Chiamato saveUser() con: " + email);
+        File file = new File(FILE_PATH);
+
+        try {
+            if (!file.exists()) {
+                if (file.createNewFile()) {
+                    System.out.println("File creato: " + FILE_PATH);
+                } else {
+                    System.err.println("Errore nella creazione del file");
                 }
             }
         } catch (IOException e) {
-            System.err.println("Errore nella lettura del file: " + e.getMessage());
+            System.err.println("❌ Errore nella creazione del file: " + e.getMessage());
+            return; // Interrompe il flusso in caso di errore
         }
-        return null;
+
+        System.out.println("\n📌 Tentativo di scrittura dati...");
+        try (FileWriter fw = new FileWriter(FILE_PATH, true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
+
+            out.println(email + "," + password);
+            System.out.println("Utente salvato: " + email + ", psw:" + password);
+
+        } catch (IOException e) {
+            System.err.println("❌ Errore nella scrittura del file: " + e.getMessage());
+        }
     }
+
+    //questo va in un controller
+
 }

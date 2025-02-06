@@ -4,7 +4,7 @@ import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.factory.LobbyFactory;
 import java.util.ArrayList;
 import java.util.List;
-
+////////////////////////////////////singleton/////////////////////////////////////////
 public class LobbyRepository {
 
     private LobbyRepository(){}

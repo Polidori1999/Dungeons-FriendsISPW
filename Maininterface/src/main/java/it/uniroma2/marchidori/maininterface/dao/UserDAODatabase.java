@@ -5,11 +5,11 @@ import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 
 public class UserDAODatabase implements UserDAO {
     @Override
-    public void saveUser(UserBean user, String password) {
+    public void saveUser(String email, String password) {
         // Logica per salvare utente su database
     }
 
-    @Override
+
     public UserBean authenticate(String email, String password) {
         // Logica per autenticare utente da database
         return null;

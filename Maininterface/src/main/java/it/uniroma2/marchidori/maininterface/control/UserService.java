@@ -6,16 +6,17 @@ import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 
 class UserService {
     private final UserDAO userDAO;
+    private AuthController authController;
 
     public UserService(boolean useDatabase) {
         this.userDAO = UserDAOFactory.getUserDAO(useDatabase);
     }
 
-    public void registerUser(UserBean user, String password) {
-        userDAO.saveUser(user, password);
+    public void registerUser(String email, String password) {
+        userDAO.saveUser(email, password);
     }
 
     public UserBean loginUser(String email, String password) {
-        return userDAO.authenticate(email, password);
+        return authController.authenticate(email, password);
     }
 }
