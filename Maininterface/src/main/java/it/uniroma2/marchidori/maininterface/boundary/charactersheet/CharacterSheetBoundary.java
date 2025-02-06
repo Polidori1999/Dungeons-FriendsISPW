@@ -84,7 +84,6 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         );
 
         // Stampa di debug per verificare l'iniezione dell'utente
-        System.out.println("User in CharacterSheetBoundary: " + (currentUser != null ? currentUser.getUsername() : "null"));
 
         // Determina la modalità in base al campo selectedLobbyName del currentUser
         // (Nel tuo caso probabilmente usi selectedLobbyName per determinare se si tratta di un update)

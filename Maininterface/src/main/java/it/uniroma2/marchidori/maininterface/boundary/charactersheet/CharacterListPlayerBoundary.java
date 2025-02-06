@@ -195,7 +195,6 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
         // Invece di aprire un modal, usiamo la scena "manageLobby.fxml"
         // e settiamo selectedLobbyName = null => creazione
         currentUser.setSelectedLobbyName(null);
-        System.out.println(currentUser.getUsername());
         try {
             SceneSwitcher.changeScene(
                     (Stage) characterPane.getScene().getWindow(),
