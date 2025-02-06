@@ -100,7 +100,7 @@ public class ConfirmationPopupController {
         }
     }
 
-    private void hide() {
+    public void hide() {
         Platform.runLater(() -> {
             popupPane.setVisible(false);
             popupPane.setManaged(false); // Se vuoi che scompaia anche dal layout

@@ -18,7 +18,7 @@ import java.util.UUID;
 public class AuthController {
     private User currentEntity = Session.getCurrentUser();
 
-    private static final String DIRECTORY_PATH = "src/main/java/it/uniroma2/marchidori/maininterface/userrepository";
+    private static final String DIRECTORY_PATH = "src/main/java/it/uniroma2/marchidori/maininterface/userpsw";
     private static final String FILE_PATH = DIRECTORY_PATH + "/users.txt";
 
 
@@ -41,7 +41,11 @@ public class AuthController {
                 String[] parts = line.split(",");
                 if (parts.length == 2 && parts[0].equals(email) && parts[1].equals(password)) {
                     System.out.println("✅ Login riuscito per: " + email);
-                    return new UserBean(String.valueOf(lineNumber), email, RoleEnum.PLAYER, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());                }
+                    UserBean temp = new UserBean(String.valueOf(lineNumber),
+                            email, RoleEnum.PLAYER, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                    Session.setCurrentUser(Converter.userBeanToEntity(temp));
+                    return temp;
+                }
             }
         } catch (IOException e) {
             System.err.println("❌ Errore nella lettura del file: " + e.getMessage());

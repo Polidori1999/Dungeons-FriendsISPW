@@ -6,24 +6,30 @@ import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
+import javafx.scene.control.TableView;
 
 import java.util.List;
 
 public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
 
-    // Recupera l'utente corrente dalla Sessione
-    public User currentEntity = Session.getCurrentUser();
+    // User corrente: se risulta null lo recuperiamo dalla Session
+
 
     public JoinLobbyPlayerBoundary() {
-        super(); // Usa il costruttore senza parametri di JoinLobbyBoundary (che richiama la factory)
+        super(); // Usa il costruttore di JoinLobbyBoundary
     }
 
     @Override
     public void initialize() {
         super.initialize();
+        // Imposta le cell factory delle colonne "Join" e "Favourite"
+        joinButtonColumn.setCellFactory(col -> createJoinButtonCell());
+        favouriteButton.setCellFactory(col -> createFavouriteButtonCell());
+    }
 
-        // Colonna "Join": se la lobby è già joinata, il pulsante non viene mostrato
-        joinButtonColumn.setCellFactory(col -> new TableCell<>() {
+    // ----------------------- METODI PER IL PULSANTE JOIN -----------------------
+    private TableCell<LobbyBean, Void> createJoinButtonCell() {
+        return new TableCell<>() {
             private final Button joinBtn = new Button("Join");
 
             @Override
@@ -31,107 +37,96 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
                 super.updateItem(item, empty);
                 if (empty) {
                     setGraphic(null);
+                    return;
+                }
+                LobbyBean lobby = getTableView().getItems().get(getIndex());
+                if (isLobbyJoined(lobby)) {
+                    setGraphic(null);
                 } else {
-                    // Ottieni il LobbyBean della riga corrente
-                    LobbyBean lobby = getTableView().getItems().get(getIndex());
-
-                    // Se la lobby è già joinata, non mostriamo il pulsante
-                    if (isLobbyJoined(lobby)) {
-                        setGraphic(null);
-                    } else {
-                        joinBtn.setText("Join");
-                        joinBtn.setOnAction(event -> {
-                            String message = "Vuoi entrare nella lobby '" + lobby.getName() + "'?";
-                            confirmationPopupController.show(
-                                    message,
-                                    10,
-                                    () -> join(lobby), // azione da eseguire se conferma
-                                    () -> System.out.println("Azione annullata o scaduta.")
-                            );
-                        });
-                        setGraphic(joinBtn);
-                    }
+                    configureJoinButton(joinBtn, lobby);
+                    setGraphic(joinBtn);
                 }
             }
+        };
+    }
 
-            // Metodo helper: verifica se la lobby è già presente nella lista joinata
-            private boolean isLobbyJoined(LobbyBean lobby) {
-                if (currentUser != null && currentUser.getJoinedLobbies() != null) {
-                    for (LobbyBean lb : currentUser.getJoinedLobbies()) {
-                        if (lb.getName().equals(lobby.getName())) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
+    private void configureJoinButton(Button btn, LobbyBean lobby) {
+        btn.setText("Join");
+        btn.setOnAction(event -> {
+            String message = "Vuoi entrare nella lobby '" + lobby.getName() + "'?";
+            confirmationPopupController.show(
+                    message,
+                    10,
+                    () -> join(lobby),
+                    () -> System.out.println("Azione annullata o scaduta.")
+            );
         });
+    }
 
-        // Colonna "Add to Favourite" (toggle)
-        favouriteButton.setCellFactory(col -> new TableCell<>() {
-            private final Button favouriteBtn = new Button();
+    private boolean isLobbyJoined(LobbyBean lobby) {
+        return currentUser != null &&
+                currentUser.getJoinedLobbies() != null &&
+                currentUser.getJoinedLobbies().stream()
+                        .anyMatch(lb -> lb.getName().equals(lobby.getName()));
+    }
+
+    // ----------------------- METODI PER IL PULSANTE FAVOURITE -----------------------
+    private TableCell<LobbyBean, Void> createFavouriteButtonCell() {
+        return new TableCell<>() {
+            private final Button favBtn = new Button();
 
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
                     setGraphic(null);
-                } else {
-                    // Ottieni la lobby della riga corrente
-                    LobbyBean lobby = getTableView().getItems().get(getIndex());
-
-                    // Imposta il testo del pulsante in base allo stato di "favourite"
-                    if (isLobbyFavorite(lobby.getName(), currentUser.getFavouriteLobbies())) {
-                        favouriteBtn.setText("Remove from Favourite");
-                    } else {
-                        favouriteBtn.setText("Add to Favourite");
-                    }
-
-                    favouriteBtn.setOnAction(event -> {
-                        if (isLobbyFavorite(lobby.getName(), currentUser.getFavouriteLobbies())) {
-                            // Rimuovi la lobby dai preferiti e aggiorna il testo
-                            boolean uno = currentUser.removeLobbyByName(lobby.getName());
-                            boolean due = currentEntity.removeLobbyByName(lobby.getName());
-                            if (uno && due) {
-                                favouriteBtn.setText("Add to Favourite");
-                                System.out.println("Lobby rimossa dai preferiti.");
-                            }
-                        } else {
-                            // Aggiungi la lobby ai preferiti e aggiorna il testo
-                            Lobby temp = controller.beanToEntity(lobby);
-                            currentUser.addLobbyToFavourite(lobby);
-                            currentEntity.addLobbyToFavourite(temp);
-                            favouriteBtn.setText("Remove from Favourite");
-                            System.out.println("Lobby aggiunta ai preferiti.");
-                        }
-                    });
-                    setGraphic(favouriteBtn);
+                    return;
                 }
+                LobbyBean lobby = getTableView().getItems().get(getIndex());
+                configureFavouriteButton(favBtn, lobby);
+                setGraphic(favBtn);
+            }
+        };
+    }
+
+    private void configureFavouriteButton(Button btn, LobbyBean lobby) {
+        boolean isFav = isLobbyFavorite(lobby.getName(), currentUser.getFavouriteLobbies());
+        btn.setText(isFav ? "Remove from Favourite" : "Add to Favourite");
+        btn.setOnAction(event -> {
+            if (isLobbyFavorite(lobby.getName(), currentUser.getFavouriteLobbies())) {
+                if (controller.removeLobbyByName(lobby.getName())) {
+                    btn.setText("Add to Favourite");
+                    System.out.println("Lobby rimossa dai preferiti.");
+                }
+            } else {
+                Lobby temp = controller.beanToEntity(lobby);
+                controller.addLobbyToFavourite(lobby);
+                btn.setText("Remove from Favourite");
+                System.out.println("Lobby aggiunta ai preferiti.");
             }
         });
     }
 
-    // Metodo helper: verifica se una lobby è già tra quelle joinate
     public boolean isLobbyFavorite(String nameLobby, List<LobbyBean> favouriteLobbies) {
-        if (favouriteLobbies == null || nameLobby == null) {
-            return false;
-        }
-        for (LobbyBean lobby : favouriteLobbies) {
-            if (lobby.getName().equals(nameLobby)) {
-                return true;
-            }
-        }
-        return false;
+        if (favouriteLobbies == null || nameLobby == null) return false;
+        return favouriteLobbies.stream().anyMatch(lb -> lb.getName().equals(nameLobby));
     }
 
-    // Metodo che esegue l'azione di join
+    // ----------------------- METODO PER ESEGUIRE JOIN -----------------------
     private void join(LobbyBean lobby) {
         System.out.println(">>> DEBUG: Sto eseguendo join su: " + lobby.getName());
+        // Assicurati che currentEntity sia non null
         Lobby temp = controller.beanToEntity(lobby);
-        // Aggiungi la lobby alla lista joinata di currentUser e currentEntity
-        currentUser.addLobby(lobby);
-        currentEntity.addLobby(temp);
-        // Rinfresca la TableView in modo che la cella venga aggiornate (nascondendo il pulsante "Join")
-        lobbyTableView.refresh();
+        controller.addLobby(lobby);
+        controller.addLobby(temp);
+        // Refresh della TableView per aggiornare la visualizzazione
+        getTableView().refresh();
+    }
+
+
+    // Presumiamo che getTableView() sia disponibile (se non lo è, usa il riferimento corretto)
+    private TableView<LobbyBean> getTableView() {
+        // Se il campo lobbyTableView è definito in JoinLobbyBoundary, puoi semplicemente:
+        return lobbyTableView;
     }
 }

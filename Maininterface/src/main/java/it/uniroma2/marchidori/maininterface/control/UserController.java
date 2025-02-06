@@ -5,6 +5,9 @@ import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 
+import static it.uniroma2.marchidori.maininterface.enumerate.RoleEnum.DM;
+import static it.uniroma2.marchidori.maininterface.enumerate.RoleEnum.PLAYER;
+
 public class UserController implements UserAwareInterface {
     public UserBean currentUser;
     public User currentEntity = Session.getCurrentUser();
@@ -17,5 +20,24 @@ public class UserController implements UserAwareInterface {
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;
     }
+
+    // Metodo per cambiare il ruolo tra PLAYER e DM
+    public void switchRole(UserBean user) {
+        if(user.getRoleBehavior() == PLAYER) {
+            user.setRoleBehavior(DM);
+        } else if (user.getRoleBehavior() == DM) {
+            user.setRoleBehavior(PLAYER);
+        }
+    }
+
+    public void switchRole(User user) {
+        if(user.getRoleBehavior() == PLAYER) {
+            user.setRoleBehavior(DM);
+        } else if (user.getRoleBehavior() == DM) {
+            user.setRoleBehavior(PLAYER);
+        }
+    }
+
+
 
 }

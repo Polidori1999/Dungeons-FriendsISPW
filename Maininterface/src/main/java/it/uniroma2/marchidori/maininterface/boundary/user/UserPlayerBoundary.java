@@ -28,7 +28,8 @@ public class UserPlayerBoundary extends UserBoundary {
     @FXML
     protected void onClickSwitchRole(ActionEvent event) throws IOException {
         // 1) Cambia il ruolo nel model
-        currentUser.switchRole();   // <-- usa il field PROTECTED ereditato
+        controller.switchRole(currentUser);// <-- usa il field PROTECTED ereditato
+        controller.switchRole(currentEntity);// <-- usa il field PROTECTED ereditato
         LOGGER.log(Level.INFO, () -> "Switched role to: " + currentUser.getRoleBehavior().getRoleName());
 
         // 2) Carica user.fxml ma assegnando come controller la classe DM
