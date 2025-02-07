@@ -4,7 +4,6 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.*;
 import it.uniroma2.marchidori.maininterface.boundary.charactersheet.*;
 import it.uniroma2.marchidori.maininterface.boundary.consultrules.ConsultRulesBoundary;
-import it.uniroma2.marchidori.maininterface.boundary.consultrules.ConsultRulesDMORPlayerBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.consultrules.ConsultRulesGuestBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyGuestBoundary;
@@ -80,7 +79,7 @@ public class SceneSwitcher {
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.NONE, SceneIdEnum.LOGIN), LoginBoundary.class);
 
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.CONSULT_RULES), ConsultRulesBoundary.class);
-        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.CONSULT_RULES), ConsultRulesDMORPlayerBoundary.class);
+        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.CONSULT_RULES), ConsultRulesBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.CONSULT_RULES), ConsultRulesGuestBoundary.class);
     }
 

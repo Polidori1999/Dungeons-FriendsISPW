@@ -63,9 +63,9 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     @FXML
     protected TableColumn<LobbyBean, String> numberOfPlayersColumn;
     @FXML
-    protected TableColumn<LobbyBean, Void> joinButtonColumn;
+    protected TableColumn<LobbyBean, Button> joinButtonColumn;
     @FXML
-    protected TableColumn<LobbyBean, Void> favouriteButton;
+    protected TableColumn<LobbyBean, Button> favouriteButton;
     @FXML
     protected TableColumn<LobbyBean, String> durationColumn;
     @FXML

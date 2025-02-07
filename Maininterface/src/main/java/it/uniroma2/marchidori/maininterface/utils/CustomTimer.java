@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.utils;
 
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -9,7 +10,6 @@ import javafx.util.Duration;
  * Incapsula la logica di un timer basato su Timeline.
  */
 public class CustomTimer {
-
 
     private int seconds;
     private final int initialSeconds;
@@ -51,7 +51,7 @@ public class CustomTimer {
                 });
             }
         }));
-        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
 
@@ -60,7 +60,6 @@ public class CustomTimer {
             timeline.stop();
         }
     }
-
 
     public void reset() {
         stop();

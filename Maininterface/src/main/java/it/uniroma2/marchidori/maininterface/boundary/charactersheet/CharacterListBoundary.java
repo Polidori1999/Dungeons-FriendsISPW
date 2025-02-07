@@ -53,22 +53,6 @@ public class CharacterListBoundary implements UserAwareInterface, ControllerAwar
     protected TableColumn<CharacterSheetBean, Button> tableViewCharDelete; // colonna "Delete"
 
     @FXML
-    protected AnchorPane confirmationPane;
-
-    @FXML
-    protected Button noButton;
-
-    @FXML
-    protected Button yesButton;
-
-    @FXML
-    protected Label timerLabel;
-
-    @FXML
-    protected Label confirmationLabel;
-
-
-    @FXML
     protected Button newCharacterButton;
 
     protected UserBean currentUser;

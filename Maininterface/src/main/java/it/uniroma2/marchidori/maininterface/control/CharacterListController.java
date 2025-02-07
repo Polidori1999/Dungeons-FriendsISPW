@@ -7,20 +7,23 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsB
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.entity.*;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
-import it.uniroma2.marchidori.maininterface.entity.Session;
 
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static it.uniroma2.marchidori.maininterface.control.CharacterSheetController.getCharacterSheetDownloadTask;
 
 public class CharacterListController implements UserAwareInterface {
-   private User currentEntity = Session.getCurrentUser();
-   private UserBean currentUser;
+    private final User currentEntity = Session.getCurrentUser();
+    private UserBean currentUser;
+
+    private static final Logger logger = Logger.getLogger(CharacterListController.class.getName());
 
     public CharacterListController() {
-        //empty
+        // empty
     }
-
 
     private CharacterSheetBean entityToBean(CharacterSheet cs) {
         // Crea la parte "info"
@@ -46,31 +49,6 @@ public class CharacterListController implements UserAwareInterface {
         return new CharacterSheetBean(infoBean, abilityBean);
     }
 
-    /**
-     * Converte da Bean "spezzato" a Entity pura.
-     */
-    private CharacterSheet beanToEntity(CharacterSheetBean bean) {
-        CharacterInfoBean infoBean = bean.getInfoBean();
-        CharacterStatsBean statsBean = bean.getStatsBean();
-
-        CharacterInfo infoEntity = new CharacterInfo(
-                infoBean.getName(),
-                infoBean.getRace(),
-                infoBean.getAge(),
-                infoBean.getClasse(),
-                infoBean.getLevel()
-        );
-        CharacterStats statsEntity = new CharacterStats(
-                statsBean.getStrength(),
-                statsBean.getDexterity(),
-                statsBean.getIntelligence(),
-                statsBean.getWisdom(),
-                statsBean.getCharisma(),
-                statsBean.getConstitution()
-        );
-        return new CharacterSheet(infoEntity, statsEntity);
-    }
-
 
     public void deleteCharacter(String characterName) {
         if (currentUser != null && currentUser.getCharacterSheets() != null) {
@@ -78,35 +56,18 @@ public class CharacterListController implements UserAwareInterface {
                 if (currentUser.getCharacterSheets().get(i).getInfoBean().getName().equals(characterName)) {
                     currentUser.getCharacterSheets().remove(i);
                     currentEntity.getCharacterSheets().remove(i);
-                    System.out.println(">>> DEBUG: Personaggio eliminato dallo UserBean: " + characterName);
+                    logger.info(() -> ">>> DEBUG: Personaggio eliminato dallo UserBean: " + characterName);
                     return;
                 }
             }
-            System.err.println(">>> ERRORE: Nessun personaggio trovato con il nome: " + characterName);
+            logger.log(Level.SEVERE, () -> ">>> ERRORE: Nessun personaggio trovato con il nome: " + characterName);
         } else {
-            System.err.println(">>> ERRORE: currentUser o lista personaggi NULL in deleteCharacter()");
+            logger.severe(">>> ERRORE: currentUser o lista personaggi NULL in deleteCharacter()");
         }
     }
 
     public CharacterSheetDownloadTask getDownloadTask(CharacterSheetBean bean) {
-        try {
-            // Ottieni la cartella di download dinamica
-            String userHome = System.getProperty("user.home");
-            String downloadFolder = Paths.get(userHome, "Downloads").toString();
-
-            // Crea il nome del file
-            String fileName = "character_" + bean.getInfoBean().getName() + ".txt";
-            String destinationPath = Paths.get(downloadFolder, fileName).toString();
-
-            System.out.println(">>> DEBUG: Percorso di download: " + destinationPath);
-
-            // Crea e restituisci il task di download
-            return new CharacterSheetDownloadTask(bean, destinationPath);
-
-        } catch (Exception e) {
-            System.err.println("Errore durante il download: " + e.getMessage());
-            return null;
-        }
+        return getCharacterSheetDownloadTask(bean, logger);
     }
 
     public List<CharacterSheetBean> getCharacterSheets() {
@@ -120,16 +81,14 @@ public class CharacterListController implements UserAwareInterface {
                 beans.add(bean);
             }
         } else {
-            System.err.println(">>> ERRORE: currentEntity o la sua lista di CharacterSheet è null in getCharacterSheets()");
+            logger.severe(">>> ERRORE: currentEntity o la sua lista di CharacterSheet è null in getCharacterSheets()");
         }
 
         return beans;
     }
 
-
     @Override
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;
     }
-
 }

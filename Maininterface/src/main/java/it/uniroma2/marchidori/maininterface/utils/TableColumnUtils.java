@@ -5,6 +5,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public final class TableColumnUtils {
 
@@ -45,4 +47,46 @@ public final class TableColumnUtils {
             }
         });
     }
+
+    /**
+     * Configura una colonna in modo dinamico, aggiornando il testo e lo stato del pulsante
+     * in base al bean della riga.
+     *
+     * @param <T>              il tipo di elemento contenuto nella tabella
+     * @param column           la colonna da configurare
+     * @param textFunction     funzione che, dato il bean, restituisce il testo del pulsante
+     * @param disablePredicate predicato che, dato il bean, indica se il pulsante deve essere disabilitato
+     * @param action           l'azione da eseguire al click sul pulsante, ricevendo il bean della riga
+     */
+    public static <T> void setupDynamicButtonColumn(TableColumn<T, Button> column,
+                                                    Function<T, String> textFunction,
+                                                    Predicate<T> disablePredicate,
+                                                    Consumer<T> action) {
+        column.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(new Button()));
+        column.setCellFactory(col -> new TableCell<T, Button>() {
+            @Override
+            protected void updateItem(Button item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()) {
+                    setGraphic(null);
+                } else {
+                    T rowItem = getTableView().getItems().get(getIndex());
+                    if (item == null) {
+                        item = new Button();
+                    }
+                    String text = textFunction.apply(rowItem);
+                    if (text == null || text.trim().isEmpty()) {
+                        // Se il testo è vuoto, non mostriamo il pulsante
+                        setGraphic(null);
+                    } else {
+                        item.setText(text);
+                        item.setDisable(disablePredicate.test(rowItem));
+                        item.setOnAction(e -> action.accept(rowItem));
+                        setGraphic(item);
+                    }
+                }
+            }
+        });
+    }
+
 }

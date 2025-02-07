@@ -107,19 +107,27 @@ public class JoinLobbyController implements UserAwareInterface {
             logger.log(Level.SEVERE, ">>> ERRORE: Lista lobby è NULL (currentUser.getJoinedLobbies()).");
             currentUser.setJoinedLobbies(new ArrayList<>());
         }
-        currentUser.getJoinedLobbies().add(lobby);
-
-        logger.log(Level.INFO, ">>> Lobby aggiunta! Lista aggiornata: {0}", currentUser.getJoinedLobbies());
-    }
-
-    public void addLobby(Lobby lobby) {
         if (currentEntity.getJoinedLobbies() == null) {
             logger.log(Level.SEVERE, ">>> ERRORE: Lista lobby è NULL (currentEntity.getJoinedLobbies()).");
             currentEntity.setJoinedLobbies(new ArrayList<>());
         }
-        currentEntity.getJoinedLobbies().add(lobby);
 
-        // Se utile, puoi aggiungere anche qui un messaggio di log:
-        logger.log(Level.INFO, ">>> Lobby aggiunta (Entity). Lista aggiornata: {0}", currentEntity.getJoinedLobbies());
+        currentUser.getJoinedLobbies().add(lobby);
+        currentEntity.getJoinedLobbies().add(beanToEntity(lobby));
+
+        logger.log(Level.INFO, ">>> Lobby aggiunta! Lista aggiornata: {0}", currentUser.getJoinedLobbies());
     }
+
+    public boolean isLobbyFavorite(String nameLobby, List<LobbyBean> favouriteLobbies) {
+        if (favouriteLobbies == null || nameLobby == null) return false;
+        return favouriteLobbies.stream().anyMatch(lb -> lb.getName().equals(nameLobby));
+    }
+
+    public boolean isLobbyJoined(LobbyBean lobby) {
+        return currentUser != null &&
+                currentUser.getJoinedLobbies() != null &&
+                currentUser.getJoinedLobbies().stream()
+                        .anyMatch(lb -> lb.getName().equals(lobby.getName()));
+    }
+
 }
