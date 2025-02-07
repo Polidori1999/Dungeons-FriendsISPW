@@ -49,13 +49,14 @@ public class JoinLobbyController implements UserAwareInterface {
         return new Lobby(bean.getName(), bean.getDuration(), bean.getType(), bean.isOwned(), bean.getNumberOfPlayers());
     }
 
-    public List<LobbyBean> filterLobbies(String type, String duration, String numPlayersStr) {
+    public List<LobbyBean> filterLobbies(String type, String duration, String numPlayersStr, String searchQuery) {
         List<LobbyBean> result = new ArrayList<>();
 
         for (Lobby lob : LobbyRepository.getAllLobbies()) {
             boolean matchesType = (type == null || type.isEmpty() || lob.getType().equals(type));
             boolean matchesDuration = (duration == null || duration.isEmpty() || lob.getDuration().equals(duration));
             boolean matchesPlayers = true;
+            boolean matchesSearch= (searchQuery == null || searchQuery.isEmpty()||lob.getLobbyName().toLowerCase().contains(searchQuery));
 
             // Correzione: != null
             if (numPlayersStr != null && !numPlayersStr.isEmpty()) {
@@ -63,7 +64,7 @@ public class JoinLobbyController implements UserAwareInterface {
                 matchesPlayers = (lob.getPlayers().size() == n);
             }
 
-            if (matchesType && matchesDuration && matchesPlayers) {
+            if (matchesType && matchesDuration && matchesPlayers && matchesSearch) {
                 result.add(entityToBean(lob));
             }
         }

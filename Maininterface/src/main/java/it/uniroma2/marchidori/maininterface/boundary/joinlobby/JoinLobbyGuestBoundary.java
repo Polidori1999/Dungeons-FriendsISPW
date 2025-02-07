@@ -1,18 +1,24 @@
 package it.uniroma2.marchidori.maininterface.boundary.joinlobby;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
+import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class JoinLobbyGuestBoundary extends JoinLobbyPlayerBoundary {
 
     @Override
     public void initialize() {
         super.initialize();
+        if (currentUser == null) {
+            currentUser = new UserBean("guest", "guest@example.com", RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        }
 
         // Imposta la factory per le colonne in modo più modulare
         joinButtonColumn.setCellFactory(col -> createJoinCell());
