@@ -1,6 +1,5 @@
 package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
-import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import java.io.IOException;
@@ -33,23 +32,18 @@ public class CharacterListGuestBoundary extends CharacterListPlayerBoundary {
     }
 
     @Override
-    public void setCurrentUser(UserBean currentUser) {
-        this.currentUser = currentUser;
-    }
-
-    @Override
     protected void downloadCharacter(CharacterSheetBean bean) {
         if (confirmationPopupController != null) {
             String message = "you are getting redirected to login";
             confirmationPopupController.show(message, 10,
-                    () -> redirectToLogin(),
-                    () -> onCancelDelete());
+                    this::redirectToLogin,
+                    this::onDelete);
         } else {
-            System.err.println("Errore: ConfirmationPopupController non inizializzato o pendingDeleteBean è null");
+            logger.info("Errore: ConfirmationPopupController non inizializzato o pendingDeleteBean è null");
         }
     }
 
-    private void onCancelDelete() {
+    private void onDelete() {
         //empty
     }
 

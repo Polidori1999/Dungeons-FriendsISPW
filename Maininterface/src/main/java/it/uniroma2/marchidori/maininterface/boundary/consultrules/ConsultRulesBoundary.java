@@ -9,13 +9,11 @@ import it.uniroma2.marchidori.maininterface.control.ConsultRulesController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
+import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -40,10 +38,10 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
     private AnchorPane consultRulesPane;
 
     @FXML
-    protected TableColumn<RuleBookBean, Void> buyButton;
+    protected TableColumn<RuleBookBean, Button> buyButton;
 
     @FXML
-    protected TableColumn<RuleBookBean, Void> consultButton;
+    protected TableColumn<RuleBookBean, Button> consultButton;
 
     @FXML
     private Button consultRules;
@@ -88,23 +86,9 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
 
     @FXML
     public void initialize() {
-        loadConfirmationPopup();
+        confirmationPopupController = ConfirmationPopupController.loadPopup(consultRulesPane);
         initRulesBookTable();
         rulesBookTableView.setItems(rulesBook);
-    }
-
-    /**
-     * Carica il popup di conferma e inizializza il relativo controller.
-     */
-    private void loadConfirmationPopup() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/confirmationPopup.fxml"));
-            Parent popupRoot = loader.load();
-            consultRulesPane.getChildren().add(popupRoot);
-            confirmationPopupController = loader.getController();
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "Errore durante il caricamento del popup di conferma: {0}", e.getMessage());
-        }
     }
 
     /**
@@ -116,65 +100,14 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
         // Colonna "Nome RuleBook" (riferita alla proprietà "rulesBookName")
         rulesBookNameColumn.setCellValueFactory(new PropertyValueFactory<>("rulesBookName"));
 
-        // Colonna "Buy"
-        buyButton.setCellFactory(col -> createBuyButtonCell());
+        // Colonna "Buy" (dinamica: modifica testo e stato in base al bean)
+        TableColumnUtils.setupDynamicButtonColumn(buyButton,
+                bean -> bean.isObtained() ? "Obtained" : "Buy now!",
+                RuleBookBean::isObtained,
+                this::handleBuyConfirmation);
 
-        // Colonna "Consult"
-        consultButton.setCellFactory(col -> createConsultButtonCell());
-    }
-
-    /**
-     * Crea la cella con il pulsante "Buy".
-     */
-    private TableCell<RuleBookBean, Void> createBuyButtonCell() {
-        return new TableCell<RuleBookBean, Void>() {
-
-            private final Button buyBtn = new Button("Buy now!");
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (empty) {
-                    setGraphic(null);
-                    return;
-                }
-
-                // Recupera il bean relativo alla riga corrente
-                RuleBookBean currentBean = getTableView().getItems().get(getIndex());
-                if (currentBean.isObtained()) {
-                    buyBtn.setText("Obtained");
-                    buyBtn.setDisable(true);
-                } else {
-                    buyBtn.setText("Buy now!");
-                    buyBtn.setDisable(false);
-                    buyBtn.setOnAction(e -> handleBuyConfirmation(currentBean));
-                }
-                setGraphic(buyBtn);
-            }
-        };
-    }
-
-    /**
-     * Crea la cella con il pulsante "Consult".
-     */
-    private TableCell<RuleBookBean, Void> createConsultButtonCell() {
-        return new TableCell<RuleBookBean, Void>() {
-
-            private final Button consultBtn = new Button("Consult Now");
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    consultBtn.setOnAction(e -> handleConsultAction(getTableView().getItems().get(getIndex())));
-                    setGraphic(consultBtn);
-                }
-            }
-        };
+        // Colonna "Consult" (testo statico)
+        TableColumnUtils.setupButtonColumn(consultButton, "Consult Now", this::handleConsultAction);
     }
 
     /**
@@ -183,7 +116,6 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
      */
     private void handleConsultAction(RuleBookBean book) {
         pendingBuyBean = book;
-
         if (book.isObtained()) {
             openFileIfExists(book.getPath());
         } else if (confirmationPopupController != null) {
@@ -231,7 +163,6 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
                 logger.log(Level.INFO, "Il sistema non supporta l'apertura dei file.");
             }
         } catch (IOException e) {
-            // Se l'errore è critico, possiamo loggare con SEVERE.
             logger.log(Level.SEVERE, String.format("Errore durante l'apertura del file: %s", normalizedPath), e);
         }
     }
