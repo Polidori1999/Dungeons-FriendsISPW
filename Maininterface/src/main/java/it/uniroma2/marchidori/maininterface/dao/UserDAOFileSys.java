@@ -52,7 +52,7 @@ public class UserDAOFileSys implements UserDAO {
 
             // Salva: email, password hashata
             out.println(email + "," + hashedPassword);
-            System.out.println("Utente salvato: " + email + ", psw:" + hashedPassword);
+            System.out.println("Utente salvato da dao filesys: " + email + ", psw:" + hashedPassword);
 
         } catch (IOException e) {
             System.err.println("❌ Errore nella scrittura del file: " + e.getMessage());
@@ -79,7 +79,6 @@ public class UserDAOFileSys implements UserDAO {
                     // Qui creiamo un UserBean che contiene anche la password hashata.
                     // Per questo, aggiungiamo un campo "password" a UserBean (o usiamo un costruttore dedicato).
                     return new UserBean(
-                            String.valueOf(lineNumber),
                             email,
                             parts[1],          // password hashata
                             RoleEnum.PLAYER,   // Ruolo di default (puoi modificarlo se necessario)

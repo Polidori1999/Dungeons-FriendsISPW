@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface;
 
+import it.uniroma2.marchidori.maininterface.dao.DatabaseConnection;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.application.Application;
@@ -7,6 +8,8 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class Main extends Application {
 
@@ -18,6 +21,17 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            if (conn != null) {
+                System.out.println("✅ Connessione a MySQL riuscita!");
+                conn.close();
+            } else {
+                System.out.println("❌ Connessione fallita.");
+            }
+        } catch (SQLException e) {
+            System.err.println("❌ Errore di connessione: " + e.getMessage());
+        }
         launch();
     }
 }

@@ -87,7 +87,7 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
     @FXML
     void onClickGuest(ActionEvent event) throws IOException {
         try {
-            currentUser = new UserBean( GUEST, "guest@example.com", GUEST ,RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            currentUser = new UserBean( "guest@example.com", GUEST ,RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
             logger.info(">>> Utente impostato come Guest. Ruolo: " + currentUser.getRoleBehavior());
 
             Session.setCurrentUser(Converter.userBeanToEntity(currentUser));
@@ -102,7 +102,7 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
         try {
             if (currentUser == null) {
                 logger.info(">>> Creazione di un UserBean temporaneo per la registrazione.");
-                currentUser = new UserBean(UUID.randomUUID().toString(), "temp@example.com", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                currentUser = new UserBean( "temp@example.com", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
             }
             logger.info(">>> LoginBoundary: Sto passando currentUser con ruolo: " + currentUser.getRoleBehavior());
             changeScene(SceneNames.REGISTER);
@@ -117,7 +117,7 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
     private void changeScene(String fxml) throws IOException {
         if (currentUser == null) {
             logger.info(">>> ERRORE: currentUser è NULL! Creazione di un UserBean di fallback.");
-            currentUser = new UserBean(GUEST, "guest@example.com", GUEST,RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            currentUser = new UserBean("guest@example.com", GUEST,RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         }
         logger.log(Level.FINE, "Cambiando scena: {0} con UserBean ruolo: {1}", new Object[]{fxml, currentUser.getRoleBehavior()});
         Stage currentStage = (Stage) anchorLoginPane.getScene().getWindow();

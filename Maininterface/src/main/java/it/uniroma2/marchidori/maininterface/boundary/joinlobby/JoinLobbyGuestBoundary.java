@@ -17,7 +17,7 @@ public class JoinLobbyGuestBoundary extends JoinLobbyPlayerBoundary {
     public void initialize() {
         super.initialize();
         if (currentUser == null) {
-            currentUser = new UserBean("guest", "guest@example.com","guest", RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            currentUser = new UserBean( "guest@example.com","guest", RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         }
 
         // Imposta la factory per le colonne in modo più modulare

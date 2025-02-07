@@ -39,7 +39,6 @@ public class Converter {
         }
 
         // Campi semplici
-        String id = userBean.getId();
         String email = userBean.getEmail();
         String password=userBean.getPassword();
         RoleEnum role = userBean.getRoleBehavior();
@@ -62,10 +61,10 @@ public class Converter {
         // Creazione dell'User
         if (role != null) {
             // Se è presente un ruolo specifico, usiamo il costruttore con role.
-            return new User(id, email, password ,role, characterSheets, favouriteLobbies, joinedLobbies);
+            return new User(email, password ,role, characterSheets, favouriteLobbies, joinedLobbies);
         } else {
             // Altrimenti usiamo il costruttore di default (che setta il role a PLAYER di default).
-            return new User(id, email, characterSheets, favouriteLobbies, joinedLobbies);
+            return new User(email, characterSheets, favouriteLobbies, joinedLobbies);
         }
     }
 

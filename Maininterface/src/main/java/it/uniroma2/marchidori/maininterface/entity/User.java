@@ -8,7 +8,7 @@ import java.util.List;
 public class User {
 
 
-    private final String id;
+
     private final String email;
     private transient String password;
     private RoleEnum roleBehavior;
@@ -20,9 +20,9 @@ public class User {
     // private final List<Notification> notificationPlayer;  // Riferimento alle notifiche
 
     // Costruttore immutabile
-    public User(String id, String email, List<CharacterSheet> characterSheets,
+    public User( String email, List<CharacterSheet> characterSheets,
                 List<it.uniroma2.marchidori.maininterface.entity.Lobby> favouriteLobbies, List<Lobby> joinedLobbies)/*,List<CharacterSheet> characterSheets, List<Notification> notificationPlayer)*/ {
-        this.id = id;
+
         this.email = email;
         this.characterSheets = characterSheets;
         this.favouriteLobbies = favouriteLobbies;
@@ -37,8 +37,7 @@ public class User {
     /**
      * Se vuoi poter assegnare direttamente un ruolo esterno:
      */
-    public User(String id, String email,String password, RoleEnum initialRole, List<CharacterSheet> characterSheets, List<Lobby> favouriteLobbies, List<Lobby> joinedLobbies) {
-        this.id = id;
+    public User(String email,String password, RoleEnum initialRole, List<CharacterSheet> characterSheets, List<Lobby> favouriteLobbies, List<Lobby> joinedLobbies) {
         this.email = email;
         this.password = password;
         this.roleBehavior = initialRole;
@@ -58,9 +57,7 @@ public class User {
 
 
 
-    public String getId() {
-        return id;
-    }
+
 
     public RoleEnum getRoleBehavior() {
         return roleBehavior;

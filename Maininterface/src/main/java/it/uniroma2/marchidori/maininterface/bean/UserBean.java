@@ -8,7 +8,6 @@ import static it.uniroma2.marchidori.maininterface.enumerate.RoleEnum.PLAYER;
 
 public class UserBean {
 
-    private String id;
     private String email;
     // Aggiungi il campo password (hashata)
     private transient String password; // transient se non vuoi esporlo in serializzazione
@@ -19,8 +18,7 @@ public class UserBean {
     private List<CharacterSheetBean> characterSheets;
 
     // Costruttore "base" (senza password) per altri usi
-    public UserBean(String id, String email, List<LobbyBean> favouriteLobbies, List<LobbyBean> joinedLobbies, List<CharacterSheetBean> characterSheets) {
-        this.id = id;
+    public UserBean(String email, List<LobbyBean> favouriteLobbies, List<LobbyBean> joinedLobbies, List<CharacterSheetBean> characterSheets) {
         this.email = email;
         this.favouriteLobbies = favouriteLobbies;
         this.joinedLobbies = joinedLobbies;
@@ -29,8 +27,8 @@ public class UserBean {
     }
 
     // Costruttore per l'autenticazione, include la password hashata
-    public UserBean(String id, String email, String password, RoleEnum initialRole, List<LobbyBean> joinedLobbies, List<LobbyBean> favouriteLobbies, List<CharacterSheetBean> characterSheets) {
-        this.id = id;
+    public UserBean(String email, String password, RoleEnum initialRole, List<LobbyBean> joinedLobbies, List<LobbyBean> favouriteLobbies, List<CharacterSheetBean> characterSheets) {
+
         this.email = email;
         this.password = password;
         this.roleBehavior = initialRole;
@@ -40,12 +38,6 @@ public class UserBean {
     }
 
     // Getter e Setter
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
     public String getEmail() {
         return email;
     }

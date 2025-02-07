@@ -12,8 +12,8 @@ public class LoginController {
 
     // Costruttore senza parametri
     public LoginController() {
-        // Usa il servizio con il DAO basato su file system (false per default)
-        this.userService = new UserService(false);
+        // true per db false per filesys
+        this.userService = new UserService(true);
     }
 
     public void setCurrentUser(UserBean user) {
