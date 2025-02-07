@@ -4,6 +4,7 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.control.LoginController;
+import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
@@ -56,14 +57,14 @@ public class LoginBoundary implements UserAwareInterface {
     @FXML
     private Label wrongLogin;
 
-    private AuthController authentication;
+    private UserDAOFileSys authentication;
     private UserBean currentUser;
-    private LoginController loginController;
+    //private LoginController loginController;
 
-    public LoginBoundary() {
-        this.authentication = new AuthController();
-    }
-
+    /*public LoginBoundary() {
+        this.authentication = new UserDAOFileSys();
+    }*/
+    private LoginController loginController = new LoginController();
     @FXML
     public void initialize() {
         login.maxWidthProperty().bind(anchorLoginPane.widthProperty().divide(2));
@@ -75,10 +76,9 @@ public class LoginBoundary implements UserAwareInterface {
         String userEmail = email.getText();
         String userPassword = password.getText();
         try {
-            UserBean authenticatedUser = authentication.authenticate(userEmail, userPassword);
+            UserBean authenticatedUser = loginController.login(userEmail, userPassword);
             if (authenticatedUser != null) {
-                currentUser = authenticatedUser;
-                //setCurrentUser(currentUser);
+                currentUser=authenticatedUser;
                 logger.info(">>> Login avvenuto con successo. Ruolo: " + currentUser.getRoleBehavior());
                 changeScene(SceneNames.HOME);
             } else {
@@ -93,7 +93,7 @@ public class LoginBoundary implements UserAwareInterface {
     @FXML
     void onClickGuest(ActionEvent event) throws IOException {
         try {
-            currentUser = new UserBean("guest", "guest@example.com", RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            currentUser = new UserBean("guest", "guest@example.com","guest" ,RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
             logger.info(">>> Utente impostato come Guest. Ruolo: " + currentUser.getRoleBehavior());
 
             Session.setCurrentUser(Converter.userBeanToEntity(currentUser));
@@ -123,7 +123,7 @@ public class LoginBoundary implements UserAwareInterface {
     private void changeScene(String fxml) throws IOException {
         if (currentUser == null) {
             logger.info(">>> ERRORE: currentUser è NULL! Creazione di un UserBean di fallback.");
-            currentUser = new UserBean("guest", "guest@example.com", RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            currentUser = new UserBean("guest", "guest@example.com","guest",RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         }
         logger.log(Level.FINE, "Cambiando scena: {0} con UserBean ruolo: {1}", new Object[]{fxml, currentUser.getRoleBehavior()});
         Stage currentStage = (Stage) anchorLoginPane.getScene().getWindow();

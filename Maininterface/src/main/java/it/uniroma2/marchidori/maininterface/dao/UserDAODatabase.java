@@ -9,10 +9,8 @@ public class UserDAODatabase implements UserDAO {
         // Logica per salvare utente su database
     }
 
-
-
-    public UserBean authenticate(String email, String password) {
-        // Logica per autenticare utente da database
+    public UserBean getUserByEmail(String email) {
+        //logica
         return null;
     }
 }
