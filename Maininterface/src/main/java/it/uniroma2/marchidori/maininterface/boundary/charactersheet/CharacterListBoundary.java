@@ -88,7 +88,7 @@ public class CharacterListBoundary implements UserAwareInterface, ControllerAwar
 
 
         data.clear();
-        data.addAll(currentUser.getCharacterSheets());
+        data.addAll(controller.getCharacterSheets());
         // Carico i personaggi iniziali (sotto forma di Bean)
 
         newCharacterButton.setVisible(false);
@@ -107,7 +107,7 @@ public class CharacterListBoundary implements UserAwareInterface, ControllerAwar
     public void refreshTable() {
         if (currentUser != null) {
             data.clear();
-            List<CharacterSheetBean> updatedList = currentUser.getCharacterSheets(); // Prendi i dati aggiornati
+            List<CharacterSheetBean> updatedList = controller.getCharacterSheets(); // Prendi i dati aggiornati
             data.addAll(updatedList); // Riaggiungi i dati aggiornati
             tableViewChar.refresh();
             logger.info(">>> DEBUG: Tabella aggiornata con personaggi aggiornati.");
@@ -223,7 +223,7 @@ public class CharacterListBoundary implements UserAwareInterface, ControllerAwar
     public void reloadCharacterList() {
         if (currentUser != null) {
             data.clear();
-            data.addAll(currentUser.getCharacterSheets()); // Carica i dati aggiornati dallo UserBean
+            data.addAll(controller.getCharacterSheets()); // Carica i dati aggiornati dallo UserBean
             tableViewChar.refresh();
             logger.info(">>> DEBUG: Tabella ricaricata con personaggi aggiornati.");
         }

@@ -26,6 +26,8 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Boundary per la consultazione dei manuali (RuleBook).
@@ -77,6 +79,8 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
     protected ConsultRulesController controller;
     protected ConfirmationPopupController confirmationPopupController;
 
+    private static final Logger logger = Logger.getLogger(ConsultRulesBoundary.class.getName());
+
     /**
      * Bean selezionato in attesa di conferma dell'acquisto.
      */
@@ -99,7 +103,7 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
             consultRulesPane.getChildren().add(popupRoot);
             confirmationPopupController = loader.getController();
         } catch (IOException e) {
-            System.err.println("Errore durante il caricamento del popup di conferma: " + e.getMessage());
+            logger.log(Level.SEVERE, "Errore durante il caricamento del popup di conferma: {0}", e.getMessage());
         }
     }
 
@@ -197,7 +201,7 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
             String message = "Vuoi comprare il libro: " + pendingBuyBean.getRulesBookName() + "?";
             confirmationPopupController.show(message, 10, this::onConfirm, this::onCancel);
         } else {
-            System.err.println("Errore: popup o bean non inizializzato correttamente.");
+            logger.log(Level.WARNING, "Errore: popup o bean non inizializzato correttamente.");
         }
     }
 
@@ -206,7 +210,7 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
      */
     private void openFileIfExists(String filePath) {
         if (filePath == null || filePath.isEmpty()) {
-            System.err.println("Errore: Il percorso del file è vuoto o nullo.");
+            logger.log(Level.WARNING, "Errore: Il percorso del file è vuoto o nullo.");
             return;
         }
 
@@ -214,7 +218,7 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
         File file = new File(normalizedPath);
 
         if (!file.exists()) {
-            System.err.println("Errore: Il file non esiste! Path: " + normalizedPath);
+            logger.log(Level.WARNING, "Errore: Il file non esiste! Path: {0}", normalizedPath);
             return;
         }
 
@@ -222,13 +226,13 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
             Desktop desktop = Desktop.getDesktop();
             if (desktop.isSupported(Desktop.Action.OPEN)) {
                 desktop.open(file);
-                System.out.println("File aperto con successo: " + normalizedPath);
+                logger.log(Level.INFO, "File aperto con successo: {0}", normalizedPath);
             } else {
-                System.err.println("Il sistema non supporta l'apertura dei file.");
+                logger.log(Level.INFO, "Il sistema non supporta l'apertura dei file.");
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Errore durante l'apertura del file: " + normalizedPath);
+            // Se l'errore è critico, possiamo loggare con SEVERE.
+            logger.log(Level.SEVERE, String.format("Errore durante l'apertura del file: %s", normalizedPath), e);
         }
     }
 

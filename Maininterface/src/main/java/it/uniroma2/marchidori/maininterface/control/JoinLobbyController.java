@@ -9,37 +9,32 @@ import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 
 import java.util.ArrayList;
-
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class JoinLobbyController implements UserAwareInterface {
     private UserBean currentUser;
     private User currentEntity = Session.getCurrentUser();
 
-
-
     private static final Logger logger = Logger.getLogger(JoinLobbyController.class.getName());
 
-
     public JoinLobbyController() {
-        //empty
+        // empty
     }
 
-
-
-    public List<LobbyBean> getList(List<Lobby> lobbyList){
+    public List<LobbyBean> getList(List<Lobby> lobbyList) {
         List<LobbyBean> beans = new ArrayList<>();
-        for(Lobby lobby : lobbyList){
+        for (Lobby lobby : lobbyList) {
             beans.add(entityToBean(lobby));
         }
         return beans;
     }
+
     /**
      * Filtro su type, duration, e numero di players.
      * Se un parametro è null/empty => ignoriamo quel filtro.
      */
-
     @Override
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;
@@ -56,9 +51,9 @@ public class JoinLobbyController implements UserAwareInterface {
             boolean matchesType = (type == null || type.isEmpty() || lob.getType().equals(type));
             boolean matchesDuration = (duration == null || duration.isEmpty() || lob.getDuration().equals(duration));
             boolean matchesPlayers = true;
-            boolean matchesSearch= (searchQuery == null || searchQuery.isEmpty()||lob.getLobbyName().toLowerCase().contains(searchQuery));
+            boolean matchesSearch = (searchQuery == null || searchQuery.isEmpty() ||
+                    lob.getLobbyName().toLowerCase().contains(searchQuery));
 
-            // Correzione: != null
             if (numPlayersStr != null && !numPlayersStr.isEmpty()) {
                 int n = Integer.parseInt(numPlayersStr);
                 matchesPlayers = (lob.getPlayers().size() == n);
@@ -72,11 +67,8 @@ public class JoinLobbyController implements UserAwareInterface {
     }
 
     public void saveChanges(LobbyBean bean) {
-        logger.info("Salvataggio della lobby: " + bean.getName());
+        logger.log(Level.INFO, "Salvataggio della lobby: {0}", bean.getName());
     }
-
-
-
 
     // Conversione da Entity -> Bean
     private LobbyBean entityToBean(Lobby lob) {
@@ -93,16 +85,16 @@ public class JoinLobbyController implements UserAwareInterface {
         if (currentUser.getFavouriteLobbies() == null) {
             currentUser.setFavouriteLobbies(new ArrayList<>());
         }
-        if(currentEntity.getFavouriteLobbies() == null) {
+        if (currentEntity.getFavouriteLobbies() == null) {
             currentEntity.setFavouriteLobbies(new ArrayList<>());
         }
         currentUser.getFavouriteLobbies().add(lobby);
         currentEntity.getFavouriteLobbies().add(beanToEntity(lobby));
-
     }
 
     public boolean removeLobbyByName(String name) {
-        if (currentUser.getFavouriteLobbies() == null || name == null || currentEntity.getFavouriteLobbies() == null) {
+        if (currentUser.getFavouriteLobbies() == null || name == null
+                || currentEntity.getFavouriteLobbies() == null) {
             return false;
         }
         // removeIf restituisce true se almeno un elemento è stato rimosso
@@ -116,21 +108,22 @@ public class JoinLobbyController implements UserAwareInterface {
         lobby.setCurrentNumberOfPlayers(lobby.getCurrentNumberOfPlayers() + 1);
 
         if (currentUser.getJoinedLobbies() == null) {
-            System.err.println(">>> ERRORE: Lista lobby è NULL!");
+            logger.log(Level.SEVERE, ">>> ERRORE: Lista lobby è NULL (currentUser.getJoinedLobbies()).");
             currentUser.setJoinedLobbies(new ArrayList<>());
         }
         currentUser.getJoinedLobbies().add(lobby);
 
-        System.out.println(">>> Lobby aggiunta! Lista aggiornata: " + currentUser.getJoinedLobbies());
+        logger.log(Level.INFO, ">>> Lobby aggiunta! Lista aggiornata: {0}", currentUser.getJoinedLobbies());
     }
-    public void addLobby(Lobby lobby) {
 
+    public void addLobby(Lobby lobby) {
         if (currentEntity.getJoinedLobbies() == null) {
-            System.err.println(">>> ERRORE: Lista lobby è NULL!");
+            logger.log(Level.SEVERE, ">>> ERRORE: Lista lobby è NULL (currentEntity.getJoinedLobbies()).");
             currentEntity.setJoinedLobbies(new ArrayList<>());
         }
         currentEntity.getJoinedLobbies().add(lobby);
+
+        // Se utile, puoi aggiungere anche qui un messaggio di log:
+        logger.log(Level.INFO, ">>> Lobby aggiunta (Entity). Lista aggiornata: {0}", currentEntity.getJoinedLobbies());
     }
-
-
 }

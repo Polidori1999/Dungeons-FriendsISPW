@@ -11,8 +11,8 @@ import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 
 public class ManageLobbyController implements UserAwareInterface {
-    public UserBean currentUser;
-    public User currentEntity = Session.getCurrentUser();
+    private UserBean currentUser;
+    private User currentEntity = Session.getCurrentUser();
     public ManageLobbyController(){}
 
     @Override

@@ -86,12 +86,6 @@ public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAw
      */
     @FXML
     protected void initialize() {
-
-        /*if (currentUser.getJoinedLobbies() == null) {
-            // Assicurati di avere un setter o un modo per assegnare la lista,
-            // oppure crea un fallback direttamente
-            currentUser.setJoinedLobbies(new ArrayList<>());
-        }*/
         if (currentUser == null) {
             logger.severe(">>> ERRORE: currentUser è null in ManageLobbyListBoundary.");
             return;  // Interrompi l'esecuzione se currentUser è null
@@ -101,7 +95,7 @@ public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAw
             currentUser.setJoinedLobbies(new ArrayList<>());
         }
         data.clear();
-        data.addAll(currentUser.getJoinedLobbies());
+        data.addAll(controller.getJoinedLobbies());
         // Imposta il PropertyValueFactory per le colonne basate sulle proprietà di LobbyBean.
         tableViewLobbyName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tableViewMaxPlayers.setCellValueFactory(new PropertyValueFactory<>("numberOfPlayers"));

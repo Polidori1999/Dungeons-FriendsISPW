@@ -8,10 +8,13 @@ import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ManageLobbyListController implements UserAwareInterface {
-    public UserBean currentUser;
-    public User currentEntity = Session.getCurrentUser();
+    private UserBean currentUser;
+    private User currentEntity = Session.getCurrentUser();
 
     public ManageLobbyListController() {}
 
@@ -63,4 +66,20 @@ public class ManageLobbyListController implements UserAwareInterface {
         this.currentUser = user;
     }
 
+    public List<LobbyBean> getJoinedLobbies() {
+        List<LobbyBean> beans = new ArrayList<>();
+
+        // Verifichiamo che currentEntity non sia null e che abbia la lista di joinedLobbies valorizzata
+        if (currentEntity != null && currentEntity.getJoinedLobbies() != null) {
+            for (Lobby lob : currentEntity.getJoinedLobbies()) {
+                // Converte la entity Lobby in un LobbyBean
+                LobbyBean bean = entityToBean(lob);
+                beans.add(bean);
+            }
+        } else {
+            System.err.println(">>> ERRORE: currentEntity o la sua lista di joinedLobbies è null.");
+        }
+
+        return beans;
+    }
 }
