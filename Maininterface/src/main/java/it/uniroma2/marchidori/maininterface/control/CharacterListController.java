@@ -7,12 +7,15 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsB
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.entity.*;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
+import it.uniroma2.marchidori.maininterface.entity.Session;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CharacterListController implements UserAwareInterface {
-    private User currentEntity = Session.getCurrentUser();
-    private UserBean currentUser;
+   private User currentEntity = Session.getCurrentUser();
+   private UserBean currentUser;
 
     public CharacterListController() {
         //empty
@@ -104,6 +107,23 @@ public class CharacterListController implements UserAwareInterface {
             System.err.println("Errore durante il download: " + e.getMessage());
             return null;
         }
+    }
+
+    public List<CharacterSheetBean> getCharacterSheets() {
+        List<CharacterSheetBean> beans = new ArrayList<>();
+
+        // Verifichiamo che currentEntity e la sua lista non siano null
+        if (currentEntity != null && currentEntity.getCharacterSheets() != null) {
+            for (CharacterSheet cs : currentEntity.getCharacterSheets()) {
+                // Converte la entity CharacterSheet in CharacterSheetBean
+                CharacterSheetBean bean = entityToBean(cs);
+                beans.add(bean);
+            }
+        } else {
+            System.err.println(">>> ERRORE: currentEntity o la sua lista di CharacterSheet è null in getCharacterSheets()");
+        }
+
+        return beans;
     }
 
 

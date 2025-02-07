@@ -159,22 +159,6 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
         }
     }
 
-    // Metodo per cancellare eventuali filtri (se esiste un pulsante dedicato)
-    @FXML
-    public void clearFilters(ActionEvent event) {
-        durationBox.setValue(null);
-        maxPlayersBox.setValue(null);
-        liveOnlineBox.setValue(null);
-        doFilter();
-    }
-
-    // Metodo per applicare i filtri (a seconda dei valori selezionati nelle ComboBox)
-    private void doFilter() {
-        // Se necessario, implementa la logica per filtrare le lobby basata sui valori delle ComboBox.
-        // Per questa classe potrebbe non essere strettamente necessario, a meno che tu non stia usando
-        // questi filtri per popolare l'interfaccia.
-    }
-
     // -------------------------------------------------------------
     //                    VARIABILI DI STATO
     // -------------------------------------------------------------
