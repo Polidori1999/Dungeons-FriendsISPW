@@ -70,6 +70,9 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     protected TableColumn<LobbyBean, Void> favouriteButton;
 
     @FXML
+    protected TextField searchBar;
+
+    @FXML
     protected Button resetButton;
 
     protected UserBean currentUser;
@@ -107,6 +110,9 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         comboBox2.setItems(FXCollections.observableArrayList("Singola", "Campagna"));
         comboBox3.setItems(FXCollections.observableArrayList("2", "3", "4", "5", "6", "7", "8"));
 
+        //barra di ricerca
+        searchBar.textProperty().addListener((observable, oldValue, newValue) -> doFilter());
+
         // Listener per i filtri
         comboBox1.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
         comboBox2.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
@@ -139,7 +145,8 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         String type = comboBox1.getValue();
         String duration = comboBox2.getValue();
         String numPlayers = comboBox3.getValue();
-        List<LobbyBean> result = controller.filterLobbies(type, duration, numPlayers);
+        String searchQuery= searchBar.getText().toLowerCase();
+        List<LobbyBean> result = controller.filterLobbies(type, duration, numPlayers,searchQuery);
         filteredLobbies.setAll(result);
     }
 
