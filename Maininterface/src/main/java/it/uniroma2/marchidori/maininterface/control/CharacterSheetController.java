@@ -6,29 +6,29 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBe
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.entity.*;
+import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
 
-/**
- * Control che gestisce la logica di manipolazione
- *
- * di CharacterSheet, mantenendo una lista in memoria.
- */
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class CharacterSheetController implements UserAwareInterface {
 
     private UserBean currentUser;
-    private User currentEntity = Session.getCurrentUser();
-    @Override
-    public void setCurrentUser(UserBean user) {
-        this.currentUser = user;
-    }
+    private static final User currentEntity = Session.getCurrentUser();
 
-    public CharacterSheetController(){}
+    private static final Logger logger = Logger.getLogger(CharacterSheetController.class.getName());
+
+    public CharacterSheetController() {
+        // empty
+    }
 
     public CharacterSheetController(UserBean currentUser) {
         if (currentUser == null) {
             throw new IllegalArgumentException("UserBean passato a CharacterSheetController è NULL!");
         }
         this.currentUser = currentUser;
-        System.out.println("CharacterSheetController creato con UserBean: " + this.currentUser);
+        logger.info(() -> "CharacterSheetController creato con UserBean: " + this.currentUser);
     }
 
     /**
@@ -38,21 +38,20 @@ public class CharacterSheetController implements UserAwareInterface {
      */
     public void createChar(CharacterSheetBean bean) {
         if (bean == null) {
-            System.err.println(">>> ERRORE: Il Bean passato a createCharacter() è NULL!");
+            logger.severe(">>> ERRORE: Il Bean passato a createCharacter() è NULL!");
             return;
         }
 
         CharacterSheet newChar = beanToEntity(bean);
         if (currentUser != null) {
-            System.out.println(">>> Aggiungendo lobby a UserBean: " + newChar.getCharacterInfo().getName());
+            logger.info(">>> Aggiungendo lobby a UserBean: " + newChar.getCharacterInfo().getName());
             currentUser.getCharacterSheets().add(bean);
             currentEntity.getCharacterSheets().add(newChar);
-            System.out.println(">>> Lista attuale personaggi: " + currentUser.getJoinedLobbies());
+            logger.info(">>> Lista attuale personaggi: " + currentUser.getJoinedLobbies());
         } else {
-            System.err.println(">>> ERRORE: currentUser è NULL in createlobby()!");
+            logger.severe(">>> ERRORE: currentUser è NULL in createlobby()!");
         }
     }
-
 
     /**
      * Aggiorna un personaggio esistente (cerca per nome).
@@ -65,68 +64,32 @@ public class CharacterSheetController implements UserAwareInterface {
                 CharacterSheetBean cs = currentUser.getCharacterSheets().get(i);
                 // Confronta usando oldName (il nome originale)
                 if (cs.getInfoBean().getName().equals(oldName)) {
-                    // Converte il bean aggiornato in un'entità Lobby
-                    CharacterSheet updatedLobby = beanToEntity(bean);
+                    // Converte il bean aggiornato in un'entità CharacterSheet
+                    CharacterSheet updatedCharacter = beanToEntity(bean);
                     // Aggiorna la lobby nella lista dello user
                     currentUser.getCharacterSheets().set(i, bean);
-                    currentEntity.getCharacterSheets().set(i, updatedLobby);
+                    currentEntity.getCharacterSheets().set(i, updatedCharacter);
                     // Aggiorna anche la repository:
                     // Rimuove la vecchia lobby e aggiunge quella aggiornata.
-                    System.out.println(">>> Lobby aggiornata correttamente in UserBean e Repository.");
+                    logger.info(">>> Lobby aggiornata correttamente in UserBean e Repository.");
                     return;
                 }
             }
-            System.err.println(">>> ERRORE: Nessuna lobby trovata con il nome: " + oldName);
+            logger.log(Level.SEVERE, () -> ">>> ERRORE: Nessuna lobby trovata con il nome: " + oldName);
         } else {
-            System.err.println(">>> ERRORE: currentUser o la lista delle lobby è NULL in updateLobby().");
+            logger.severe(">>> ERRORE: currentUser o la lista delle lobby è NULL in updateLobby().");
         }
     }
-
-
-
-
-
-
-
 
     // -------------------------------------------------------------
     //                      METODI PRIVATI
     // -------------------------------------------------------------
 
-    /**
-     * Converte da Entity pura a Bean complesso.
-     * - Crea un CharacterInfoBean con i dati generici
-     * - Crea un AbilityScoresBean con i punteggi
-     * - Inserisce tutto nel CharacterSheetBean
-     */
-    private CharacterSheetBean entityToBean(CharacterSheet cs) {
-        // Crea la parte "info"
-        CharacterInfoBean infoBean = new CharacterInfoBean(
-                cs.getName(),
-                cs.getRace(),
-                cs.getAge(),
-                cs.getClasse(),
-                cs.getLevel()
-        );
-
-        // Crea la parte "ability scores"
-        CharacterStatsBean abilityBean = new CharacterStatsBean(
-                cs.getStrength(),
-                cs.getDexterity(),
-                cs.getIntelligence(),
-                cs.getWisdom(),
-                cs.getCharisma(),
-                cs.getConstitution()
-        );
-
-        // Infine crea il bean complessivo
-        return new CharacterSheetBean(infoBean, abilityBean);
+    private CharacterSheet beanToEntity(CharacterSheetBean bean) {
+        return getCharacterSheet(bean);
     }
 
-    /**
-     * Converte da Bean "spezzato" a Entity pura.
-     */
-    private CharacterSheet beanToEntity(CharacterSheetBean bean) {
+    static CharacterSheet getCharacterSheet(CharacterSheetBean bean) {
         CharacterInfoBean infoBean = bean.getInfoBean();
         CharacterStatsBean statsBean = bean.getStatsBean();
 
@@ -146,5 +109,35 @@ public class CharacterSheetController implements UserAwareInterface {
                 statsBean.getConstitution()
         );
         return new CharacterSheet(infoEntity, statsEntity);
+    }
+
+    public CharacterSheetDownloadTask getDownloadTask(CharacterSheetBean bean) {
+        return getCharacterSheetDownloadTask(bean, logger);
+    }
+
+    static CharacterSheetDownloadTask getCharacterSheetDownloadTask(CharacterSheetBean bean, Logger logger) {
+        try {
+            // Ottieni la cartella di download dinamica
+            String userHome = System.getProperty("user.home");
+            String downloadFolder = Paths.get(userHome, "Downloads").toString();
+
+            // Crea il nome del file
+            String fileName = "character_" + bean.getInfoBean().getName() + ".txt";
+            String destinationPath = Paths.get(downloadFolder, fileName).toString();
+
+            logger.info(() -> ">>> DEBUG: Percorso di download: " + destinationPath);
+
+            // Crea e restituisci il task di download
+            return new CharacterSheetDownloadTask(bean, destinationPath);
+
+        } catch (Exception e) {
+            logger.severe("Errore durante il download: " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public void setCurrentUser(UserBean user) {
+        this.currentUser = user;
     }
 }

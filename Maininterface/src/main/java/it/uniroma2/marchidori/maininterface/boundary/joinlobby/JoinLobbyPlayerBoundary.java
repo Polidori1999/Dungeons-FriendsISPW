@@ -16,7 +16,6 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
     public void initialize() {
         super.initialize();
 
-        // Configura la colonna "Join" in modo dinamico usando il metodo utility
         TableColumnUtils.<LobbyBean>setupDynamicButtonColumn(
                 joinButtonColumn, // Assicurarsi che sia TableColumn<LobbyBean, Button>
                 lobby -> controller.isLobbyJoined(lobby) ? "" : "Join",
@@ -26,13 +25,15 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
                     confirmationPopupController.show(
                             message,
                             10,
-                            () -> controller.addLobby(lobby),
+                            () -> {
+                                controller.addLobby(lobby);
+                                joinButtonColumn.getTableView().refresh();
+                            },
                             () -> logger.info("Azione annullata o scaduta.")
                     );
                 }
         );
 
-        // Configura la colonna "Favourite" in modo dinamico usando il metodo utility
         TableColumnUtils.<LobbyBean>setupDynamicButtonColumn(
                 favouriteButton, // Assicurarsi che sia TableColumn<LobbyBean, Button>
                 lobby -> controller.isLobbyFavorite(lobby.getName(), currentUser.getFavouriteLobbies())
@@ -48,6 +49,8 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
                         controller.addLobbyToFavourite(lobby);
                         logger.info("Lobby aggiunta ai preferiti.");
                     }
+                    // Forza il refresh della TableView per rivalutare il testo del pulsante
+                    favouriteButton.getTableView().refresh();
                 }
         );
     }

@@ -12,20 +12,17 @@ import it.uniroma2.marchidori.maininterface.utils.CharacterSheetValidator;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
-
-/**
- * Boundary per mostrare/creare/modificare i dati di un CharacterSheet
- * in forma "spezzata" (info + statsScores).
- */
 public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwareInterface {
+
+    private static final Logger logger = Logger.getLogger(CharacterSheetBoundary.class.getName());
 
     @FXML
     private AnchorPane characterSheetPane;
@@ -84,10 +81,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
                 "Druido", "Warlock"
         );
 
-        // Stampa di debug per verificare l'iniezione dell'utente
-
-        // Determina la modalità in base al campo selectedLobbyName del currentUser
-        // (Nel tuo caso probabilmente usi selectedLobbyName per determinare se si tratta di un update)
+        // Verifica l'iniezione dell'utente
         String selected = currentUser != null ? currentUser.getSelectedLobbyName() : null;
         if (selected == null || selected.isEmpty()) {
             creationMode = true;
@@ -98,17 +92,16 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
             currentBean = findCharByName(selected);
             oldName = selected;
             if (currentBean == null) {
-                System.err.println(">>> Non ho trovato il personaggio con nome: " + selected);
                 creationMode = true;
                 currentBean = new CharacterSheetBean();
             }
         }
         if (creationMode) {
             clearFields();
-            System.out.println(">>> Modalità creazione attiva.");
+            logger.info(">>> Modalità creazione attiva.");
         } else {
             populateFields(currentBean);
-            System.out.println(">>> Modalità modifica attiva per personaggio: " + currentBean.getInfoBean().getName());
+            logger.info(">>> Modalità modifica attiva per personaggio: " + currentBean.getInfoBean().getName());
         }
     }
 
@@ -168,9 +161,8 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
     // -------------------------------------------------------------
     @FXML
     private void onClickSaveCharacter(ActionEvent event) {
-
         if (currentBean == null) {
-            System.err.println(">>> ERRORE: currentBean è NULL! Non posso aggiornare.");
+            logger.severe(">>> ERRORE: currentBean è NULL! Non posso aggiornare.");
             return;
         }
 
@@ -199,12 +191,11 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         // Validazione del bean
         String validationErrors = CharacterSheetValidator.validate(currentBean);
         if (!validationErrors.isEmpty()) {
-            System.out.println(">>> ERRORE DI VALIDAZIONE:\n" + validationErrors);
             Alert.showError("Errore di Validazione", validationErrors);
             return;
         }
 
-        System.out.println(">>> Personaggio aggiornato con successo: " + currentBean.getInfoBean().getName());
+        logger.info(">>> Personaggio aggiornato con successo: " + currentBean.getInfoBean().getName());
 
         // Chiamata alle funzioni di update o create in base alla modalità
         if (!creationMode) {
@@ -219,11 +210,11 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
 
         // Dopo il salvataggio, resetta la selezione e torna alla lista dei personaggi
         currentUser.setSelectedLobbyName(null);
+
         try {
-            Stage currentStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            SceneSwitcher.changeScene(currentStage, SceneNames.CHARACTER_LIST, currentUser);
+            changeScene(SceneNames.CHARACTER_LIST);
         } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambiare scena a characterlist.fxml", e);
+            throw new SceneChangeException(e.getMessage());
         }
     }
 
@@ -234,7 +225,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         try {
             return Integer.parseInt(input.trim());
         } catch (NumberFormatException e) {
-            System.err.println(">>> ERRORE: Il valore inserito non è un numero valido: " + input);
+            logger.severe(">>> ERRORE: Il valore inserito non è un numero valido: " + input);
             return 0;
         }
     }
@@ -247,7 +238,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         try {
             changeScene(SceneNames.CHARACTER_LIST);
         } catch (IOException e) {
-            throw new SceneChangeException("Errore durante il cambio verso characterList.fxml", e);
+            throw new SceneChangeException(e.getMessage());
         }
     }
 
@@ -256,7 +247,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         try {
             changeScene(SceneNames.CONSULT_RULES);
         } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambiare scena a consultRules.fxml", e);
+            throw new SceneChangeException(e.getMessage());
         }
     }
 
@@ -265,7 +256,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         try {
             changeScene(SceneNames.HOME);
         } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambiare scena a home.fxml", e);
+            throw new SceneChangeException(e.getMessage());
         }
     }
 
@@ -274,7 +265,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         try {
             changeScene(SceneNames.JOIN_LOBBY);
         } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambiare scena a joinlobby.fxml", e);
+            throw new SceneChangeException(e.getMessage());
         }
     }
 
@@ -283,7 +274,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         try {
             changeScene(SceneNames.MANAGE_LOBBY);
         } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambiare scena a managelobby.fxml", e);
+            throw new SceneChangeException(e.getMessage());
         }
     }
 
@@ -292,7 +283,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         try {
             changeScene(SceneNames.USER);
         } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambiare scena a user.fxml", e);
+            throw new SceneChangeException(e.getMessage());
         }
     }
 
@@ -301,7 +292,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         try {
             changeScene(SceneNames.CHARACTER_LIST);
         } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambiare scena a mycharacter.fxml", e);
+            throw new SceneChangeException(e.getMessage());
         }
     }
 
@@ -313,7 +304,6 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
 
     @Override
     public void setCurrentUser(UserBean user) {
-        System.out.println("SetCurrentUser chiamato con: " + user);
         this.currentUser = user;
     }
 

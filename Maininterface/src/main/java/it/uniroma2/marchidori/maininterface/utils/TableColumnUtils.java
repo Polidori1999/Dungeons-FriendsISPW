@@ -67,7 +67,6 @@ public final class TableColumnUtils {
             @Override
             protected void updateItem(Button item, boolean empty) {
                 super.updateItem(item, empty);
-                // Controlla se la riga è vuota o se l'indice è fuori dai limiti
                 if (empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()) {
                     setGraphic(null);
                 } else {
@@ -75,12 +74,19 @@ public final class TableColumnUtils {
                     if (item == null) {
                         item = new Button();
                     }
-                    item.setText(textFunction.apply(rowItem));
-                    item.setDisable(disablePredicate.test(rowItem));
-                    item.setOnAction(e -> action.accept(rowItem));
-                    setGraphic(item);
+                    String text = textFunction.apply(rowItem);
+                    if (text == null || text.trim().isEmpty()) {
+                        // Se il testo è vuoto, non mostriamo il pulsante
+                        setGraphic(null);
+                    } else {
+                        item.setText(text);
+                        item.setDisable(disablePredicate.test(rowItem));
+                        item.setOnAction(e -> action.accept(rowItem));
+                        setGraphic(item);
+                    }
                 }
             }
         });
     }
+
 }

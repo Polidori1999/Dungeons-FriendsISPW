@@ -17,7 +17,6 @@ public class CharacterSheetDownloadTask extends Task<Void> {
 
     private final CharacterSheetBean bean;
     private final String destinationPath;
-    private final int totalSteps = 50; // numero di "passi" simulati per il download
 
     /**
      * Costruttore.
@@ -33,6 +32,8 @@ public class CharacterSheetDownloadTask extends Task<Void> {
     @Override
     protected Void call() throws Exception {
         // Simula il download in totalSteps passi, con una pausa di 50 ms per passo.
+        // numero di "passi" simulati per il download
+        int totalSteps = 50;
         for (int i = 1; i <= totalSteps; i++) {
             if (isCancelled()) {
                 break;

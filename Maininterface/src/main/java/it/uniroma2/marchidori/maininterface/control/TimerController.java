@@ -1,6 +1,5 @@
 package it.uniroma2.marchidori.maininterface.control;
 
-import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.utils.CustomTimer;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -12,8 +11,6 @@ public class TimerController {
 
 
     private CustomTimer timer;
-    private final Label timerLabel;
-    private final Runnable onFinishAction;
 
     /**
      * @param timerLabel       Label da aggiornare con il countdown.
@@ -21,8 +18,6 @@ public class TimerController {
      * @param onFinishAction   Azione da eseguire quando il timer scade.
      */
     public TimerController(Label timerLabel, int durationInSeconds, Runnable onFinishAction) {
-        this.timerLabel = timerLabel;
-        this.onFinishAction = onFinishAction;
         this.timer = new CustomTimer(durationInSeconds, new CustomTimer.TimerListener() {
             @Override
             public void onTick(int secondsRemaining) {
