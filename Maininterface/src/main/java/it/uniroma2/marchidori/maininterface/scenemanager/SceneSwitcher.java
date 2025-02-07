@@ -7,7 +7,6 @@ import it.uniroma2.marchidori.maininterface.boundary.consultrules.ConsultRulesBo
 import it.uniroma2.marchidori.maininterface.boundary.consultrules.ConsultRulesDMORPlayerBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.consultrules.ConsultRulesGuestBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyBoundary;
-import it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyDMBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyGuestBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyPlayerBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.login.LoginBoundary;
@@ -48,7 +47,7 @@ public class SceneSwitcher {
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.MANAGE_LOBBY_LIST), ManageLobbyListPlayerBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.MANAGE_LOBBY_LIST), ManageLobbyListGuestBoundary.class);
 
-        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.JOIN_LOBBY), JoinLobbyDMBoundary.class);
+        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.JOIN_LOBBY), JoinLobbyBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.JOIN_LOBBY), JoinLobbyPlayerBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.JOIN_LOBBY), JoinLobbyGuestBoundary.class);
 
@@ -243,6 +242,9 @@ public class SceneSwitcher {
         if (boundary instanceof RegisterBoundary registerBoundary) {
             registerBoundary.setLogicController(controller);
         }
+        if (boundary instanceof LoginBoundary loginBoundary) {
+            loginBoundary.setLogicController(controller);
+        }
 
 
     }
@@ -287,6 +289,9 @@ public class SceneSwitcher {
         if (controller instanceof ConsultRulesBoundary consultRulesBoundary) {
             consultRulesBoundary.setCurrentUser(currentUser);
         }
+        if (controller instanceof LoginBoundary loginBoundary) {
+            loginBoundary.setCurrentUser(currentUser);
+        }
     }
 
 
@@ -323,6 +328,9 @@ public class SceneSwitcher {
         }
         if (controller instanceof ConsultRulesController consultRulesController) {
             consultRulesController.setCurrentUser(currentUser);
+        }
+        if (controller instanceof LoginController loginController) {
+            loginController.setCurrentUser(currentUser);
         }
     }
 

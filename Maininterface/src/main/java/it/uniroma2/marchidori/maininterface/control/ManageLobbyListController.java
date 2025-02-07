@@ -10,16 +10,19 @@ import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ManageLobbyListController implements UserAwareInterface {
+
+    private static final Logger LOGGER = Logger.getLogger(ManageLobbyListController.class.getName());
+
     private UserBean currentUser;
     private User currentEntity = Session.getCurrentUser();
 
-    public ManageLobbyListController() {}
-
-
-
+    public ManageLobbyListController() {
+        // empty
+    }
 
     private LobbyBean entityToBean(Lobby cs) {
         // Infine crea il bean complessivo
@@ -33,7 +36,7 @@ public class ManageLobbyListController implements UserAwareInterface {
     public void deleteLobby(String lobbyName) {
         // Se l'utente è un guest, non fare nulla con la lista delle lobby
         if (currentUser == null || currentUser.getRoleBehavior() == RoleEnum.GUEST) {
-            System.err.println(">>> Errore: L'utente è un guest e non può gestire le lobby.");
+            LOGGER.log(Level.WARNING, "Errore: L'utente è un guest e non può gestire le lobby.");
             return;  // Non fare nulla se l'utente è un guest
         }
 
@@ -43,22 +46,14 @@ public class ManageLobbyListController implements UserAwareInterface {
                 if (currentUser.getJoinedLobbies().get(i).getName().equals(lobbyName)) {
                     currentUser.getJoinedLobbies().remove(i);
                     currentEntity.getJoinedLobbies().remove(i);
-                    System.out.println(">>> DEBUG: Lobby eliminata dallo UserBean: " + lobbyName);
+                    LOGGER.log(Level.INFO, "Lobby eliminata dallo UserBean: {0}", lobbyName);
                     return;
                 }
             }
-            System.err.println(">>> ERRORE: Nessuna lobby trovata con il nome: " + lobbyName);
+            LOGGER.log(Level.SEVERE, "ERRORE: Nessuna lobby trovata con il nome: {0}", lobbyName);
         } else {
-            System.err.println(">>> ERRORE: La lista delle lobby è null per l'utente " + currentUser.getRoleBehavior());
+            LOGGER.log(Level.SEVERE, "ERRORE: La lista delle lobby è null per l utente {0}", currentUser.getRoleBehavior());
         }
-    }
-
-
-    /**
-     * Converte da Bean "spezzato" a Entity pura.
-     */
-    private Lobby beanToEntity(LobbyBean bean) {
-        return new Lobby(bean.getName(), bean.getDuration(), bean.getType(), bean.isOwned(), bean.getNumberOfPlayers());
     }
 
     @Override
@@ -77,7 +72,7 @@ public class ManageLobbyListController implements UserAwareInterface {
                 beans.add(bean);
             }
         } else {
-            System.err.println(">>> ERRORE: currentEntity o la sua lista di joinedLobbies è null.");
+            LOGGER.log(Level.SEVERE, "ERRORE: currentEntity o la sua lista di joinedLobbies è null.");
         }
 
         return beans;

@@ -1,13 +1,15 @@
 package it.uniroma2.marchidori.maininterface.control;
 
-import it.uniroma2.marchidori.maininterface.entity.User;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
+
+import java.io.IOException;
 
 /**
  * Controller per il popup di conferma con timer.
@@ -34,7 +36,6 @@ public class ConfirmationPopupController {
     private TimerController timerController;
     private Runnable confirmAction;
     private Runnable cancelAction;
-    private User currentEntity;
 
     @FXML
     public void initialize() {
@@ -106,4 +107,19 @@ public class ConfirmationPopupController {
             popupPane.setManaged(false); // Se vuoi che scompaia anche dal layout
         });
     }
+
+    public static ConfirmationPopupController loadPopup(AnchorPane container) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    ConfirmationPopupController.class.getResource("/it/uniroma2/marchidori/maininterface/confirmationPopup.fxml")
+            );
+            Parent popupRoot = loader.load();
+            container.getChildren().add(popupRoot);
+            return loader.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

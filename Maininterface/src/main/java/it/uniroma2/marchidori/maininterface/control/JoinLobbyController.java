@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 public class JoinLobbyController implements UserAwareInterface {
     private UserBean currentUser;
-    private User currentEntity = Session.getCurrentUser();
+    private final User currentEntity = Session.getCurrentUser();
 
     private static final Logger logger = Logger.getLogger(JoinLobbyController.class.getName());
 
@@ -41,7 +41,7 @@ public class JoinLobbyController implements UserAwareInterface {
     }
 
     public Lobby beanToEntity(LobbyBean bean) {
-        return new Lobby(bean.getName(), bean.getDuration(), bean.getType(), bean.isOwned(), bean.getNumberOfPlayers());
+        return new Lobby(bean.getName(), bean.getDuration(), bean.getLiveOnline(), bean.isOwned(), bean.getNumberOfPlayers());
     }
 
     public List<LobbyBean> filterLobbies(String type, String duration, String numPlayersStr, String searchQuery) {
@@ -66,15 +66,11 @@ public class JoinLobbyController implements UserAwareInterface {
         return result;
     }
 
-    public void saveChanges(LobbyBean bean) {
-        logger.log(Level.INFO, "Salvataggio della lobby: {0}", bean.getName());
-    }
-
     // Conversione da Entity -> Bean
     private LobbyBean entityToBean(Lobby lob) {
         LobbyBean bean = new LobbyBean();
         bean.setName(lob.getLobbyName());
-        bean.setType(lob.getType());
+        bean.setLiveOnline(lob.getType());
         bean.setDuration(lob.getDuration());
         bean.setNumberOfPlayers(lob.getNumberOfPlayers());
         return bean;

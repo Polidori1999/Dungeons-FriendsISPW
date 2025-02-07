@@ -38,8 +38,6 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     protected ComboBox<String> comboBox2; // "Singola"/"Campagna"
     @FXML
     protected ComboBox<String> comboBox3; // "2", "3", ... "8"
-    @FXML
-    protected ComboBox<String> comboBox4;
 
     @FXML
     protected ImageView joinLobbyImage;
@@ -68,6 +66,10 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     protected TableColumn<LobbyBean, Void> joinButtonColumn;
     @FXML
     protected TableColumn<LobbyBean, Void> favouriteButton;
+    @FXML
+    protected TableColumn<LobbyBean, String> durationColumn;
+    @FXML
+    protected TableColumn<LobbyBean, String> liveOnlineColumn;
 
     @FXML
     protected TextField searchBar;
@@ -102,7 +104,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
                 throw new NullPointerException("Errore: il controller di confirmationPopup.fxml è null!");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new SceneChangeException("errore nel caricamento del popup controller", e);
         }
 
         // Popola i ComboBox
@@ -125,6 +127,8 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         // Imposta le colonne: usa una lambda per la colonna "players"
         lobbyNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         numberOfPlayersColumn.setCellValueFactory(new PropertyValueFactory<>("players"));
+        durationColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
+        liveOnlineColumn.setCellValueFactory(new PropertyValueFactory<>("liveOnline"));
 
         lobbyTableView.setItems(filteredLobbies);
         refreshTable();
@@ -133,7 +137,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
 
 
     public void refreshTable() {
-        if (currentUser != null) {
+        if (controller != null) {
             filteredLobbies.clear();
             List<LobbyBean> updatedList = controller.getList(LobbyRepository.getAllLobbies()); // Prendi i dati aggiornati
             filteredLobbies.addAll(updatedList); // Riaggiungi i dati aggiornati

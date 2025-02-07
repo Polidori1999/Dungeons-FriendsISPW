@@ -10,21 +10,20 @@ import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
     private static final Logger logger = Logger.getLogger(ManageLobbyListDMBoundary.class.getName());
 
     protected ConfirmationPopupController confirmationPopupController;
     private LobbyBean pendingDeleteBean;
+
     @Override
     protected void initialize() {
         super.initialize();
@@ -35,19 +34,8 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
         data.clear();
         data.addAll(currentUser.getJoinedLobbies());
         tableViewLobby.refresh();
-
-        System.out.println(">>> DEBUG: Numero di personaggi nella tabella: " + data.size());
-
-        // Carica il popup di conferma dal file FXML e aggiungilo al contenitore principale
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/confirmationPopup.fxml"));
-            Parent popupRoot = loader.load();
-            // Si assume che "characterPane" (definito in CharacterListBoundary) sia il contenitore principale
-            manageLobbyListPane.getChildren().add(popupRoot);
-            confirmationPopupController = loader.getController();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        logger.log(Level.INFO, "Numero di personaggi nella tabella: {0}", data.size());
+        confirmationPopupController = ConfirmationPopupController.loadPopup(manageLobbyListPane);
 
         // Configura colonna "Edit"
         tableViewLobbyEdit.setCellValueFactory(cellData -> {
@@ -85,7 +73,6 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
                         // Salva il bean selezionato per la cancellazione
                         pendingDeleteBean = getTableView().getItems().get(getIndex());
                         // Mostra il popup di conferma con timer
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         showDeleteConfirmation();
                     });
                 }
@@ -101,13 +88,12 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
         if (confirmationPopupController != null && pendingDeleteBean != null) {
             String message = "Vuoi eliminare il personaggio '" + pendingDeleteBean.getName() + "'?";
             confirmationPopupController.show(message, 10,
-                    () -> onConfirmDelete(),
-                    () -> onCancelDelete());
+                    this::onConfirmDelete,
+                    this::onCancelDelete);
         } else {
-            System.err.println("Errore: ConfirmationPopupController non inizializzato o pendingDeleteBean è null");
+            logger.severe("Errore: ConfirmationPopupController non inizializzato o pendingDeleteBean è null");
         }
     }
-
 
     private void onConfirmDelete() {
         if (pendingDeleteBean != null) {
@@ -138,20 +124,12 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
         }
     }
 
-    private void deleteLobby(LobbyBean bean) {
-        // Invochi la delete sul controller e rimuovi dalla tabella
-        if (bean == null) return;
-        controller.deleteLobby(bean.getName());
-        data.remove(bean);
-        tableViewLobby.refresh();
-    }
-
     @FXML
     void onClickNewCharacter(ActionEvent event) {
         // Invece di aprire un modal, usiamo la scena "manageLobby.fxml"
         // e settiamo selectedLobbyName = null => creazione
         currentUser.setSelectedLobbyName(null);
-        System.out.println(currentUser.getEmail());
+        logger.info(currentUser.getEmail());
         try {
             SceneSwitcher.changeScene(
                     (Stage) manageLobbyListPane.getScene().getWindow(),
@@ -163,6 +141,7 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
         }
     }
 
+    @Override
     public void setCurrentUser(UserBean currentUser) {
         this.currentUser = currentUser;
     }

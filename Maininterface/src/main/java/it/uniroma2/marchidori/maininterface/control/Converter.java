@@ -131,7 +131,7 @@ public class Converter {
         return new Lobby(
                 lobbyBean.getName(),
                 lobbyBean.getDuration(),
-                lobbyBean.getType(),
+                lobbyBean.getLiveOnline(),
                 lobbyBean.isOwned(),
                 lobbyBean.getNumberOfPlayers()
         );
@@ -152,6 +152,6 @@ public class Converter {
     }
 
     public Lobby beanToEntity(LobbyBean bean) {
-        return new Lobby(bean.getName(), bean.getDuration(), bean.getType(), bean.isOwned(), bean.getNumberOfPlayers());
+        return new Lobby(bean.getName(), bean.getDuration(), bean.getLiveOnline(), bean.isOwned(), bean.getNumberOfPlayers());
     }
 }

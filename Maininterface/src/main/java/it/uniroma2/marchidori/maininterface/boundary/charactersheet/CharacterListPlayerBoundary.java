@@ -54,19 +54,9 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
         data.clear();
         data.addAll(currentUser.getCharacterSheets());
         tableViewChar.refresh();
+        System.out.println(">>> DEBUG: Numero di personaggi nella tabella: " + data.size());// Carica il popup di conferma dal file FXML e aggiungilo al contenitore principale
+        confirmationPopupController = ConfirmationPopupController.loadPopup(characterPane);
 
-        System.out.println(">>> DEBUG: Numero di personaggi nella tabella: " + data.size());
-
-        // Carica il popup di conferma dal file FXML e aggiungilo al contenitore principale
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/confirmationPopup.fxml"));
-            Parent popupRoot = loader.load();
-            // Si assume che "characterPane" (definito in CharacterListBoundary) sia il contenitore principale
-            characterPane.getChildren().add(popupRoot);
-            confirmationPopupController = loader.getController();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         // ---------------------------------------------------
         // Colonna EDIT (bottone "Edit")

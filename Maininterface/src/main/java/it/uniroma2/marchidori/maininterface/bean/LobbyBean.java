@@ -3,7 +3,7 @@ package it.uniroma2.marchidori.maininterface.bean;
 public class LobbyBean {
     private String duration;       // "Singola"/"Campagna"
     private String name;           // nome lobby
-    private String type;// "Online"/"Presenza"
+    private String liveOnline;// "Online"/"Presenza"
     private int currentNumberOfPlayers;
     private int maxOfPlayers;// # di giocatori
     private boolean owned;
@@ -15,7 +15,7 @@ public class LobbyBean {
     public LobbyBean(String duration, String name, String type, int numberOfPlayers, boolean owned) {
         this.duration = duration;
         this.name = name;
-        this.type = type;
+        this.liveOnline = type;
         this.maxOfPlayers = numberOfPlayers;
         this.currentNumberOfPlayers = 0;
         this.owned = owned;
@@ -35,11 +35,11 @@ public class LobbyBean {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
+    public String getLiveOnline() {
+        return liveOnline;
     }
-    public void setType(String type) {
-        this.type = type;
+    public void setLiveOnline(String type) {
+        this.liveOnline = type;
     }
 
     public int getNumberOfPlayers() {
@@ -64,11 +64,4 @@ public class LobbyBean {
     public String getPlayers() {
         return currentNumberOfPlayers + "/" + maxOfPlayers;
     }
-
-
-    @Override
-    public String toString() {
-        return "[LobbyBean] " + name + " (" + type + ") - Duration: " + duration + " - players: " + maxOfPlayers;
-    }
-
 }

@@ -6,6 +6,7 @@ import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.ManageLobbyController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
+import it.uniroma2.marchidori.maininterface.factory.LobbyFactory;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.collections.FXCollections;
@@ -19,9 +20,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareInterface {
 
+    private static final Logger LOGGER = Logger.getLogger(ManageLobbyBoundary.class.getName());
 
     // -------------------------------------------------------------
     //                      VARIABILI FXML
@@ -60,13 +64,10 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
     @FXML
     private Button myChar;
 
-
-
     // Metodi per il cambio scena (es. per JoinLobby, ConsultRules, ecc.)
     @FXML
     void onClickGoToJoinLobby(ActionEvent event) {
         try {
-            currentUser.setSelectedLobbyName(null);
             SceneSwitcher.changeScene(
                     (Stage) manageLobbyPane.getScene().getWindow(),
                     SceneNames.JOIN_LOBBY,
@@ -80,7 +81,6 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
     @FXML
     void onClickGoToConsultRules(ActionEvent event) {
         try {
-            currentUser.setSelectedLobbyName(null);
             SceneSwitcher.changeScene(
                     (Stage) manageLobbyPane.getScene().getWindow(),
                     SceneNames.CONSULT_RULES,
@@ -107,7 +107,6 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
     @FXML
     void onClickGoBackToListOfLobbies(ActionEvent event) {
         try {
-            currentUser.setSelectedLobbyName(null);
             SceneSwitcher.changeScene(
                     (Stage) manageLobbyPane.getScene().getWindow(),
                     SceneNames.MANAGE_LOBBY_LIST,
@@ -121,7 +120,6 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
     @FXML
     void onClickGoToHome(ActionEvent event) {
         try {
-            currentUser.setSelectedLobbyName(null);
             SceneSwitcher.changeScene(
                     (Stage) manageLobbyPane.getScene().getWindow(),
                     SceneNames.HOME,
@@ -135,7 +133,6 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
     @FXML
     void onClickUser(ActionEvent event) {
         try {
-            currentUser.setSelectedLobbyName(null);
             SceneSwitcher.changeScene(
                     (Stage) manageLobbyPane.getScene().getWindow(),
                     SceneNames.USER,
@@ -162,7 +159,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
     // -------------------------------------------------------------
     //                    VARIABILI DI STATO
     // -------------------------------------------------------------
-    public UserBean currentUser;
+    private UserBean currentUser;
     private ManageLobbyController controller;
 
     /** true = creazione nuova lobby, false = modifica di una lobby esistente */
@@ -198,51 +195,33 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
         liveOnlineBox.setItems(FXCollections.observableArrayList("Live", "Online"));
 
         // Stampa di debug per verificare l'iniezione dell'utente
-        System.out.println("User in ManageLobbyBoundary: " + (currentUser != null ? currentUser.getEmail() : "null"));
+        LOGGER.log(Level.INFO, "User in ManageLobbyBoundary: {0}", (currentUser != null ? currentUser.getEmail() : "null"));
 
         // Determina la modalità in base al campo selectedLobbyName del currentUser
         String selected = currentUser != null ? currentUser.getSelectedLobbyName() : null;
         if (selected == null || selected.isEmpty()) {
             creationMode = true;
-            currentBean = new LobbyBean();
+            currentBean = LobbyFactory.createBean();
             oldName = null;
         } else {
             creationMode = false;
-            currentBean = findLobbyByName(selected);
+            currentBean = controller.findLobbyByName(selected, currentUser.getJoinedLobbies());
             oldName = selected;
             if (currentBean == null) {
-                System.err.println(">>> Non ho trovato la lobby con nome: " + selected);
+                LOGGER.log(Level.SEVERE, "Non ho trovato la lobby con nome: {0}", selected);
                 creationMode = true;
-                currentBean = new LobbyBean();
+                currentBean = LobbyFactory.createBean();
             }
         }
         if (creationMode) {
             clearFields();
-            System.out.println(">>> Modalità creazione attiva.");
+            LOGGER.info("Modalità creazione attiva.");
         } else {
             populateFields(currentBean);
-            System.out.println(">>> Modalità modifica attiva per lobby: " + currentBean.getName());
+            LOGGER.log(Level.INFO, "Modalità modifica attiva per lobby: {0}", currentBean.getName());
         }
-    }
 
-    private LobbyBean findLobbyByName(String lobbyName) {
-        if (currentUser.getJoinedLobbies() == null) {
-            return null;
-        }
-        LobbyBean foundLobby = currentUser.getJoinedLobbies().stream()
-                .filter(l -> l.getName().equals(lobbyName))
-                .findFirst()
-                .orElse(null);
-        if (foundLobby == null) {
-            return null;
-        }
-        return new LobbyBean(
-                foundLobby.getDuration(),
-                foundLobby.getName(),
-                foundLobby.getType(),
-                foundLobby.getNumberOfPlayers(),
-                foundLobby.isOwned()
-        );
+
     }
 
     // -------------------------------------------------------------
@@ -251,15 +230,15 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
     @FXML
     void onClickSaveLobby(ActionEvent event) {
         if (currentBean == null) {
-            System.err.println(">>> ERRORE: currentBean è NULL! Non posso salvare.");
+            LOGGER.severe("ERRORE: currentBean è NULL! Non posso salvare.");
             return;
         }
 
         // Legge il nome dalla TextField e gli altri valori dalle ComboBox
         currentBean.setName(lobbyName.getText());
-        currentBean.setType(liveOnlineBox.getValue()); // Valore della ComboBox per il tipo (Live/Online)
-        currentBean.setNumberOfPlayers(parseIntOrZero(maxPlayersBox.getValue())); // Numero massimo come stringa convertita in int
-        currentBean.setDuration(durationBox.getValue()); // Durata
+        currentBean.setLiveOnline(liveOnlineBox.getValue());
+        currentBean.setNumberOfPlayers(parseIntOrZero(maxPlayersBox.getValue()));
+        currentBean.setDuration(durationBox.getValue());
 
         if (!creationMode) {
             controller.updateLobby(oldName, currentBean);
@@ -268,7 +247,6 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
         }
 
         // Dopo il salvataggio, resetta la selezione e torna alla lista delle lobby
-        currentUser.setSelectedLobbyName(null);
         try {
             SceneSwitcher.changeScene(
                     (Stage) ((Button) event.getSource()).getScene().getWindow(),
@@ -276,7 +254,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
                     currentUser
             );
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new SceneChangeException("errore cambio di scena in managelobbylist", e);
         }
     }
 
@@ -285,7 +263,6 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
     // -------------------------------------------------------------
     private void clearFields() {
         lobbyName.setText("");
-        // Reset delle ComboBox
         durationBox.setValue(null);
         liveOnlineBox.setValue(null);
         maxPlayersBox.setValue(null);
@@ -293,7 +270,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
 
     private void populateFields(LobbyBean bean) {
         lobbyName.setText(bean.getName());
-        liveOnlineBox.setValue(bean.getType());
+        liveOnlineBox.setValue(bean.getLiveOnline());
         maxPlayersBox.setValue(String.valueOf(bean.getNumberOfPlayers()));
         durationBox.setValue(bean.getDuration());
     }
@@ -302,7 +279,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
         try {
             return Integer.parseInt(input.trim());
         } catch (NumberFormatException e) {
-            System.err.println(">>> ERRORE: Il valore inserito non è un numero valido: " + input);
+            LOGGER.log(Level.SEVERE, "ERRORE: Il valore inserito non è un numero valido: {0}", input);
             return 0;
         }
     }

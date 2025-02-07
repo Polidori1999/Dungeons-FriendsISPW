@@ -102,16 +102,9 @@ public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAw
         tableViewDuration.setCellValueFactory(new PropertyValueFactory<>("duration"));
         tableViewLiveOrNot.setCellValueFactory(new PropertyValueFactory<>("type"));
 
-
-
-
         tableViewLobby.setItems(data);
     }
 
-
-    /**
-     * Metodo che inizializza la TableView e configura le colonne.
-     */
 
     @FXML
     void onClickGoToConsultRules(ActionEvent event) {

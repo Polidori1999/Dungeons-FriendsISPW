@@ -144,12 +144,14 @@
         </ComboBox>
 
         <!-- Sostituita la ListView con la TableView -->
-        <TableView fx:id="lobbyTableView" layoutX="320.0" layoutY="180.0" prefHeight="360.0" prefWidth="640.0">
+        <TableView fx:id="lobbyTableView" layoutX="290.0" layoutY="180.0" prefHeight="400.0" prefWidth="700.0">
             <columns>
-                <TableColumn fx:id="lobbyNameColumn" prefWidth="200.0" text="Lobby Name" />
-                <TableColumn fx:id="numberOfPlayersColumn" prefWidth="160.0" text="NumberOfPlayers" />
-                <TableColumn fx:id="joinButtonColumn" prefWidth="140.0" text="Join" />
-                <TableColumn fx:id="favouriteButton" prefWidth="140.0" text="Favourite" />
+                <TableColumn fx:id="lobbyNameColumn" prefWidth="148.00006103515625" text="Lobby Name" />
+                <TableColumn fx:id="numberOfPlayersColumn" prefWidth="108.0" text="NumberOfPlayers" />
+                <TableColumn fx:id="durationColumn" prefWidth="112.66668701171875" text="Duration" />
+                <TableColumn fx:id="liveOnlineColumn" prefWidth="106.6666259765625" text="Live/Online" />
+            <TableColumn fx:id="joinButtonColumn" prefWidth="66.0" text="Join" />
+            <TableColumn fx:id="favouriteButton" prefWidth="159.3333740234375" text="Favourite" />
             </columns>
         </TableView>
 
