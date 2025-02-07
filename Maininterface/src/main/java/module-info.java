@@ -5,6 +5,7 @@ module it.uniroma2.marchidori.maininterface {
     requires javafx.graphics;
     requires java.desktop;
     requires java.logging;
+    requires jbcrypt;
 
 
     opens it.uniroma2.marchidori.maininterface to javafx.fxml;

@@ -4,10 +4,8 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 
-class UserService {
+public class UserService {
     private final UserDAO userDAO;
-    private AuthController authController;
-
 
     public UserService(boolean useDatabase) {
         this.userDAO = UserDAOFactory.getUserDAO(useDatabase);
@@ -17,7 +15,8 @@ class UserService {
         userDAO.saveUser(email, password);
     }
 
-    public UserBean loginUser(String email, String password) {
-        return authController.authenticate(email, password);
+    // Metodo per recuperare l'utente basandosi sull'email
+    public UserBean getUserByEmail(String email) {
+        return userDAO.getUserByEmail(email);
     }
 }

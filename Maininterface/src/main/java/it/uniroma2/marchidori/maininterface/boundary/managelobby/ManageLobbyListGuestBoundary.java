@@ -48,7 +48,7 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
 
         // Se l'utente è guest e non ha una lista, inizializzala come vuota
         if (currentUser == null) {
-            currentUser = new UserBean("guest", "guest@example.com", RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            currentUser = new UserBean("guest", "guest@example.com","guest" ,RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
             logger.info(">>> currentUser inizializzato come Guest");
         } else if (currentUser.getRoleBehavior() == RoleEnum.GUEST && currentUser.getJoinedLobbies() == null) {
             currentUser.setJoinedLobbies(new ArrayList<>());

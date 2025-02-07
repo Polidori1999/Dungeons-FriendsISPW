@@ -10,6 +10,7 @@ public class User {
 
     private final String id;
     private final String email;
+    private transient String password;
     private RoleEnum roleBehavior;
     private List<CharacterSheet> characterSheets;  // Riferimento ai fogli dei personaggi
     private List<Lobby> favouriteLobbies;  // Riferimento alle lobby preferite
@@ -36,9 +37,10 @@ public class User {
     /**
      * Se vuoi poter assegnare direttamente un ruolo esterno:
      */
-    public User(String id, String email, RoleEnum initialRole, List<CharacterSheet> characterSheets, List<Lobby> favouriteLobbies, List<Lobby> joinedLobbies) {
+    public User(String id, String email,String password, RoleEnum initialRole, List<CharacterSheet> characterSheets, List<Lobby> favouriteLobbies, List<Lobby> joinedLobbies) {
         this.id = id;
         this.email = email;
+        this.password = password;
         this.roleBehavior = initialRole;
         this.characterSheets = characterSheets;
         this.favouriteLobbies = favouriteLobbies;

@@ -2,30 +2,42 @@ package it.uniroma2.marchidori.maininterface.control;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
+import it.uniroma2.marchidori.maininterface.entity.Session;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class LoginController {
 
-
     private UserService userService;
     private UserBean currentUser;
-    private UserDAOFileSys userDAOFileSys;
 
-    // ✅ Aggiungi un costruttore senza parametri per la Factory
+    // Costruttore senza parametri
     public LoginController() {
-        this.userService = new UserService(false); // Usa `false` per default (file system)
+        // Usa il servizio con il DAO basato su file system (false per default)
+        this.userService = new UserService(false);
     }
 
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;
     }
 
+    // Metodo login che esegue il controllo della password
     public UserBean login(String email, String password) {
-        UserBean authenticatedUser = userService.loginUser(email, password);
-        if (authenticatedUser != null) {
-            setCurrentUser(authenticatedUser);
+        // Recupera l'utente (con password hash ata) tramite il DAO
+        UserBean retrievedUser = userService.getUserByEmail(email);
+        if (retrievedUser == null) {
+            System.out.println("❌ Utente non trovato per: " + email);
+            return null;
         }
-        return authenticatedUser;
+
+        // Verifica la password usando BCrypt
+        if (BCrypt.checkpw(password, retrievedUser.getPassword())) {
+            System.out.println("✅ Login riuscito per: " + email);
+            setCurrentUser(retrievedUser);
+            Session.getInstance().setCurrentUser(Converter.userBeanToEntity(retrievedUser));
+            return retrievedUser;
+        } else {
+            System.out.println("❌ Password errata per: " + email);
+            return null;
+        }
     }
-
-
 }
