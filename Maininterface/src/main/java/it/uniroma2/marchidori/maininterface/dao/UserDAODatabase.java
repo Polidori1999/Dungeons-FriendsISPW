@@ -27,6 +27,7 @@ import java.util.ArrayList;
             }
             System.out.println("🔍 DEBUG: Password hashata prima dell'inserimento → '" + password + "'");
 
+
             String query = "INSERT INTO users (email, password) VALUES (?, ?)";
 
             try (Connection conn = DatabaseConnection.getConnection();
