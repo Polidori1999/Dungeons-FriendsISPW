@@ -7,12 +7,13 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsB
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.entity.*;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
+import it.uniroma2.marchidori.maininterface.entity.Session;
 
 import java.nio.file.Paths;
 
 public class CharacterListController implements UserAwareInterface {
-    private User currentEntity = Session.getCurrentUser();
-    private UserBean currentUser;
+   private User currentEntity = Session.getCurrentUser();
+   private UserBean currentUser;
 
     public CharacterListController() {
         //empty

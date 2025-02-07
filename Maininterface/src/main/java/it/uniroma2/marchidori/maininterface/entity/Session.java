@@ -3,6 +3,8 @@ package it.uniroma2.marchidori.maininterface.entity;
 
 public class Session {
 
+    private Session(){}
+
     // Campo statico che contiene l'utente corrente
     private static User currentUser;
 
