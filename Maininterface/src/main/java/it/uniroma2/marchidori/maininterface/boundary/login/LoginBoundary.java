@@ -5,12 +5,10 @@ import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.control.LoginController;
-import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
-import it.uniroma2.marchidori.maininterface.control.AuthController;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -59,8 +57,8 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
     private Label wrongLogin;
 
     private UserBean currentUser;
-    private String guest = "guest";
-    private LoginController loginController = new LoginController();
+    private static final String GUEST = "guest";
+    private LoginController loginController;
     @FXML
     public void initialize() {
         login.maxWidthProperty().bind(anchorLoginPane.widthProperty().divide(2));
@@ -89,7 +87,7 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
     @FXML
     void onClickGuest(ActionEvent event) throws IOException {
         try {
-            currentUser = new UserBean(guest, "guest@example.com",guest ,RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            currentUser = new UserBean( GUEST, "guest@example.com", GUEST ,RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
             logger.info(">>> Utente impostato come Guest. Ruolo: " + currentUser.getRoleBehavior());
 
             Session.setCurrentUser(Converter.userBeanToEntity(currentUser));
@@ -119,7 +117,7 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
     private void changeScene(String fxml) throws IOException {
         if (currentUser == null) {
             logger.info(">>> ERRORE: currentUser è NULL! Creazione di un UserBean di fallback.");
-            currentUser = new UserBean(guest, "guest@example.com",guest,RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            currentUser = new UserBean(GUEST, "guest@example.com", GUEST,RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         }
         logger.log(Level.FINE, "Cambiando scena: {0} con UserBean ruolo: {1}", new Object[]{fxml, currentUser.getRoleBehavior()});
         Stage currentStage = (Stage) anchorLoginPane.getScene().getWindow();

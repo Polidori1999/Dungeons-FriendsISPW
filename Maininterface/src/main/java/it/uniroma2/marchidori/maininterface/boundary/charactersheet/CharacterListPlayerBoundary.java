@@ -8,6 +8,7 @@ import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
+import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.concurrent.WorkerStateEvent;
@@ -56,57 +57,13 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
         tableViewChar.refresh();
         System.out.println(">>> DEBUG: Numero di personaggi nella tabella: " + data.size());// Carica il popup di conferma dal file FXML e aggiungilo al contenitore principale
         confirmationPopupController = ConfirmationPopupController.loadPopup(characterPane);
+        // Configura la colonna "Edit"
+        TableColumnUtils.setupButtonColumn(tableViewCharButton, "Edit", this::editChar);
 
-
-        // ---------------------------------------------------
-        // Colonna EDIT (bottone "Edit")
-        // ---------------------------------------------------
-        tableViewCharButton.setCellValueFactory(cellData -> {
-            Button editBtn = new Button("Edit");
-            return new ReadOnlyObjectWrapper<>(editBtn);
-        });
-        tableViewCharButton.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Button item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(item);
-                    item.setOnAction(e -> {
-                        CharacterSheetBean selectedChar = getTableView().getItems().get(getIndex());
-                        System.out.println(">>> DEBUG: Bottone Edit premuto per personaggio: "
-                                + selectedChar.getInfoBean().getName());
-                        editChar(selectedChar);
-                    });
-                }
-            }
-        });
-
-        // ---------------------------------------------------
-        // Colonna DELETE (bottone "Delete")
-        // ---------------------------------------------------
-        tableViewCharDelete.setCellValueFactory(cellData -> {
-            Button deleteBtn = new Button("Delete");
-            return new ReadOnlyObjectWrapper<>(deleteBtn);
-        });
-        tableViewCharDelete.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Button item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(item);
-                    item.setOnAction(e -> {
-                        // Salva il bean selezionato per la cancellazione
-                        pendingDeleteBean = getTableView().getItems().get(getIndex());
-                        // Mostra il popup di conferma con timer
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        showDeleteConfirmation();
-                    });
-                }
-            }
+        // Configura la colonna "Delete"
+        TableColumnUtils.setupButtonColumn(tableViewCharDelete, "Delete", characterSheet -> {
+            pendingDeleteBean = characterSheet;
+            showDeleteConfirmation();
         });
 
         // ---------------------------------------------------
@@ -141,8 +98,8 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
         if (confirmationPopupController != null && pendingDeleteBean != null) {
             String message = "Vuoi eliminare il personaggio '" + pendingDeleteBean.getInfoBean().getName() + "'?";
             confirmationPopupController.show(message, 10,
-                    () -> onConfirmDelete(),
-                    () -> onCancelDelete());
+                    this::onConfirmDelete,
+                    this::onCancelDelete);
         } else {
             System.err.println("Errore: ConfirmationPopupController non inizializzato o pendingDeleteBean è null");
         }

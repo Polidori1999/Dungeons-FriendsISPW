@@ -7,6 +7,7 @@ import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
+import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -37,46 +38,13 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
         logger.log(Level.INFO, "Numero di personaggi nella tabella: {0}", data.size());
         confirmationPopupController = ConfirmationPopupController.loadPopup(manageLobbyListPane);
 
-        // Configura colonna "Edit"
-        tableViewLobbyEdit.setCellValueFactory(cellData -> {
-            Button editBtn = new Button("Edit");
-            return new ReadOnlyObjectWrapper<>(editBtn);
-        });
-        tableViewLobbyEdit.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Button item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(item);
-                    item.setOnAction(e -> {
-                        LobbyBean selectedLobby = getTableView().getItems().get(getIndex());
-                        editLobby(selectedLobby);
-                    });
-                }
-            }
-        });
-        tableViewLobbyDelete.setCellValueFactory(cellData -> {
-            Button deleteBtn = new Button("Delete");
-            return new ReadOnlyObjectWrapper<>(deleteBtn);
-        });
-        tableViewLobbyDelete.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Button item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(item);
-                    item.setOnAction(e -> {
-                        // Salva il bean selezionato per la cancellazione
-                        pendingDeleteBean = getTableView().getItems().get(getIndex());
-                        // Mostra il popup di conferma con timer
-                        showDeleteConfirmation();
-                    });
-                }
-            }
+// Configura la colonna "Edit"
+        TableColumnUtils.setupButtonColumn(tableViewLobbyEdit, "Edit", this::editLobby);
+
+// Configura la colonna "Delete"
+        TableColumnUtils.setupButtonColumn(tableViewLobbyDelete, "Delete", lobby -> {
+            pendingDeleteBean = lobby;
+            showDeleteConfirmation();
         });
 
         // Rendo cliccabile il bottone "New Lobby"
