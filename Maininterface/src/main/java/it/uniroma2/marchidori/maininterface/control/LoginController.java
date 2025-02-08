@@ -30,8 +30,8 @@ public class LoginController {
 
         if (retrievedUser == null) {
             // Log solo se il livello di log permette
-            if (LoginController.logger.isLoggable(Level.SEVERE)) {
-                LoginController.logger.severe(String.format("❌ Utente non trovato per: %s", email));
+            if (logger.isLoggable(Level.SEVERE)) {
+                logger.severe(String.format("❌ Utente non trovato per: %s", email));
             }
             return null;
         }
@@ -39,16 +39,16 @@ public class LoginController {
         // Verifica la password usando BCrypt
         if (BCrypt.checkpw(password, retrievedUser.getPassword())) {
             // Log solo se il livello di log permette
-            if (LoginController.logger.isLoggable(Level.INFO)) {
-                LoginController.logger.info(String.format("✅ Login riuscito per: %s", email));
+            if (logger.isLoggable(Level.INFO)) {
+                logger.info(String.format("✅ Login riuscito per: %s", email));
             }
             setCurrentUser(retrievedUser);
             Session.getInstance().setCurrentUser(Converter.userBeanToEntity(retrievedUser));
             return retrievedUser;
         } else {
             // Log solo se il livello di log permette
-            if (LoginController.logger.isLoggable(Level.SEVERE)) {
-                LoginController.logger.severe(String.format("❌ Password errata per: %s", email));
+            if (logger.isLoggable(Level.SEVERE)) {
+                logger.severe(String.format("❌ Password errata per: %s", email));
             }
             return null;
         }
