@@ -10,7 +10,7 @@ public class UserBean {
 
     private String email;
     // Aggiungi il campo password (hashata)
-    private transient String password; // transient se non vuoi esporlo in serializzazione
+    private String password; // transient se non vuoi esporlo in serializzazione
     private RoleEnum roleBehavior;
     private List<LobbyBean> favouriteLobbies;
     private String selectedLobbyName;

@@ -10,7 +10,7 @@ public class User {
 
 
     private final String email;
-    private transient String password;
+    private String password;
     private RoleEnum roleBehavior;
     private List<CharacterSheet> characterSheets;  // Riferimento ai fogli dei personaggi
     private List<Lobby> favouriteLobbies;  // Riferimento alle lobby preferite
@@ -29,9 +29,7 @@ public class User {
         this.joinedLobbies = joinedLobbies;
         this.roleBehavior = RoleEnum.PLAYER; // Default come Player
 
-        //DA IMPLEMENTARE
-        //this.characterSheets = characterSheets;
-        //this.notificationPlayer = notificationPlayer;
+
     }
 
     /**
