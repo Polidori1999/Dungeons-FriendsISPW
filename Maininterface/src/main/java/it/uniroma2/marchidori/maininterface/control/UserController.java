@@ -4,16 +4,18 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
+import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 
 import static it.uniroma2.marchidori.maininterface.enumerate.RoleEnum.DM;
 import static it.uniroma2.marchidori.maininterface.enumerate.RoleEnum.PLAYER;
 
 public class UserController implements UserAwareInterface {
-    private UserBean currentUser;
     private User currentEntity = Session.getInstance().getCurrentUser();
-    public UserController() {
-        //boh
+    private UserBean currentUser;
 
+
+    public UserController() {
+        //costruttore vuoto
     }
 
     @Override
@@ -22,22 +24,13 @@ public class UserController implements UserAwareInterface {
     }
 
     // Metodo per cambiare il ruolo tra PLAYER e DM
-    public void switchRole(UserBean user) {
-        if(user.getRoleBehavior() == PLAYER) {
-            user.setRoleBehavior(DM);
-        } else if (user.getRoleBehavior() == DM) {
-            user.setRoleBehavior(PLAYER);
+    public void switchRole(RoleEnum role) {
+        if(role == PLAYER) {
+            currentUser.setRoleBehavior(DM);
+            currentEntity.setRoleBehavior(DM);
+        } else if (role == DM) {
+            currentUser.setRoleBehavior(PLAYER);
+            currentEntity.setRoleBehavior(PLAYER);
         }
     }
-
-    public void switchRole(User user) {
-        if(user.getRoleBehavior() == PLAYER) {
-            user.setRoleBehavior(DM);
-        } else if (user.getRoleBehavior() == DM) {
-            user.setRoleBehavior(PLAYER);
-        }
-    }
-
-
-
 }

@@ -79,7 +79,6 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
                 confirmationPopupController.show("Stai per essere rediretto al login", 10, this::redirectToLogin, this::redirectToLogin);
             });
         } catch (IOException e) {
-            e.printStackTrace();
             throw new PopupLoadingException("Errore durante il caricamento del popup di conferma");
         }
     }

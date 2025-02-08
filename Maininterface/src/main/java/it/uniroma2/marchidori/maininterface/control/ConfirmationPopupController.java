@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.control;
 
+import it.uniroma2.marchidori.maininterface.exception.PopupLoadingException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -117,8 +118,7 @@ public class ConfirmationPopupController {
             container.getChildren().add(popupRoot);
             return loader.getController();
         } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            throw new PopupLoadingException("Errore durante il caricamento del popup di conferma");
         }
     }
 
