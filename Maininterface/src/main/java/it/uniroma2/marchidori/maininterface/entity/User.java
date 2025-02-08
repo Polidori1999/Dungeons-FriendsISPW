@@ -8,15 +8,17 @@ import java.util.List;
 public class User {
 
     private final String email;
+    private String password;
     private RoleEnum roleBehavior;
     private List<CharacterSheet> characterSheets;  // Riferimento ai fogli dei personaggi
     private List<Lobby> favouriteLobbies;  // Riferimento alle lobby preferite
     private List<Lobby> joinedLobbies;
 
     // Costruttore immutabile
-    public User(String email, List<CharacterSheet> characterSheets,
+    public User(String email,String password, List<CharacterSheet> characterSheets,
                 List<Lobby> favouriteLobbies, List<Lobby> joinedLobbies) {
         this.email = email;
+        this.password=password;
         this.characterSheets = characterSheets;
         this.favouriteLobbies = favouriteLobbies;
         this.joinedLobbies = joinedLobbies;
@@ -28,6 +30,7 @@ public class User {
      */
     public User(String email, RoleEnum initialRole, List<CharacterSheet> characterSheets, List<Lobby> favouriteLobbies, List<Lobby> joinedLobbies) {
         this.email = email;
+
         this.roleBehavior = initialRole;
         this.characterSheets = characterSheets;
         this.favouriteLobbies = favouriteLobbies;
@@ -38,6 +41,10 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public RoleEnum getRoleBehavior() {
