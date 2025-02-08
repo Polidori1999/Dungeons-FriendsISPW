@@ -12,9 +12,7 @@ import it.uniroma2.marchidori.maininterface.boundary.login.LoginBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.login.RegisterBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.managelobby.*;
 import it.uniroma2.marchidori.maininterface.boundary.user.UserBoundary;
-import it.uniroma2.marchidori.maininterface.boundary.user.UserDMBoundary;
 import it.uniroma2.marchidori.maininterface.boundary.user.UserGuestBoundary;
-import it.uniroma2.marchidori.maininterface.boundary.user.UserPlayerBoundary;
 import it.uniroma2.marchidori.maininterface.control.*;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.enumerate.SceneIdEnum;
@@ -54,8 +52,8 @@ public class SceneSwitcher {
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.CHARACTER_LIST), CharacterListPlayerBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.CHARACTER_LIST), CharacterListGuestBoundary.class);
 
-        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.USER), UserDMBoundary.class);
-        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.USER), UserPlayerBoundary.class);
+        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.USER), UserBoundary.class);
+        ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.USER), UserBoundary.class);
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.USER), UserGuestBoundary.class);
 
         ROLE_SCENE_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.CHARACTER_SHEET), CharacterSheetBoundary.class);
@@ -140,8 +138,6 @@ public class SceneSwitcher {
         //TOLTO PER MODIFICARE
         RoleEnum role = (currentUser != null) ? currentUser.getRoleBehavior() : RoleEnum.NONE;
 
-
-
         // Risolvi la classe boundary in base al mapping
         Class<?> boundaryClass = getBoundaryClass(role, sceneId);
         logger.info(">>> [SceneSwitcher] Boundary risolta: " + boundaryClass.getSimpleName());
@@ -208,7 +204,6 @@ public class SceneSwitcher {
     private static final String X = ">>> [SceneSwitcher] Nessun currentUser da iniettare.";
 
     private static void injectControllerIntoBoundary(Object controller, Object boundary) {
-
 
         if (controller == null) {
             logger.info(X);
@@ -295,6 +290,7 @@ public class SceneSwitcher {
 
 
     private static void injectCurrentUserController(Object controller, UserBean currentUser) {
+
         if (currentUser == null) {
             logger.info(X);
             return;
@@ -352,7 +348,7 @@ public class SceneSwitcher {
             case "characterList.fxml"   -> SceneIdEnum.CHARACTER_LIST;
             case "characterSheet.fxml"  -> SceneIdEnum.CHARACTER_SHEET;
             case "manageLobby.fxml"     -> SceneIdEnum.MANAGE_LOBBY;
-            case "home.fxml"            -> HOME;
+            case "home.fxml"            -> SceneIdEnum.HOME;
             case "user.fxml"            -> SceneIdEnum.USER;
             case "register.fxml"        -> SceneIdEnum.REGISTER;
             case "login.fxml"           -> SceneIdEnum.LOGIN;

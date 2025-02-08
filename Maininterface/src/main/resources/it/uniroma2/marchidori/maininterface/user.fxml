@@ -44,7 +44,7 @@
                </opaqueInsets>
             </TextField>
             <TextField fx:id="roleUser" editable="false" layoutX="80.0" layoutY="150.0" prefHeight="25.0" prefWidth="118.0" promptText="Role" />
-            <Button fx:id="switchRoleButton" layoutX="80.0" layoutY="205.0" mnemonicParsing="false" onAction="#onClickSwitchRole" prefHeight="25.0" style="-fx-background-color: #e90000;" text="Switch role to Dungeon Master" textFill="WHITE" />
+            <Button fx:id="switchRoleButton" layoutX="80.0" layoutY="205.0" mnemonicParsing="false" onAction="#onClickSwitchRole" prefHeight="25.0" style="-fx-background-color: #e90000;" textFill="WHITE" />
          </children>
       </Pane>
       <ImageView fx:id="tiamatImage" fitHeight="522.0" fitWidth="675.0" layoutX="561.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true">

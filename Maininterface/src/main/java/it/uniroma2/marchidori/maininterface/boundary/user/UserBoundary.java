@@ -18,6 +18,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static it.uniroma2.marchidori.maininterface.enumerate.RoleEnum.DM;
+import static it.uniroma2.marchidori.maininterface.enumerate.RoleEnum.PLAYER;
 
 public class UserBoundary implements UserAwareInterface, ControllerAwareInterface {
 
@@ -64,40 +69,27 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
     protected User currentEntity = Session.getInstance().getCurrentUser();
     protected UserBean currentUser;
     protected UserController controller;
+    private static final Logger LOGGER = Logger.getLogger(UserBoundary.class.getName());
+
 
     /**
      * Invocato automaticamente da JavaFX dopo l'iniezione dei nodi @FXML.
      */
     @FXML
     protected void initialize() {
-        configureUI();
-    }
-
-    /**
-     * Configurazione di base. Le sottoclassi la possono sovrascrivere.
-     */
-    protected void configureUI() {
         if (currentUser != null) {
             roleUser.setText(currentUser.getRoleBehavior().getRoleName());
-
             emailUser.setText(currentUser.getEmail());
+            switchRoleButton.setText("Switch Role to " + currentUser.getRoleBehavior().getRoleName());
         }
     }
-
-    /**
-     * Metodo per passare l'oggetto User da fuori (es. quando si carica questo controller).
-     */
-
-    // ------------------------------------------------------------
-    // Metodi generici di cambio scena
-    // ------------------------------------------------------------
 
 
     @FXML
     protected void onClickGoToConsultRules(ActionEvent event) {
         try {
             changeScene(SceneNames.CONSULT_RULES);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new SceneChangeException("Error during change scene from user to consult rules.", e);
         }
     }
@@ -106,7 +98,7 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
     protected void onClickGoToHome(ActionEvent event) {
         try {
             changeScene(SceneNames.HOME);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new SceneChangeException("Error during change scene from user to home.", e);
         }
     }
@@ -115,7 +107,7 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
     protected void onClickGoToJoinLobby(ActionEvent event) {
         try {
             changeScene(SceneNames.JOIN_LOBBY);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new SceneChangeException("Error during change scene from user to join lobby.", e);
         }
     }
@@ -124,7 +116,7 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
     protected void onClickGoToManageLobby(ActionEvent event) {
         try {
             changeScene(SceneNames.MANAGE_LOBBY_LIST);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new SceneChangeException("Error during change scene from user to manage lobby list.", e);
         }
     }
@@ -132,17 +124,18 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
     @FXML
     protected void onClickLogOut(ActionEvent event) {
         try {
+            Session.getInstance().clear();
             changeScene(SceneNames.LOGIN);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new SceneChangeException("Error during change scene from user to login.", e);
         }
     }
 
     @FXML
-    protected void onClickMyCharacter(ActionEvent event) {
+    protected void onClickMyCharacter(ActionEvent event){
         try {
             changeScene(SceneNames.CHARACTER_LIST);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new SceneChangeException("Error during change scene from user to my character list.", e);
         }
     }
@@ -157,13 +150,22 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
     }
 
     @FXML
-    protected void onClickSwitchRole(ActionEvent event) throws IOException {
-        // Vuoto: verrà override in UserPlayerBoundary e UserDMBoundary
+    protected void onClickSwitchRole(ActionEvent event) {
+        String switchTo= "Switch Role to";
+        controller.switchRole(currentUser.getRoleBehavior());
+        roleUser.setText(currentUser.getRoleBehavior().getRoleName());
+        if(currentUser.getRoleBehavior() == PLAYER){
+            switchRoleButton.setText(switchTo + DM.getRoleName());
+            return;
+        }else{
+            switchRoleButton.setText(switchTo + PLAYER.getRoleName());
+        }
+        LOGGER.log(Level.INFO, () -> "Switched role to: " + currentUser.getRoleBehavior().getRoleName());
+
     }
 
     @FXML
     protected void changeScene(String fxml) throws IOException {
-        // Usa SceneSwitcher per cambiare scena
         Stage currentStage = (Stage) userPane.getScene().getWindow();
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher
     }
