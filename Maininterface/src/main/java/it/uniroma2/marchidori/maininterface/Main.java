@@ -6,6 +6,7 @@ import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
