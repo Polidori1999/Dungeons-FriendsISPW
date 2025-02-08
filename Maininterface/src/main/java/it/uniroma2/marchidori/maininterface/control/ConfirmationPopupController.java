@@ -70,7 +70,7 @@ public class ConfirmationPopupController {
     }
 
     private void onConfirm(ActionEvent event) {
-        System.out.println(">>> DEBUG: onConfirm triggered");
+
         stopTimer();
         if (confirmAction != null) {
             confirmAction.run(); // Esegue join

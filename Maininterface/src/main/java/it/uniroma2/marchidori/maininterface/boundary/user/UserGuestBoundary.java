@@ -15,12 +15,13 @@ public class UserGuestBoundary extends UserBoundary{
         roleUser.setText(currentUser.getRoleBehavior().getRoleName());
         // Cambia etichetta del bottone
         switchRoleButton.setText("Login");
-        System.out.println("eccopmi qua sono u guest");
+
         logOutButton.setDisable(true);
         logOutButton.setVisible(false);
     }
 
     @FXML
+    @Override
     protected void onClickSwitchRole(ActionEvent event) throws IOException {
         changeScene(SceneNames.LOGIN);
     }

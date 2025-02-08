@@ -1,6 +1,6 @@
 package it.uniroma2.marchidori.maininterface.boundary.consultrules;
 
-import it.uniroma2.marchidori.maininterface.bean.RuleBookBean;
+
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
