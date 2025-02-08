@@ -17,13 +17,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.logging.Level;
 
 import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
 public class RegisterBoundary implements UserAwareInterface, ControllerAwareInterface {
-
 
     @FXML
     private Button register;
@@ -43,49 +41,52 @@ public class RegisterBoundary implements UserAwareInterface, ControllerAwareInte
     @FXML
     private Label wrongLogin;
 
-    private UserBean currentUser;
     private RegisterController controller;
 
     public RegisterBoundary() {
-        logger.info(">>> RegisterBoundary creato");
+        if (logger.isLoggable(Level.INFO)) {
+            logger.info(">>> RegisterBoundary creato");
+        }
     }
 
     @FXML
     void clickRegister(ActionEvent event) throws IOException {
         try {
-            /*if (currentUser == null) {
-                // Se currentUser è NULL, creiamo un utente temporaneo
-                logger.info(">>> ERRORE: currentUser è NULL! Creazione di un UserBean di fallback.");
-                currentUser = new UserBean(UUID.randomUUID().toString(), "TempUser", "temp@example.com",
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-            }*/
             String emailText = email.getText();
             String passwordText = password.getText();
             String confirmPasswordText = confirmPassword.getText();
+
             if (emailText.isEmpty() || passwordText.isEmpty() || confirmPasswordText.isEmpty()) {
-                logger.warning("⚠️ Campi vuoti, registrazione non possibile!");
+                if (logger.isLoggable(Level.WARNING)) {
+                    logger.warning("⚠️ Campi vuoti, registrazione non possibile!");
+                }
                 wrongLogin.setText("Riempi tutti i campi!");
                 return;
             }
 
             if (!passwordText.equals(confirmPasswordText)) {
-                logger.warning("⚠️ Le password non coincidono!");
+                if (logger.isLoggable(Level.WARNING)) {
+                    logger.warning("⚠️ Le password non coincidono!");
+                }
                 wrongLogin.setText("Le password non coincidono!");
                 return;
             }
-            logger.info("✅ Tentativo di registrazione con email: " + emailText);
+
+            if (logger.isLoggable(Level.INFO)) {
+                logger.info(String.format("✅ Tentativo di registrazione con email: %s", emailText));
+            }
 
             controller.register(emailText, passwordText);
 
-            logger.info("registrazione completata: "+emailText);
-
+            if (logger.isLoggable(Level.INFO)) {
+                logger.info(String.format("Registrazione completata per l'email: %s", emailText));
+            }
 
             changeScene(SceneNames.LOGIN);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from register to login.", e);
         }
     }
-
 
     @FXML
     void onClickGoBackToLogin(ActionEvent event) throws IOException {
@@ -96,7 +97,6 @@ public class RegisterBoundary implements UserAwareInterface, ControllerAwareInte
         }
     }
 
-
     @FXML
     private void changeScene(String fxml) throws IOException {
         // Usa SceneSwitcher per cambiare scena
@@ -106,8 +106,7 @@ public class RegisterBoundary implements UserAwareInterface, ControllerAwareInte
 
     @Override
     public void setCurrentUser(UserBean user) {
-        this.currentUser = user;
-        logger.info(">>> RegisterBoundary: currentUser ricevuto con ruolo: " + user.getRoleBehavior());
+        //implementa usereawareinterface
     }
 
     @Override

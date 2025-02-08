@@ -13,7 +13,7 @@ public class LoginController {
     // Costruttore senza parametri
     public LoginController() {
         // true per db false per filesys
-        this.userService = new UserService(true);
+        this.userService = new UserService(false);
     }
 
     public void setCurrentUser(UserBean user) {

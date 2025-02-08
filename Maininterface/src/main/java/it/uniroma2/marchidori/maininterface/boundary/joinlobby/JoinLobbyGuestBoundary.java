@@ -15,7 +15,7 @@ public class JoinLobbyGuestBoundary extends JoinLobbyPlayerBoundary {
         super.initialize();
         if (currentUser == null) {
             currentUser = new UserBean(
-                    "guest",
+
                     "guest@example.com",
                     "guest",
                     RoleEnum.GUEST,
