@@ -125,9 +125,6 @@ public class SceneSwitcher {
 
     private SceneSwitcher() {}
 
-    private static final String Y = " con ruolo: ";
-
-
     public static void changeScene(Stage currentStage, String fxmlPath, UserBean currentUser) throws IOException {
         //evitare scene duplicate
         if (currentStage.getScene() != null && fxmlPath.equals(currentStage.getScene().getUserData())) {
@@ -146,13 +143,13 @@ public class SceneSwitcher {
         Object boundaryInstance = createBoundary(boundaryClass);
         logger.info(">>> [SceneSwitcher] Istanza della boundary creata: " + boundaryInstance.getClass().getSimpleName());
 
-        injectCurrentUserBoundary(boundaryInstance, currentUser);
+        injectCurrentUser(boundaryInstance, currentUser);
 
 
         Class<?> controllerClass = getControllerClass(role, sceneId);
         if(controllerClass != null) {
             Object controllerInstance = createController(controllerClass);
-            injectCurrentUserController(controllerInstance, currentUser);
+            injectCurrentUser(controllerInstance, currentUser);
             injectControllerIntoBoundary(controllerInstance,boundaryInstance);
 
         }
@@ -193,7 +190,6 @@ public class SceneSwitcher {
 
     /**
      * Inietta nella boundary il controller associato.
-     *
      * Le assunzioni sono:
      * - Il nome della classe controller è ottenuto sostituendo "Boundary" con "Controller" nel nome della boundary.
      * - La classe controller si trova in "it.uniroma2.marchidori.maininterface.controller".
@@ -201,137 +197,23 @@ public class SceneSwitcher {
      * - La boundary espone un metodo pubblico "setController(...)" per iniettare il controller.
      */
 
-    private static final String X = ">>> [SceneSwitcher] Nessun currentUser da iniettare.";
-
     private static void injectControllerIntoBoundary(Object controller, Object boundary) {
-
-        if (controller == null) {
-            logger.info(X);
-            return;
-        }
-
-        if (boundary instanceof UserBoundary userBoundary) {
-            userBoundary.setLogicController(controller);
-        }
-
-        if (boundary instanceof CharacterSheetBoundary charBoundary) {
-            charBoundary.setLogicController(controller);
-        }
-        if (boundary instanceof CharacterListBoundary charLBoundary) {
-            charLBoundary.setLogicController(controller);
-        }
-        if (boundary instanceof ManageLobbyListBoundary manageLobbyListBoundary) {
-            manageLobbyListBoundary.setLogicController(controller);
-        }
-        if(boundary instanceof ManageLobbyBoundary manageLobbyBoundary) {
-            manageLobbyBoundary.setLogicController(controller);
-        }
-        if (boundary instanceof JoinLobbyBoundary jlBoundary) {
-            jlBoundary.setLogicController(controller);
-        }
-        if (boundary instanceof ConsultRulesBoundary consultRulesBoundary) {
-            consultRulesBoundary.setLogicController(controller);
-        }
-
-        if (boundary instanceof RegisterBoundary registerBoundary) {
-            registerBoundary.setLogicController(controller);
-        }
-        if (boundary instanceof LoginBoundary loginBoundary) {
-            loginBoundary.setLogicController(controller);
-        }
-
-
-    }
-
-
-
-    private static void injectCurrentUserBoundary(Object controller, UserBean currentUser) {
-        if (currentUser == null) {
-            logger.info(X);
-            logger.info(">>> ERRORE: currentUser è NULL! La scena potrebbe avere problemi.");
-            return;
-        }
-
-        logger.info(">>> [SceneSwitcher] Iniezione utente nel controller " + controller.getClass().getSimpleName() +
-                Y + currentUser.getRoleBehavior());
-
-        if (controller instanceof RegisterBoundary registerBoundary) {
-            registerBoundary.setCurrentUser(currentUser);
-        }
-
-        if (controller instanceof UserBoundary userBoundary) {
-            userBoundary.setCurrentUser(currentUser);
-        }
-        if (controller instanceof HomeBoundary homeBoundary) {
-            homeBoundary.setCurrentUser(currentUser);
-        }
-        if (controller instanceof CharacterSheetBoundary charBoundary) {
-            charBoundary.setCurrentUser(currentUser);
-        }
-        if (controller instanceof CharacterListBoundary charLBoundary) {
-            charLBoundary.setCurrentUser(currentUser);
-        }
-        if (controller instanceof ManageLobbyListBoundary manageLobbyListBoundary) {
-            manageLobbyListBoundary.setCurrentUser(currentUser);
-        }
-        if(controller instanceof ManageLobbyBoundary manageLobbyBoundary) {
-            manageLobbyBoundary.setCurrentUser(currentUser);
-        }
-        if (controller instanceof JoinLobbyBoundary jlBoundary) {
-            jlBoundary.setCurrentUser(currentUser);
-        }
-        if (controller instanceof ConsultRulesBoundary consultRulesBoundary) {
-            consultRulesBoundary.setCurrentUser(currentUser);
-        }
-        if (controller instanceof LoginBoundary loginBoundary) {
-            loginBoundary.setCurrentUser(currentUser);
-        }
-    }
-
-
-    private static void injectCurrentUserController(Object controller, UserBean currentUser) {
-
-        if (currentUser == null) {
-            logger.info(X);
-            return;
-        }
-
-        logger.info(">>> [SceneSwitcher] Iniezione utente nel controller " + controller.getClass().getSimpleName() +
-                Y + currentUser.getRoleBehavior());
-
-        if (controller instanceof RegisterController registerController) {
-            registerController.setCurrentUser(currentUser);
-        }
-
-        if (controller instanceof UserController userController) {
-            userController.setCurrentUser(currentUser);
-        }
-        if (controller instanceof CharacterSheetController charController) {
-            charController.setCurrentUser(currentUser);
-        }
-        if (controller instanceof CharacterListController charLController) {
-            charLController.setCurrentUser(currentUser);
-        }
-        if (controller instanceof ManageLobbyListController manageLobbyListController) {
-            manageLobbyListController.setCurrentUser(currentUser);
-        }
-        if(controller instanceof ManageLobbyController manageLobbyController) {
-            manageLobbyController.setCurrentUser(currentUser);
-        }
-        if (controller instanceof JoinLobbyController jlController) {
-            jlController.setCurrentUser(currentUser);
-        }
-        if (controller instanceof ConsultRulesController consultRulesController) {
-            consultRulesController.setCurrentUser(currentUser);
-        }
-        if (controller instanceof LoginController loginController) {
-            loginController.setCurrentUser(currentUser);
+        if (controller != null && boundary instanceof ControllerAwareInterface controllerAware) {
+            controllerAware.setLogicController(controller);
+        } else {
+            logger.info(">>> [SceneSwitcher] Nessun controller da iniettare in " + boundary.getClass().getSimpleName());
         }
     }
 
 
 
-
+    private static void injectCurrentUser(Object target, UserBean currentUser) {
+        if (currentUser != null && target instanceof UserAwareInterface userAware) {
+            userAware.setCurrentUser(currentUser);
+        } else {
+            logger.info(">>> [SceneSwitcher] Nessun currentUser da iniettare in " + target.getClass().getSimpleName());
+        }
+    }
 
     private static Parent loadFXML(String fxmlPath, Object controller) throws IOException {
         FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource(

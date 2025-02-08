@@ -7,9 +7,26 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="homePane" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="homePane"
+            prefHeight="720.0"
+            prefWidth="1280.0"
+            style="-fx-background-color: #292932;"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1">
+
    <children>
-      <Button fx:id="userButton" layoutX="1220.0" layoutY="5.0" mnemonicParsing="false" onAction="#onClickUser" prefHeight="41.0" prefWidth="45.0" style="-fx-background-color: transparent;" textFill="#f80606">
+
+      <!-- Pulsante utente (apre user.fxml) -->
+      <Button fx:id="userButton"
+              layoutX="1220.0"
+              layoutY="5.0"
+              mnemonicParsing="false"
+              onAction="#onNavigationButtonClick"
+              userData="user.fxml"
+              prefHeight="41.0"
+              prefWidth="45.0"
+              style="-fx-background-color: transparent;"
+              textFill="#f80606">
          <graphic>
             <ImageView blendMode="MULTIPLY" fitHeight="53.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -21,30 +38,90 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="goToHome" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#onClickGoToHome" prefHeight="65.0" prefWidth="349.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE">
+
+      <!-- Pulsante "Dungeons & Friends" (home) -->
+      <Button fx:id="goToHome"
+              alignment="TOP_LEFT"
+              mnemonicParsing="false"
+              onAction="#onNavigationButtonClick"
+              userData="home.fxml"
+              prefHeight="65.0"
+              prefWidth="349.0"
+              style="-fx-background-color: transparent;"
+              text="Dungeons &amp; Friends"
+              textFill="WHITE">
          <font>
             <Font name="System Bold" size="30.0" />
          </font>
       </Button>
-      <Button fx:id="myChar" layoutX="320.0" layoutY="180.0" mnemonicParsing="false" onAction="#onclickGoToMyCharList" prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
+
+      <!-- Pulsante "MyCharacters" -->
+      <Button fx:id="myChar"
+              layoutX="320.0"
+              layoutY="180.0"
+              mnemonicParsing="false"
+              onAction="#onNavigationButtonClick"
+              userData="characterList.fxml"
+              prefHeight="100.0"
+              prefWidth="250.0"
+              style="-fx-background-color: transparent;"
+              text="MyCharacters"
+              textFill="WHITE">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
       </Button>
-      <Button fx:id="joinLobby" layoutX="640.0" layoutY="180.0" mnemonicParsing="false" onAction="#onClickGoToJoinLobby" prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
+
+      <!-- Pulsante "Join Lobby" -->
+      <Button fx:id="joinLobby"
+              layoutX="640.0"
+              layoutY="180.0"
+              mnemonicParsing="false"
+              onAction="#onNavigationButtonClick"
+              userData="joinLobby.fxml"
+              prefHeight="100.0"
+              prefWidth="250.0"
+              style="-fx-background-color: transparent;"
+              text="Join Lobby"
+              textFill="WHITE">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
       </Button>
-      <Button fx:id="manageLobby" layoutX="320.0" layoutY="360.0" mnemonicParsing="false" onAction="#onClickGoToManageLobby" prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
+
+      <!-- Pulsante "Manage Lobby" -->
+      <Button fx:id="manageLobby"
+              layoutX="320.0"
+              layoutY="360.0"
+              mnemonicParsing="false"
+              onAction="#onNavigationButtonClick"
+              userData="manageLobbyList.fxml"
+              prefHeight="100.0"
+              prefWidth="250.0"
+              style="-fx-background-color: transparent;"
+              text="Manage Lobby"
+              textFill="WHITE">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
       </Button>
-      <Button fx:id="consultRules" layoutX="640.0" layoutY="360.0" mnemonicParsing="false" onAction="#onClickGoToConsultRules" prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
+
+      <!-- Pulsante "Consult Rules" -->
+      <Button fx:id="consultRules"
+              layoutX="640.0"
+              layoutY="360.0"
+              mnemonicParsing="false"
+              onAction="#onNavigationButtonClick"
+              userData="consultRules.fxml"
+              prefHeight="100.0"
+              prefWidth="250.0"
+              style="-fx-background-color: transparent;"
+              text="Consult Rules"
+              textFill="WHITE">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
       </Button>
+
    </children>
 </AnchorPane>

@@ -8,7 +8,6 @@ import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.control.ConsultRulesController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
-import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -186,61 +185,19 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
         rulesBookTableView.refresh();
     }
 
-    /* ==============================================================
-       Metodi di navigazione tra le scene
-       ============================================================== */
-
     @FXML
-    void onClickGoToConsultRules(ActionEvent event) throws IOException {
-        try {
-            changeScene(SceneNames.CONSULT_RULES);
-        } catch (IOException e) {
-            throw new SceneChangeException("Error during change scene to consult rules.", e);
-        }
-    }
+    protected void onNavigationButtonClick(ActionEvent event) {
+        Button sourceButton = (Button) event.getSource();
+        String fxml = (String) sourceButton.getUserData();
 
-    @FXML
-    void onClickGoToHome(ActionEvent event) throws IOException {
+        // Esegui il cambio scena
+        Stage currentStage = (Stage) consultRulesPane.getScene().getWindow();
         try {
-            changeScene(SceneNames.HOME);
+            SceneSwitcher.changeScene(currentStage, fxml, currentUser);
         } catch (IOException e) {
-            throw new SceneChangeException("Error during change scene to home.", e);
-        }
-    }
-
-    @FXML
-    void onClickGoToJoinLobby(ActionEvent event) throws IOException {
-        try {
-            changeScene(SceneNames.JOIN_LOBBY);
-        } catch (IOException e) {
-            throw new SceneChangeException("Error during change scene to join lobby.", e);
-        }
-    }
-
-    @FXML
-    void onClickGoToManageLobby(ActionEvent event) throws IOException {
-        try {
-            changeScene(SceneNames.MANAGE_LOBBY_LIST);
-        } catch (IOException e) {
-            throw new SceneChangeException("Error during change scene to manage lobby list.", e);
-        }
-    }
-
-    @FXML
-    void onClickUser(ActionEvent event) throws IOException {
-        try {
-            changeScene(SceneNames.USER);
-        } catch (IOException e) {
-            throw new SceneChangeException("Error during change scene to user.", e);
-        }
-    }
-
-    @FXML
-    void onClickMyCharacter(ActionEvent event) throws IOException {
-        try {
-            changeScene(SceneNames.CHARACTER_LIST);
-        } catch (IOException e) {
-            throw new SceneChangeException("Error during change scene to character list.", e);
+            // Se preferisci, potresti usare un messaggio più "dinamico", come:
+            // "Error during change scene from ManageLobbyListBoundary to " + fxml
+            throw new SceneChangeException("Error during change scene.", e);
         }
     }
 

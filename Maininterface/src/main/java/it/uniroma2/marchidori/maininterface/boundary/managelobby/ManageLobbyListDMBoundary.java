@@ -5,12 +5,8 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
-import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -24,37 +20,47 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
 
     @Override
     protected void initialize() {
+        // Richiama l’initialize() della superclasse per caricare tabella, ecc.
         super.initialize();
+
         if (controller == null) {
             logger.severe("Errore: controller non inizializzato!");
             return;
         }
+        // Carica la lista delle lobby gestite dal DM
         data.clear();
         data.addAll(currentUser.getJoinedLobbies());
         tableViewLobby.refresh();
-        logger.log(Level.INFO, "Numero di personaggi nella tabella: {0}", data.size());
+
+        logger.log(Level.INFO, "Numero di lobby nella tabella: {0}", data.size());
+
+        // Carica / prepara il popup di conferma
         confirmationPopupController = ConfirmationPopupController.loadPopup(manageLobbyListPane);
 
-// Configura la colonna "Edit"
+        // Configura la colonna "Edit"
         TableColumnUtils.setupButtonColumn(tableViewLobbyEdit, "Edit", this::editLobby);
 
-// Configura la colonna "Delete"
+        // Configura la colonna "Delete"
         TableColumnUtils.setupButtonColumn(tableViewLobbyDelete, "Delete", lobby -> {
             pendingDeleteBean = lobby;
             showDeleteConfirmation();
         });
 
         // Rendo cliccabile il bottone "New Lobby"
+        // (nel FXML, newLobbyButton chiama onNavigationButtonClick con userData="manageLobby.fxml")
         newLobbyButton.setVisible(true);
         newLobbyButton.setDisable(false);
     }
 
     private void showDeleteConfirmation() {
         if (confirmationPopupController != null && pendingDeleteBean != null) {
-            String message = "Vuoi eliminare il personaggio '" + pendingDeleteBean.getName() + "'?";
-            confirmationPopupController.show(message, 10,
+            String message = "Vuoi eliminare la lobby '" + pendingDeleteBean.getName() + "'?";
+            confirmationPopupController.show(
+                    message,
+                    10,                // timer di scadenza popup
                     this::onConfirmDelete,
-                    this::onCancelDelete);
+                    this::onCancelDelete
+            );
         } else {
             logger.severe("Errore: ConfirmationPopupController non inizializzato o pendingDeleteBean è null");
         }
@@ -62,10 +68,17 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
 
     private void onConfirmDelete() {
         if (pendingDeleteBean != null) {
-            String characterName = pendingDeleteBean.getName();
+            String lobbyName = pendingDeleteBean.getName();
+
+            // Rimuovi dalla TableView
             tableViewLobby.getItems().remove(pendingDeleteBean);
-            controller.deleteLobby(characterName);
-            LobbyRepository.removeLobby(pendingDeleteBean.getName());
+
+            // Chiedi al controller di rimuoverla in DB
+            controller.deleteLobby(lobbyName);
+
+            // Eventuale rimozione in repository locale
+            LobbyRepository.removeLobby(lobbyName);
+
             pendingDeleteBean = null;
         }
     }
@@ -75,37 +88,17 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
     }
 
     private void editLobby(LobbyBean beanToEdit) {
-        // Imposta in userBean il nome della lobby da editare
+        // Imposta la lobby da editare nel currentUser
         currentUser.setSelectedLobbyName(beanToEdit.getName());
-        // Passo alla scena "manageLobby.fxml"
+        // Cambia scena (usa il metodo protetto ereditato dalla superclasse)
         try {
-            SceneSwitcher.changeScene(
-                    (Stage) manageLobbyListPane.getScene().getWindow(),
-                    SceneNames.MANAGE_LOBBY,
-                    currentUser
-            );
+            changeScene(SceneNames.MANAGE_LOBBY);
         } catch (IOException e) {
             throw new SceneChangeException("Errore nel cambio scena (modifica Lobby).", e);
         }
     }
 
-    @FXML
-    void onClickNewCharacter(ActionEvent event) {
-        // Invece di aprire un modal, usiamo la scena "manageLobby.fxml"
-        // e settiamo selectedLobbyName = null => creazione
-        currentUser.setSelectedLobbyName(null);
-        logger.info(currentUser.getEmail());
-        try {
-            SceneSwitcher.changeScene(
-                    (Stage) manageLobbyListPane.getScene().getWindow(),
-                    SceneNames.MANAGE_LOBBY,
-                    currentUser
-            );
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena (nuova lobby).", e);
-        }
-    }
-
+    // Se vuoi, puoi sovrascrivere setCurrentUser, ma non è più strettamente necessario
     @Override
     public void setCurrentUser(UserBean currentUser) {
         this.currentUser = currentUser;

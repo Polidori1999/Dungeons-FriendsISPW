@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
+
 public class HomeBoundary implements UserAwareInterface {
 
     @FXML
@@ -40,64 +42,25 @@ public class HomeBoundary implements UserAwareInterface {
     private UserBean currentUser;
 
     @FXML
-    void onClickGoToConsultRules(ActionEvent event) throws IOException {
-        try {
-            changeScene(SceneNames.CONSULT_RULES);
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena verso CONSULT_RULES.fxml", e);
-        }
-    }
+    protected void onNavigationButtonClick(ActionEvent event) {
+        Button sourceButton = (Button) event.getSource();
+        String fxml = (String) sourceButton.getUserData();
 
-    @FXML
-    void onClickGoToHome(ActionEvent event) {
-        try {
-            changeScene(SceneNames.HOME);
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena verso home.fxml", e);
+        // Se hai logiche speciali, ad esempio sul pulsante "New Lobby" (manageLobby.fxml):
+        if (SceneNames.MANAGE_LOBBY.equals(fxml)) {
+            currentUser.setSelectedLobbyName(null);
+            logger.info("Reset selectedLobbyName. Current user: " + currentUser.getEmail());
         }
-    }
 
-    @FXML
-    void onClickGoToJoinLobby(ActionEvent event) {
-        try {
-            changeScene(SceneNames.JOIN_LOBBY);
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena verso joinLobby.fxml", e);
-        }
-    }
-
-    @FXML
-    void onClickGoToManageLobby(ActionEvent event) {
-        try {
-            changeScene(SceneNames.MANAGE_LOBBY_LIST);
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena verso manageLobbyList.fxml", e);
-        }
-    }
-
-    @FXML
-    void onClickUser(ActionEvent event) throws IOException {
-        try {
-            changeScene(SceneNames.USER);
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena verso user.fxml", e);
-        }
-    }
-
-    @FXML
-    void onclickGoToMyCharList(ActionEvent event) {
-        try {
-            changeScene(SceneNames.CHARACTER_LIST);
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena verso characterList.fxml", e);
-        }
-    }
-
-    @FXML
-    private void changeScene(String fxml) throws IOException {
-        // Usa SceneSwitcher per cambiare scena
+        // Esegui il cambio scena
         Stage currentStage = (Stage) homePane.getScene().getWindow();
-        SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher
+        try {
+            SceneSwitcher.changeScene(currentStage, fxml, currentUser);
+        } catch (IOException e) {
+            // Se preferisci, potresti usare un messaggio più "dinamico", come:
+            // "Error during change scene from ManageLobbyListBoundary to " + fxml
+            throw new SceneChangeException("Error during change scene.", e);
+        }
     }
 
     @Override

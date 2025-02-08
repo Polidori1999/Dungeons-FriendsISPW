@@ -64,98 +64,6 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
     @FXML
     private Button myChar;
 
-    // Metodi per il cambio scena (es. per JoinLobby, ConsultRules, ecc.)
-    @FXML
-    void onClickGoToJoinLobby(ActionEvent event) {
-        try {
-            SceneSwitcher.changeScene(
-                    (Stage) manageLobbyPane.getScene().getWindow(),
-                    SceneNames.JOIN_LOBBY,
-                    currentUser
-            );
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena a JOIN_LOBBY.", e);
-        }
-    }
-
-    @FXML
-    void onClickGoToConsultRules(ActionEvent event) {
-        try {
-            SceneSwitcher.changeScene(
-                    (Stage) manageLobbyPane.getScene().getWindow(),
-                    SceneNames.CONSULT_RULES,
-                    currentUser
-            );
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena a CONSULT_RULES.", e);
-        }
-    }
-
-    @FXML
-    void onClickGoToManageLobby(ActionEvent event) {
-        try {
-            SceneSwitcher.changeScene(
-                    (Stage) manageLobbyPane.getScene().getWindow(),
-                    SceneNames.MANAGE_LOBBY,
-                    currentUser
-            );
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena a MANAGE_LOBBY.", e);
-        }
-    }
-
-    @FXML
-    void onClickGoBackToListOfLobbies(ActionEvent event) {
-        try {
-            SceneSwitcher.changeScene(
-                    (Stage) manageLobbyPane.getScene().getWindow(),
-                    SceneNames.MANAGE_LOBBY_LIST,
-                    currentUser
-            );
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena dalla ManageLobby alla lista delle lobby.", e);
-        }
-    }
-
-    @FXML
-    void onClickGoToHome(ActionEvent event) {
-        try {
-            SceneSwitcher.changeScene(
-                    (Stage) manageLobbyPane.getScene().getWindow(),
-                    SceneNames.HOME,
-                    currentUser
-            );
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena dalla ManageLobby alla Home.", e);
-        }
-    }
-
-    @FXML
-    void onClickUser(ActionEvent event) {
-        try {
-            SceneSwitcher.changeScene(
-                    (Stage) manageLobbyPane.getScene().getWindow(),
-                    SceneNames.USER,
-                    currentUser
-            );
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena dalla ManageLobby all'User.", e);
-        }
-    }
-
-    @FXML
-    void onClickMyCharacter(ActionEvent event) {
-        try {
-            SceneSwitcher.changeScene(
-                    (Stage) manageLobbyPane.getScene().getWindow(),
-                    SceneNames.CHARACTER_LIST,
-                    currentUser
-            );
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena alla Character List.", e);
-        }
-    }
-
     // -------------------------------------------------------------
     //                    VARIABILI DI STATO
     // -------------------------------------------------------------
@@ -282,5 +190,41 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
             LOGGER.log(Level.SEVERE, "ERRORE: Il valore inserito non è un numero valido: {0}", input);
             return 0;
         }
+    }
+
+
+    @FXML
+    void onClickGoBackToListOfLobbies(ActionEvent event) {
+        try {
+            SceneSwitcher.changeScene(
+                    (Stage) manageLobbyPane.getScene().getWindow(),
+                    SceneNames.MANAGE_LOBBY_LIST,
+                    currentUser
+            );
+        } catch (IOException e) {
+            throw new SceneChangeException("Errore nel cambio scena dalla ManageLobby alla lista delle lobby.", e);
+        }
+    }
+
+    @FXML
+    protected void onNavigationButtonClick(ActionEvent event) {
+        Button sourceButton = (Button) event.getSource();
+        String fxml = (String) sourceButton.getUserData();
+
+        // Esegui il cambio scena
+        Stage currentStage = (Stage) manageLobbyPane.getScene().getWindow();
+        try {
+            SceneSwitcher.changeScene(currentStage, fxml, currentUser);
+        } catch (IOException e) {
+            // Se preferisci, potresti usare un messaggio più "dinamico", come:
+            // "Error during change scene from ManageLobbyListBoundary to " + fxml
+            throw new SceneChangeException("Error during change scene.", e);
+        }
+    }
+
+    @FXML
+    private void changeScene(String fxml) throws IOException {
+        Stage currentStage = (Stage) manageLobbyPane.getScene().getWindow();
+        SceneSwitcher.changeScene(currentStage, fxml, currentUser);
     }
 }

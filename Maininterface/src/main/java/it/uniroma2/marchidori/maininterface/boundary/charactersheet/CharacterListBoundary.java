@@ -100,58 +100,18 @@ public class CharacterListBoundary implements UserAwareInterface, ControllerAwar
 
 
     @FXML
-    void onClickMyCharacter(ActionEvent event) {
+    protected void onNavigationButtonClick(ActionEvent event) {
+        Button sourceButton = (Button) event.getSource();
+        String fxml = (String) sourceButton.getUserData();
+
+        // Esegui il cambio scena
+        Stage currentStage = (Stage) characterPane.getScene().getWindow();
         try {
-            changeScene(SceneNames.CHARACTER_LIST);
+            SceneSwitcher.changeScene(currentStage, fxml, currentUser);
         } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambiare scena a characterList.fxml", e);
-        }
-
-    }
-
-    @FXML
-    void onClickGoToConsultRules(ActionEvent event) {
-        try {
-            changeScene(SceneNames.CONSULT_RULES);
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambiare scena a consultRules.fxml", e);
-        }
-    }
-
-    @FXML
-    void onClickGoToHome(ActionEvent event) {
-        try {
-            changeScene(SceneNames.HOME);
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambiare scena a home.fxml", e);
-        }
-    }
-
-    @FXML
-    void onClickGoToJoinLobby(ActionEvent event) {
-        try {
-            changeScene(SceneNames.JOIN_LOBBY);
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambiare scena a joinLobby.fxml", e);
-        }
-    }
-
-    @FXML
-    void onClickGoToManageLobby(ActionEvent event) {
-        try {
-            changeScene(SceneNames.MANAGE_LOBBY_LIST);
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambiare scena a manageLobby.fxml", e);
-        }
-    }
-
-
-    @FXML
-    void onClickUser(ActionEvent event) {
-        try {
-            changeScene(SceneNames.USER);
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambiare scena a user.fxml", e);
+            // Se preferisci, potresti usare un messaggio più "dinamico", come:
+            // "Error during change scene from ManageLobbyListBoundary to " + fxml
+            throw new SceneChangeException("Error during change scene.", e);
         }
     }
 

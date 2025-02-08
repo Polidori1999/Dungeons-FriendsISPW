@@ -13,17 +13,57 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="manageLobbyListPane" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="manageLobbyListPane"
+            prefHeight="720.0"
+            prefWidth="1280.0"
+            style="-fx-background-color: #292932;"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1">
+
    <children>
-      <Button fx:id="goToHome" alignment="TOP_LEFT" layoutX="-8.0" layoutY="-3.0" mnemonicParsing="false" onAction="#onClickGoToHome" prefHeight="65.0" prefWidth="349.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE">
+
+      <!-- Pulsante "Dungeons & Friends" (home) -->
+      <Button fx:id="goToHome"
+              alignment="TOP_LEFT"
+              layoutX="-8.0"
+              layoutY="-3.0"
+              mnemonicParsing="false"
+              onAction="#onNavigationButtonClick"
+              userData="home.fxml"
+              prefHeight="65.0"
+              prefWidth="349.0"
+              style="-fx-background-color: transparent;"
+              text="Dungeons &amp; Friends"
+              textFill="WHITE">
          <font>
             <Font name="System Bold" size="30.0" />
          </font>
       </Button>
-      <Pane layoutX="30.0" layoutY="284.0" prefHeight="15.0" prefWidth="15.0" style="-fx-background-color: #e90000;" />
-      <Button fx:id="userButton" layoutX="1219.0" layoutY="11.0" mnemonicParsing="false" onAction="#onClickUser" prefHeight="41.0" prefWidth="45.0" style="-fx-background-color: transparent;" textFill="#f80606">
+
+      <!-- Pallino rosso (grafica) -->
+      <Pane layoutX="30.0"
+            layoutY="284.0"
+            prefHeight="15.0"
+            prefWidth="15.0"
+            style="-fx-background-color: #e90000;" />
+
+      <!-- Pulsante "User" -->
+      <Button fx:id="userButton"
+              layoutX="1219.0"
+              layoutY="11.0"
+              mnemonicParsing="false"
+              onAction="#onNavigationButtonClick"
+              userData="user.fxml"
+              prefHeight="41.0"
+              prefWidth="45.0"
+              style="-fx-background-color: transparent;"
+              textFill="#f80606">
          <graphic>
-            <ImageView blendMode="MULTIPLY" fitHeight="53.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView blendMode="MULTIPLY"
+                       fitHeight="53.0"
+                       fitWidth="44.0"
+                       pickOnBounds="true"
+                       preserveRatio="true">
                <image>
                   <Image url="@user_icon.jpg" />
                </image>
@@ -33,94 +73,183 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="newLobbyButton" layoutX="611.0" layoutY="621.0" mnemonicParsing="false" onAction="#onClickNewLobby" style="-fx-background-color: #e90000;" text="New lobby" textFill="WHITE">
+
+      <!-- Pulsante "New Lobby" (apre manageLobby.fxml, ad esempio) -->
+      <Button fx:id="newLobbyButton"
+              layoutX="611.0"
+              layoutY="621.0"
+              mnemonicParsing="false"
+              onAction="#onNavigationButtonClick"
+              userData="manageLobby.fxml"
+              style="-fx-background-color: #e90000;"
+              text="New lobby"
+              textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font>
       </Button>
-      <TableView fx:id="tableViewLobby" layoutX="245.0" layoutY="74.0" prefHeight="522.0" prefWidth="858.0" style="-fx-background-color: #292932;">
+
+      <!-- TableView e colonne -->
+      <TableView fx:id="tableViewLobby"
+                 layoutX="245.0"
+                 layoutY="74.0"
+                 prefHeight="522.0"
+                 prefWidth="858.0"
+                 style="-fx-background-color: #292932;">
          <columns>
-            <TableColumn fx:id="tableViewLobbyName" minWidth="0.0" prefWidth="191.3333282470703" text="Lobby name" />
-            <TableColumn fx:id="tableViewMaxPlayers" prefWidth="84.66671752929688" text="Max players" />
-            <TableColumn fx:id="tableViewLiveOrNot" prefWidth="144.66668701171875" text="Live/Online" />
-            <TableColumn fx:id="tableViewDuration" prefWidth="207.33331298828125" text="Duration">
+            <TableColumn fx:id="tableViewLobbyName"
+                         prefWidth="191.3333"
+                         text="Lobby name" />
+            <TableColumn fx:id="tableViewMaxPlayers"
+                         prefWidth="84.6667"
+                         text="Max players" />
+            <TableColumn fx:id="tableViewLiveOrNot"
+                         prefWidth="144.6667"
+                         text="Live/Online" />
+            <TableColumn fx:id="tableViewDuration"
+                         prefWidth="207.3333"
+                         text="Duration">
                <cellValueFactory>
                   <PropertyValueFactory property="editButton" />
                </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="tableViewLobbyEdit" prefWidth="113.3333740234375" text="Edit" />
-            <TableColumn fx:id="tableViewLobbyDelete" prefWidth="114.66656494140625" text="Delete" />
+            <TableColumn fx:id="tableViewLobbyEdit"
+                         prefWidth="113.3334"
+                         text="Edit" />
+            <TableColumn fx:id="tableViewLobbyDelete"
+                         prefWidth="114.6666"
+                         text="Delete" />
          </columns>
       </TableView>
-      <VBox fx:id="vBox" layoutX="-2.0" layoutY="171.0" prefHeight="219.0" prefWidth="260.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="1023.5">
-         <children>
-            <Button fx:id="myChar" mnemonicParsing="false" onAction="#onClickMyCharacter" prefHeight="51.0" prefWidth="255.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="17.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@d20.png" />
-                     </image>
-                     <effect>
-                        <ColorAdjust brightness="1.0" />
-                     </effect>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="joinLobby" mnemonicParsing="false" onAction="#onClickGoToJoinLobby" prefHeight="45.0" prefWidth="230.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="17.0" />
-               </font>
-               <graphic>
-                  <ImageView fx:id="joinLobbyImage" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@coppa.png" />
-                     </image>
-                     <effect>
-                        <ColorAdjust brightness="1.0" />
-                     </effect>
-                  </ImageView>
-               </graphic>
-               <VBox.margin>
-                  <Insets left="1.0" />
-               </VBox.margin>
-            </Button>
-            <Button fx:id="manageLobby" mnemonicParsing="false" onAction="#onClickGoToManageLobby" prefHeight="45.0" prefWidth="260.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="17.0" />
-               </font>
-               <graphic>
-                  <ImageView fx:id="manageLobbyList" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@lucchetto.png" />
-                     </image>
-                     <effect>
-                        <ColorAdjust brightness="1.0" />
-                     </effect>
-                  </ImageView>
-               </graphic>
-               <VBox.margin>
-                  <Insets left="4.0" />
-               </VBox.margin>
-            </Button>
-            <Button fx:id="consultRules" mnemonicParsing="false" onAction="#onClickGoToConsultRules" prefHeight="45.0" prefWidth="255.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="17.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@libro.png" />
-                     </image>
-                     <effect>
-                        <ColorAdjust brightness="1.0" />
-                     </effect>
-                  </ImageView>
-               </graphic>
-            </Button>
-         </children>
+
+      <!-- VBox con i pulsanti laterali -->
+      <VBox fx:id="vBox"
+            layoutX="-2.0"
+            layoutY="171.0"
+            prefHeight="219.0"
+            prefWidth="260.0">
+
+         <!-- Pulsante "MyCharacters" -->
+         <Button fx:id="myChar"
+                 mnemonicParsing="false"
+                 onAction="#onNavigationButtonClick"
+                 userData="characterList.fxml"
+                 prefHeight="51.0"
+                 prefWidth="255.0"
+                 style="-fx-background-color: transparent;"
+                 text="MyCharacters"
+                 textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="17.0" />
+            </font>
+            <graphic>
+               <ImageView fitHeight="25.0"
+                          fitWidth="25.0"
+                          pickOnBounds="true"
+                          preserveRatio="true">
+                  <image>
+                     <Image url="@d20.png" />
+                  </image>
+                  <effect>
+                     <ColorAdjust brightness="1.0" />
+                  </effect>
+               </ImageView>
+            </graphic>
+         </Button>
+
+         <!-- Pulsante "Join Lobby" -->
+         <Button fx:id="joinLobby"
+                 mnemonicParsing="false"
+                 onAction="#onNavigationButtonClick"
+                 userData="joinLobby.fxml"
+                 prefHeight="45.0"
+                 prefWidth="230.0"
+                 style="-fx-background-color: transparent;"
+                 text="Join Lobby"
+                 textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="17.0" />
+            </font>
+            <graphic>
+               <ImageView fx:id="joinLobbyImage"
+                          fitHeight="25.0"
+                          fitWidth="25.0"
+                          pickOnBounds="true"
+                          preserveRatio="true">
+                  <image>
+                     <Image url="@coppa.png" />
+                  </image>
+                  <effect>
+                     <ColorAdjust brightness="1.0" />
+                  </effect>
+               </ImageView>
+            </graphic>
+            <VBox.margin>
+               <Insets left="1.0" />
+            </VBox.margin>
+         </Button>
+
+         <!-- Pulsante "Manage Lobby" -->
+         <Button fx:id="manageLobby"
+                 mnemonicParsing="false"
+                 onAction="#onNavigationButtonClick"
+                 userData="manageLobbyList.fxml"
+                 prefHeight="45.0"
+                 prefWidth="260.0"
+                 style="-fx-background-color: transparent;"
+                 text="Manage Lobby"
+                 textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="17.0" />
+            </font>
+            <graphic>
+               <ImageView fx:id="manageLobbyList"
+                          fitHeight="25.0"
+                          fitWidth="25.0"
+                          pickOnBounds="true"
+                          preserveRatio="true">
+                  <image>
+                     <Image url="@lucchetto.png" />
+                  </image>
+                  <effect>
+                     <ColorAdjust brightness="1.0" />
+                  </effect>
+               </ImageView>
+            </graphic>
+            <VBox.margin>
+               <Insets left="4.0" />
+            </VBox.margin>
+         </Button>
+
+         <!-- Pulsante "Consult Rules" -->
+         <Button fx:id="consultRules"
+                 mnemonicParsing="false"
+                 onAction="#onNavigationButtonClick"
+                 userData="consultRules.fxml"
+                 prefHeight="45.0"
+                 prefWidth="255.0"
+                 style="-fx-background-color: transparent;"
+                 text="Consult Rules"
+                 textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="17.0" />
+            </font>
+            <graphic>
+               <ImageView fitHeight="25.0"
+                          fitWidth="25.0"
+                          pickOnBounds="true"
+                          preserveRatio="true">
+                  <image>
+                     <Image url="@libro.png" />
+                  </image>
+                  <effect>
+                     <ColorAdjust brightness="1.0" />
+                  </effect>
+               </ImageView>
+            </graphic>
+         </Button>
+
       </VBox>
+
    </children>
 </AnchorPane>

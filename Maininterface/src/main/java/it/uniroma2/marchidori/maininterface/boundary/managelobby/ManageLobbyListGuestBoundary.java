@@ -14,7 +14,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,15 +23,6 @@ import java.util.ArrayList;
 import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
 public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
-
-    // Il pannello principale definito nel file FXML (deve essere presente in FXML con fx:id="manageLobbyListPane")
-    @FXML
-
-
-
-    protected AnchorPane characterPane;
-
-
 
     protected ConfirmationPopupController confirmationPopupController;
 
@@ -103,11 +93,6 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
         }
     }
 
-    /**
-     * Imposta il currentUser. Metodo definito dall'interfaccia UserAwareInterface.
-     *
-     * @param user il currentUser da iniettare
-     */
     @Override
     public void setCurrentUser(UserBean user) {
         logger.info(">>> Impostazione currentUser: " + user.getRoleBehavior());
