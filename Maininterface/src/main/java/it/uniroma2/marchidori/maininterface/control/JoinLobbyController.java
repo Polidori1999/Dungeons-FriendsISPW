@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 public class JoinLobbyController implements UserAwareInterface {
     private UserBean currentUser;
-    private final User currentEntity = Session.getCurrentUser();
+    private final User currentEntity = Session.getInstance().getCurrentUser();
 
     private static final Logger logger = Logger.getLogger(JoinLobbyController.class.getName());
 

@@ -90,7 +90,7 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
             currentUser = new UserBean( "guest@example.com", GUEST ,RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
             logger.info(">>> Utente impostato come Guest. Ruolo: " + currentUser.getRoleBehavior());
 
-            Session.setCurrentUser(Converter.userBeanToEntity(currentUser));
+            Session.getInstance().setCurrentUser(Converter.userBeanToEntity(currentUser));
             changeScene(SceneNames.HOME);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from login to home.", e);

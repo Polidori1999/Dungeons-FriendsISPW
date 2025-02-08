@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import static it.uniroma2.marchidori.maininterface.control.CharacterSheetController.getCharacterSheetDownloadTask;
 
 public class CharacterListController implements UserAwareInterface {
-    private final User currentEntity = Session.getCurrentUser();
+    private final User currentEntity = Session.getInstance().getCurrentUser();
     private UserBean currentUser;
 
     private static final Logger logger = Logger.getLogger(CharacterListController.class.getName());

@@ -78,7 +78,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     protected Button resetButton;
 
     protected UserBean currentUser;
-    protected User currentEntity = Session.getCurrentUser();
+    protected User currentEntity = Session.getInstance().getCurrentUser();
 
     // Controller per logica di join
     protected JoinLobbyController controller;

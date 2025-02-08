@@ -43,8 +43,7 @@ public class LoginController {
                 logger.info(String.format("✅ Login riuscito per: %s", email));
             }
             setCurrentUser(retrievedUser);
-            Session.getInstance().setCurrentUser(Converter.userBeanToEntity(retrievedUser));
-            return retrievedUser;
+            Session.getInstance().setCurrentUser(Converter.userBeanToEntity(retrievedUser));            return retrievedUser;
         } else {
             // Log solo se il livello di log permette
             if (logger.isLoggable(Level.SEVERE)) {

@@ -1,34 +1,36 @@
 package it.uniroma2.marchidori.maininterface.entity;
 
-
 public class Session {
 
-    private static Session ist = null;
-    // Campo statico che contiene l'utente corrente
-    private static User currentUser;
+    // L'istanza singleton
+    private static Session instance = null;
 
-    private Session() {}
+    // Campo che contiene l'utente corrente (non statico)
+    private User currentUser;
 
+    // Costruttore privato per evitare istanziazioni esterne
+    private Session() { }
 
-    // Imposta l'utente corrente
-    public static void setCurrentUser(User user) {
-        currentUser = user;
-    }
-
-    // Recupera l'utente corrente
-    public static User getCurrentUser() {
-        return currentUser;
-    }
-
-    // Metodo per pulire la sessione (ad es. logout)
-    public static void clear() {
-        currentUser = null;
-    }
-
-    public static Session getInstance() {
-        if (ist == null) {
-            ist = new Session();
+    // Metodo per ottenere l'unica istanza della sessione
+    public static synchronized Session getInstance() {
+        if (instance == null) {
+            instance = new Session();
         }
-        return ist;
+        return instance;
+    }
+
+    // Imposta l'utente corrente (metodo d'istanza)
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+    }
+
+    // Recupera l'utente corrente (metodo d'istanza)
+    public User getCurrentUser() {
+        return this.currentUser;
+    }
+
+    // Pulisce la sessione (ad es. logout)
+    public void clear() {
+        this.currentUser = null;
     }
 }

@@ -17,7 +17,7 @@ public class ManageLobbyController implements UserAwareInterface {
     private static final Logger LOGGER = Logger.getLogger(ManageLobbyController.class.getName());
 
     private UserBean currentUser;
-    private User currentEntity = Session.getCurrentUser();
+    private User currentEntity = Session.getInstance().getCurrentUser();
 
     public ManageLobbyController(){
         // empty

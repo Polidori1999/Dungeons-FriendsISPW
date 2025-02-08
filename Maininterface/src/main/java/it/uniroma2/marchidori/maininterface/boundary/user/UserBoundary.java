@@ -61,7 +61,7 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
     @FXML
     protected Button switchRoleButton;
 
-    protected User currentEntity = Session.getCurrentUser();
+    protected User currentEntity = Session.getInstance().getCurrentUser();
     protected UserBean currentUser;
     protected UserController controller;
 
