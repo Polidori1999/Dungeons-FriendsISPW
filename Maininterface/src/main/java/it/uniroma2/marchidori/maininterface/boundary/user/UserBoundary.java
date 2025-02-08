@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 
 import static it.uniroma2.marchidori.maininterface.enumerate.RoleEnum.DM;
 import static it.uniroma2.marchidori.maininterface.enumerate.RoleEnum.PLAYER;
-import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
 public class UserBoundary implements UserAwareInterface, ControllerAwareInterface {
 
