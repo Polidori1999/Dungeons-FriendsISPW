@@ -15,14 +15,12 @@ public enum SceneConfigEnum {
     CHAR_LIST_PLAYER(
             CHAR_LIST_DM.fxmlPath,
             forNameNoException("it.uniroma2.marchidori.maininterface.boundary.charactersheet.CharacterListPlayerBoundary"),
-            forNameNoException("it.uniroma2.marchidori.maininterface.control.CharacterListController")
-    ),
+            CHAR_LIST_DM.controllerClass    ),
 
     CHAR_LIST_GUEST(
             CHAR_LIST_DM.fxmlPath,
             forNameNoException("it.uniroma2.marchidori.maininterface.boundary.charactersheet.CharacterListGuestBoundary"),
-            forNameNoException("it.uniroma2.marchidori.maininterface.control.CharacterListController")
-    ),
+            CHAR_LIST_DM.controllerClass    ),
 
     CHAR_SHEET(
             "characterSheet.fxml",
@@ -51,14 +49,12 @@ public enum SceneConfigEnum {
     JOIN_LOBBY_PLAYER(
             JOIN_LOBBY_DM.fxmlPath,
             forNameNoException("it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyPlayerBoundary"),
-            forNameNoException("it.uniroma2.marchidori.maininterface.control.JoinLobbyController")
-    ),
+            JOIN_LOBBY_DM.controllerClass    ),
 
     JOIN_LOBBY_GUEST(
             JOIN_LOBBY_DM.fxmlPath,
             forNameNoException("it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyGuestBoundary"),
-            forNameNoException("it.uniroma2.marchidori.maininterface.control.JoinLobbyController")
-    ),
+            JOIN_LOBBY_DM.controllerClass    ),
 
     LOGIN(
             "login.fxml",
@@ -87,13 +83,12 @@ public enum SceneConfigEnum {
     MANAGE_LOBBY_LIST_PLAYER(
             MANAGE_LOBBY_LIST_DM.fxmlPath,
             forNameNoException("it.uniroma2.marchidori.maininterface.boundary.managelobby.ManageLobbyListPlayerBoundary"),
-            forNameNoException("it.uniroma2.marchidori.maininterface.control.ManageLobbyListController")
-    ),
+            MANAGE_LOBBY_LIST_DM.controllerClass    ),
 
     MANAGE_LOBBY_LIST_GUEST(
             MANAGE_LOBBY_LIST_DM.fxmlPath,
             forNameNoException("it.uniroma2.marchidori.maininterface.boundary.managelobby.ManageLobbyListGuestBoundary"),
-            forNameNoException("it.uniroma2.marchidori.maininterface.control.ManageLobbyListController")
+            MANAGE_LOBBY_LIST_DM.controllerClass
     ),
 
     HOME(
