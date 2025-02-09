@@ -58,9 +58,9 @@ public class BoundaryMap {
         BOUNDARY_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.HOME), HomeBoundary.class);
         BOUNDARY_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.HOME), HomeBoundary.class);
 
-        BOUNDARY_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.LOGIN), LoginBoundary.class);
-        BOUNDARY_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.LOGIN), LoginBoundary.class);
-        BOUNDARY_MAP.put(new Pair<>(RoleEnum.NONE, SceneIdEnum.LOGIN), LoginBoundary.class);
+        BOUNDARY_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.LOGIN), it.uniroma2.marchidori.maininterface.boundary.login.LoginBoundary.class);
+        BOUNDARY_MAP.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.LOGIN), it.uniroma2.marchidori.maininterface.boundary.login.LoginBoundary.class);
+        BOUNDARY_MAP.put(new Pair<>(RoleEnum.NONE, SceneIdEnum.LOGIN),it.uniroma2.marchidori.maininterface.boundary.login.LoginBoundary.class);
 
         BOUNDARY_MAP.put(new Pair<>(RoleEnum.DM, SceneIdEnum.REGISTER), RegisterBoundary.class);
         BOUNDARY_MAP.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.REGISTER), RegisterBoundary.class);
