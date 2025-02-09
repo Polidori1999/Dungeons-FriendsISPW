@@ -5,6 +5,7 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.CharacterListController;
+import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
@@ -107,6 +108,7 @@ public class CharacterListBoundary implements UserAwareInterface, ControllerAwar
         // Esegui il cambio scena
         Stage currentStage = (Stage) characterPane.getScene().getWindow();
         try {
+
             SceneSwitcher.changeScene(currentStage, fxml, currentUser);
         } catch (IOException e) {
             // Se preferisci, potresti usare un messaggio più "dinamico", come:

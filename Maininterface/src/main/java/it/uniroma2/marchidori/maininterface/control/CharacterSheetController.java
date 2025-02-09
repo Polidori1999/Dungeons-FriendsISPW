@@ -15,12 +15,14 @@ import java.util.logging.Logger;
 public class CharacterSheetController implements UserAwareInterface {
 
     private UserBean currentUser;
-    private static final User currentEntity = Session.getInstance().getCurrentUser();
+    private User currentEntity;
 
     private static final Logger logger = Logger.getLogger(CharacterSheetController.class.getName());
 
     public CharacterSheetController() {
         // empty
+        currentEntity = Session.getInstance().getCurrentUser();
+
     }
 
     public CharacterSheetController(UserBean currentUser) {

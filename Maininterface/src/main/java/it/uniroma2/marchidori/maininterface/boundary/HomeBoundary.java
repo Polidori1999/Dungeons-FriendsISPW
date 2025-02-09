@@ -1,6 +1,7 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
@@ -46,6 +47,7 @@ public class HomeBoundary implements UserAwareInterface {
         Button sourceButton = (Button) event.getSource();
         String fxml = (String) sourceButton.getUserData();
 
+
         // Se hai logiche speciali, ad esempio sul pulsante "New Lobby" (manageLobby.fxml):
         if (SceneNames.MANAGE_LOBBY.equals(fxml)) {
             currentUser.setSelectedLobbyName(null);
@@ -55,6 +57,7 @@ public class HomeBoundary implements UserAwareInterface {
         // Esegui il cambio scena
         Stage currentStage = (Stage) homePane.getScene().getWindow();
         try {
+
             SceneSwitcher.changeScene(currentStage, fxml, currentUser);
         } catch (IOException e) {
             // Se preferisci, potresti usare un messaggio più "dinamico", come:

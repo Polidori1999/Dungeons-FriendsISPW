@@ -89,4 +89,14 @@ public final class TableColumnUtils {
         });
     }
 
+    public static <T> void setupConditionalButtonColumn(TableColumn<T, Button> column,
+                                                        Predicate<T> condition,
+                                                        String buttonText,
+                                                        Consumer<T> action) {
+        setupDynamicButtonColumn(column,
+                rowItem -> condition.test(rowItem) ? buttonText : "",
+                rowItem -> false,  // il pulsante non è disabilitato se mostrato
+                action);
+    }
+
 }

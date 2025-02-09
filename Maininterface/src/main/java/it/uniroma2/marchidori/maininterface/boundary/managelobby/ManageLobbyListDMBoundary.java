@@ -38,8 +38,12 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
         confirmationPopupController = ConfirmationPopupController.loadPopup(manageLobbyListPane);
 
         // Configura la colonna "Edit"
-        TableColumnUtils.setupButtonColumn(tableViewLobbyEdit, "Edit", this::editLobby);
-
+        TableColumnUtils.setupConditionalButtonColumn(
+                tableViewLobbyEdit,
+                LobbyBean::isOwned,  // il bottone sarà visibile solo se isOwned restituisce true
+                "Edit",
+                this::editLobby          // azione da eseguire al click
+        );
         // Configura la colonna "Delete"
         TableColumnUtils.setupButtonColumn(tableViewLobbyDelete, "Delete", lobby -> {
             pendingDeleteBean = lobby;

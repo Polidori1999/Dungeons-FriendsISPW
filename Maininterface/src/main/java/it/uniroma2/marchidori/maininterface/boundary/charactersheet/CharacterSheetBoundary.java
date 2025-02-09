@@ -7,6 +7,7 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsB
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
+import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.Alert;
@@ -198,6 +199,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
             // Dopo un update, puoi ripopolare i campi per riflettere i dati aggiornati
             populateFields(currentBean);
         } else {
+
             controller.createChar(currentBean);
             // Dopo una create, pulisci i campi per permettere l'inserimento di un nuovo personaggio
             clearFields();

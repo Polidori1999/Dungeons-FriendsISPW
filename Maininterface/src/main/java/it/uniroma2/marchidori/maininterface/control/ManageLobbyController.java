@@ -38,8 +38,7 @@ public class ManageLobbyController implements UserAwareInterface {
             LOGGER.log(Level.INFO, "Aggiungendo lobby a UserBean: {0}", newlobby.getLobbyName());
             currentUser.getJoinedLobbies().add(bean);
             currentEntity.getJoinedLobbies().add(newlobby);
-            List<Lobby> tempList = LobbyRepository.getAllLobbies();
-            tempList.add(newlobby);
+            LobbyRepository.addLobby(newlobby);
             currentUser.setSelectedLobbyName(null);
             LOGGER.log(Level.INFO, "Lista attuale delle lobby: {0}", currentUser.getJoinedLobbies());
         } else {
