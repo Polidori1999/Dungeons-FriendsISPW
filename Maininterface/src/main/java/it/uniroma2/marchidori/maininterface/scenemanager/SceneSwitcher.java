@@ -1,9 +1,9 @@
 package it.uniroma2.marchidori.maininterface.scenemanager;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
-import it.uniroma2.marchidori.maininterface.boundary.map.BoundaryMap;
-import it.uniroma2.marchidori.maininterface.boundary.map.ControllerMap;
+import it.uniroma2.marchidori.maininterface.boundary.map.RoleSceneMap;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
+import it.uniroma2.marchidori.maininterface.enumerate.SceneConfigEnum;
 import it.uniroma2.marchidori.maininterface.enumerate.SceneIdEnum;
 import it.uniroma2.marchidori.maininterface.factory.BoundaryFactory;
 import it.uniroma2.marchidori.maininterface.factory.ControllerFactory;
@@ -28,9 +28,10 @@ public class SceneSwitcher {
         // Ottieni lo SceneIdEnum corrispondente al file FXML richiesto
         SceneIdEnum sceneId = getSceneIdFromFxml(fxmlPath);
         RoleEnum role = (currentUser != null) ? currentUser.getRoleBehavior() : RoleEnum.NONE;
+        SceneConfigEnum config = RoleSceneMap.getConfig(role, sceneId);
 
         // Recupera la classe della boundary tramite il metodo pubblico di BoundaryMap
-        Class<?> boundaryClass = BoundaryMap.getBoundaryClass(role, sceneId);
+        Class<?> boundaryClass = config.getBoundaryClass();
         logger.info(">>> [SceneSwitcher] Boundary risolta: " + boundaryClass.getSimpleName());
 
         // Istanzia la boundary
@@ -40,7 +41,7 @@ public class SceneSwitcher {
         injectCurrentUser(boundaryInstance, currentUser);
 
         // Recupera la classe del controller tramite il metodo pubblico di ControllerMap (se prevista)
-        Class<?> controllerClass = ControllerMap.getControllerClass(role, sceneId);
+        Class<?> controllerClass = config.getControllerClass();
         if (controllerClass != null) {
             Object controllerInstance = ControllerFactory.createController(controllerClass);
             injectCurrentUser(controllerInstance, currentUser);
