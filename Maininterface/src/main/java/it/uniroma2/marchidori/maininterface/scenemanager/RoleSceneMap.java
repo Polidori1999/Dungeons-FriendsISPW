@@ -1,14 +1,13 @@
-package it.uniroma2.marchidori.maininterface.boundary.map;
+package it.uniroma2.marchidori.maininterface.scenemanager;
 
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
-import it.uniroma2.marchidori.maininterface.enumerate.SceneConfigEnum;
 import it.uniroma2.marchidori.maininterface.enumerate.SceneIdEnum;
 import it.uniroma2.marchidori.maininterface.utils.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static it.uniroma2.marchidori.maininterface.enumerate.SceneConfigEnum.*;
+import static it.uniroma2.marchidori.maininterface.scenemanager.SceneConfigEnum.*;
 
 public class RoleSceneMap {
 

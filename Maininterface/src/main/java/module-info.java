@@ -34,6 +34,8 @@ module it.uniroma2.marchidori.maininterface {
     opens it.uniroma2.marchidori.maininterface.boundary.consultrules to javafx.fxml;
     opens it.uniroma2.marchidori.maininterface.control;
     exports it.uniroma2.marchidori.maininterface.control to javafx.fxml;
+    exports it.uniroma2.marchidori.maininterface.scenemanager;
+    opens it.uniroma2.marchidori.maininterface.scenemanager to javafx.fxml;
 
 
 }

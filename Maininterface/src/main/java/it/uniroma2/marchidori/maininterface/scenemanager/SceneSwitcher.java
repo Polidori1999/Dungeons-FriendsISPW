@@ -1,9 +1,7 @@
 package it.uniroma2.marchidori.maininterface.scenemanager;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
-import it.uniroma2.marchidori.maininterface.boundary.map.RoleSceneMap;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
-import it.uniroma2.marchidori.maininterface.enumerate.SceneConfigEnum;
 import it.uniroma2.marchidori.maininterface.enumerate.SceneIdEnum;
 import it.uniroma2.marchidori.maininterface.factory.BoundaryFactory;
 import it.uniroma2.marchidori.maininterface.factory.ControllerFactory;
