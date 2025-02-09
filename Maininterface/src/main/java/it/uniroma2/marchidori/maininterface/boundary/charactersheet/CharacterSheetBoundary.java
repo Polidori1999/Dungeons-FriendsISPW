@@ -1,14 +1,15 @@
 package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
+import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.Alert;
-import it.uniroma2.marchidori.maininterface.utils.CharacterSheetValidator;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -162,10 +163,10 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
 
         // Se le parti del bean non sono inizializzate, creale.
         if (currentBean.getInfoBean() == null) {
-            currentBean.setInfoBean(new it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBean());
+            currentBean.setInfoBean(new CharacterInfoBean());
         }
         if (currentBean.getStatsBean() == null) {
-            currentBean.setStatsBean(new it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsBean());
+            currentBean.setStatsBean(new CharacterStatsBean());
         }
 
         // Aggiorna i dati del bean con i valori presenti nei campi della UI
@@ -183,7 +184,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         currentBean.getStatsBean().setConstitution(parseIntOrZero(charConstitution.getText()));
 
         // Validazione del bean
-        String validationErrors = CharacterSheetValidator.validate(currentBean);
+        String validationErrors = controller.validate(currentBean);
         if (!validationErrors.isEmpty()) {
             Alert.showError("Errore di Validazione", validationErrors);
             return;

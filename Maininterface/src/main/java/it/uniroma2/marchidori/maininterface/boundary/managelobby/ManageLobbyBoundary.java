@@ -8,6 +8,7 @@ import it.uniroma2.marchidori.maininterface.control.ManageLobbyController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.factory.LobbyFactory;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.utils.Alert;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -148,6 +149,14 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
         currentBean.setNumberOfPlayers(parseIntOrZero(maxPlayersBox.getValue()));
         currentBean.setDuration(durationBox.getValue());
 
+        // Validazione del bean
+        String validationErrors = controller.validate(currentBean);
+        if (!validationErrors.isEmpty()) {
+            Alert.showError("Errore di Validazione", validationErrors);
+            return;
+        }
+
+
         if (!creationMode) {
             controller.updateLobby(oldName, currentBean);
         } else {
@@ -184,6 +193,11 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
     }
 
     private int parseIntOrZero(String input) {
+        // Se input è null o vuoto, restituisci 0
+        if (input == null || input.trim().isEmpty()) {
+            LOGGER.log(Level.SEVERE, "ERRORE: Il campo per il numero di giocatori è vuoto o nullo.");
+            return 0;
+        }
         try {
             return Integer.parseInt(input.trim());
         } catch (NumberFormatException e) {

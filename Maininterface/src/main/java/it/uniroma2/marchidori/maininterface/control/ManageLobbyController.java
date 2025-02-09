@@ -101,4 +101,23 @@ public class ManageLobbyController implements UserAwareInterface {
                 foundLobby.isOwned()
         );
     }
+
+    public String validate(LobbyBean lobby) {
+        StringBuilder errors = new StringBuilder();
+
+        // Validazione dei campi di testo (non vuoti)
+        validateNotEmpty(lobby.getName(), "Name", errors);
+        validateNotEmpty(lobby.getDuration(), "Duration", errors);
+        validateNotEmpty(lobby.getLiveOnline(), "Live/Online", errors);
+        if (lobby.getNumberOfPlayers() == 0) {
+            errors.append("Max number of players cannot be 0.\n");
+        }
+        return errors.toString();
+    }
+
+    private static void validateNotEmpty(String value, String fieldName, StringBuilder errors) {
+        if (value == null || value.trim().isEmpty()) {
+            errors.append(fieldName).append(" cannot be empty.\n");
+        }
+    }
 }
