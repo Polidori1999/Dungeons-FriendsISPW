@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.image.Image?>
@@ -11,50 +12,21 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="userPane"
-            prefHeight="720.0"
-            prefWidth="1280.0"
-            style="-fx-background-color: #292932;"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="userPane" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #292932;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
    <children>
 
       <!-- Pulsante "Dungeons & Friends" (Home) -->
-      <Button fx:id="goToHome"
-              alignment="TOP_LEFT"
-              layoutX="-8.0"
-              layoutY="-3.0"
-              mnemonicParsing="false"
-              onAction="#onNavigationButtonClick"
-              userData="home.fxml"
-              prefHeight="65.0"
-              prefWidth="349.0"
-              style="-fx-background-color: transparent;"
-              text="Dungeons &amp; Friends"
-              textFill="WHITE">
+      <Button fx:id="goToHome" alignment="TOP_LEFT" layoutX="-8.0" layoutY="-3.0" mnemonicParsing="false" onAction="#onNavigationButtonClick" prefHeight="65.0" prefWidth="349.0" style="-fx-background-color: transparent;" text="Dungeons &amp; Friends" textFill="WHITE" userData="home.fxml">
          <font>
             <Font name="System Bold" size="30.0" />
          </font>
       </Button>
 
       <!-- Pulsante utente -->
-      <Button fx:id="userButton"
-              layoutX="1219.0"
-              layoutY="11.0"
-              mnemonicParsing="false"
-              onAction="#onNavigationButtonClick"
-              userData="user.fxml"
-              prefHeight="41.0"
-              prefWidth="45.0"
-              style="-fx-background-color: transparent;"
-              textFill="#f80606">
+      <Button fx:id="userButton" layoutX="1219.0" layoutY="11.0" mnemonicParsing="false" onAction="#onNavigationButtonClick" prefHeight="41.0" prefWidth="45.0" style="-fx-background-color: transparent;" textFill="#f80606" userData="user.fxml">
          <graphic>
-            <ImageView blendMode="MULTIPLY"
-                       fitHeight="53.0"
-                       fitWidth="44.0"
-                       pickOnBounds="true"
-                       preserveRatio="true">
+            <ImageView blendMode="MULTIPLY" fitHeight="53.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@user_icon.jpg" />
                </image>
@@ -66,17 +38,7 @@
       </Button>
 
       <!-- Pulsante "Log Out" (se vuoi tornare al login) -->
-      <Button fx:id="logOutButton"
-              layoutX="240.0"
-              layoutY="450.0"
-              mnemonicParsing="false"
-              onAction="#onNavigationButtonClick"
-              userData="login.fxml"
-              prefHeight="50.0"
-              prefWidth="300.0"
-              style="-fx-background-color: #e90000;"
-              text="Log Out"
-              textFill="WHITE">
+      <Button fx:id="logOutButton" layoutX="240.0" layoutY="450.0" mnemonicParsing="false" onAction="#onNavigationButtonClick" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #e90000;" text="Log Out" textFill="WHITE" userData="login.fxml">
          <font>
             <Font size="20.0" />
          </font>
@@ -85,85 +47,40 @@
       <!-- Pane con campi Username/Email/Role e pulsante Switch Role
            NB: se "Switch Role" fa solo cambio scena, puoi unificarlo;
                altrimenti, mantieni un metodo dedicato -->
-      <Pane layoutX="240.0"
-            layoutY="130.0"
-            prefHeight="270.0"
-            prefWidth="300.0"
-            style="-fx-background-color: #ffffff;">
+      <Pane layoutX="240.0" layoutY="130.0" prefHeight="270.0" prefWidth="300.0" style="-fx-background-color: #ffffff;">
          <children>
-            <TextField fx:id="userName"
-                       layoutX="80.0"
-                       layoutY="40.0"
-                       prefHeight="25.0"
-                       promptText="Username" />
-            <TextField fx:id="emailUser"
-                       editable="false"
-                       layoutX="80.0"
-                       layoutY="95.0"
-                       prefHeight="25.0"
-                       prefWidth="78.0"
-                       promptText="Email" />
-            <TextField fx:id="roleUser"
-                       editable="false"
-                       layoutX="80.0"
-                       layoutY="150.0"
-                       prefHeight="25.0"
-                       prefWidth="118.0"
-                       promptText="Role" />
+            <TextField fx:id="emailUser" editable="false" layoutX="37.0" layoutY="96.0" prefHeight="25.0" prefWidth="238.0" promptText="Email" />
+            <TextField fx:id="roleUser" editable="false" layoutX="118.0" layoutY="150.0" prefHeight="25.0" prefWidth="77.0" promptText="Role" />
 
             <!-- Pulsante "Switch Role":
                  Se cambia ruolo + scena, puoi gestire con onNavigationButtonClick
                  Se fa logica extra, puoi mantenere onAction="#onClickSwitchRole" -->
-            <Button fx:id="switchRoleButton"
-                    layoutX="80.0"
-                    layoutY="205.0"
-                    mnemonicParsing="false"
-                    onAction="#onClickSwitchRole"
-                    prefHeight="25.0"
-                    style="-fx-background-color: #e90000;"
-                    text="Switch role to DM"
-                    textFill="WHITE" />
+            <Button fx:id="switchRoleButton" layoutX="101.0" layoutY="205.0" mnemonicParsing="false" onAction="#onClickSwitchRole" prefHeight="25.0" style="-fx-background-color: #e90000;" text="Switch role to DM" textFill="WHITE" />
+            <Label layoutX="115.0" layoutY="43.0" prefHeight="17.0" prefWidth="71.0" text="Your data:">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
 
       <!-- Immagine Tiamat -->
-      <ImageView fx:id="tiamatImage"
-                 fitHeight="522.0"
-                 fitWidth="675.0"
-                 layoutX="561.0"
-                 layoutY="75.0"
-                 pickOnBounds="true"
-                 preserveRatio="true">
+      <ImageView fx:id="tiamatImage" fitHeight="522.0" fitWidth="675.0" layoutX="561.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@Tiamat.png" />
          </image>
       </ImageView>
 
       <!-- Barra laterale con pulsanti (Vbox) -->
-      <VBox fx:id="vBox"
-            layoutX="-2.0"
-            layoutY="171.0"
-            prefHeight="219.0"
-            prefWidth="260.0">
+      <VBox fx:id="vBox" layoutX="-2.0" layoutY="171.0" prefHeight="219.0" prefWidth="260.0">
 
          <!-- Pulsante "MyCharacters" -->
-         <Button fx:id="myChar"
-                 mnemonicParsing="false"
-                 onAction="#onNavigationButtonClick"
-                 userData="characterList.fxml"
-                 prefHeight="51.0"
-                 prefWidth="255.0"
-                 style="-fx-background-color: transparent;"
-                 text="MyCharacters"
-                 textFill="WHITE">
+         <Button fx:id="myChar" mnemonicParsing="false" onAction="#onNavigationButtonClick" prefHeight="51.0" prefWidth="255.0" style="-fx-background-color: transparent;" text="MyCharacters" textFill="WHITE" userData="characterList.fxml">
             <font>
                <Font name="System Bold" size="17.0" />
             </font>
             <graphic>
-               <ImageView fitHeight="25.0"
-                          fitWidth="25.0"
-                          pickOnBounds="true"
-                          preserveRatio="true">
+               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                   <image>
                      <Image url="@d20.png" />
                   </image>
@@ -175,23 +92,12 @@
          </Button>
 
          <!-- Pulsante "Join Lobby" -->
-         <Button fx:id="joinLobby"
-                 mnemonicParsing="false"
-                 onAction="#onNavigationButtonClick"
-                 userData="joinLobby.fxml"
-                 prefHeight="45.0"
-                 prefWidth="230.0"
-                 style="-fx-background-color: transparent;"
-                 text="Join Lobby"
-                 textFill="WHITE">
+         <Button fx:id="joinLobby" mnemonicParsing="false" onAction="#onNavigationButtonClick" prefHeight="45.0" prefWidth="230.0" style="-fx-background-color: transparent;" text="Join Lobby" textFill="WHITE" userData="joinLobby.fxml">
             <font>
                <Font name="System Bold" size="17.0" />
             </font>
             <graphic>
-               <ImageView fitHeight="25.0"
-                          fitWidth="25.0"
-                          pickOnBounds="true"
-                          preserveRatio="true">
+               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                   <image>
                      <Image url="@coppa.png" />
                   </image>
@@ -206,23 +112,12 @@
          </Button>
 
          <!-- Pulsante "Manage Lobby" -->
-         <Button fx:id="manageLobby"
-                 mnemonicParsing="false"
-                 onAction="#onNavigationButtonClick"
-                 userData="manageLobbyList.fxml"
-                 prefHeight="45.0"
-                 prefWidth="260.0"
-                 style="-fx-background-color: transparent;"
-                 text="Manage Lobby"
-                 textFill="WHITE">
+         <Button fx:id="manageLobby" mnemonicParsing="false" onAction="#onNavigationButtonClick" prefHeight="45.0" prefWidth="260.0" style="-fx-background-color: transparent;" text="Manage Lobby" textFill="WHITE" userData="manageLobbyList.fxml">
             <font>
                <Font name="System Bold" size="17.0" />
             </font>
             <graphic>
-               <ImageView fitHeight="25.0"
-                          fitWidth="25.0"
-                          pickOnBounds="true"
-                          preserveRatio="true">
+               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                   <image>
                      <Image url="@lucchetto.png" />
                   </image>
@@ -237,23 +132,12 @@
          </Button>
 
          <!-- Pulsante "Consult Rules" -->
-         <Button fx:id="consultRules"
-                 mnemonicParsing="false"
-                 onAction="#onNavigationButtonClick"
-                 userData="consultRules.fxml"
-                 prefHeight="45.0"
-                 prefWidth="255.0"
-                 style="-fx-background-color: transparent;"
-                 text="Consult Rules"
-                 textFill="WHITE">
+         <Button fx:id="consultRules" mnemonicParsing="false" onAction="#onNavigationButtonClick" prefHeight="45.0" prefWidth="255.0" style="-fx-background-color: transparent;" text="Consult Rules" textFill="WHITE" userData="consultRules.fxml">
             <font>
                <Font name="System Bold" size="17.0" />
             </font>
             <graphic>
-               <ImageView fitHeight="25.0"
-                          fitWidth="25.0"
-                          pickOnBounds="true"
-                          preserveRatio="true">
+               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                   <image>
                      <Image url="@libro.png" />
                   </image>

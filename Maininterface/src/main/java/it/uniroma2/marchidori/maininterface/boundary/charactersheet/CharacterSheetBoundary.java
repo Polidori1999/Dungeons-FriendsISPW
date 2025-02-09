@@ -74,13 +74,6 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
 
     @FXML
     public void initialize() {
-        // Inizializza le ComboBox con le opzioni disponibili
-        charRace.getItems().addAll("Elfo", "Nano", "Halfling", "Orco", "Tiefling");
-        charClass.getItems().addAll(
-                "Barbaro", "Guerriero", "Ladro", "Monaco", "Paladino",
-                "Ranger", "Bardo", "Chierico", "Stregone", "Mago",
-                "Druido", "Warlock"
-        );
 
         // Verifica l'iniezione dell'utente
         String selected = currentUser != null ? currentUser.getSelectedLobbyName() : null;
