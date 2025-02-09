@@ -12,40 +12,35 @@ import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
 import java.util.logging.Level;
-
 import java.util.logging.Logger;
-
 
 public class LoginBoundary implements UserAwareInterface, ControllerAwareInterface {
     private static final Logger logger = Logger.getLogger(LoginBoundary.class.getName());
-
 
     @FXML
     private AnchorPane anchorLoginPane;
 
     @FXML
-    private Button createAccount;
+    private Button createAccount;   // Pulsante "Create Account"
+
+    @FXML
+    private Button forgotPassword;  // Pulsante "Forgot Password"
+
+    @FXML
+    private Button login;           // Pulsante "Login"
+
+    @FXML
+    private Button guest;           // Pulsante "Guest"
 
     @FXML
     private TextField email;
-
-    @FXML
-    private Button forgotPassword;
-
-    @FXML
-    private Button login;
 
     @FXML
     private PasswordField password;
@@ -57,73 +52,88 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
     private Label wrongLogin;
 
     private UserBean currentUser;
-    private static final String GUEST = "guest";
     private LoginController loginController;
+
+    // Valore di default per il guest
+    private static final String GUEST_EMAIL = "guest@example.com";
+
     @FXML
     public void initialize() {
+        // Binding vari, se necessario
         login.maxWidthProperty().bind(anchorLoginPane.widthProperty().divide(2));
         login.maxHeightProperty().bind(anchorLoginPane.heightProperty().divide(2));
     }
 
+    /**
+     * Metodo UNICO che gestisce i cambi di scena e la logica dei pulsanti
+     */
     @FXML
-    void clickLogin(ActionEvent event) throws IOException {
-        String userEmail = email.getText();
-        String userPassword = password.getText();
-        try {
-            UserBean authenticatedUser = loginController.login(userEmail, userPassword);
-            if (authenticatedUser != null) {
-                currentUser=authenticatedUser;
-                logger.info(">>> Login avvenuto con successo. Ruolo: " + currentUser.getRoleBehavior());
-                changeScene(SceneNames.HOME);
-            } else {
-                wrongLogin.setText("Wrong email or password!");
-                logger.info(">>> ERRORE: Login fallito. UserBean è NULL!");
-            }
-        } catch (IOException e) {
-            throw new SceneChangeException("Error during scene change from login to login.", e);
-        }
-    }
-
-    @FXML
-    void onClickGuest(ActionEvent event) throws IOException {
-        try {
-            currentUser = new UserBean( "guest@example.com", GUEST ,RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-            logger.info(">>> Utente impostato come Guest. Ruolo: " + currentUser.getRoleBehavior());
-
-            Session.getInstance().setCurrentUser(Converter.userBeanToEntity(currentUser));
-            changeScene(SceneNames.HOME);
-        } catch (IOException e) {
-            throw new SceneChangeException("Error during change scene from login to home.", e);
-        }
-    }
-
-    @FXML
-    void onClickCreate(ActionEvent event) {
-        try {
-            if (currentUser == null) {
-                logger.info(">>> Creazione di un UserBean temporaneo per la registrazione.");
-                currentUser = new UserBean( "temp@example.com", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-            }
-            logger.info(">>> LoginBoundary: Sto passando currentUser con ruolo: " + currentUser.getRoleBehavior());
-            changeScene(SceneNames.REGISTER);
-        } catch (IOException e) {
-            throw new SceneChangeException("Error during change scene from login to register.", e);
-        }
-    }
-
-
-
-    @FXML
-    private void changeScene(String fxml) throws IOException {
-        if (currentUser == null) {
-            logger.info(">>> ERRORE: currentUser è NULL! Creazione di un UserBean di fallback.");
-            currentUser = new UserBean("guest@example.com", GUEST,RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-        }
-        logger.log(Level.FINE, "Cambiando scena: {0} con UserBean ruolo: {1}", new Object[]{fxml, currentUser.getRoleBehavior()});
+    protected void onNavigationButtonClick(ActionEvent event) {
+        Button sourceButton = (Button) event.getSource();
+        // Il valore userData corrisponde alle azioni che vogliamo gestire
+        String action = (String) sourceButton.getUserData();
         Stage currentStage = (Stage) anchorLoginPane.getScene().getWindow();
-        SceneSwitcher.changeScene(currentStage, fxml, currentUser);
+
+
+        try {
+            switch (action) {
+
+                // Caso LOGIN
+                case "LOGIN" -> {
+                    String userEmail = email.getText();
+                    String userPassword = password.getText();
+                    UserBean authenticatedUser = loginController.login(userEmail, userPassword);
+                    if (authenticatedUser != null) {
+                        currentUser = authenticatedUser;
+                        logger.log( Level.INFO,">>> Login avvenuto con successo. Ruolo: {}", currentUser.getRoleBehavior());
+                        SceneSwitcher.changeScene(currentStage,SceneNames.HOME,currentUser);
+                    } else {
+                        wrongLogin.setText("Wrong email or password!");
+                        logger.log( Level.INFO,">>> ERRORE: Login fallito. UserBean è NULL!");
+                    }
+                }
+
+                // Caso GUEST
+                case "GUEST" -> {
+                    currentUser = new UserBean(
+                            GUEST_EMAIL,
+                            "guest",
+                            RoleEnum.GUEST,
+                            new ArrayList<>(),
+                            new ArrayList<>(),
+                            new ArrayList<>()
+                    );
+                    logger.log(Level.INFO,">>> Utente impostato come Guest. Ruolo: {}", currentUser.getRoleBehavior());
+
+                    // Se usi session, aggiorna l'entity in session
+                    Session.getInstance().setCurrentUser(Converter.userBeanToEntity(currentUser));
+                    SceneSwitcher.changeScene(currentStage,SceneNames.HOME,currentUser);
+                }
+
+                // Caso CREATE_ACCOUNT
+                case "CREATE_ACCOUNT" -> {
+                    if (currentUser == null) {
+                        logger.log(Level.INFO,">>> Creazione di un UserBean temporaneo per la registrazione.");
+                        currentUser = new UserBean(
+                                "temp@example.com",
+                                new ArrayList<>(),
+                                new ArrayList<>(),
+                                new ArrayList<>()
+                        );
+                    }
+                    logger.info(">>> Sto passando currentUser con ruolo: " + currentUser.getRoleBehavior());
+                    SceneSwitcher.changeScene(currentStage, SceneNames.REGISTER, currentUser);
+                }
+                default -> logger.log(Level.INFO,"boh");
+            }
+        } catch (IOException e) {
+            throw new SceneChangeException("Error during change scene.", e);
+        }
     }
 
+    // -------------------------------------------------------------
+    //          METODI DI INTERFACCIA (UserAware, ControllerAware)
+    // -------------------------------------------------------------
     @Override
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;
