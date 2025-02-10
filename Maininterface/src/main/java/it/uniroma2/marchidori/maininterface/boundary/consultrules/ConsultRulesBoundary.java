@@ -116,7 +116,7 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
     private void handleConsultAction(RuleBookBean book) {
         pendingBuyBean = book;
         if (book.isObtained()) {
-            openFileIfExists(book.getPath());
+            controller.openFileIfExists(book.getPath());
         } else if (confirmationPopupController != null) {
             String message = "Vuoi comprare il libro: " + book.getRulesBookName() + "?";
             confirmationPopupController.show(message, 10, this::onConfirm, this::onCancel);
@@ -133,36 +133,6 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
             confirmationPopupController.show(message, 10, this::onConfirm, this::onCancel);
         } else {
             logger.log(Level.WARNING, "Errore: popup o bean non inizializzato correttamente.");
-        }
-    }
-
-    /**
-     * Prova ad aprire il file associato al percorso indicato, se esiste.
-     */
-    private void openFileIfExists(String filePath) {
-        if (filePath == null || filePath.isEmpty()) {
-            logger.log(Level.WARNING, "Errore: Il percorso del file è vuoto o nullo.");
-            return;
-        }
-
-        String normalizedPath = filePath.replace("/", File.separator).replace("\\", File.separator);
-        File file = new File(normalizedPath);
-
-        if (!file.exists()) {
-            logger.log(Level.WARNING, "Errore: Il file non esiste! Path: {0}", normalizedPath);
-            return;
-        }
-
-        try {
-            Desktop desktop = Desktop.getDesktop();
-            if (desktop.isSupported(Desktop.Action.OPEN)) {
-                desktop.open(file);
-                logger.log(Level.INFO, "File aperto con successo: {0}", normalizedPath);
-            } else {
-                logger.log(Level.INFO, "Il sistema non supporta l'apertura dei file.");
-            }
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, String.format("Errore durante l'apertura del file: %s", normalizedPath), e);
         }
     }
 

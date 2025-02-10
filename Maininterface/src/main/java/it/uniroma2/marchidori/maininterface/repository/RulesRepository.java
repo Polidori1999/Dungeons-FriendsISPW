@@ -19,7 +19,7 @@ public class RulesRepository {
     private RulesRepository() {}
 
     // Lista statica per contenere i RuleBook
-    private static final List<RuleBook> ruleBookList = new ArrayList<>();
+    private static List<RuleBook> ruleBookList = new ArrayList<>();
 
     // Recupera il percorso dalla variabile d'ambiente oppure usa come default la cartella "it.uniroma2.marchidori.maininterface.rulesbook"
     private static final String FOLDERPATH = "src/main/java/it/uniroma2/marchidori/maininterface/rulesbook";
@@ -56,5 +56,8 @@ public class RulesRepository {
      */
     public static List<RuleBook> getAllBooks() {
         return new ArrayList<>(ruleBookList);
+    }
+    public static void setAllBooks(List<RuleBook> books) {
+        ruleBookList = books;
     }
 }
