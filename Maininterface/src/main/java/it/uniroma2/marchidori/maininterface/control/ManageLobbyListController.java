@@ -41,7 +41,7 @@ public class ManageLobbyListController implements UserAwareInterface {
         }
 
         // Se l'utente non è un guest, prosegui con la logica normale
-        if (currentUser.getJoinedLobbies() != null) {
+        if (currentUser != null && currentUser.getJoinedLobbies() != null) {
             for (int i = 0; i < currentUser.getJoinedLobbies().size(); i++) {
                 if (currentUser.getJoinedLobbies().get(i).getName().equals(lobbyName)) {
                     currentUser.getJoinedLobbies().remove(i);

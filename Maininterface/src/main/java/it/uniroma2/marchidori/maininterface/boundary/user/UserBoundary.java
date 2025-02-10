@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.boundary.user;
 
+import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
@@ -72,6 +73,8 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
     protected UserController controller;
     private static final Logger LOGGER = Logger.getLogger(UserBoundary.class.getName());
     private static final String SWITCHTO = "Switch Role to ";
+    private Jout jout = new Jout(this.getClass().getSimpleName());
+
 
 
     /**
@@ -127,7 +130,7 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
         roleUser.setText(currentUser.getRoleBehavior().getRoleName());
         setSwitchRoleButtonText(currentUser.getRoleBehavior());
         LOGGER.log(Level.INFO, () -> "Switched role to: " + currentUser.getRoleBehavior().getRoleName());
-
+        jout.print("ciao mondo!");
     }
 
     @FXML

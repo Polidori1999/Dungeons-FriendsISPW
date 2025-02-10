@@ -87,11 +87,13 @@ public class CharacterSheetController implements UserAwareInterface {
     //                      METODI PRIVATI
     // -------------------------------------------------------------
 
-    private CharacterSheet beanToEntity(CharacterSheetBean bean) {
-        return getCharacterSheet(bean);
-    }
+    public CharacterSheet beanToEntity(CharacterSheetBean bean) {
 
-    static CharacterSheet getCharacterSheet(CharacterSheetBean bean) {
+        if(bean == null) {
+            logger.log(Level.INFO, "bean is null!");
+            return null;
+        }
+
         CharacterInfoBean infoBean = bean.getInfoBean();
         CharacterStatsBean statsBean = bean.getStatsBean();
 
