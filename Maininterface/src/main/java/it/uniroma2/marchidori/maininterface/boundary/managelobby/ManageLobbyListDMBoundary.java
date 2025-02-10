@@ -4,7 +4,6 @@ import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
-import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
 
@@ -15,8 +14,6 @@ import java.util.logging.Logger;
 public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
     private static final Logger logger = Logger.getLogger(ManageLobbyListDMBoundary.class.getName());
 
-    protected ConfirmationPopupController confirmationPopupController;
-    private LobbyBean pendingDeleteBean;
 
     @Override
     protected void initialize() {
@@ -34,9 +31,6 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
 
         logger.log(Level.INFO, "Numero di lobby nella tabella: {0}", data.size());
 
-        // Carica / prepara il popup di conferma
-        confirmationPopupController = ConfirmationPopupController.loadPopup(manageLobbyListPane);
-
         // Configura la colonna "Edit"
         TableColumnUtils.setupConditionalButtonColumn(
                 tableViewLobbyEdit,
@@ -44,11 +38,7 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
                 "Edit",
                 this::editLobby          // azione da eseguire al click
         );
-        // Configura la colonna "Delete"
-        TableColumnUtils.setupButtonColumn(tableViewLobbyDelete, "Delete", lobby -> {
-            pendingDeleteBean = lobby;
-            showDeleteConfirmation();
-        });
+
 
         // Rendo cliccabile il bottone "New Lobby"
         // (nel FXML, newLobbyButton chiama onNavigationButtonClick con userData="manageLobby.fxml")
@@ -56,40 +46,6 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
         newLobbyButton.setDisable(false);
     }
 
-    private void showDeleteConfirmation() {
-        if (confirmationPopupController != null && pendingDeleteBean != null) {
-            String message = "Vuoi eliminare la lobby '" + pendingDeleteBean.getName() + "'?";
-            confirmationPopupController.show(
-                    message,
-                    10,                // timer di scadenza popup
-                    this::onConfirmDelete,
-                    this::onCancelDelete
-            );
-        } else {
-            logger.severe("Errore: ConfirmationPopupController non inizializzato o pendingDeleteBean è null");
-        }
-    }
-
-    private void onConfirmDelete() {
-        if (pendingDeleteBean != null) {
-            String lobbyName = pendingDeleteBean.getName();
-
-            // Rimuovi dalla TableView
-            tableViewLobby.getItems().remove(pendingDeleteBean);
-
-            // Chiedi al controller di rimuoverla in DB
-            controller.deleteLobby(lobbyName);
-
-            // Eventuale rimozione in repository locale
-            LobbyRepository.removeLobby(lobbyName);
-
-            pendingDeleteBean = null;
-        }
-    }
-
-    private void onCancelDelete() {
-        pendingDeleteBean = null;
-    }
 
     private void editLobby(LobbyBean beanToEdit) {
         // Imposta la lobby da editare nel currentUser

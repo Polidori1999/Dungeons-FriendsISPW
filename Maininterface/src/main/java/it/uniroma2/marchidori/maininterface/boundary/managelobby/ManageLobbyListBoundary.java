@@ -4,10 +4,13 @@ import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
+import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.control.ManageLobbyListController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
+import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
+import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -66,6 +69,9 @@ public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAw
     protected UserBean currentUser;
     protected ManageLobbyListController controller;
     protected ObservableList<LobbyBean> data = FXCollections.observableArrayList();
+    private LobbyBean pendingDeleteBean;
+    protected ConfirmationPopupController confirmationPopupController;
+
 
     @FXML
     protected void initialize() {
@@ -76,6 +82,8 @@ public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAw
         if (currentUser.getJoinedLobbies() == null) {
             currentUser.setJoinedLobbies(new ArrayList<>());
         }
+        confirmationPopupController = ConfirmationPopupController.loadPopup(manageLobbyListPane);
+
         data.clear();
         data.addAll(controller.getJoinedLobbies());
 
@@ -83,9 +91,52 @@ public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAw
         tableViewMaxPlayers.setCellValueFactory(new PropertyValueFactory<>("numberOfPlayers"));
         tableViewDuration.setCellValueFactory(new PropertyValueFactory<>("duration"));
         tableViewLiveOrNot.setCellValueFactory(new PropertyValueFactory<>("liveOnline"));
+        // Configura la colonna "Delete"
+        TableColumnUtils.setupButtonColumn(tableViewLobbyDelete, "Delete", lobby -> {
+            pendingDeleteBean = lobby;
+            showDeleteConfirmation();
+        });
 
         tableViewLobby.setItems(data);
     }
+
+    private void showDeleteConfirmation() {
+        if (confirmationPopupController != null && pendingDeleteBean != null) {
+            String message = "Vuoi eliminare la lobby '" + pendingDeleteBean.getName() + "'?";
+            confirmationPopupController.show(
+                    message,
+                    10,                // timer di scadenza popup
+                    this::onConfirmDelete,
+                    this::onCancelDelete
+            );
+        } else {
+            logger.severe("Errore: ConfirmationPopupController non inizializzato o pendingDeleteBean è null");
+        }
+    }
+
+
+    private void onConfirmDelete() {
+        if (pendingDeleteBean != null) {
+            String lobbyName = pendingDeleteBean.getName();
+
+            // Rimuovi dalla TableView
+            tableViewLobby.getItems().remove(pendingDeleteBean);
+
+            // Chiedi al controller di rimuoverla in DB
+            controller.deleteLobby(lobbyName);
+
+            // Eventuale rimozione in repository locale
+            LobbyRepository.removeLobby(lobbyName);
+
+            pendingDeleteBean = null;
+        }
+    }
+
+
+    private void onCancelDelete() {
+        pendingDeleteBean = null;
+    }
+
 
     /**
      * Unico metodo per gestire la navigazione. Ricava l'FXML dal pulsante premuto (usando userData).
