@@ -24,7 +24,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        try {
+        /*try {
             Connection conn = DatabaseConnection.getConnection();
             if (conn != null) {
                 logger.info("✅ Connessione a MySQL riuscita!");
@@ -34,7 +34,7 @@ public class Main extends Application {
             }
         } catch (SQLException e) {
             logger.severe(String.format("❌ Errore di connessione: %s", e.getMessage()));
-        }
+        }*/
         launch();
     }
 }

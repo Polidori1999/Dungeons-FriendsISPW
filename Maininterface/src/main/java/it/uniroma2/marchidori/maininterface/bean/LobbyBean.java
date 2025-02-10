@@ -1,5 +1,7 @@
 package it.uniroma2.marchidori.maininterface.bean;
 
+import it.uniroma2.marchidori.maininterface.entity.Lobby;
+
 public class LobbyBean {
     private String duration;       // "Singola"/"Campagna"
     private String name;           // nome lobby
@@ -11,6 +13,16 @@ public class LobbyBean {
 
     public LobbyBean(){
     }
+
+    public LobbyBean(Lobby lobby) {
+        this.name = lobby.getLobbyName();
+        this.duration = lobby.getDuration();
+        this.liveOnline = lobby.getType();
+        this.maxOfPlayers = lobby.getNumberOfPlayers();
+        this.currentNumberOfPlayers = lobby.getPlayers().size();  // Numero di giocatori attuali
+        this.owned = lobby.isOwned();
+    }
+
 
     public LobbyBean(String duration, String name, String type, int numberOfPlayers, boolean owned) {
         this.duration = duration;

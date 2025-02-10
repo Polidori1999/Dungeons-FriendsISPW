@@ -11,5 +11,7 @@ public class ManageLobbyListPlayerBoundary extends ManageLobbyListBoundary {
         super.initialize();
         newLobbyButton.setVisible(false);
         newLobbyButton.setDisable(true);
+
     }
+
 }

@@ -153,4 +153,12 @@ public class Converter {
     public Lobby beanToEntity(LobbyBean bean) {
         return new Lobby(bean.getName(), bean.getDuration(), bean.getLiveOnline(), bean.isOwned(), bean.getNumberOfPlayers());
     }
+
+    public static LobbyBean stringToLobbyBean(String lobbyName){
+        if (lobbyName == null||lobbyName.isEmpty()) {
+            return null;
+        }
+        //creo  oggetto lobby bean con il nome
+        return new LobbyBean("",lobbyName,"",0,false);
+    }
 }

@@ -16,6 +16,7 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
     public void initialize() {
         super.initialize();
 
+        // Setup dynamic button for joining lobby
         TableColumnUtils.<LobbyBean>setupDynamicButtonColumn(
                 joinButtonColumn, // Assicurarsi che sia TableColumn<LobbyBean, Button>
                 lobby -> controller.isLobbyJoined(lobby) ? "" : "Join",
@@ -34,6 +35,7 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
                 }
         );
 
+        // Setup dynamic button for adding/removing lobby from favourites
         TableColumnUtils.<LobbyBean>setupDynamicButtonColumn(
                 favouriteButton, // Assicurarsi che sia TableColumn<LobbyBean, Button>
                 lobby -> controller.isLobbyFavorite(lobby.getName(), currentUser.getFavouriteLobbies())

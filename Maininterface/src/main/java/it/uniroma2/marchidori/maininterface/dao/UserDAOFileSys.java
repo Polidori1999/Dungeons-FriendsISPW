@@ -6,17 +6,20 @@ import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 public class UserDAOFileSys implements UserDAO {
     private static final String DIRECTORY_PATH = "src/main/java/it/uniroma2/marchidori/maininterface/userpsw";
-    private static final String FILE_PATH = DIRECTORY_PATH + "/users.txt";
+    private static final String USER_FILE_PATH = DIRECTORY_PATH + "/users.txt";
+    private static final String LOBBY_FILE_PATH = DIRECTORY_PATH + "/user_lobbies.txt";
 
-    // Creazione del logger
     private static final Logger logger = Logger.getLogger(UserDAOFileSys.class.getName());
 
     public UserDAOFileSys() {
-        createDirectory(); // Assicura che la cartella esista
+        createDirectory();
     }
 
     private void createDirectory() {
@@ -25,73 +28,92 @@ public class UserDAOFileSys implements UserDAO {
             if (directory.mkdirs()) {
                 logger.info("Cartella creata: " + DIRECTORY_PATH);
             } else {
-                logger.severe("Errore nella creazione della cartella: " + DIRECTORY_PATH);
+                logger.severe("Errore nella creazione della cartella.");
             }
         }
     }
 
-    // Metodo per salvare l'utente (rimane invariato)
+    @Override
     public void saveUser(String email, String password) {
-        // Cripta la password con BCrypt
         String hashedPassword = org.mindrot.jbcrypt.BCrypt.hashpw(password, org.mindrot.jbcrypt.BCrypt.gensalt());
-        File file = new File(FILE_PATH);
-
-        try {
-            if (!file.exists()) {
-                if (file.createNewFile()) {
-                    logger.info("File creato: " + FILE_PATH);
-                } else {
-                    logger.severe("Errore nella creazione del file");
-                }
-            }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(USER_FILE_PATH, true))) {
+            writer.write(email + "," + hashedPassword);
+            writer.newLine();
         } catch (IOException e) {
-            logger.severe("❌ Errore nella creazione del file: " + e.getMessage());
-            return;
-        }
-
-        logger.info("\n📌 Tentativo di scrittura dati...");
-        try (FileWriter fw = new FileWriter(FILE_PATH, true);
-             BufferedWriter bw = new BufferedWriter(fw);
-             PrintWriter out = new PrintWriter(bw)) {
-
-            // Salva: email, password hashata
-            out.println(email + "," + hashedPassword);
-
-        } catch (IOException e) {
-            logger.severe("❌ Errore nella scrittura del file: " + e.getMessage());
+            logger.severe("Errore nella scrittura del file: " + e.getMessage());
         }
     }
 
-    // Metodo per recuperare l'utente in base all'email (il DAO NON verifica la password)
+    @Override
     public UserBean getUserByEmail(String email) {
-        File file = new File(FILE_PATH);
-
-        if (!file.exists()) {
-            logger.severe("❌ File non trovato: " + FILE_PATH);
-            return null;
-        }
-
-        try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(USER_FILE_PATH))) {
             String line;
-
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 2 && parts[0].equals(email)) {
-                    // Qui creiamo un UserBean che contiene anche la password hashata.
-                    // Per questo, aggiungiamo un campo "password" a UserBean (o usiamo un costruttore dedicato).
-                    return new UserBean(
-                            email,
-                            parts[1],          // password hashata
-                            RoleEnum.PLAYER,   // Ruolo di default (puoi modificarlo se necessario)
-                            new ArrayList<>(), // joinedLobbies vuota
-                            new ArrayList<>(), // favouriteLobbies vuota
-                            new ArrayList<>()  // characterSheets vuota
-                    );
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data[0].equals(email)) {
+                    return new UserBean(data[0], data[1], RoleEnum.PLAYER, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
                 }
             }
         } catch (IOException e) {
-            logger.severe("❌ Errore nella lettura del file: " + e.getMessage());
+            logger.severe("Errore nella lettura del file: " + e.getMessage());
         }
         return null;
+    }
+
+    public void saveUserLobbies(String email, List<String> newLobbies) {
+        List<String> allUserData = new ArrayList<>();
+        boolean userFound = false;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(LOBBY_FILE_PATH))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data[0].equals(email)) {
+                    Set<String> lobbiesSet = new HashSet<>();
+                    for (int i = 1; i < data.length; i++) {
+                        lobbiesSet.add(data[i]);
+                    }
+                    lobbiesSet.addAll(newLobbies);
+                    allUserData.add(email + "," + String.join(",", lobbiesSet));
+                    userFound = true;
+                } else {
+                    allUserData.add(line);
+                }
+            }
+        } catch (IOException e) {
+            logger.severe("Errore nella lettura del file: " + e.getMessage());
+        }
+
+        if (!userFound) {
+            allUserData.add(email + "," + String.join(",", newLobbies));
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(LOBBY_FILE_PATH, false))) {
+            for (String userData : allUserData) {
+                writer.write(userData);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            logger.severe("Errore nella scrittura delle lobby: " + e.getMessage());
+        }
+    }
+
+    public List<String> getUserLobbies(String email) {
+        List<String> lobbies = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(LOBBY_FILE_PATH))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data[0].equals(email)) {
+                    for (int i = 1; i < data.length; i++) {
+                        lobbies.add(data[i]);
+                    }
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            logger.severe("Errore nella lettura delle lobby: " + e.getMessage());
+        }
+        return lobbies;
     }
 }

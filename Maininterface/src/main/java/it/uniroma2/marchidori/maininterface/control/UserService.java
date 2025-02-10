@@ -4,6 +4,8 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 
+import java.util.List;
+
 public class UserService {
     private final UserDAO userDAO;
 
@@ -19,4 +21,9 @@ public class UserService {
     public UserBean getUserByEmail(String email) {
         return userDAO.getUserByEmail(email);
     }
+
+    public List<String> getUserLobbies(String email) {
+        return userDAO.getUserLobbies(email);
+    }
+
 }
