@@ -14,8 +14,8 @@ public class PayPalPaymentController {
     private static final String PAYPAL_API_BASE = "https://api-m.sandbox.paypal.com";
 
     // Inserisci le TUE credenziali (client id e secret) create su PayPal Developer
-    private static final String CLIENT_ID = "AbzfWZ_neeQ2ml3IMS_SZ3PHZOqfGaZm69gr1y3860SbFl5yAyWYL5DExVBHaBhKNKQ1o8cJqaG84WzX";
-    private static final String CLIENT_SECRET = "EEFVaGSPKnMecDpitzALfeBM8EMQAQ62YiATd1Tr6tqd03ZcbaZi8q8dnRz_mDReDn1QZbmA0lH5nkJ_";
+    private static final String CLIENT_ID = "";
+    private static final String CLIENT_SECRET = "";
 
     /**
      * Ottiene l'access token per autenticare le richieste all'API PayPal (OAuth2 client_credentials).
