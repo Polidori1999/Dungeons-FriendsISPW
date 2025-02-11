@@ -9,6 +9,7 @@ module it.uniroma2.marchidori.maininterface {
 
 
     opens it.uniroma2.marchidori.maininterface to javafx.fxml;
+
     exports it.uniroma2.marchidori.maininterface;
     exports it.uniroma2.marchidori.maininterface.entity;
     opens it.uniroma2.marchidori.maininterface.entity to javafx.fxml;
