@@ -2,7 +2,9 @@ package it.uniroma2.marchidori.maininterface.control;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
+import it.uniroma2.marchidori.maininterface.entity.User;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.ArrayList;
@@ -13,60 +15,61 @@ import java.util.logging.Logger;
 public class LoginController {
 
     private UserService userService;
-
-    // Creazione del logger come campo statico
     private static final Logger logger = Logger.getLogger(LoginController.class.getName());
 
-    // Costruttore senza parametri
     public LoginController() {
-        // true per db false per filesys
-        this.userService = new UserService(false);
+        this.userService = UserService.getInstance(false);
     }
 
     public void setCurrentUser(UserBean user) {
-        // Metodo vuoto, viene implementato solo per implementare l'interfaccia
+        // Metodo vuoto per implementare l'interfaccia
     }
 
-    // Metodo login che esegue il controllo della password
-    public UserBean login(String email, String password) {
-        // Recupera l'utente (con password hashata) tramite il DAO
-        UserBean retrievedUser = userService.getUserByEmail(email);
+    public User login(String email, String password) {
+        logger.info("🔍 Tentativo di login per: " + email);
+
+        User retrievedUser = userService.getUserByEmail(email);
 
         if (retrievedUser == null) {
-            // Log solo se il livello di log permette
-            if (logger.isLoggable(Level.SEVERE)) {
-                logger.severe(String.format("❌ Utente non trovato per: %s", email));
-            }
+            logger.severe("❌ Utente non trovato per: " + email);
             return null;
         }
 
-        // Verifica la password usando BCrypt
+        logger.info("🔄 Utente trovato: " + retrievedUser.getEmail());
+
         if (BCrypt.checkpw(password, retrievedUser.getPassword())) {
-            // Log solo se il livello di log permette
-            if (logger.isLoggable(Level.INFO)) {
-                logger.info(String.format("✅ Login riuscito per: %s", email));
-            }
-            //recupero dal dao
-            List<String> joinedLobbiesNames=userService.getUserLobbies(email);
-            List<LobbyBean> joinedLobbies=new ArrayList<>();
-            //convertire i nomi delle lobby in oggetti lobbybean
+            logger.info("✅ Password corretta per: " + email);
+
+            List<String> joinedLobbiesNames = userService.getUserLobbies(email);
+            logger.info("📌 Lobby recuperate: " + joinedLobbiesNames);
+
+            List<Lobby> joinedLobbies = new ArrayList<>();
             for (String lobbyName : joinedLobbiesNames) {
-                LobbyBean lobbyBean = Converter.stringToLobbyBean(lobbyName);
-                if (lobbyBean != null) {
-                    joinedLobbies.add(lobbyBean);
+                Lobby lobby = Converter.stringToLobby(lobbyName);
+                if (lobby != null) {
+                    logger.info("🔄 Lobby convertita con successo: " + lobby.getLobbyName());
+                    logger.info("📊 Dettagli lobby - Durata: " + lobby.getDuration() +
+                            ", Tipo: " + lobby.getType() +
+                            ", Proprietario: " + (lobby.isOwned() ? "Sì" : "No") +
+                            ", Giocatori: " + lobby.getNumberOfPlayers());
+
+                    joinedLobbies.add(lobby);
+                } else {
+                    logger.warning("⚠️ Impossibile convertire la lobby: " + lobbyName);
                 }
             }
 
             retrievedUser.setJoinedLobbies(joinedLobbies);
 
-            setCurrentUser(retrievedUser);
-            Session.getInstance().setCurrentUser(Converter.userBeanToEntity(retrievedUser));
+            UserBean convertedUser = Converter.convert(retrievedUser);
+            logger.info("🔄 Conversione User -> UserBean completata: " + convertedUser.getEmail());
+
+            setCurrentUser(convertedUser);
+            Session.getInstance().setCurrentUser(retrievedUser);
+
             return retrievedUser;
         } else {
-            // Log solo se il livello di log permette
-            if (logger.isLoggable(Level.SEVERE)) {
-                logger.severe(String.format("❌ Password errata per: %s", email));
-            }
+            logger.severe("❌ Password errata per: " + email);
             return null;
         }
     }

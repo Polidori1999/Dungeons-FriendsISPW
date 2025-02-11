@@ -16,6 +16,7 @@ import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -150,15 +151,139 @@ public class Converter {
         return result;
     }
 
-    public Lobby beanToEntity(LobbyBean bean) {
+
+    public static Lobby beanToEntity(LobbyBean bean) {
         return new Lobby(bean.getName(), bean.getDuration(), bean.getLiveOnline(), bean.isOwned(), bean.getNumberOfPlayers());
     }
 
-    public static LobbyBean stringToLobbyBean(String lobbyName){
-        if (lobbyName == null||lobbyName.isEmpty()) {
+    public static Lobby stringToLobby(String lobbyData) {
+        if (lobbyData == null || lobbyData.isEmpty()) {
             return null;
         }
-        //creo  oggetto lobby bean con il nome
-        return new LobbyBean("",lobbyName,"",0,false);
+
+        String[] dataParts = lobbyData.split(";");
+        String lobbyName = dataParts.length > 0 ? dataParts[0] : "";
+        String duration = dataParts.length > 1 ? dataParts[1] : "";
+        String type = dataParts.length > 2 ? dataParts[2] : "";
+        boolean owned = dataParts.length > 3 && Boolean.parseBoolean(dataParts[3]);
+        int numberOfPlayers = dataParts.length > 4 ? Integer.parseInt(dataParts[4]) : 0;
+
+
+        return new Lobby(lobbyName, duration, type, owned, numberOfPlayers);
     }
+    //////////////////////////////////////////////
+
+    public static UserBean convert(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        // Converte le liste di Lobby e CharacterSheet
+        List<LobbyBean> favouriteLobbies = convertLobbyList2(user.getFavouriteLobbies());
+        List<LobbyBean> joinedLobbies    = convertLobbyList2(user.getJoinedLobbies());
+        List<CharacterSheetBean> sheetBeans = convertCharacterSheetList(user.getCharacterSheets());
+
+        // Crea il UserBean
+        UserBean userBean = new UserBean(
+                user.getEmail(),
+                user.getPassword(),
+                user.getRoleBehavior(),
+                joinedLobbies,
+                favouriteLobbies,
+                sheetBeans
+        );
+
+        // Se vuoi gestire altri campi particolari di UserBean, puoi impostarli qui
+        // Esempio: userBean.setSelectedLobbyName(...);
+
+        return userBean;
+    }
+
+    /**
+     * =====================
+     *     METODI LOBBY
+     * =====================
+     */
+
+    /**
+     * Converte un singolo oggetto Lobby (entity) in un oggetto LobbyBean (bean).
+     */
+    private static LobbyBean convertLobby(Lobby lobby) {
+        if (lobby == null) {
+            return null;
+        }
+        // Usa il costruttore di LobbyBean che accetta un Lobby
+        return new LobbyBean(lobby);
+    }
+
+    /**
+     * Converte una lista di Lobby in una lista di LobbyBean.
+     */
+    private static List<LobbyBean> convertLobbyList2(List<Lobby> lobbies) {
+        if (lobbies == null) {
+            return new ArrayList<>();
+        }
+        return lobbies.stream()
+                .map(Converter::convertLobby)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * =====================
+     *  METODI CHAR-SHEET
+     * =====================
+     */
+
+    /**
+     * Converte un singolo CharacterSheet (entity) in CharacterSheetBean (bean).
+     */
+    private static CharacterSheetBean convertCharacterSheet(CharacterSheet sheet) {
+        if (sheet == null) {
+            return null;
+        }
+
+        // Converte la parte "info"
+        CharacterInfo info = sheet.getCharacterInfo();
+        CharacterInfoBean infoBean = null;
+        if (info != null) {
+            infoBean = new CharacterInfoBean(
+                    info.getName(),
+                    info.getRace(),
+                    info.getAge(),
+                    info.getClasse(),
+                    info.getLevel()
+            );
+        }
+
+        // Converte la parte "stats"
+        CharacterStats stats = sheet.getCharacterStats();
+        CharacterStatsBean statsBean = null;
+        if (stats != null) {
+            statsBean = new CharacterStatsBean(
+                    stats.getStrength(),
+                    stats.getDexterity(),
+                    stats.getIntelligence(),
+                    stats.getWisdom(),
+                    stats.getCharisma(),
+                    stats.getConstitution()
+            );
+        }
+
+        // Crea il CharacterSheetBean
+        return new CharacterSheetBean(infoBean, statsBean);
+    }
+
+    /**
+     * Converte una lista di CharacterSheet in una lista di CharacterSheetBean.
+     */
+    private static List<CharacterSheetBean> convertCharacterSheetList(List<CharacterSheet> sheets) {
+        if (sheets == null) {
+            return new ArrayList<>();
+        }
+        return sheets.stream()
+                .map(Converter::convertCharacterSheet)
+                .collect(Collectors.toList());
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.repository;
 
+import it.uniroma2.marchidori.maininterface.boundary.LobbyChangeListener;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.factory.LobbyFactory;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class LobbyRepository {
     private LobbyRepository(){}
     // Rendi la lista statica
     private static List<Lobby> lobbyList = new ArrayList<>();
-
+    private static List<LobbyChangeListener> listeners = new ArrayList<>();
     // Inizializza la lista in un blocco statico
     static {
         // Inizializziamo con lobby statiche per ora
@@ -53,4 +54,20 @@ public class LobbyRepository {
     public static void removeLobby(String name) {
         lobbyList.removeIf(lobby -> lobby.getLobbyName().equals(name));
     }
+
+    public static void addLobbyChangeListener(LobbyChangeListener listener) {
+        listeners.add(listener);
+    }
+
+    public static void removeLobbyChangeListener(LobbyChangeListener listener) {
+        listeners.remove(listener);
+    }
+
+    public static void notifyLobbyChangeListeners() {
+        for (LobbyChangeListener listener : listeners) {
+            listener.onLobbyListChanged();
+        }
+    }
+
 }
+

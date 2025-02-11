@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.dao;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
+import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 
 import java.io.*;
@@ -10,6 +11,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
+
+import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
 public class UserDAOFileSys implements UserDAO {
     private static final String DIRECTORY_PATH = "src/main/java/it/uniroma2/marchidori/maininterface/userpsw";
@@ -35,7 +38,7 @@ public class UserDAOFileSys implements UserDAO {
 
     @Override
     public void saveUser(String email, String password) {
-        String hashedPassword = org.mindrot.jbcrypt.BCrypt.hashpw(password, org.mindrot.jbcrypt.BCrypt.gensalt());
+        String hashedPassword = org.mindrot.jbcrypt.BCrypt.hashpw(password, org.mindrot.jbcrypt.BCrypt.gensalt());//da spostare nel controller
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(USER_FILE_PATH, true))) {
             writer.write(email + "," + hashedPassword);
             writer.newLine();
@@ -45,13 +48,13 @@ public class UserDAOFileSys implements UserDAO {
     }
 
     @Override
-    public UserBean getUserByEmail(String email) {
+    public User getUserByEmail(String email) {
         try (BufferedReader reader = new BufferedReader(new FileReader(USER_FILE_PATH))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
                 if (data[0].equals(email)) {
-                    return new UserBean(data[0], data[1], RoleEnum.PLAYER, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                    return new User(data[0], data[1], new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
                 }
             }
         } catch (IOException e) {
@@ -116,4 +119,55 @@ public class UserDAOFileSys implements UserDAO {
         }
         return lobbies;
     }
+
+
+    public void removeUserLobby(String email, String lobbyName) {
+        List<String> allUserData = new ArrayList<>();
+        boolean userFound = false;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(LOBBY_FILE_PATH))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data[0].equals(email)) {
+                    userFound = true;
+                    List<String> updatedLobbies = new ArrayList<>();
+
+                    // Mantiene solo le lobby diverse da quella da rimuovere
+                    for (int i = 1; i < data.length; i++) {
+                        if (!data[i].equals(lobbyName)) {
+                            updatedLobbies.add(data[i]);
+                        }
+                    }
+
+                    // Se l'utente ha ancora lobby, lo aggiungiamo alla lista
+                    if (!updatedLobbies.isEmpty()) {
+                        allUserData.add(email + "," + String.join(",", updatedLobbies));
+                    }
+                } else {
+                    allUserData.add(line);
+                }
+            }
+        } catch (IOException e) {
+            logger.severe("Errore nella lettura del file delle lobby: " + e.getMessage());
+            return;
+        }
+
+        // Scriviamo i dati aggiornati nel file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(LOBBY_FILE_PATH, false))) {
+            for (String userData : allUserData) {
+                writer.write(userData);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            logger.severe("Errore nella scrittura delle lobby: " + e.getMessage());
+        }
+
+        if (userFound) {
+            logger.info("Lobby '" + lobbyName + "' rimossa con successo per l'utente: " + email);
+        } else {
+            logger.warning("L'utente " + email + " non aveva la lobby: " + lobbyName);
+        }
+    }
 }
+

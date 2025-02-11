@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.dao;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
+import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 public class UserDAODatabase implements UserDAO {
 
@@ -63,7 +65,7 @@ public class UserDAODatabase implements UserDAO {
     }
 
     @Override
-    public UserBean getUserByEmail(String email) {
+    public User getUserByEmail(String email) {
         String query = "SELECT email, password FROM users WHERE email = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -81,10 +83,9 @@ public class UserDAODatabase implements UserDAO {
                     logger.info(String.format("🔍 DEBUG: Password dal database per %s → %s", foundEmail, hashedPassword));
                 }
 
-                return new UserBean(
+                return new User(
                         foundEmail,
                         hashedPassword,
-                        RoleEnum.PLAYER,
                         new ArrayList<>(),
                         new ArrayList<>(),
                         new ArrayList<>()
@@ -99,12 +100,21 @@ public class UserDAODatabase implements UserDAO {
                 logger.severe(String.format("❌ Errore nel recupero dell'utente dal database: %s", e.getMessage()));
             }
         }
-
         return null;
+    }
+
+    @Override
+    public void removeUserLobby(String email, String lobby) {
+        //vuoto
     }
 
     @Override
     public List<String> getUserLobbies(String email) {
         return null;
+    }
+
+    @Override
+    public void saveUserLobbies(String email, List<String> lobbyNames) {
+        //void
     }
 }

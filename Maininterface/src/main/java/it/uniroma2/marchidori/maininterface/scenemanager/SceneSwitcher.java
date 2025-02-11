@@ -1,6 +1,9 @@
 package it.uniroma2.marchidori.maininterface.scenemanager;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.boundary.LobbyChangeListener;
+import it.uniroma2.marchidori.maininterface.boundary.managelobby.ManageLobbyListBoundary;
+import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.enumerate.SceneIdEnum;
 import it.uniroma2.marchidori.maininterface.factory.BoundaryFactory;
@@ -33,18 +36,31 @@ public class SceneSwitcher {
         logger.info(">>> [SceneSwitcher] Boundary risolta: " + boundaryClass.getSimpleName());
 
         // Istanzia la boundary
+        // Istanzia la boundary
         Object boundaryInstance = BoundaryFactory.createBoundary(boundaryClass);
         logger.info(">>> [SceneSwitcher] Istanza della boundary creata: " + boundaryInstance.getClass().getSimpleName());
 
         injectCurrentUser(boundaryInstance, currentUser);
 
+// Recupera la classe del controller tramite il metodo pubblico di ControllerMap (se prevista)
         // Recupera la classe del controller tramite il metodo pubblico di ControllerMap (se prevista)
         Class<?> controllerClass = config.getControllerClass();
+        Object controllerInstance = null;
         if (controllerClass != null) {
-            Object controllerInstance = ControllerFactory.createController(controllerClass);
+            controllerInstance = ControllerFactory.createController(controllerClass);
             injectCurrentUser(controllerInstance, currentUser);
             injectControllerIntoBoundary(controllerInstance, boundaryInstance);
+
+            // 🔥 REGISTRA IL LISTENER: controlla se la boundary implementa LobbyChangeListener
+            if (controllerInstance instanceof JoinLobbyController && boundaryInstance instanceof LobbyChangeListener) {
+                ((JoinLobbyController) controllerInstance).addLobbyChangeListener((LobbyChangeListener) boundaryInstance);
+                logger.info("✅ Listener registrato: " + boundaryInstance.getClass().getSimpleName() +
+                        " ora riceverà aggiornamenti da JoinLobbyController");
+            }
+
         }
+
+
 
         // Carica il file FXML impostando la boundary come controller
         Parent root = loadFXML(fxmlPath, boundaryInstance);

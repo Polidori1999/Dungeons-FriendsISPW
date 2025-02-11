@@ -3,14 +3,18 @@ package it.uniroma2.marchidori.maininterface.boundary.managelobby;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
+import it.uniroma2.marchidori.maininterface.boundary.LobbyChangeListener;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.control.ManageLobbyListController;
+import it.uniroma2.marchidori.maininterface.control.UserService;
+import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,10 +27,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+
 
 import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
-public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAwareInterface {
+public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAwareInterface, LobbyChangeListener {
 
     @FXML
     protected AnchorPane manageLobbyListPane;
@@ -86,28 +92,28 @@ public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAw
 
         data.clear();
         data.addAll(controller.getJoinedLobbies());
-
+        //se usiakmo observable la atble view si aggiorna auto ma possiamo anche fare refresh manuake
         tableViewLobbyName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tableViewMaxPlayers.setCellValueFactory(new PropertyValueFactory<>("numberOfPlayers"));
         tableViewDuration.setCellValueFactory(new PropertyValueFactory<>("duration"));
         tableViewLiveOrNot.setCellValueFactory(new PropertyValueFactory<>("liveOnline"));
         // Configura la colonna "Delete"
-        TableColumnUtils.setupButtonColumn(tableViewLobbyDelete, "Delete", lobby -> {
+        TableColumnUtils.setupButtonColumn(tableViewLobbyDelete, "Leave", lobby -> {
             pendingDeleteBean = lobby;
-            showDeleteConfirmation();
+            showLeaveConfirmation();
         });
 
         tableViewLobby.setItems(data);
     }
 
-    private void showDeleteConfirmation() {
+    private void showLeaveConfirmation() {
         if (confirmationPopupController != null && pendingDeleteBean != null) {
             String message = "Vuoi eliminare la lobby '" + pendingDeleteBean.getName() + "'?";
             confirmationPopupController.show(
                     message,
                     10,                // timer di scadenza popup
-                    this::onConfirmDelete,
-                    this::onCancelDelete
+                    this::onConfirmLeave,
+                    this::onCancel
             );
         } else {
             logger.severe("Errore: ConfirmationPopupController non inizializzato o pendingDeleteBean è null");
@@ -115,25 +121,26 @@ public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAw
     }
 
 
-    private void onConfirmDelete() {
+    private void onConfirmLeave() {
         if (pendingDeleteBean != null) {
             String lobbyName = pendingDeleteBean.getName();
 
             // Rimuovi dalla TableView
             tableViewLobby.getItems().remove(pendingDeleteBean);
 
-            // Chiedi al controller di rimuoverla in DB
+            // Chiedi al controller di rimuoverla (la logica differenziata in base al ruolo viene gestita all'interno del controller)
             controller.deleteLobby(lobbyName);
 
-            // Eventuale rimozione in repository locale
-            LobbyRepository.removeLobby(lobbyName);
+            // Rimuovi la chiamata seguente, poiché il controller già gestisce la rimozione dalla repository in caso di proprietario
+            // LobbyRepository.removeLobby(lobbyName);
 
             pendingDeleteBean = null;
         }
     }
 
 
-    private void onCancelDelete() {
+
+    private void onCancel() {
         pendingDeleteBean = null;
     }
 
@@ -163,6 +170,34 @@ public class ManageLobbyListBoundary implements UserAwareInterface, ControllerAw
         }
     }
 
+
+
+    @Override
+    public void onLobbyListChanged() {
+        System.out.println("✅ Evento ricevuto: la lista delle lobby è cambiata! Aggiorno la UI...");
+        refreshTable();
+    }
+
+    public void refreshTable() {
+        Platform.runLater(()->{;
+            System.out.println("🔄 Aggiornamento UI della lista lobby...");
+            tableViewLobby.getItems().clear();
+            tableViewLobby.getItems().addAll(controller.getJoinedLobbies());
+            tableViewLobby.refresh();  // Se usi una TableView, assicurati che venga rinfrescata!
+        });
+    }
+
+
+
+    public void refreshLobbyList(){
+        if(controller==null||currentUser==null){
+            return;
+        }
+        data.clear();
+        data.addAll(controller.getJoinedLobbies());
+        tableViewLobby.setItems(data);
+        tableViewLobby.refresh();
+    }
 
     @FXML
     protected void changeScene(String fxml) throws IOException {

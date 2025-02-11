@@ -14,7 +14,7 @@ public class RegisterController implements UserAwareInterface {
 
     // ✅ Costruttore senza parametri per la Factory
     public RegisterController() {
-        this.userService = new UserService(false); // Usa false per default (file system)
+        this.userService=UserService.getInstance(false);
         if (logger.isLoggable(Level.INFO)) {
             logger.info("🔍 [DEBUG] RegisterController inizializzato.");
         }

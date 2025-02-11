@@ -6,6 +6,7 @@ import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.control.LoginController;
 import it.uniroma2.marchidori.maininterface.entity.Session;
+import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
@@ -82,9 +83,9 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
                 case "LOGIN" -> {
                     String userEmail = email.getText();
                     String userPassword = password.getText();
-                    UserBean authenticatedUser = loginController.login(userEmail, userPassword);
+                    User authenticatedUser = loginController.login(userEmail, userPassword);
                     if (authenticatedUser != null) {
-                        currentUser = authenticatedUser;
+                        currentUser = Converter.convert(authenticatedUser);
                         logger.log( Level.INFO,">>> Login avvenuto con successo. Ruolo: {}", currentUser.getRoleBehavior());
                         SceneSwitcher.changeScene(currentStage,SceneNames.HOME,currentUser);
                     } else {

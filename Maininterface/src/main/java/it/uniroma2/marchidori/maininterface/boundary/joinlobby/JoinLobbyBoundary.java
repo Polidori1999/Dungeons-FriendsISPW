@@ -6,6 +6,7 @@ import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
+import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
@@ -24,6 +25,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
+
+import static it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyPlayerBoundary.logger;
 
 public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInterface {
 
@@ -90,6 +93,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
 
     @FXML
     public void initialize() {
+
         // Inizializza il JoinLobbyController e il popup di conferma
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/confirmationPopup.fxml"));
@@ -137,12 +141,19 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
 
     public void refreshTable() {
         if (controller != null) {
-            filteredLobbies.clear();
-            List<LobbyBean> updatedList = controller.getList(LobbyRepository.getAllLobbies()); // Prendi i dati aggiornati
-            filteredLobbies.addAll(updatedList); // Riaggiungi i dati aggiornati
-            lobbyTableView.refresh();
+            List<Lobby> rawLobbies = LobbyRepository.getAllLobbies();
+            List<LobbyBean> updatedList = controller.getList(rawLobbies);
+
+            // LOGGING DEBUG
+            logger.info("📌 LobbyRepository attuale: " + rawLobbies);
+            logger.info("📌 LobbyBean convertite: " + updatedList);
+
+            filteredLobbies.setAll(updatedList);
+            lobbyTableView.setItems(filteredLobbies); // Forza il reset della lista
+            lobbyTableView.refresh(); // Forza l'aggiornamento visivo
         }
     }
+
 
     private void doFilter() {
         String type = comboBox1.getValue();
