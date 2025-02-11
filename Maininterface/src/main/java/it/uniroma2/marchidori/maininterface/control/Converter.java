@@ -16,8 +16,6 @@ import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 
 /**
  * Classe che fornisce i metodi di conversione da Bean a Entity.
@@ -184,7 +182,10 @@ public class Converter {
         List<CharacterSheetBean> sheetBeans = convertCharacterSheetList(user.getCharacterSheets());
 
         // Crea il UserBean
-        UserBean userBean = new UserBean(
+
+        // Se vuoi gestire altri campi particolari di UserBean, puoi impostarli qui
+
+        return new UserBean(
                 user.getEmail(),
                 user.getPassword(),
                 user.getRoleBehavior(),
@@ -192,11 +193,6 @@ public class Converter {
                 favouriteLobbies,
                 sheetBeans
         );
-
-        // Se vuoi gestire altri campi particolari di UserBean, puoi impostarli qui
-        // Esempio: userBean.setSelectedLobbyName(...);
-
-        return userBean;
     }
 
     /**
@@ -225,7 +221,7 @@ public class Converter {
         }
         return lobbies.stream()
                 .map(Converter::convertLobby)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -282,7 +278,7 @@ public class Converter {
         }
         return sheets.stream()
                 .map(Converter::convertCharacterSheet)
-                .collect(Collectors.toList());
+                .toList();
     }
 
 

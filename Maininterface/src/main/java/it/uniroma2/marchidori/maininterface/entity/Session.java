@@ -7,6 +7,7 @@ public class Session {
 
     // Campo che contiene l'utente corrente (non statico)
     private User currentUser;
+    private boolean isCLI;
 
     // Costruttore privato per evitare istanziazioni esterne
     private Session() { }
@@ -32,5 +33,11 @@ public class Session {
     // Pulisce la sessione (ad es. logout)
     public void clear() {
         this.currentUser = null;
+    }
+    public boolean getCLI() {
+        return isCLI;
+    }
+    public void setCLI(boolean isCLI) {
+        this.isCLI = isCLI;
     }
 }

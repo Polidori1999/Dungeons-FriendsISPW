@@ -11,20 +11,28 @@ import it.uniroma2.marchidori.maininterface.control.RegisterController;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
+import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
 
 public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInterface {
 
     private UserBean currentUser;
     private LoginController loginController;
-    private Jout jout = new Jout(this.getClass().getSimpleName());
+    private final Jout jout = new Jout(this.getClass().getSimpleName());
 
     private static final String GUEST_EMAIL = "guest@example.com";
+    public LoginCLIBoundary() throws IOException {
+        run();
+    }
 
-    public void run() throws FileNotFoundException {
+
+    public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
 
@@ -67,24 +75,25 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
         jout.print("4. Esci");
     }
 
-    private void eseguiLogin(Scanner scanner) throws FileNotFoundException {
+    private void eseguiLogin(Scanner scanner) throws IOException {
         jout.print("Inserisci email: ");
         String email = scanner.nextLine().trim();
 
         jout.print("Inserisci password: ");
         String password = scanner.nextLine().trim();
-
-        User authenticatedUser = loginController.login(email, password);
+        /*User authenticatedUser = loginController.login(email, password);
         if (authenticatedUser != null) {
             currentUser = Converter.convert(authenticatedUser);
-            jout.print("Login avvenuto con successo. Benvenuto " + currentUser.getEmail() + "!");
-            changeScene("HOME", currentUser);
+            Session.getInstance().setCurrentUser(Converter.userBeanToEntity(currentUser));
+            changeScene("HOME",currentUser);
         } else {
-            jout.print("Errore: Wrong email or password!");
-        }
+            jout.print(">>> ERRORE: Login fallito. UserBean è NULL!");
+        }*/
+        changeScene("HOME",currentUser);
+
     }
 
-    private void eseguiGuest() throws FileNotFoundException {
+    private void eseguiGuest() throws IOException {
         currentUser = new UserBean(
                 GUEST_EMAIL,
                 "guest",  // password fittizia
@@ -98,7 +107,7 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
         changeScene("HOME", currentUser);
     }
 
-    private void eseguiCreateAccount() throws FileNotFoundException {
+    private void eseguiCreateAccount() throws IOException {
         if (currentUser == null) {
             jout.print("Creazione di un UserBean temporaneo per la registrazione.");
             currentUser = new UserBean(
@@ -113,10 +122,10 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
         changeScene("REGISTER", currentUser);
     }
 
-    private void changeScene(String sceneName, UserBean user) throws FileNotFoundException {
+    private void changeScene(String sceneName, UserBean user) throws IOException {
         jout.print("Cambio scena verso: " + sceneName);
-        jout.print("Utente attuale: " + user.getEmail());
-
+        //jout.print("Utente attuale: " + user.getEmail());
+        user = new UserBean("edo",new ArrayList<>(),new ArrayList<>(),new ArrayList<>());
         if ("HOME".equalsIgnoreCase(sceneName)) {
             HomeCLIBoundary homeBoundary = new HomeCLIBoundary();
             homeBoundary.setCurrentUser(user);

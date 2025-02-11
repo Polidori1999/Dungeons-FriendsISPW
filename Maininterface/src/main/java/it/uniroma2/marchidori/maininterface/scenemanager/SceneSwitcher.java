@@ -4,6 +4,7 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.LobbyChangeListener;
 import it.uniroma2.marchidori.maininterface.boundary.managelobby.ManageLobbyListBoundary;
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
+import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.enumerate.SceneIdEnum;
 import it.uniroma2.marchidori.maininterface.factory.BoundaryFactory;
@@ -23,13 +24,38 @@ public class SceneSwitcher {
     private SceneSwitcher() {}
 
     public static void changeScene(Stage currentStage, String fxmlPath, UserBean currentUser) throws IOException {
+        RoleEnum role = (currentUser != null) ? currentUser.getRoleBehavior() : RoleEnum.NONE;
+        SceneIdEnum sceneId = getSceneIdFromFxml(fxmlPath);
+
+        if(Session.getInstance().getCLI()){
+            SceneConfigCLIEnum config = RoleSceneMap.getCLIConfig(role, sceneId);
+            Class<?> boundaryClass = config.getBoundaryClass();
+            logger.info(">>> [SceneSwitcher] Boundary risolta: " + boundaryClass.getSimpleName());
+            Object boundaryInstance = BoundaryFactory.createBoundary(boundaryClass);
+            logger.info(">>> [SceneSwitcher] Istanza della boundary creata: " + boundaryInstance.getClass().getSimpleName());
+            injectCurrentUser(boundaryInstance, currentUser);
+            Class<?> controllerClass = config.getControllerClass();
+            Object controllerInstance = null;
+            if (controllerClass != null) {
+                controllerInstance = ControllerFactory.createController(controllerClass);
+                injectCurrentUser(controllerInstance, currentUser);
+                injectControllerIntoBoundary(controllerInstance, boundaryInstance);
+                if (controllerInstance instanceof JoinLobbyController && boundaryInstance instanceof LobbyChangeListener) {
+                    ((JoinLobbyController) controllerInstance).addLobbyChangeListener((LobbyChangeListener) boundaryInstance);
+                    logger.info("✅ Listener registrato: " + boundaryInstance.getClass().getSimpleName() +
+                            " ora riceverà aggiornamenti da JoinLobbyController");
+                }
+
+            }
+            return;
+        }
+
+
         // Evitare scene duplicate
-        if (currentStage.getScene() != null && fxmlPath.equals(currentStage.getScene().getUserData())) {
+        if (!Session.getInstance().getCLI() && currentStage.getScene() != null && fxmlPath.equals(currentStage.getScene().getUserData())) {
             return; // Se la scena è già attiva, non fare nulla
         }
         // Ottieni lo SceneIdEnum corrispondente al file FXML richiesto
-        SceneIdEnum sceneId = getSceneIdFromFxml(fxmlPath);
-        RoleEnum role = (currentUser != null) ? currentUser.getRoleBehavior() : RoleEnum.NONE;
         SceneConfigEnum config = RoleSceneMap.getConfig(role, sceneId);
 
         // Recupera la classe della boundary tramite il metodo pubblico di BoundaryMap
@@ -60,8 +86,6 @@ public class SceneSwitcher {
             }
 
         }
-
-
 
         // Carica il file FXML impostando la boundary come controller
         Parent root = loadFXML(fxmlPath, boundaryInstance);

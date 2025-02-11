@@ -1,11 +1,15 @@
 package it.uniroma2.marchidori.maininterface.boundary.managelobby;
 
+import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 
 import java.util.List;
 
 public class ManageLobbyListPlayerBoundary extends ManageLobbyListBoundary {
+    private final Jout jout = new Jout(this.getClass().getSimpleName());
+
+
     @Override
     protected void initialize() {
         // Chiama la configurazione di base definita nella superclasse
@@ -17,25 +21,25 @@ public class ManageLobbyListPlayerBoundary extends ManageLobbyListBoundary {
 
     @Override
     public void onLobbyListChanged() {
-        System.out.println("✅ Evento ricevuto: la lista delle lobby è cambiata! Aggiorno la UI...");
+        jout.print("✅ Evento ricevuto: la lista delle lobby è cambiata! Aggiorno la UI...");
         refreshTable();
     }
 
-
+    @Override
     public void refreshTable() {
 
         
-        System.out.println("🔄 Aggiornamento UI della lista lobby...");
-        System.out.println("🎯 Prima del refresh, elementi nella tabella: " + tableViewLobby.getItems().size());
+        jout.print("🔄 Aggiornamento UI della lista lobby...");
+        jout.print("🎯 Prima del refresh, elementi nella tabella: " + tableViewLobby.getItems().size());
 
         tableViewLobby.getItems().clear();
         List<LobbyBean> updatedList = controller.getJoinedLobbies();
-        System.out.println("🔄 Nuova lista ricevuta dal controller: " + updatedList);
+        jout.print("🔄 Nuova lista ricevuta dal controller: " + updatedList);
 
         tableViewLobby.getItems().addAll(updatedList);
         tableViewLobby.refresh();
 
-        System.out.println("🎯 Dopo il refresh, elementi nella tabella: " + tableViewLobby.getItems().size());
+        jout.print("🎯 Dopo il refresh, elementi nella tabella: " + tableViewLobby.getItems().size());
     }
 
 }

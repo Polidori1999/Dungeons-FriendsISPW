@@ -24,7 +24,7 @@ import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.lo
 
 public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
 
-    protected ConfirmationPopupController confirmationPopupController;
+    protected ConfirmationPopupController confirmationPopup;
 
     /**
      * Metodo di inizializzazione che richiama l'inizializzazione del parent e, subito dopo,
@@ -59,14 +59,14 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/confirmationPopup.fxml"));
             Parent popupRoot = loader.load();
-            confirmationPopupController = loader.getController();
+            confirmationPopup = loader.getController();
 
             // Aggiungi il popup al layout
             Platform.runLater(() -> {
                 manageLobbyListPane.getChildren().add(popupRoot);
 
                 // Mostra il messaggio e imposta il timer
-                confirmationPopupController.show("Stai per essere rediretto al login", 10, this::redirectToLogin, this::redirectToLogin);
+                confirmationPopup.show("Stai per essere rediretto al login", 10, this::redirectToLogin, this::redirectToLogin);
             });
         } catch (IOException e) {
             throw new PopupLoadingException("Errore durante il caricamento del popup di conferma");

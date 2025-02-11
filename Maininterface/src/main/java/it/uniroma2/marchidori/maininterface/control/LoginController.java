@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.control;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class LoginController {
+public class LoginController implements UserAwareInterface {
 
     private UserService userService;
     private UserBean userBean;  // Bean usato dall'interfaccia

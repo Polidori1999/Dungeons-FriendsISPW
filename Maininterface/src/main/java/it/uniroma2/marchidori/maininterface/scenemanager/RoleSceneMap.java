@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static it.uniroma2.marchidori.maininterface.scenemanager.SceneConfigEnum.*;
+import static it.uniroma2.marchidori.maininterface.scenemanager.SceneConfigCLIEnum.*;
 
 public class RoleSceneMap {
 
@@ -56,8 +57,59 @@ public class RoleSceneMap {
         MAPPING.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.CONSULT_RULES), CONSULT_RULES_GUEST);
     }
 
+    private static final Map<Pair<RoleEnum, SceneIdEnum>, SceneConfigCLIEnum> MAPPING_CLI = new HashMap<>();
+
+    static {
+        /*
+        MAPPING_CLI.put(new Pair<>(RoleEnum.DM, SceneIdEnum.MANAGE_LOBBY_LIST), MANAGE_LOBBY_LIST_DM_CLI);
+        MAPPING_CLI.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.MANAGE_LOBBY_LIST), MANAGE_LOBBY_LIST_PLAYER_CLI);
+        MAPPING_CLI.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.MANAGE_LOBBY_LIST), MANAGE_LOBBY_LIST_GUEST_CLI);
+
+        MAPPING_CLI.put(new Pair<>(RoleEnum.DM, SceneIdEnum.JOIN_LOBBY), JOIN_LOBBY_DM_CLI);
+        MAPPING_CLI.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.JOIN_LOBBY), JOIN_LOBBY_PLAYER_CLI);
+        MAPPING_CLI.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.JOIN_LOBBY), JOIN_LOBBY_GUEST_CLI);
+
+        MAPPING_CLI.put(new Pair<>(RoleEnum.DM, SceneIdEnum.CHARACTER_LIST), CHAR_LIST_DM_CLI);
+        MAPPING_CLI.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.CHARACTER_LIST), CHAR_LIST_PLAYER_CLI);
+        MAPPING_CLI.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.CHARACTER_LIST), CHAR_LIST_GUEST_CLI);
+*/
+        MAPPING_CLI.put(new Pair<>(RoleEnum.DM, SceneIdEnum.USER), USER_CLI);
+        MAPPING_CLI.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.USER), USER_CLI);
+  //      MAPPING_CLI.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.USER), USER_GUEST_CLI);
+/*
+        MAPPING_CLI.put(new Pair<>(RoleEnum.DM, SceneIdEnum.CHARACTER_SHEET), CHAR_SHEET_CLI);
+        MAPPING_CLI.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.CHARACTER_SHEET), CHAR_SHEET_CLI);
+        MAPPING_CLI.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.CHARACTER_SHEET), CHAR_SHEET_CLI);
+*/
+        MAPPING_CLI.put(new Pair<>(RoleEnum.DM, SceneIdEnum.HOME), HOME_CLI);
+        MAPPING_CLI.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.HOME), HOME_CLI);
+        MAPPING_CLI.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.HOME), HOME_CLI);
+
+        MAPPING_CLI.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.LOGIN), LOGIN_CLI);
+        MAPPING_CLI.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.LOGIN), LOGIN_CLI);
+        MAPPING_CLI.put(new Pair<>(RoleEnum.NONE, SceneIdEnum.LOGIN), LOGIN_CLI);
+
+        MAPPING_CLI.put(new Pair<>(RoleEnum.DM, SceneIdEnum.REGISTER), REGISTER_CLI);
+        MAPPING_CLI.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.REGISTER), REGISTER_CLI);
+
+  //      MAPPING_CLI.put(new Pair<>(RoleEnum.DM, SceneIdEnum.MANAGE_LOBBY), MANAGE_LOBBY_CLI);
+  //      MAPPING_CLI.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.MANAGE_LOBBY), MANAGE_LOBBY_CLI);
+
+        MAPPING_CLI.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.CONSULT_RULES), CONSULT_RULES_CLI);
+        MAPPING_CLI.put(new Pair<>(RoleEnum.DM, SceneIdEnum.CONSULT_RULES), CONSULT_RULES_CLI);
+  //      MAPPING_CLI.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.CONSULT_RULES), CONSULT_RULES_GUEST_CLI);
+    }
+
     public static SceneConfigEnum getConfig(RoleEnum role, SceneIdEnum sceneId) {
         SceneConfigEnum config = MAPPING.get(new Pair<>(role, sceneId));
+        if (config == null) {
+            throw new IllegalArgumentException("Nessuna configurazione trovata per: "
+                    + role + " / " + sceneId);
+        }
+        return config;
+    }
+    public static SceneConfigCLIEnum getCLIConfig(RoleEnum role, SceneIdEnum sceneId) {
+        SceneConfigCLIEnum config = MAPPING_CLI.get(new Pair<>(role, sceneId));
         if (config == null) {
             throw new IllegalArgumentException("Nessuna configurazione trovata per: "
                     + role + " / " + sceneId);

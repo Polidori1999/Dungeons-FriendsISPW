@@ -1,15 +1,11 @@
 package it.uniroma2.marchidori.maininterface.dao;
 
-import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.entity.*;
-import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 
 import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
-
-import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
 public class UserDAOFileSys implements UserDAO {
     // I percorsi terminano con "/" per garantire la corretta concatenazione
@@ -280,6 +276,7 @@ public class UserDAOFileSys implements UserDAO {
 
     @Override
     public void updateUsersEntityData(User user) {
+        //EMPTY
 
     }
 

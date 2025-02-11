@@ -7,8 +7,7 @@ import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.LoginController;
 import it.uniroma2.marchidori.maininterface.control.RegisterController;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class RegisterCLIBoundary implements UserAwareInterface, ControllerAwareInterface {
@@ -20,7 +19,7 @@ public class RegisterCLIBoundary implements UserAwareInterface, ControllerAwareI
     /**
      * Avvia il processo di registrazione in modalità CLI.
      */
-    public void run() throws FileNotFoundException {
+    public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
         jout.print("=== SCHERMATA DI REGISTRAZIONE ===");
 
@@ -63,7 +62,7 @@ public class RegisterCLIBoundary implements UserAwareInterface, ControllerAwareI
      *
      * @param sceneName Il nome della scena verso cui cambiare (ad es. "LOGIN")
      */
-    private void changeScene(String sceneName) throws FileNotFoundException {
+    private void changeScene(String sceneName) throws IOException {
         jout.print("Cambio scena verso: " + sceneName);
         if ("LOGIN".equalsIgnoreCase(sceneName)) {
             LoginCLIBoundary loginBoundary = new LoginCLIBoundary();

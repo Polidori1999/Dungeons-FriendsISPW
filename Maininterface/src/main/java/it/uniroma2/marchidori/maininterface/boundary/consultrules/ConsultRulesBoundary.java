@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.boundary.consultrules;
 
+import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.bean.RuleBookBean;
@@ -10,7 +11,7 @@ import it.uniroma2.marchidori.maininterface.control.PayPalPaymentController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
-import javafx.application.Platform;
+
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,7 +24,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,6 +64,8 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
     protected ConfirmationPopupController confirmationPopupController;
 
     private static final Logger logger = Logger.getLogger(ConsultRulesBoundary.class.getName());
+    private final Jout jout = new Jout(this.getClass().getSimpleName());
+
 
     /**
      * Bean selezionato in attesa di conferma dell'acquisto.
@@ -148,11 +150,11 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
 
             // 1) Ottieni access token
             String accessToken = payCtrl.getAccessToken();
-            System.out.println("AccessToken = " + accessToken);
+            jout.print("AccessToken = " + accessToken);
 
             // 2) Crea ordine (EUR e importo a piacere)
             String createOrderResponse = payCtrl.createOrder(accessToken, "EUR", String.valueOf(amount));
-            System.out.println("createOrderResponse = " + createOrderResponse);
+            jout.print("createOrderResponse = " + createOrderResponse);
 
             // 3) Estrai link "approve"
             String approveLink = payCtrl.extractApproveLink(createOrderResponse);
@@ -176,6 +178,8 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Errore durante il pagamento PayPal: ", e);
+
+            throw new RuntimeException(e);
         }
     }
 
