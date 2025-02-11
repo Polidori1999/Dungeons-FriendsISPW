@@ -12,9 +12,10 @@ import java.util.logging.Logger;
 import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
 public class UserDAOFileSys implements UserDAO {
+    // Assicurati che i path terminino con "/" per concatenare correttamente
     private static final String BASE_DIR = "src/main/java/it/uniroma2/marchidori/maininterface/repository/";
     private static final String USERS_FILE_PATH = BASE_DIR + "users.txt";
-    private static final String USER_DATA_DIR = BASE_DIR + "useser ";
+    private static final String USER_DATA_DIR = BASE_DIR + "user/";
 
     private static final Logger logger = Logger.getLogger(UserDAOFileSys.class.getName());
 
@@ -28,40 +29,41 @@ public class UserDAOFileSys implements UserDAO {
             if (baseDir.mkdirs()) {
                 logger.info("Cartella creata: " + BASE_DIR);
             } else {
-                logger.severe("Errore nella creazione della cartella.");
+                logger.severe("Errore nella creazione della cartella: " + BASE_DIR);
             }
         }
     }
 
-
     @Override
     public void saveUser(String email, String password) {
-        String hashedPassword = org.mindrot.jbcrypt.BCrypt.hashpw(password, org.mindrot.jbcrypt.BCrypt.gensalt());//da spostare nel controller
+        // Hash della password (viene calcolato una sola volta)
+        String hashedPassword = org.mindrot.jbcrypt.BCrypt.hashpw(password, org.mindrot.jbcrypt.BCrypt.gensalt());
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(USERS_FILE_PATH, true))) {
             writer.write(email + "," + hashedPassword);
             writer.newLine();
         } catch (IOException e) {
-            logger.severe("Errore nella scrittura del file: " + e.getMessage());
+            logger.severe("Errore nella scrittura del file users.txt: " + e.getMessage());
         }
+
+        // Creazione della cartella dell'utente, se non esiste
         File userDir = getUserFolder(email);
         if (!userDir.exists()) {
             if (userDir.mkdirs()) {
                 logger.info("Directory dei dati utente creata: " + email);
             } else {
-                logger.severe("Errore nella creazione della cartella." + email);
+                logger.severe("Errore nella creazione della cartella per: " + email);
             }
         }
         createUserDataFiles(userDir, email);
     }
 
-
-    //Cartella dell'utente
+    // Restituisce la cartella dell'utente, sanificando l'email
     private static File getUserFolder(String email) {
         String mail = email.replaceAll("[^a-zA-Z0-9._@-]", "_");
         return new File(USER_DATA_DIR + mail);
     }
 
-
+    // Crea i file di dati dell'utente se non esistono già
     private void createUserDataFiles(File userDir, String email) {
         String[] fileNames = {"characterSheets.csv", "joinedLobbies.csv", "favouriteLobbies.csv"};
         for (String fileName : fileNames) {
@@ -71,11 +73,10 @@ public class UserDAOFileSys implements UserDAO {
                     writer.write(email);
                     writer.newLine();
                 } catch (IOException e) {
-                    logger.severe("Errore nella creazione della file: " + file.getPath() + e.getMessage());
+                    logger.severe("Errore nella creazione del file " + file.getPath() + ": " + e.getMessage());
                 }
             }
         }
-
     }
 
     @Override
@@ -85,22 +86,35 @@ public class UserDAOFileSys implements UserDAO {
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
                 if (data[0].equals(email)) {
+                    // Restituisce un oggetto User con le informazioni basilari (le liste saranno poi aggiornate tramite loadUserData)
                     return new User(data[0], data[1], new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
                 }
             }
         } catch (IOException e) {
-            logger.severe("Errore nella lettura del file: " + e.getMessage());
+            logger.severe("Errore nella lettura del file users.txt: " + e.getMessage());
         }
         return null;
     }
 
-
+    /**
+     * Salva i dati dell'utente (entity) in file: characterSheets, joinedLobbies e favouriteLobbies.
+     * Utilizza la modalità append per aggiungere nuove righe.
+     */
     public void saveUsersEntityData(User user) {
         File userDir = getUserFolder(user.getEmail());
-        File characterFile = new File(userDir, "characters.csv");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(characterFile))) {
-            writer.write(user.getEmail());
-            writer.newLine();
+        if (!userDir.exists() && !userDir.mkdirs()) {
+            logger.severe("Errore nella creazione della cartella per: " + user.getEmail());
+            return;
+        }
+
+        // Salvataggio dei character sheets in modalità append
+        File characterFile = new File(userDir, "characterSheets.csv");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(characterFile, true))) {
+            // Se il file è vuoto, scrive una riga di intestazione con l'email
+            if (characterFile.length() == 0) {
+                writer.write(user.getEmail());
+                writer.newLine();
+            }
             for (CharacterSheet cs : user.getCharacterSheets()) {
                 writer.write(serializeCharacterSheet(cs));
                 writer.newLine();
@@ -108,20 +122,14 @@ public class UserDAOFileSys implements UserDAO {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        if (!userDir.exists()) {
-            if (userDir.mkdirs()) {
-                logger.info("Directory dei dati utente creata: " + user.getEmail());
-            } else {
-                logger.severe("Errore nella creazione della cartella." + user.getEmail());
+
+        // Salvataggio delle joined lobbies in modalità append
+        File joinedFile = new File(userDir, "joinedLobbies.csv");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(joinedFile, true))) {
+            if (joinedFile.length() == 0) {
+                writer.write(user.getEmail());
+                writer.newLine();
             }
-        }
-
-
-        // Salvataggio delle joined lobbies
-        File joinedFile = new File(userDir, "joinedLobbies.txt");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(joinedFile))) {
-            writer.write(user.getEmail());
-            writer.newLine();
             for (Lobby lobby : user.getJoinedLobbies()) {
                 writer.write(serializeLobby(lobby));
                 writer.newLine();
@@ -129,11 +137,14 @@ public class UserDAOFileSys implements UserDAO {
         } catch (IOException e) {
             logger.severe("Errore durante il salvataggio delle joined lobbies: " + e.getMessage());
         }
-        // Salvataggio delle favourite lobbies
-        File favFile = new File(userDir, "favouriteLobbies.txt");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(favFile))) {
-            writer.write(user.getEmail());
-            writer.newLine();
+
+        // Salvataggio delle favourite lobbies in modalità append
+        File favFile = new File(userDir, "favouriteLobbies.csv");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(favFile, true))) {
+            if (favFile.length() == 0) {
+                writer.write(user.getEmail());
+                writer.newLine();
+            }
             for (Lobby lobby : user.getFavouriteLobbies()) {
                 writer.write(serializeLobby(lobby));
                 writer.newLine();
@@ -146,7 +157,6 @@ public class UserDAOFileSys implements UserDAO {
     public String serializeCharacterSheet(CharacterSheet cs) {
         CharacterInfo info = cs.getCharacterInfo();
         CharacterStats stats = cs.getCharacterStats();
-
         StringBuilder sb = new StringBuilder();
         sb.append(info.getName()).append(";")
                 .append(info.getRace()).append(";")
@@ -166,7 +176,6 @@ public class UserDAOFileSys implements UserDAO {
      * Deserializza una riga CSV in un oggetto Lobby.
      */
     public static Lobby deserializeLobby(String line) {
-        // Split usando il delimitatore ";"
         String[] parts = line.split(";", -1);
         String lobbyName = parts[0];
         String duration = parts[1];
@@ -174,11 +183,10 @@ public class UserDAOFileSys implements UserDAO {
         boolean owned = Boolean.parseBoolean(parts[3]);
         int numberOfPlayers = Integer.parseInt(parts[4]);
         List<String> players = new ArrayList<>();
-        if (!parts[5].isEmpty()) {
+        if (parts.length > 5 && !parts[5].isEmpty()) {
             players = new ArrayList<>(Arrays.asList(parts[5].split("\\|")));
         }
         Lobby lobby = new Lobby(lobbyName, duration, type, owned, numberOfPlayers);
-        // Aggiungiamo i players (si suppone che la lista ritornata da getPlayers() sia modificabile)
         lobby.getPlayers().addAll(players);
         return lobby;
     }
@@ -193,14 +201,12 @@ public class UserDAOFileSys implements UserDAO {
         int age = Integer.parseInt(parts[2]);
         String classe = parts[3];
         int level = Integer.parseInt(parts[4]);
-
         int strength = Integer.parseInt(parts[5]);
         int dexterity = Integer.parseInt(parts[6]);
         int intelligence = Integer.parseInt(parts[7]);
         int wisdom = Integer.parseInt(parts[8]);
         int charisma = Integer.parseInt(parts[9]);
         int constitution = Integer.parseInt(parts[10]);
-
         CharacterInfo info = new CharacterInfo(name, race, age, classe, level);
         CharacterStats stats = new CharacterStats(strength, dexterity, intelligence, wisdom, charisma, constitution);
         return new CharacterSheet(info, stats);
@@ -219,7 +225,6 @@ public class UserDAOFileSys implements UserDAO {
         }
         return sb.toString();
     }
-
 
     public User loadUserData(User user) throws FileNotFoundException {
         File userDir = getUserFolder(user.getEmail());
@@ -277,134 +282,8 @@ public class UserDAOFileSys implements UserDAO {
                 throw new RuntimeException(e);
             }
         }
-        // Impostiamo una password dummy (puoi adattare questa parte secondo le tue necessità)
+        // Impostiamo una password dummy; per il login la password viene recuperata da getUserByEmail
         String dummyPassword = "******";
         return new User(user.getEmail(), dummyPassword, characterSheets, favouriteLobbies, joinedLobbies);
     }
 }
-
-
-/*
-    @Override
-    public User getUserByEmail(String email) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(USER_FILE_PATH))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] data = line.split(",");
-                if (data[0].equals(email)) {
-                    return new User(data[0], data[1], new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-                }
-            }
-        } catch (IOException e) {
-            logger.severe("Errore nella lettura del file: " + e.getMessage());
-        }
-        return null;
-    }
-
-    public void saveUserLobbies(String email, List<String> newLobbies) {
-        List<String> allUserData = new ArrayList<>();
-        boolean userFound = false;
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(LOBBY_FILE_PATH))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] data = line.split(",");
-                if (data[0].equals(email)) {
-                    Set<String> lobbiesSet = new HashSet<>();
-                    for (int i = 1; i < data.length; i++) {
-                        lobbiesSet.add(data[i]);
-                    }
-                    lobbiesSet.addAll(newLobbies);
-                    allUserData.add(email + "," + String.join(",", lobbiesSet));
-                    userFound = true;
-                } else {
-                    allUserData.add(line);
-                }
-            }
-        } catch (IOException e) {
-            logger.severe("Errore nella lettura del file: " + e.getMessage());
-        }
-
-        if (!userFound) {
-            allUserData.add(email + "," + String.join(",", newLobbies));
-        }
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(LOBBY_FILE_PATH, false))) {
-            for (String userData : allUserData) {
-                writer.write(userData);
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            logger.severe("Errore nella scrittura delle lobby: " + e.getMessage());
-        }
-    }
-
-    public List<String> getUserLobbies(String email) {
-        List<String> lobbies = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(LOBBY_FILE_PATH))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] data = line.split(",");
-                if (data[0].equals(email)) {
-                    for (int i = 1; i < data.length; i++) {
-                        lobbies.add(data[i]);
-                    }
-                    break;
-                }
-            }
-        } catch (IOException e) {
-            logger.severe("Errore nella lettura delle lobby: " + e.getMessage());
-        }
-        return lobbies;
-    }
-
-
-    public void removeUserLobby(String email, String lobbyName) {
-        List<String> allUserData = new ArrayList<>();
-        boolean userFound = false;
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(LOBBY_FILE_PATH))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] data = line.split(",");
-                if (data[0].equals(email)) {
-                    userFound = true;
-                    List<String> updatedLobbies = new ArrayList<>();
-
-                    // Mantiene solo le lobby diverse da quella da rimuovere
-                    for (int i = 1; i < data.length; i++) {
-                        if (!data[i].equals(lobbyName)) {
-                            updatedLobbies.add(data[i]);
-                        }
-                    }
-
-                    // Se l'utente ha ancora lobby, lo aggiungiamo alla lista
-                    if (!updatedLobbies.isEmpty()) {
-                        allUserData.add(email + "," + String.join(",", updatedLobbies));
-                    }
-                } else {
-                    allUserData.add(line);
-                }
-            }
-        } catch (IOException e) {
-            logger.severe("Errore nella lettura del file delle lobby: " + e.getMessage());
-            return;
-        }
-
-        // Scriviamo i dati aggiornati nel file
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(LOBBY_FILE_PATH, false))) {
-            for (String userData : allUserData) {
-                writer.write(userData);
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            logger.severe("Errore nella scrittura delle lobby: " + e.getMessage());
-        }
-
-        if (userFound) {
-            logger.info("Lobby '" + lobbyName + "' rimossa con successo per l'utente: " + email);
-        } else {
-            logger.warning("L'utente " + email + " non aveva la lobby: " + lobbyName);
-        }
-    }*/
-
