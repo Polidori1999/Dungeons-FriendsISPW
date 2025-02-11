@@ -1,4 +1,4 @@
-package it.uniroma2.marchidori.maininterface.utils;
+/*package it.uniroma2.marchidori.maininterface.utils;
 
 import it.uniroma2.marchidori.maininterface.entity.CharacterInfo;
 import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
@@ -78,4 +78,4 @@ public class MainTest {
             e.printStackTrace();
         }
     }
-}
+}*/

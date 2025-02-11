@@ -11,6 +11,8 @@ import it.uniroma2.marchidori.maininterface.control.RegisterController;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
+
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -22,7 +24,7 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
 
     private static final String GUEST_EMAIL = "guest@example.com";
 
-    public void run() {
+    public void run() throws FileNotFoundException {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
 
@@ -65,7 +67,7 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
         jout.print("4. Esci");
     }
 
-    private void eseguiLogin(Scanner scanner) {
+    private void eseguiLogin(Scanner scanner) throws FileNotFoundException {
         jout.print("Inserisci email: ");
         String email = scanner.nextLine().trim();
 
@@ -82,7 +84,7 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
         }
     }
 
-    private void eseguiGuest() {
+    private void eseguiGuest() throws FileNotFoundException {
         currentUser = new UserBean(
                 GUEST_EMAIL,
                 "guest",  // password fittizia
@@ -96,7 +98,7 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
         changeScene("HOME", currentUser);
     }
 
-    private void eseguiCreateAccount() {
+    private void eseguiCreateAccount() throws FileNotFoundException {
         if (currentUser == null) {
             jout.print("Creazione di un UserBean temporaneo per la registrazione.");
             currentUser = new UserBean(
@@ -111,7 +113,7 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
         changeScene("REGISTER", currentUser);
     }
 
-    private void changeScene(String sceneName, UserBean user) {
+    private void changeScene(String sceneName, UserBean user) throws FileNotFoundException {
         jout.print("Cambio scena verso: " + sceneName);
         jout.print("Utente attuale: " + user.getEmail());
 

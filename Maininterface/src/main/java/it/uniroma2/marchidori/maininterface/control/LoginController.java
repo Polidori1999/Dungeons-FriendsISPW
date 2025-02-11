@@ -5,8 +5,10 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
+import it.uniroma2.marchidori.maininterface.control.UserService;  // oppure il package corretto
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -15,20 +17,24 @@ import java.util.logging.Logger;
 public class LoginController {
 
     private UserService userService;
+    private UserBean userBean;  // Bean usato dall'interfaccia
     private static final Logger logger = Logger.getLogger(LoginController.class.getName());
+    private UserBean currentUser;
 
     public LoginController() {
         this.userService = UserService.getInstance(false);
     }
 
-    public void setCurrentUser(UserBean user) {
-        // Metodo vuoto per implementare l'interfaccia
+    // Metodo dell'interfaccia UserAwareInterface
+    public void setCurrentUser(UserBean userBean) {
+        this.currentUser = userBean;
     }
 
-    public User login(String email, String password) {
+    public User login(String email, String password) throws FileNotFoundException {
         logger.info("🔍 Tentativo di login per: " + email);
 
-        User retrievedUser = userService.getUserByEmail(email);
+        // Recupera l'utente tramite il servizio; il DAO carica tutte le info (comprese le lobby)
+        User retrievedUser = userService.loadUserData(Converter.userBeanToEntity(userBean));
 
         if (retrievedUser == null) {
             logger.severe("❌ Utente non trovato per: " + email);
@@ -37,33 +43,20 @@ public class LoginController {
 
         logger.info("🔄 Utente trovato: " + retrievedUser.getEmail());
 
+        // Verifica la password usando BCrypt
         if (BCrypt.checkpw(password, retrievedUser.getPassword())) {
             logger.info("✅ Password corretta per: " + email);
 
-            List<String> joinedLobbiesNames = userService.getUserLobbies(email);
-            logger.info("📌 Lobby recuperate: " + joinedLobbiesNames);
-
-            List<Lobby> joinedLobbies = new ArrayList<>();
-            for (String lobbyName : joinedLobbiesNames) {
-                Lobby lobby = Converter.stringToLobby(lobbyName);
-                if (lobby != null) {
-                    logger.info("🔄 Lobby convertita con successo: " + lobby.getLobbyName());
-                    logger.info("📊 Dettagli lobby - Durata: " + lobby.getDuration() +
-                            ", Tipo: " + lobby.getType() +
-                            ", Proprietario: " + (lobby.isOwned() ? "Sì" : "No") +
-                            ", Giocatori: " + lobby.getNumberOfPlayers());
-
-                    joinedLobbies.add(lobby);
-                } else {
-                    logger.warning("⚠️ Impossibile convertire la lobby: " + lobbyName);
-                }
+            // Se il DAO ha caricato le joined lobbies, possiamo usarle direttamente
+            if (retrievedUser.getJoinedLobbies() != null) {
+                logger.info("🔄 Numero di lobby joinate: " + retrievedUser.getJoinedLobbies().size());
             }
 
-            retrievedUser.setJoinedLobbies(joinedLobbies);
-
+            // Converte l'entity User in un UserBean per l'interfaccia utente
             UserBean convertedUser = Converter.convert(retrievedUser);
             logger.info("🔄 Conversione User -> UserBean completata: " + convertedUser.getEmail());
 
+            // Imposta l'utente corrente (sia a livello di controller che di sessione)
             setCurrentUser(convertedUser);
             Session.getInstance().setCurrentUser(retrievedUser);
 

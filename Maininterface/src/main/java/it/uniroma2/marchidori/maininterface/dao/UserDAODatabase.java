@@ -2,10 +2,13 @@ package it.uniroma2.marchidori.maininterface.dao;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
+import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
+import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -104,16 +107,36 @@ public class UserDAODatabase implements UserDAO {
     }
 
     @Override
+    public void saveUsersEntityData(User user) {
+
+    }
+
+    @Override
+    public String serializeCharacterSheet(CharacterSheet cs) {
+        return "";
+    }
+
+    @Override
+    public String serializeLobby(Lobby lobby) {
+        return "";
+    }
+
+    @Override
+    public User loadUserData(User user) throws FileNotFoundException {
+        return null;
+    }
+
+
     public void removeUserLobby(String email, String lobby) {
         //vuoto
     }
 
-    @Override
+
     public List<String> getUserLobbies(String email) {
         return null;
     }
 
-    @Override
+
     public void saveUserLobbies(String email, List<String> lobbyNames) {
         //void
     }

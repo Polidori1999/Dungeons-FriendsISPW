@@ -7,6 +7,7 @@ import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -22,7 +23,7 @@ public class Main extends Application {
         SceneSwitcher.changeScene(primaryStage, SceneNames.LOGIN, null);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         Scanner scanner = new Scanner(System.in);
         while(true) {
             System.out.println("Seleziona la modalità di esecuzione dell'applicazione:");

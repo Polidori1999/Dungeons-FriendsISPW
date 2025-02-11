@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
+
 
 public class ManageLobbyListController implements UserAwareInterface {
 
@@ -39,8 +41,35 @@ public class ManageLobbyListController implements UserAwareInterface {
     }
 
 
+    public boolean deleteLobby(String lobbyName) {
+        if (lobbyName == null || currentUser.getJoinedLobbies() == null) {
+            logger.warning("Impossibile rimuovere la lobby: il nome o la lista delle lobby è null");
+            return false;
+        }
 
-    public void deleteLobby(String lobbyName) {
+        // Rimuovi la lobby dalla lista dei LobbyBean (usata dalla UI)
+        boolean removedFromBean = currentUser.getJoinedLobbies().removeIf(lobby -> lobby.getName().equals(lobbyName));
+
+        // Rimuovi la lobby dalla lista dell'entity User (per la persistenza)
+        boolean removedFromEntity = currentEntity.getJoinedLobbies().removeIf(lobby -> lobby.getLobbyName().equals(lobbyName));
+
+        if (removedFromEntity) {
+            // Aggiorna la persistenza chiamando il DAO
+            UserDAO dao = UserDAOFactory.getUserDAO(false);
+            dao.saveUsersEntityData(currentEntity);
+
+            // Notifica i listener (se presenti) che la lista delle lobby è cambiata
+            LobbyRepository.notifyLobbyChangeListeners();
+            logger.info("Lobby joinata rimossa con successo: " + lobbyName);
+        } else {
+            logger.warning("Nessuna lobby joinata trovata con il nome: " + lobbyName);
+        }
+
+        return removedFromEntity;
+    }
+
+
+    /*public void deleteLobby(String lobbyName) {
         if (currentUser == null || currentUser.getRoleBehavior() == RoleEnum.GUEST) {
             LOGGER.log(Level.WARNING, "Errore: L'utente è un guest e non può gestire le lobby.");
             return;
@@ -84,7 +113,7 @@ public class ManageLobbyListController implements UserAwareInterface {
             LOGGER.log(Level.INFO, "🔄 Reinserimento della lobby nella lista disponibile: {0}", lobbyName);
         }
         LOGGER.log(Level.INFO, "✅ Azione completata per la lobby: {0}", lobbyName);
-    }
+    }*/
 
 
 

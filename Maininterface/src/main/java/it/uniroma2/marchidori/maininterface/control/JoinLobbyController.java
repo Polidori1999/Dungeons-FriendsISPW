@@ -20,7 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class JoinLobbyController implements UserAwareInterface {
-    private User currentUser;
+    private UserBean currentUser;
     private final User currentEntity = Session.getInstance().getCurrentUser();
 
     private static final Logger logger = Logger.getLogger(JoinLobbyController.class.getName());
@@ -73,12 +73,12 @@ public class JoinLobbyController implements UserAwareInterface {
     }
 
     // Aggiungi una lobby all'utente e salva nel file
-    public void addLobby(LobbyBean lobby) {
+    public void addLobby(LobbyBean lobbyBean) {
         if (currentUser.getJoinedLobbies() == null) {
             currentUser.setJoinedLobbies(FXCollections.observableArrayList());
         }
-        currentUser.getJoinedLobbies().add(lobby);
-        currentEntity.getJoinedLobbies().add(Converter.beanToEntity(lobby));
+        currentUser.getJoinedLobbies().add(lobbyBean);
+        currentEntity.getJoinedLobbies().add(Converter.beanToEntity(lobbyBean));
         // Aggiorna la lista tramite DAO...
         UserDAO dao = UserDAOFactory.getUserDAO(false);
         List<String> lobbyNames = new ArrayList<>();
@@ -99,17 +99,17 @@ public class JoinLobbyController implements UserAwareInterface {
         //UserDAOFileSys dao = new UserDAOFileSys();
         //da cambiare
         UserDAO dao = UserDAOFactory.getUserDAO(false);
-        currentUser = dao.loadUserData(currentEntity);
-        List<LobbyBean> joinedLobbies = new ArrayList<>();
-        for (String lobbyName : lobbyNames) {
+        currentUser = Converter.convert(dao.loadUserData(currentEntity));
+        //List<LobbyBean> joinedLobbies = new ArrayList<>();
+        /*for (String lobbyName : lobbyNames) {
             Lobby lobby = LobbyRepository.findLobbyByName(lobbyName);
             if (lobby != null) {
                 joinedLobbies.add(new LobbyBean(lobby));  // Aggiungi LobbyBean alla lista
             }
 
-        }
+        }*/
 
-        currentUser.setJoinedLobbies(joinedLobbies);
+        //currentUser.setJoinedLobbies(joinedLobbies);
     }
 
     // Metodo per aggiungere un nuovo personaggio
