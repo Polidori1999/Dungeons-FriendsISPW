@@ -16,6 +16,7 @@ public interface UserDAO {
     String serializeCharacterSheet(CharacterSheet cs);
     String serializeLobby(Lobby lobby);
     User loadUserData(User user) throws FileNotFoundException;
+    void updateUsersEntityData(User user);
     /*User getUserByEmail(String email);
     List<String> getUserLobbies(String email);
     void removeUserLobby(String email,String lobby);

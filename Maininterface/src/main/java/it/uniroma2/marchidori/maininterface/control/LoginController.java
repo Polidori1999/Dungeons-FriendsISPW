@@ -47,10 +47,12 @@ public class LoginController {
         if (BCrypt.checkpw(password, retrievedUser.getPassword())) {
             logger.info("✅ Password corretta per: " + email);
 
+            retrievedUser = userService.loadUserData(retrievedUser);
+
             // Se il DAO ha caricato le joined lobbies, possiamo usarle direttamente
-            if (retrievedUser.getJoinedLobbies() != null) {
+            /*if (retrievedUser.getJoinedLobbies() != null) {
                 logger.info("🔄 Numero di lobby joinate: " + retrievedUser.getJoinedLobbies().size());
-            }
+            }*/
 
             // Converte l'entity User in un UserBean per l'interfaccia utente
             UserBean convertedUser = Converter.convert(retrievedUser);

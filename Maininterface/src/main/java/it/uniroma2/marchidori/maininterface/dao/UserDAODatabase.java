@@ -126,6 +126,11 @@ public class UserDAODatabase implements UserDAO {
         return null;
     }
 
+    @Override
+    public void updateUsersEntityData(User user) {
+
+    }
+
 
     public void removeUserLobby(String email, String lobby) {
         //vuoto

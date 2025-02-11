@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
 public class UserDAOFileSys implements UserDAO {
-    // Assicurati che i path terminino con "/" per concatenare correttamente
+    // I percorsi terminano con "/" per garantire la corretta concatenazione
     private static final String BASE_DIR = "src/main/java/it/uniroma2/marchidori/maininterface/repository/";
     private static final String USERS_FILE_PATH = BASE_DIR + "users.txt";
     private static final String USER_DATA_DIR = BASE_DIR + "user/";
@@ -36,7 +36,7 @@ public class UserDAOFileSys implements UserDAO {
 
     @Override
     public void saveUser(String email, String password) {
-        // Hash della password (viene calcolato una sola volta)
+        // Calcola l'hash della password una sola volta
         String hashedPassword = org.mindrot.jbcrypt.BCrypt.hashpw(password, org.mindrot.jbcrypt.BCrypt.gensalt());
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(USERS_FILE_PATH, true))) {
             writer.write(email + "," + hashedPassword);
@@ -70,7 +70,7 @@ public class UserDAOFileSys implements UserDAO {
             File file = new File(userDir, fileName);
             if (!file.exists()) {
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-                    writer.write(email);
+                    // In fase di creazione non scriviamo il nome dell'utente, perché l'utente è già definito dalla cartella
                     writer.newLine();
                 } catch (IOException e) {
                     logger.severe("Errore nella creazione del file " + file.getPath() + ": " + e.getMessage());
@@ -86,7 +86,7 @@ public class UserDAOFileSys implements UserDAO {
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
                 if (data[0].equals(email)) {
-                    // Restituisce un oggetto User con le informazioni basilari (le liste saranno poi aggiornate tramite loadUserData)
+                    // Restituisce un oggetto User con le informazioni basilari
                     return new User(data[0], data[1], new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
                 }
             }
@@ -97,8 +97,12 @@ public class UserDAOFileSys implements UserDAO {
     }
 
     /**
-     * Salva i dati dell'utente (entity) in file: characterSheets, joinedLobbies e favouriteLobbies.
-     * Utilizza la modalità append per aggiungere nuove righe.
+     * Salva i dati dell'utente (entity) in file:
+     * - characterSheets.csv
+     * - joinedLobbies.csv
+     * - favouriteLobbies.csv
+     *
+     * Utilizza la modalità append per aggiungere nuove righe, senza scrivere l'email come header
      */
     public void saveUsersEntityData(User user) {
         File userDir = getUserFolder(user.getEmail());
@@ -110,11 +114,6 @@ public class UserDAOFileSys implements UserDAO {
         // Salvataggio dei character sheets in modalità append
         File characterFile = new File(userDir, "characterSheets.csv");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(characterFile, true))) {
-            // Se il file è vuoto, scrive una riga di intestazione con l'email
-            if (characterFile.length() == 0) {
-                writer.write(user.getEmail());
-                writer.newLine();
-            }
             for (CharacterSheet cs : user.getCharacterSheets()) {
                 writer.write(serializeCharacterSheet(cs));
                 writer.newLine();
@@ -126,10 +125,6 @@ public class UserDAOFileSys implements UserDAO {
         // Salvataggio delle joined lobbies in modalità append
         File joinedFile = new File(userDir, "joinedLobbies.csv");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(joinedFile, true))) {
-            if (joinedFile.length() == 0) {
-                writer.write(user.getEmail());
-                writer.newLine();
-            }
             for (Lobby lobby : user.getJoinedLobbies()) {
                 writer.write(serializeLobby(lobby));
                 writer.newLine();
@@ -141,10 +136,6 @@ public class UserDAOFileSys implements UserDAO {
         // Salvataggio delle favourite lobbies in modalità append
         File favFile = new File(userDir, "favouriteLobbies.csv");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(favFile, true))) {
-            if (favFile.length() == 0) {
-                writer.write(user.getEmail());
-                writer.newLine();
-            }
             for (Lobby lobby : user.getFavouriteLobbies()) {
                 writer.write(serializeLobby(lobby));
                 writer.newLine();
@@ -285,5 +276,91 @@ public class UserDAOFileSys implements UserDAO {
         // Impostiamo una password dummy; per il login la password viene recuperata da getUserByEmail
         String dummyPassword = "******";
         return new User(user.getEmail(), dummyPassword, characterSheets, favouriteLobbies, joinedLobbies);
+    }
+
+    @Override
+    public void updateUsersEntityData(User user) {
+
+    }
+
+    /*public void updateUsersEntityData(User user) {
+        File userDir = getUserFolder(user.getEmail());
+        if (!userDir.exists() && !userDir.mkdirs()) {
+            logger.severe("Errore nella creazione della cartella per: " + user.getEmail());
+            return;
+        }
+
+        // Riscrive il file dei character sheets
+        File characterFile = new File(userDir, "characterSheets.csv");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(characterFile, false))) {
+            for (CharacterSheet cs : user.getCharacterSheets()) {
+                writer.write(serializeCharacterSheet(cs));
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Riscrive il file delle joined lobbies
+        File joinedFile = new File(userDir, "joinedLobbies.csv");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(joinedFile, false))) {
+            for (Lobby lobby : user.getJoinedLobbies()) {
+                writer.write(serializeLobby(lobby));
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            logger.severe("Errore durante l'aggiornamento delle joined lobbies: " + e.getMessage());
+        }
+
+        // Riscrive il file delle favourite lobbies
+        File favFile = new File(userDir, "favouriteLobbies.csv");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(favFile, false))) {
+            for (Lobby lobby : user.getFavouriteLobbies()) {
+                writer.write(serializeLobby(lobby));
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            logger.severe("Errore durante l'aggiornamento delle favourite lobbies: " + e.getMessage());
+        }
+    }*/
+    public void removeJoinedLobby(String email, String lobbyName) {
+        File userDir = getUserFolder(email);
+        File joinedFile = new File(userDir, "joinedLobbies.csv");
+
+        if (!joinedFile.exists()) {
+            logger.warning("Il file joinedLobbies.csv non esiste per l'utente: " + email);
+            return;
+        }
+
+        List<String> remainingLines = new ArrayList<>();
+
+        // Leggi tutte le righe del file e mantieni solo quelle che non corrispondono a lobbyName
+        try (BufferedReader reader = new BufferedReader(new FileReader(joinedFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
+                // Il primo campo (prima del ';') contiene il nome della lobby
+                String[] parts = line.split(";", -1);
+                if (parts.length > 0 && parts[0].equals(lobbyName)) {
+                    // Salta questa riga, perché corrisponde alla lobby da eliminare
+                    continue;
+                }
+                remainingLines.add(line);
+            }
+        } catch (IOException e) {
+            logger.severe("Errore durante la lettura del file joinedLobbies.csv: " + e.getMessage());
+            return;
+        }
+
+        // Riscrivi il file con le righe rimanenti (overwrite)
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(joinedFile, false))) {
+            for (String l : remainingLines) {
+                writer.write(l);
+                writer.newLine();
+            }
+            logger.info("Lobby '" + lobbyName + "' rimossa con successo dal file delle joined lobbies per l'utente: " + email);
+        } catch (IOException e) {
+            logger.severe("Errore durante la scrittura del file joinedLobbies.csv: " + e.getMessage());
+        }
     }
 }

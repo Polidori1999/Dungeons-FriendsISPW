@@ -47,26 +47,25 @@ public class ManageLobbyListController implements UserAwareInterface {
             return false;
         }
 
-        // Rimuovi la lobby dalla lista dei LobbyBean (usata dalla UI)
+        // Rimuovi la lobby dalla lista dei LobbyBean (UI)
         boolean removedFromBean = currentUser.getJoinedLobbies().removeIf(lobby -> lobby.getName().equals(lobbyName));
 
-        // Rimuovi la lobby dalla lista dell'entity User (per la persistenza)
+        // Rimuovi la lobby dalla lista dell'entity User (persistenza)
+
+
+        // Aggiorna la persistenza riscrivendo completamente il file
+        UserDAO dao = UserDAOFactory.getUserDAO(false);
+        dao.updateUsersEntityData(currentEntity);
+        // Notifica eventuali listener
+        LobbyRepository.notifyLobbyChangeListeners();
+
+
+
         boolean removedFromEntity = currentEntity.getJoinedLobbies().removeIf(lobby -> lobby.getLobbyName().equals(lobbyName));
-
-        if (removedFromEntity) {
-            // Aggiorna la persistenza chiamando il DAO
-            UserDAO dao = UserDAOFactory.getUserDAO(false);
-            dao.saveUsersEntityData(currentEntity);
-
-            // Notifica i listener (se presenti) che la lista delle lobby è cambiata
-            LobbyRepository.notifyLobbyChangeListeners();
-            logger.info("Lobby joinata rimossa con successo: " + lobbyName);
-        } else {
-            logger.warning("Nessuna lobby joinata trovata con il nome: " + lobbyName);
-        }
 
         return removedFromEntity;
     }
+
 
 
     /*public void deleteLobby(String lobbyName) {
