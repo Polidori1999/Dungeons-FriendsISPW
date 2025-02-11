@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 
 public class Main extends Application {
 
+
     // Creazione del logger
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
