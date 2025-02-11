@@ -60,6 +60,7 @@ public class ManageLobbyListController implements UserAwareInterface {
             return;
         }
 
+
         if (lobbyToRemove.isOwned()) {
             LOGGER.log(Level.INFO, "🛑 Il proprietario sta eliminando la lobby: {0}", lobbyName);
             currentUser.getJoinedLobbies().remove(lobbyToRemove);
