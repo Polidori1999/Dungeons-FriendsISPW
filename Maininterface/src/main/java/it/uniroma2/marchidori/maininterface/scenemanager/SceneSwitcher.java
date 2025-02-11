@@ -93,6 +93,12 @@ public class SceneSwitcher {
         loader.setController(controller);
         return loader.load();
     }
+    /*private static Parent loadFXML(String fxmlPath, Object controller) throws IOException {
+        FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource(
+                "/it/uniroma2/marchidori/maininterface/" + fxmlPath));
+        loader.setController(controller);
+        return loader.load();
+    }*/
 
 
     private static SceneIdEnum getSceneIdFromFxml(String fxmlPath) {
