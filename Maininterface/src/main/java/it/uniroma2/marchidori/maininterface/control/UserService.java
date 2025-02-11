@@ -2,9 +2,12 @@ package it.uniroma2.marchidori.maininterface.control;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
+import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
+import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 
+import java.io.*;
 import java.util.List;
 
 public class UserService {
@@ -30,11 +33,18 @@ public class UserService {
         return userDAO.getUserByEmail(email);
     }
 
-    public List<String> getUserLobbies(String email) {
-        return userDAO.getUserLobbies(email);
+    public String serializeCharacterSheet(CharacterSheet cs){
+        return userDAO.serializeCharacterSheet(cs);
     }
 
-    public void removeUserLobby(String email, String lobbyName) {
-        userDAO.removeUserLobby(email, lobbyName);
+    public String serializeLobby(Lobby lobby){
+        return userDAO.serializeLobby(lobby);
     }
+
+    public User loadUserData(User user) throws FileNotFoundException {
+        return userDAO.loadUserData(user);
+    }
+
+
+
 }

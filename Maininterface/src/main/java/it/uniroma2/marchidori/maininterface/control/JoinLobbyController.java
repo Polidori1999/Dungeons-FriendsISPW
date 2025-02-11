@@ -13,13 +13,14 @@ import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 import javafx.collections.FXCollections;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class JoinLobbyController implements UserAwareInterface {
-    private UserBean currentUser;
+    private User currentUser;
     private final User currentEntity = Session.getInstance().getCurrentUser();
 
     private static final Logger logger = Logger.getLogger(JoinLobbyController.class.getName());
@@ -84,7 +85,7 @@ public class JoinLobbyController implements UserAwareInterface {
         for (LobbyBean lb : currentUser.getJoinedLobbies()) {
             lobbyNames.add(lb.getName());
         }
-        dao.saveUserLobbies(currentUser.getEmail(), lobbyNames);
+        dao.saveUsersEntityData(currentEntity);
 
         logger.log(Level.INFO, "Lobby aggiunta! Lista aggiornata: {0}", currentUser.getJoinedLobbies());
 
@@ -94,11 +95,11 @@ public class JoinLobbyController implements UserAwareInterface {
 
 
     // Recupera le lobby dell'utente durante il login
-    public void loadUserLobbies() {
+    public void loadUserLobbies() throws FileNotFoundException {
         //UserDAOFileSys dao = new UserDAOFileSys();
         //da cambiare
         UserDAO dao = UserDAOFactory.getUserDAO(false);
-        List<String> lobbyNames = dao.getUserLobbies(currentUser.getEmail());
+        currentUser = dao.loadUserData(currentEntity);
         List<LobbyBean> joinedLobbies = new ArrayList<>();
         for (String lobbyName : lobbyNames) {
             Lobby lobby = LobbyRepository.findLobbyByName(lobbyName);

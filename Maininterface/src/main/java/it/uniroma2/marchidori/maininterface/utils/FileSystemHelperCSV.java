@@ -74,7 +74,7 @@ public class FileSystemHelperCSV {
      * Carica i dati dell'utente (tramite i file CSV) e costruisce un oggetto User.
      * (In questo esempio, password e ruolo non vengono gestiti e vengono impostati a valori dummy.)
      */
-    public static User loadUserData(String email) throws IOException {
+    /*public static User loadUserData(String email) throws IOException {
         File userDir = getUserFolder(email);
         if (!userDir.exists() || !userDir.isDirectory()) {
             return null;
@@ -125,10 +125,10 @@ public class FileSystemHelperCSV {
             }
         }
 
-        // Impostiamo una password dummy (puoi adattare questa parte secondo le tue necessità)
-        String dummyPassword = "******";
-        return new User(email, dummyPassword, characterSheets, favouriteLobbies, joinedLobbies);
-    }
+//        // Impostiamo una password dummy (puoi adattare questa parte secondo le tue necessità)
+//        String dummyPassword = "******";
+//        return new User(email, dummyPassword, characterSheets, favouriteLobbies, joinedLobbies);
+    }*/
 
     // =============================================
     // METODI DI SERIALIZZAZIONE/DESERIALIZZAZIONE CSV
