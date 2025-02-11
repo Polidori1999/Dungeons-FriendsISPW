@@ -82,6 +82,7 @@ public class SceneSwitcher {
         if (currentUser != null && target instanceof it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface userAware) {
             userAware.setCurrentUser(currentUser);
         } else {
+
             logger.info(">>> [SceneSwitcher] Nessun currentUser da iniettare in " + target.getClass().getSimpleName());
         }
     }
