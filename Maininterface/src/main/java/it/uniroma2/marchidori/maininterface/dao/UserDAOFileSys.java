@@ -12,9 +12,9 @@ import java.util.logging.Logger;
 import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
 public class UserDAOFileSys implements UserDAO {
-    private static final String BASE_DIR = "src/main/java/it/uniroma2/marchidori/maininterface/";
+    private static final String BASE_DIR = "src/main/java/it/uniroma2/marchidori/maininterface/repository/";
     private static final String USERS_FILE_PATH = BASE_DIR + "users.txt";
-    private static final String USER_DATA_DIR = BASE_DIR + "users";
+    private static final String USER_DATA_DIR = BASE_DIR + "useser ";
 
     private static final Logger logger = Logger.getLogger(UserDAOFileSys.class.getName());
 

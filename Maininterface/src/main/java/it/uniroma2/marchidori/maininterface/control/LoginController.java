@@ -34,7 +34,7 @@ public class LoginController {
         logger.info("🔍 Tentativo di login per: " + email);
 
         // Recupera l'utente tramite il servizio; il DAO carica tutte le info (comprese le lobby)
-        User retrievedUser = userService.loadUserData(Converter.userBeanToEntity(userBean));
+        User retrievedUser = userService.getUserByEmail(email);
 
         if (retrievedUser == null) {
             logger.severe("❌ Utente non trovato per: " + email);
