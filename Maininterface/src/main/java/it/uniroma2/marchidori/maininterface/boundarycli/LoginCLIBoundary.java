@@ -9,6 +9,7 @@ import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.control.LoginController;
 import it.uniroma2.marchidori.maininterface.control.RegisterController;
 import it.uniroma2.marchidori.maininterface.entity.Session;
+import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -48,6 +49,7 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
                     break;
                 default:
                     jout.print("Opzione non valida, riprova.");
+
                     break;
             }
             jout.print("");
@@ -70,9 +72,9 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
         jout.print("Inserisci password: ");
         String password = scanner.nextLine().trim();
 
-        UserBean authenticatedUser = loginController.login(email, password);
+        User authenticatedUser = loginController.login(email, password);
         if (authenticatedUser != null) {
-            currentUser = authenticatedUser;
+            currentUser = Converter.convert(authenticatedUser);
             jout.print("Login avvenuto con successo. Benvenuto " + currentUser.getEmail() + "!");
             changeScene("HOME", currentUser);
         } else {

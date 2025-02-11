@@ -24,25 +24,25 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Seleziona la modalità di esecuzione dell'applicazione:");
-        System.out.println("1. CLI");
-        System.out.println("2. JavaFX");
-        System.out.print("Inserisci il numero corrispondente (1 o 2): ");
-        String scelta = scanner.nextLine().trim();
-
-        if ("1".equals(scelta)) {
-            System.out.println("Avvio modalità CLI...");
-            // Avvio della versione CLI:
-            LoginCLIBoundary cliBoundary = new LoginCLIBoundary();
-            cliBoundary.setLogicController(new LoginController());
-            cliBoundary.run();
-        } else {
-            System.out.println("Avvio modalità JavaFX...");
-            // Avvio dell'applicazione JavaFX:
-            launch(args);
+        while(true) {
+            System.out.println("Seleziona la modalità di esecuzione dell'applicazione:");
+            System.out.println("1. CLI");
+            System.out.println("2. JavaFX");
+            System.out.print("Inserisci il numero corrispondente (1 o 2): ");
+            String scelta = scanner.nextLine().trim();
+            if ("1".equals(scelta)) {
+                System.out.println("Avvio modalità CLI...");
+                // Avvio della versione CLI:
+                LoginCLIBoundary cliBoundary = new LoginCLIBoundary();
+                cliBoundary.setLogicController(new LoginController());
+                cliBoundary.run();
+            } else if ("2".equals(scelta)) {
+                System.out.println("Avvio modalità JavaFX...");
+                // Avvio dell'applicazione JavaFX:
+                launch(args);
+            }
+            System.out.print("");
         }
 
-        scanner.close();
     }
 }

@@ -16,6 +16,16 @@ public class Lobby {
     private List<String> players;
     private int numberOfPlayers;
 
+
+    private Lobby() {
+        this.lobbyName = "lobbyName";
+        this.duration = "duration";
+        this.type = "type";
+        this.owned = false;
+        this.players = new ArrayList<>();
+    }
+
+
     // costruttore
     public Lobby(String lobbyName, String duration, String type, boolean owned, int numberOfPlayers) {
         this.lobbyName = lobbyName;
