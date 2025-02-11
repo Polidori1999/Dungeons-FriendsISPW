@@ -1,11 +1,13 @@
 module it.uniroma2.marchidori.maininterface {
     requires javafx.controls;
+    requires javafx.base;
     requires javafx.fxml;
     requires jdk.compiler;
     requires javafx.graphics;
     requires java.desktop;
     requires jbcrypt;
     requires java.sql;
+    requires java.net.http;
 
 
     opens it.uniroma2.marchidori.maininterface to javafx.fxml;

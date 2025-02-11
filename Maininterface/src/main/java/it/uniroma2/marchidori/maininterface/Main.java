@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface;
 
+import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundarycli.LoginCLIBoundary;
 import it.uniroma2.marchidori.maininterface.control.LoginController;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
+
 public class Main extends Application {
 
 
@@ -20,8 +22,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        UserBean tempUser = new UserBean("",null,null,null);
         // Avvio della scena JavaFX con il file FXML "login.fxml"
-        SceneSwitcher.changeScene(primaryStage, SceneNames.LOGIN, null);
+        SceneSwitcher.changeScene(primaryStage, SceneNames.LOGIN, tempUser);
     }
 
     public static void main(String[] args) throws FileNotFoundException {

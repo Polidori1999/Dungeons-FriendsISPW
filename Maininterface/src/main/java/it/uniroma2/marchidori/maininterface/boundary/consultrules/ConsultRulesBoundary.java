@@ -1,14 +1,16 @@
 package it.uniroma2.marchidori.maininterface.boundary.consultrules;
 
-import it.uniroma2.marchidori.maininterface.bean.RuleBookBean;
-import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
+import it.uniroma2.marchidori.maininterface.bean.RuleBookBean;
+import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.control.ConsultRulesController;
+import it.uniroma2.marchidori.maininterface.control.PayPalPaymentController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,49 +28,34 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Boundary per la consultazione dei manuali (RuleBook).
- */
 public class ConsultRulesBoundary implements UserAwareInterface, ControllerAwareInterface {
 
     private UserBean currentUser;
 
     @FXML
     private AnchorPane consultRulesPane;
-
     @FXML
     protected TableColumn<RuleBookBean, Button> buyButton;
-
     @FXML
     protected TableColumn<RuleBookBean, Button> consultButton;
-
     @FXML
     private Button consultRules;
-
     @FXML
     private Button home;
-
     @FXML
     private Button joinLobby;
-
     @FXML
     private Button manageLobby;
-
     @FXML
     private Button myChar;
-
     @FXML
     protected TableColumn<RuleBookBean, String> ownedColumn;
-
     @FXML
     protected TableColumn<RuleBookBean, String> rulesBookNameColumn;
-
     @FXML
     protected TableView<RuleBookBean> rulesBookTableView;
-
     @FXML
     private Button userButton;
-
     @FXML
     private VBox vBox;
 
@@ -90,29 +77,20 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
         rulesBookTableView.setItems(rulesBook);
     }
 
-    /**
-     * Inizializza la tabella con i RuleBook e configura le colonne.
-     */
     private void initRulesBookTable() {
         rulesBook = controller.getAllRuleBooks();
-
-        // Colonna "Nome RuleBook" (riferita alla proprietà "rulesBookName")
         rulesBookNameColumn.setCellValueFactory(new PropertyValueFactory<>("rulesBookName"));
 
-        // Colonna "Buy" (dinamica: modifica testo e stato in base al bean)
+        // Colonna "Buy" (dinamica)
         TableColumnUtils.setupDynamicButtonColumn(buyButton,
                 bean -> bean.isObtained() ? "Obtained" : "Buy now!",
                 RuleBookBean::isObtained,
                 this::handleBuyConfirmation);
 
-        // Colonna "Consult" (testo statico)
+        // Colonna "Consult" (sempre "Consult Now")
         TableColumnUtils.setupButtonColumn(consultButton, "Consult Now", this::handleConsultAction);
     }
 
-    /**
-     * Logica per consultare un RuleBook:
-     * se il libro è già ottenuto, apri il PDF; altrimenti chiedi conferma di acquisto.
-     */
     private void handleConsultAction(RuleBookBean book) {
         pendingBuyBean = book;
         if (book.isObtained()) {
@@ -123,9 +101,6 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
         }
     }
 
-    /**
-     * Logica per gestire la richiesta di acquisto di un RuleBook.
-     */
     private void handleBuyConfirmation(RuleBookBean bean) {
         pendingBuyBean = bean;
         if (confirmationPopupController != null && pendingBuyBean != null) {
@@ -136,23 +111,72 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
         }
     }
 
-    /**
-     * Chiamato quando si annulla l'operazione di acquisto.
-     */
     private void onCancel() {
         pendingBuyBean = null;
     }
 
     /**
-     * Chiamato quando si conferma l'acquisto.
-     * Aggiorna il bean selezionato (impostando obtained=true).
+     * Chiamato quando l'utente conferma l'acquisto dal popup.
+     * Qui puoi inserire la logica PayPal (creazione ordine, apertura link).
      */
     private void onConfirm() {
         if (pendingBuyBean != null) {
+            // ESEMPIO: Prezzo fisso (oppure puoi derivarlo dal bean)
+            double price = 0.01;
+            // Avvia la procedura di pagamento PayPal
+            startPayPalPayment(price);
+
+            // Se vuoi segnare subito come "obtained":
             pendingBuyBean.setObtained(true);
+            // Oppure, se preferisci attendere la conferma dal server PayPal,
+            // potresti farlo DOPO la cattura.
+            // Per semplicità, lo facciamo subito:
+
+            // Aggiornare la tabella
+            rulesBookTableView.refresh();
             pendingBuyBean = null;
         }
-        rulesBookTableView.refresh();
+    }
+
+    /**
+     * Esempio di metodo che richiama PayPalPaymentController per creare un ordine
+     * e aprire il link di checkout nel browser di sistema.
+     */
+    private void startPayPalPayment(double amount) {
+        try {
+            PayPalPaymentController payCtrl = new PayPalPaymentController();
+
+            // 1) Ottieni access token
+            String accessToken = payCtrl.getAccessToken();
+            System.out.println("AccessToken = " + accessToken);
+
+            // 2) Crea ordine (EUR e importo a piacere)
+            String createOrderResponse = payCtrl.createOrder(accessToken, "EUR", String.valueOf(amount));
+            System.out.println("createOrderResponse = " + createOrderResponse);
+
+            // 3) Estrai link "approve"
+            String approveLink = payCtrl.extractApproveLink(createOrderResponse);
+            if (approveLink == null) {
+                logger.log(Level.SEVERE, "Impossibile trovare il link di approvazione nel JSON di risposta PayPal");
+                return;
+            }
+
+            // 4) Apri il browser con il link PayPal
+            // In un'app desktop JavaFX, puoi fare:
+            Desktop desktop = Desktop.getDesktop();
+            if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                desktop.browse(new java.net.URI(approveLink));
+            } else {
+                logger.warning("Apertura browser non supportata su questo sistema!");
+            }
+
+            // A questo punto l'utente vede la pagina PayPal, effettua il login e completa il pagamento.
+            // Se desideri catturare in un secondo momento, dovrai salvare l'orderID e
+            // chiamare "capture" su /v2/checkout/orders/{orderID}/capture.
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Errore durante il pagamento PayPal: ", e);
+        }
     }
 
     @FXML
@@ -160,31 +184,19 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
         Button sourceButton = (Button) event.getSource();
         String fxml = (String) sourceButton.getUserData();
 
-        // Esegui il cambio scena
         Stage currentStage = (Stage) consultRulesPane.getScene().getWindow();
         try {
             SceneSwitcher.changeScene(currentStage, fxml, currentUser);
         } catch (IOException e) {
-            // Se preferisci, potresti usare un messaggio più "dinamico", come:
-            // "Error during change scene from ManageLobbyListBoundary to " + fxml
             throw new SceneChangeException("Error during change scene.", e);
         }
     }
 
-    /**
-     * Cambio di scena generico.
-     *
-     * @param fxml Nome del file FXML da caricare.
-     */
     @FXML
     protected void changeScene(String fxml) throws IOException {
         Stage currentStage = (Stage) consultRulesPane.getScene().getWindow();
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);
     }
-
-    /* ==============================================================
-       Metodi dell'interfaccia
-       ============================================================== */
 
     @Override
     public void setCurrentUser(UserBean user) {
