@@ -16,6 +16,11 @@ public class UserController implements UserAwareInterface {
 
     public UserController() {
         //costruttore vuoto
+        currentEntity = Session.getInstance().getCurrentUser();
+    }
+
+    public UserController(User currentEntity){
+        this.currentEntity = currentEntity;
     }
 
     @Override
