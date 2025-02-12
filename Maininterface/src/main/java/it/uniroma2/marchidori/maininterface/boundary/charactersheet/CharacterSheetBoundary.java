@@ -75,7 +75,6 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
 
     @FXML
     public void initialize() {
-
         // Verifica l'iniezione dell'utente
         String selected = currentUser != null ? currentUser.getSelectedLobbyName() : null;
         if (selected == null || selected.isEmpty()) {
@@ -96,6 +95,9 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
             logger.info(">>> Modalità creazione attiva.");
         } else {
             populateFields(currentBean);
+            // Disabilita il campo del nome per impedire la modifica
+            charName.setEditable(false);
+            charName.setFocusTraversable(false);
             logger.info(">>> Modalità modifica attiva per personaggio: " + currentBean.getInfoBean().getName());
         }
     }

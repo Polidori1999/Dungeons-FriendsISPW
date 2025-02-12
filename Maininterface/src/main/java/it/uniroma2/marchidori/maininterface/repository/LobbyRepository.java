@@ -63,11 +63,6 @@ public class LobbyRepository {
         listeners.remove(listener);
     }
 
-    public static void notifyLobbyChangeListeners() {
-        for (LobbyChangeListener listener : listeners) {
-            listener.onLobbyListChanged();
-        }
-    }
 
 }
 

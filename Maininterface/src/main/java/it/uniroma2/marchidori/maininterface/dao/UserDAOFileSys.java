@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.dao;
 
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.entity.*;
+import it.uniroma2.marchidori.maininterface.control.Converter;
 
 import java.io.*;
 import java.util.*;
@@ -276,9 +277,46 @@ public class UserDAOFileSys implements UserDAO {
 
     @Override
     public void updateUsersEntityData(User user) {
-        //EMPTY
+        File userDir = getUserFolder(user.getEmail());
+        if (!userDir.exists() && !userDir.mkdirs()) {
+            logger.severe("Errore nella creazione della cartella per: " + user.getEmail());
+            return;
+        }
 
+        // Riscrive il file dei character sheets
+        File characterFile = new File(userDir, "characterSheets.csv");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(characterFile, false))) {
+            for (CharacterSheet cs : user.getCharacterSheets()) {
+                writer.write(serializeCharacterSheet(cs));
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Riscrive il file delle joined lobbies
+        File joinedFile = new File(userDir, "joinedLobbies.csv");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(joinedFile, false))) {
+            for (Lobby lobby : user.getJoinedLobbies()) {
+                writer.write(serializeLobby(lobby));
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            logger.severe("Errore durante l'aggiornamento delle joined lobbies: " + e.getMessage());
+        }
+
+        // Riscrive il file delle favourite lobbies
+        File favFile = new File(userDir, "favouriteLobbies.csv");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(favFile, false))) {
+            for (Lobby lobby : user.getFavouriteLobbies()) {
+                writer.write(serializeLobby(lobby));
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            logger.severe("Errore durante l'aggiornamento delle favourite lobbies: " + e.getMessage());
+        }
     }
+
 
     /*public void updateUsersEntityData(User user) {
         File userDir = getUserFolder(user.getEmail());
@@ -360,4 +398,7 @@ public class UserDAOFileSys implements UserDAO {
             logger.severe("Errore durante la scrittura del file joinedLobbies.csv: " + e.getMessage());
         }
     }
+
+
+
 }

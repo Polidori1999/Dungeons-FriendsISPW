@@ -85,6 +85,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
             String characterName = pendingDeleteBean.getInfoBean().getName();
             tableViewChar.getItems().remove(pendingDeleteBean);
             controller.deleteCharacter(characterName);
+
             pendingDeleteBean = null;
         }
     }
@@ -150,6 +151,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).getInfoBean().getName().equals(updatedCharacter.getInfoBean().getName())) {
                 data.set(i, updatedCharacter);
+
                 break;
             }
         }

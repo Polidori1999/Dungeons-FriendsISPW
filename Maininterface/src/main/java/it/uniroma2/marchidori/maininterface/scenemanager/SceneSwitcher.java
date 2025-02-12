@@ -39,11 +39,6 @@ public class SceneSwitcher {
                 controllerInstance = ControllerFactory.createController(controllerClass);
                 injectCurrentUser(controllerInstance, currentUser);
                 injectControllerIntoBoundary(controllerInstance, boundaryInstance);
-                if (controllerInstance instanceof JoinLobbyController && boundaryInstance instanceof LobbyChangeListener) {
-                    ((JoinLobbyController) controllerInstance).addLobbyChangeListener((LobbyChangeListener) boundaryInstance);
-                    logger.info("✅ Listener registrato: " + boundaryInstance.getClass().getSimpleName() +
-                            " ora riceverà aggiornamenti da JoinLobbyController");
-                }
 
             }
             if (boundaryInstance instanceof RunInterface runInterface){
@@ -80,12 +75,7 @@ public class SceneSwitcher {
             injectCurrentUser(controllerInstance, currentUser);
             injectControllerIntoBoundary(controllerInstance, boundaryInstance);
 
-            // 🔥 REGISTRA IL LISTENER: controlla se la boundary implementa LobbyChangeListener
-            if (controllerInstance instanceof JoinLobbyController && boundaryInstance instanceof LobbyChangeListener) {
-                ((JoinLobbyController) controllerInstance).addLobbyChangeListener((LobbyChangeListener) boundaryInstance);
-                logger.info("✅ Listener registrato: " + boundaryInstance.getClass().getSimpleName() +
-                        " ora riceverà aggiornamenti da JoinLobbyController");
-            }
+
 
         }
 

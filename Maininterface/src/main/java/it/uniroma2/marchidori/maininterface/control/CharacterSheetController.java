@@ -5,7 +5,9 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsB
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
+import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.entity.*;
+import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
 
 import java.nio.file.Paths;
@@ -38,47 +40,54 @@ public class CharacterSheetController implements UserAwareInterface {
      * Converte il CharacterSheetBean (spezzato in info e ability)
      * in una Entity "CharacterSheet" e la aggiunge alla lista in memoria.
      */
-    public void createChar(CharacterSheetBean bean) {
-        if (bean == null) {
-            logger.severe(">>> ERRORE: Il Bean passato a createCharacter() è NULL!");
-            return;
-        }
+    public void createChar(CharacterSheetBean characterSheetBean) {
+        // Aggiungi il nuovo character sheet alla lista dell'utente
+        currentUser.getCharacterSheets().add(characterSheetBean);
+        // Converti il bean in entity e aggiungilo allo User Entity (per la persistenza)
+        currentEntity=Converter.userBeanToEntity(currentUser);
 
-        CharacterSheet newChar = beanToEntity(bean);
-        if (currentUser != null) {
-            logger.info(">>> Aggiungendo lobby a UserBean: " + newChar.getCharacterInfo().getName());
-            currentUser.getCharacterSheets().add(bean);
-            currentEntity.getCharacterSheets().add(newChar);
-            logger.info(">>> Lista attuale personaggi: " + currentUser.getJoinedLobbies());
-        } else {
-            logger.severe(">>> ERRORE: currentUser è NULL in createlobby()!");
-        }
+        // Ora aggiorna il file (usa updateUsersEntityData per riscrivere completamente il file)
+        UserDAO dao = UserDAOFactory.getUserDAO(false);
+        dao.updateUsersEntityData(currentEntity);
     }
 
     /**
      * Aggiorna un personaggio esistente (cerca per nome).
      * Usa i campi di CharacterSheetBean (spezzati in info e ability).
      */
-    public void updateChar(String oldName, CharacterSheetBean bean) {
+    public void updateChar(String oldName, CharacterSheetBean characterSheetBean) {
         if (currentUser != null && currentUser.getCharacterSheets() != null) {
+            boolean found = false;
             // Cerca la lobby nella lista dello user
             for (int i = 0; i < currentUser.getCharacterSheets().size(); i++) {
                 CharacterSheetBean cs = currentUser.getCharacterSheets().get(i);
                 // Confronta usando oldName (il nome originale)
                 if (cs.getInfoBean().getName().equals(oldName)) {
+
+                    currentUser.getCharacterSheets().set(i, characterSheetBean);
                     // Converte il bean aggiornato in un'entità CharacterSheet
-                    CharacterSheet updatedCharacter = beanToEntity(bean);
+                    CharacterSheet updatedCharacter = beanToEntity(characterSheetBean);
                     // Aggiorna la lobby nella lista dello user
-                    currentUser.getCharacterSheets().set(i, bean);
-                    currentEntity.getCharacterSheets().set(i, updatedCharacter);
-                    // Aggiorna anche la repository:
-                    // Rimuove la vecchia lobby e aggiunge quella aggiornata.
-                    logger.info(">>> Lobby aggiornata correttamente in UserBean e Repository.");
-                    return;
+
+                    currentEntity.getCharacterSheets().add(i, updatedCharacter);
+                    found=true;
+                    break;
                 }
             }
-            logger.log(Level.SEVERE, () -> ">>> ERRORE: Nessuna lobby trovata con il nome: " + oldName);
-        } else {
+            if(!found) {
+                logger.log(Level.SEVERE,()->"Errore nessun personaggio trovato");
+                return;
+            }
+            // Aggiorna anche la repository:
+            oldName=characterSheetBean.getInfoBean().getName();
+            currentEntity=Converter.userBeanToEntity(currentUser);
+            UserDAO userDAO = UserDAOFactory.getUserDAO(false);
+
+            userDAO.updateUsersEntityData(currentEntity);
+
+
+
+        }else {
             logger.severe(">>> ERRORE: currentUser o la lista delle lobby è NULL in updateLobby().");
         }
     }

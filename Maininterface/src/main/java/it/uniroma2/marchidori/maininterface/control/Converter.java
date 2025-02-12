@@ -16,6 +16,7 @@ import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Classe che fornisce i metodi di conversione da Bean a Entity.
@@ -23,7 +24,7 @@ import java.util.List;
 public class Converter {
 
     private Converter(){
-        //empty
+        // empty
     }
 
     /**
@@ -149,7 +150,6 @@ public class Converter {
         return result;
     }
 
-
     public static Lobby beanToEntity(LobbyBean bean) {
         return new Lobby(bean.getName(), bean.getDuration(), bean.getLiveOnline(), bean.isOwned(), bean.getNumberOfPlayers());
     }
@@ -166,7 +166,6 @@ public class Converter {
         boolean owned = dataParts.length > 3 && Boolean.parseBoolean(dataParts[3]);
         int numberOfPlayers = dataParts.length > 4 ? Integer.parseInt(dataParts[4]) : 0;
 
-
         return new Lobby(lobbyName, duration, type, owned, numberOfPlayers);
     }
     //////////////////////////////////////////////
@@ -182,9 +181,6 @@ public class Converter {
         List<CharacterSheetBean> sheetBeans = convertCharacterSheetList(user.getCharacterSheets());
 
         // Crea il UserBean
-
-        // Se vuoi gestire altri campi particolari di UserBean, puoi impostarli qui
-
         return new UserBean(
                 user.getEmail(),
                 user.getPassword(),
@@ -214,14 +210,15 @@ public class Converter {
 
     /**
      * Converte una lista di Lobby in una lista di LobbyBean.
+     * Qui usiamo new ArrayList<>(...) per rendere la lista mutabile.
      */
     private static List<LobbyBean> convertLobbyList2(List<Lobby> lobbies) {
         if (lobbies == null) {
             return new ArrayList<>();
         }
-        return lobbies.stream()
+        return new ArrayList<>(lobbies.stream()
                 .map(Converter::convertLobby)
-                .toList();
+                .collect(Collectors.toList()));
     }
 
     /**
@@ -271,15 +268,14 @@ public class Converter {
 
     /**
      * Converte una lista di CharacterSheet in una lista di CharacterSheetBean.
+     * Anche qui restituiamo una nuova ArrayList per garantire la mutabilità.
      */
     private static List<CharacterSheetBean> convertCharacterSheetList(List<CharacterSheet> sheets) {
         if (sheets == null) {
             return new ArrayList<>();
         }
-        return sheets.stream()
+        return new ArrayList<>(sheets.stream()
                 .map(Converter::convertCharacterSheet)
-                .toList();
+                .collect(Collectors.toList()));
     }
-
-
 }
