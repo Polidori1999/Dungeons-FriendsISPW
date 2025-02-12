@@ -1,8 +1,6 @@
 package it.uniroma2.marchidori.maininterface;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
-import it.uniroma2.marchidori.maininterface.boundarycli.LoginCLIBoundary;
-import it.uniroma2.marchidori.maininterface.control.LoginController;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;

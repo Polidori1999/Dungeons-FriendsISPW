@@ -2,7 +2,7 @@ package it.uniroma2.marchidori.maininterface.scenemanager;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.LobbyChangeListener;
-import it.uniroma2.marchidori.maininterface.boundary.managelobby.ManageLobbyListBoundary;
+import it.uniroma2.marchidori.maininterface.boundary.RunInterface;
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
@@ -15,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.logging.Logger;
 
 public class SceneSwitcher {
@@ -46,6 +45,9 @@ public class SceneSwitcher {
                             " ora riceverà aggiornamenti da JoinLobbyController");
                 }
 
+            }
+            if (boundaryInstance instanceof RunInterface runInterface){
+                runInterface.run();
             }
             return;
         }

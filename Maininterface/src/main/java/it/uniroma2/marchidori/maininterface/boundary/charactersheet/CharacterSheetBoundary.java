@@ -155,7 +155,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
     //                 SALVATAGGIO (BOTTONE SAVE)
     // -------------------------------------------------------------
     @FXML
-    private void onClickSaveCharacter(ActionEvent event) {
+    private void onClickSaveCharacter(ActionEvent event) throws IOException {
         if (currentBean == null) {
             logger.severe(">>> ERRORE: currentBean è NULL! Non posso aggiornare.");
             return;
@@ -207,11 +207,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         // Dopo il salvataggio, resetta la selezione e torna alla lista dei personaggi
         currentUser.setSelectedLobbyName(null);
 
-        try {
-            changeScene(SceneNames.CHARACTER_LIST);
-        } catch (IOException e) {
-            throw new SceneChangeException(e.getMessage());
-        }
+        changeScene(SceneNames.CHARACTER_LIST);
     }
 
     /**
@@ -231,11 +227,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
     // -------------------------------------------------------------
     @FXML
     void onClickGoBackToList(ActionEvent event) throws IOException {
-        try {
-            changeScene(SceneNames.CHARACTER_LIST);
-        } catch (IOException e) {
-            throw new SceneChangeException(e.getMessage());
-        }
+        changeScene(SceneNames.CHARACTER_LIST);
     }
 
     @FXML
@@ -247,10 +239,8 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         Stage currentStage = (Stage) characterSheetPane.getScene().getWindow();
         try {
             SceneSwitcher.changeScene(currentStage, fxml, currentUser);
-        } catch (IOException e) {
-            // Se preferisci, potresti usare un messaggio più "dinamico", come:
-            // "Error during change scene from ManageLobbyListBoundary to " + fxml
-            throw new SceneChangeException("Error during change scene.", e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

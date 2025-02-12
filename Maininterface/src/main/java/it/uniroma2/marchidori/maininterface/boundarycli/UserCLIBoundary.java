@@ -3,17 +3,20 @@ package it.uniroma2.marchidori.maininterface.boundarycli;
 import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
+import it.uniroma2.marchidori.maininterface.boundary.RunInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.UserController;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
+import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
+
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class UserCLIBoundary implements UserAwareInterface, ControllerAwareInterface {
+public class UserCLIBoundary implements UserAwareInterface, ControllerAwareInterface, RunInterface {
 
     private UserBean currentUser;
     private UserController controller;
@@ -24,7 +27,7 @@ public class UserCLIBoundary implements UserAwareInterface, ControllerAwareInter
     /**
      * Metodo principale per eseguire il boundary tramite CLI.
      */
-    public void run() {
+    public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
 
         // Inizializzazione: mostra le informazioni dell'utente corrente (se presenti)
@@ -48,8 +51,7 @@ public class UserCLIBoundary implements UserAwareInterface, ControllerAwareInter
                 case "2":
                     jout.print("Logging out...");
                     Session.getInstance().clear();
-                    changeScene(SceneNames.LOGIN);
-                    //ancora nisba
+                    changeScene("login.fxml");
                     break;
                 case "3":
                     jout.print("Display info Use...");
@@ -59,7 +61,7 @@ public class UserCLIBoundary implements UserAwareInterface, ControllerAwareInter
                 case "4":
                     jout.print("Go to Home...");
                     exit = true;
-                    // Inserisci qui la logica per mostrare il personaggio
+                    changeScene("home.fxml");
                     break;
                 default:
                     jout.print("Opzione non valida, riprova.");
@@ -114,9 +116,13 @@ public class UserCLIBoundary implements UserAwareInterface, ControllerAwareInter
      * @param sceneName il nome della scena verso cui cambiare
      * @throws IOException in caso di errore (simulato)
      */
-    private void changeScene(String sceneName) {
+    private void changeScene(String sceneName) throws IOException {
         // In modalità CLI si può semplicemente stampare un messaggio oppure chiamare un altro boundary
         jout.print("Cambio scena a: " + sceneName);
+        if(sceneName.equals(SceneNames.LOGIN)){
+            currentUser = null;
+        }
+        SceneSwitcher.changeScene(null,sceneName,currentUser);
     }
 
     @Override

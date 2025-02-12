@@ -3,33 +3,25 @@ package it.uniroma2.marchidori.maininterface.boundarycli;
 import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
+import it.uniroma2.marchidori.maininterface.boundary.RunInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
-import it.uniroma2.marchidori.maininterface.boundary.login.RegisterBoundary;
 import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.control.LoginController;
-import it.uniroma2.marchidori.maininterface.control.RegisterController;
 import it.uniroma2.marchidori.maininterface.entity.Session;
-import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
-import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.logging.Level;
 
-public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInterface {
+public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInterface, RunInterface {
 
     private UserBean currentUser;
     private LoginController loginController;
     private final Jout jout = new Jout(this.getClass().getSimpleName());
 
     private static final String GUEST_EMAIL = "guest@example.com";
-    public LoginCLIBoundary() throws IOException {
-        run();
-    }
 
 
     public void run() throws IOException {
@@ -47,12 +39,9 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
                     eseguiLogin(scanner);
                     break;
                 case "2":
-                    eseguiGuest();
-                    break;
-                case "3":
                     eseguiCreateAccount();
                     break;
-                case "4":
+                case "0":
                     jout.print("Uscita dal programma.");
                     exit = true;
                     System.exit(0);
@@ -70,9 +59,8 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
     private void mostraMenu() {
         jout.print("=== MENU DI LOGIN ===");
         jout.print("1. Login");
-        jout.print("2. Accesso come Guest");
-        jout.print("3. Crea Account");
-        jout.print("4. Esci");
+        jout.print("2. Crea Account");
+        jout.print("0. Esci");
     }
 
     private void eseguiLogin(Scanner scanner) throws IOException {
@@ -81,6 +69,9 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
 
         jout.print("Inserisci password: ");
         String password = scanner.nextLine().trim();
+        currentUser = new UserBean(email,password,RoleEnum.PLAYER,new ArrayList<>(),new ArrayList<>(),new ArrayList<>());
+        Session.getInstance().setCurrentUser(Converter.userBeanToEntity(currentUser));
+
         /*User authenticatedUser = loginController.login(email, password);
         if (authenticatedUser != null) {
             currentUser = Converter.convert(authenticatedUser);
@@ -89,7 +80,7 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
         } else {
             jout.print(">>> ERRORE: Login fallito. UserBean è NULL!");
         }*/
-        changeScene("HOME",currentUser);
+        changeScene("home.fxml");
 
     }
 
@@ -104,7 +95,7 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
         );
         jout.print("Accesso come Guest effettuato.");
         Session.getInstance().setCurrentUser(Converter.userBeanToEntity(currentUser));
-        changeScene("HOME", currentUser);
+        changeScene("home.fxml");
     }
 
     private void eseguiCreateAccount() throws IOException {
@@ -116,29 +107,15 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
                     new ArrayList<>(),
                     new ArrayList<>()
             );
-            changeScene("REGISTER", currentUser);
+            changeScene("register.fxml");
         }
         jout.print("Passaggio alla schermata di registrazione (simulazione).");
-        changeScene("REGISTER", currentUser);
+        changeScene("register.fxml");
     }
 
-    private void changeScene(String sceneName, UserBean user) throws IOException {
+    private void changeScene(String sceneName) throws IOException {
         jout.print("Cambio scena verso: " + sceneName);
-        //jout.print("Utente attuale: " + user.getEmail());
-        user = new UserBean("edo",new ArrayList<>(),new ArrayList<>(),new ArrayList<>());
-        if ("HOME".equalsIgnoreCase(sceneName)) {
-            HomeCLIBoundary homeBoundary = new HomeCLIBoundary();
-            homeBoundary.setCurrentUser(user);
-            homeBoundary.run();
-        } else if ("REGISTER".equalsIgnoreCase(sceneName)) {
-            RegisterCLIBoundary registerBoundary = new RegisterCLIBoundary();
-            registerBoundary.setCurrentUser(user);
-            registerBoundary.setLogicController(new RegisterController());
-            registerBoundary.run();
-            jout.print("Schermata di registrazione (CLI) non implementata.");
-        } else {
-            jout.print("Scena non riconosciuta.");
-        }
+        SceneSwitcher.changeScene(null, sceneName, currentUser);
     }
 
     @Override

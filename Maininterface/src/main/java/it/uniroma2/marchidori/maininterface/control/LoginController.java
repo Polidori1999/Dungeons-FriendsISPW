@@ -48,7 +48,7 @@ public class LoginController implements UserAwareInterface {
         if (BCrypt.checkpw(password, retrievedUser.getPassword())) {
             logger.info("✅ Password corretta per: " + email);
 
-            retrievedUser = userService.loadUserData(retrievedUser);
+            //retrievedUser = userService.loadUserData(retrievedUser);
 
             // Se il DAO ha caricato le joined lobbies, possiamo usarle direttamente
             /*if (retrievedUser.getJoinedLobbies() != null) {

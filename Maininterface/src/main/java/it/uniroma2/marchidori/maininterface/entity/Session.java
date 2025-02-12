@@ -33,6 +33,7 @@ public class Session {
     // Pulisce la sessione (ad es. logout)
     public void clear() {
         this.currentUser = null;
+        this.isCLI = false;
     }
     public boolean getCLI() {
         return isCLI;
