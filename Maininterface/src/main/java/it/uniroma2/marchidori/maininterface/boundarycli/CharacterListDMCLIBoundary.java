@@ -17,7 +17,6 @@ import java.util.Scanner;
 
 public class CharacterListDMCLIBoundary implements UserAwareInterface, ControllerAwareInterface, RunInterface {
 
-
     private UserBean currentUser;
     private CharacterListController controller;
     // Lista dei personaggi (CharacterSheetBean) da mostrare
