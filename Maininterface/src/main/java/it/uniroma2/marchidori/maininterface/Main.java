@@ -30,6 +30,7 @@ public class Main extends Application {
         SceneSwitcher.changeScene(primaryStage, SceneNames.LOGIN, tempUser);
     }
 
+
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
         while(true) {
