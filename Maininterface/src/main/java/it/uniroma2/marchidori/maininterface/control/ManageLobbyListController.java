@@ -51,72 +51,17 @@ public class ManageLobbyListController implements UserAwareInterface {
         boolean removedFromBean = currentUser.getJoinedLobbies().removeIf(lobby -> lobby.getName().equals(lobbyName));
 
         // Rimuovi la lobby dalla lista dell'entity User (persistenza)
-
+        boolean removedFromEntity = currentEntity.getJoinedLobbies().removeIf(lobby -> lobby.getLobbyName().equals(lobbyName));
 
         // Aggiorna la persistenza riscrivendo completamente il file
         UserDAO dao = UserDAOFactory.getUserDAO(false);
         dao.updateUsersEntityData(currentEntity);
         // Notifica eventuali listener
-        LobbyRepository.notifyLobbyChangeListeners();
 
 
-
-        boolean removedFromEntity = currentEntity.getJoinedLobbies().removeIf(lobby -> lobby.getLobbyName().equals(lobbyName));
 
         return removedFromEntity;
     }
-
-
-
-    /*public void deleteLobby(String lobbyName) {
-        if (currentUser == null || currentUser.getRoleBehavior() == RoleEnum.GUEST) {
-            LOGGER.log(Level.WARNING, "Errore: L'utente è un guest e non può gestire le lobby.");
-            return;
-        }
-
-        // Trova la lobby nella lista delle joinedLobbies dell'utente
-        LobbyBean lobbyToRemove = null;
-        for (LobbyBean lobby : currentUser.getJoinedLobbies()) {
-            if (lobby.getName().equals(lobbyName)) {
-                lobbyToRemove = lobby;
-                break;
-            }
-        }
-
-        if (lobbyToRemove == null) {
-            LOGGER.log(Level.SEVERE, "❌ ERRORE: Nessuna lobby trovata con il nome: {0}", lobbyName);
-            return;
-        }
-
-
-        if (lobbyToRemove.isOwned()) {
-            LOGGER.log(Level.INFO, "🛑 Il proprietario sta eliminando la lobby: {0}", lobbyName);
-            currentUser.getJoinedLobbies().remove(lobbyToRemove);
-            currentEntity.getJoinedLobbies().removeIf(l -> l.getLobbyName().equals(lobbyName));
-
-            // SOLO SE IL PROPRIETARIO, RIMUOVIAMO DALLA REPOSITORY
-            LobbyRepository.removeLobby(lobbyName);
-        } else {
-            LOGGER.log(Level.INFO, "🚪 Il player sta uscendo dalla lobby: {0}", lobbyName);
-            currentUser.getJoinedLobbies().remove(lobbyToRemove);
-            currentEntity.getJoinedLobbies().removeIf(l -> l.getLobbyName().equals(lobbyName));
-
-            // Rimuovi solo per questo utente (ma la lobby rimane nella repository)
-            UserService userService = UserService.getInstance(false);
-            userService.removeUserLobby(currentUser.getEmail(), lobbyName);
-        }
-
-
-        Lobby lobbyEntity = LobbyRepository.findLobbyByName(lobbyName);
-        if (lobbyEntity == null) {
-            LOGGER.log(Level.INFO, "🔄 Reinserimento della lobby nella lista disponibile: {0}", lobbyName);
-        }
-        LOGGER.log(Level.INFO, "✅ Azione completata per la lobby: {0}", lobbyName);
-    }*/
-
-
-
-
 
     @Override
     public void setCurrentUser(UserBean user) {

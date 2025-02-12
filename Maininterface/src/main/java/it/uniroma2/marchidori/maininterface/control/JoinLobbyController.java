@@ -6,6 +6,7 @@ import it.uniroma2.marchidori.maininterface.boundary.LobbyChangeListener;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
+import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
@@ -29,29 +30,7 @@ public class JoinLobbyController implements UserAwareInterface {
         // empty
     }
 
-    //lista di listener
-    private  List<LobbyChangeListener> listeners = new ArrayList<>();
 
-    //medoto per registrare listener
-    public void addLobbyChangeListener(LobbyChangeListener listener) {
-        listeners.add(listener);
-        System.out.println("🔔 Listener registrato: " + listener.getClass().getSimpleName());
-    }
-
-
-
-
-
-    private void removeLobbyChangeListener(LobbyChangeListener listener) {
-        listeners.remove(listener);
-    }
-
-
-    private void notifyLobbyListChanged() {
-        for (LobbyChangeListener listener : listeners) {
-            listener.onLobbyListChanged();
-        }
-    }
 
 
     public List<LobbyBean> getList(List<Lobby> lobbyList) {
@@ -81,36 +60,14 @@ public class JoinLobbyController implements UserAwareInterface {
         currentEntity.getJoinedLobbies().add(Converter.beanToEntity(lobbyBean));
         // Aggiorna la lista tramite DAO...
         UserDAO dao = UserDAOFactory.getUserDAO(false);
-        List<String> lobbyNames = new ArrayList<>();
-        for (LobbyBean lb : currentUser.getJoinedLobbies()) {
-            lobbyNames.add(lb.getName());
-        }
-        dao.saveUsersEntityData(currentEntity);
+
+        dao.updateUsersEntityData(currentEntity);
 
         logger.log(Level.INFO, "Lobby aggiunta! Lista aggiornata: {0}", currentUser.getJoinedLobbies());
 
-        // Notifica i listener: observer
-        LobbyRepository.notifyLobbyChangeListeners();
     }
 
 
-    // Recupera le lobby dell'utente durante il login
-    public void loadUserLobbies() throws FileNotFoundException {
-        //UserDAOFileSys dao = new UserDAOFileSys();
-        //da cambiare
-        UserDAO dao = UserDAOFactory.getUserDAO(false);
-        currentUser = Converter.convert(dao.loadUserData(currentEntity));
-        //List<LobbyBean> joinedLobbies = new ArrayList<>();
-        /*for (String lobbyName : lobbyNames) {
-            Lobby lobby = LobbyRepository.findLobbyByName(lobbyName);
-            if (lobby != null) {
-                joinedLobbies.add(new LobbyBean(lobby));  // Aggiungi LobbyBean alla lista
-            }
-
-        }*/
-
-        //currentUser.setJoinedLobbies(joinedLobbies);
-    }
 
     // Metodo per aggiungere un nuovo personaggio
     public void addLobbyToFavourite(LobbyBean lobby) {

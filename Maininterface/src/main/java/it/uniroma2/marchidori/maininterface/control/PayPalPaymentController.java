@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.control;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -7,6 +8,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Properties;
 
 public class PayPalPaymentController {
 
@@ -14,8 +16,8 @@ public class PayPalPaymentController {
     private static final String PAYPAL_API_BASE = "https://api-m.sandbox.paypal.com";
 
     // Inserisci le TUE credenziali (client id e secret) create su PayPal Developer
-    private static final String CLIENT_ID = "";
-    private static final String CLIENT_SECRET = "";
+    private static String CLIENT_ID;
+    private static String CLIENT_SECRET;
 
     /**
      * Ottiene l'access token per autenticare le richieste all'API PayPal (OAuth2 client_credentials).
@@ -23,7 +25,13 @@ public class PayPalPaymentController {
     public String getAccessToken() throws IOException, InterruptedException {
         HttpClient httpClient = HttpClient.newHttpClient();
 
+
+        FileInputStream fis = new FileInputStream("src/main/resources/pp_config.properties");
+        Properties properties = new Properties();
+        properties.load(fis);
         // Basic Auth: clientId + ":" + clientSecret in Base64
+        CLIENT_ID=properties.getProperty("pp.user");
+        CLIENT_SECRET=properties.getProperty("pp.password");
         String auth = CLIENT_ID + ":" + CLIENT_SECRET;
         String base64Auth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
 
