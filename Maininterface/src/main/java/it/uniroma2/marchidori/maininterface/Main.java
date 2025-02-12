@@ -19,6 +19,7 @@ public class Main extends Application {
     // Creazione del logger
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
+
     static UserBean tempUser = new UserBean("",null,null,null);
 
 
