@@ -51,17 +51,17 @@ public class UserCLIBoundary implements UserAwareInterface, ControllerAwareInter
                 case "2":
                     jout.print("Logging out...");
                     Session.getInstance().clear();
-                    changeScene("login.fxml");
+                    changeScene(SceneNames.LOGIN);
                     break;
                 case "3":
                     jout.print("Display info Use...");
                     jout.print("email: " + currentUser.getEmail());
                     jout.print("role: " + currentUser.getRoleBehavior().getRoleName());
                     break;
-                case "4":
+                case "0":
                     jout.print("Go to Home...");
                     exit = true;
-                    changeScene("home.fxml");
+                    changeScene(SceneNames.HOME);
                     break;
                 default:
                     jout.print("Opzione non valida, riprova.");
@@ -79,7 +79,7 @@ public class UserCLIBoundary implements UserAwareInterface, ControllerAwareInter
         jout.print("1. Action Switch Role");
         jout.print("2. Log Out");
         jout.print("3. Display info User");
-        jout.print("4. Go to Home");
+        jout.print("0. Go to Home");
     }
 
     /**

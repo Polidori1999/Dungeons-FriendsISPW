@@ -72,8 +72,8 @@ public class CharacterListPlayerCLIBoundary implements UserAwareInterface, Contr
         jout.print("3. Scarica un personaggio");
         jout.print("4. Crea un nuovo personaggio");
         jout.print("5. Aggiorna lista personaggi");
-        jout.print("6. Torna a Home");
-        jout.print("0. Esci");
+        jout.print("0. Torna a Home");
+
     }
 
     /**
@@ -100,7 +100,7 @@ public class CharacterListPlayerCLIBoundary implements UserAwareInterface, Contr
                 handleDeleteCharacter();
                 break;
             case "3":
-                handleDownloadCharacter();
+                handleDownloadCharacter(); //domani
                 break;
             case "4":
                 handleNewCharacter();
@@ -109,11 +109,8 @@ public class CharacterListPlayerCLIBoundary implements UserAwareInterface, Contr
                 refreshTable();
                 jout.print("Lista aggiornata.");
                 break;
-            case "6":
-                changeScene(SceneNames.HOME);
-                return true;
             case "0":
-                jout.print("Uscita dalla gestione personaggi.");
+                changeScene(SceneNames.HOME);
                 return true;
             default:
                 jout.print("Opzione non valida, riprova.");
@@ -146,10 +143,10 @@ public class CharacterListPlayerCLIBoundary implements UserAwareInterface, Contr
     /**
      * Imposta il personaggio da modificare e simula il cambio scena verso l'editor.
      */
-    private void editCharacter(CharacterSheetBean beanToEdit) throws IOException {
+    private void editCharacter(CharacterSheetBean characterSheetBean) throws IOException {
         // Imposta il nome del personaggio selezionato (usato per individuare il bean nell'editor)
-        currentUser.setSelectedLobbyName(beanToEdit.getInfoBean().getName());
-        jout.print("Modifica del personaggio '" + beanToEdit.getInfoBean().getName() + "'.");
+        currentUser.setSelectedLobbyName(characterSheetBean.getInfoBean().getName());
+        jout.print("Modifica del personaggio '" + characterSheetBean.getInfoBean().getName() + "'.");
         changeScene(SceneNames.CHARACTER_SHEET);
     }
 
@@ -168,10 +165,10 @@ public class CharacterListPlayerCLIBoundary implements UserAwareInterface, Contr
                 jout.print("Indice non valido.");
                 return;
             }
-            CharacterSheetBean characterToDelete = data.get(index - 1);
-            String conf = prompt("Vuoi eliminare il personaggio '" + characterToDelete.getInfoBean().getName() + "'? (y/n): ");
+            pendingDeleteBean = data.get(index - 1);
+            String conf = prompt("Vuoi eliminare il personaggio '" + pendingDeleteBean.getInfoBean().getName() + "'? (y/n): ");
             if (conf.equalsIgnoreCase("y")) {
-                onConfirmDelete(characterToDelete);
+                onConfirmDelete();
                 jout.print("Personaggio eliminato.");
             } else {
                 onCancelDelete();
@@ -185,10 +182,11 @@ public class CharacterListPlayerCLIBoundary implements UserAwareInterface, Contr
     /**
      * Conferma l'eliminazione del personaggio, aggiornando la lista e delegando al controller.
      */
-    private void onConfirmDelete(CharacterSheetBean characterToDelete) {
-        String characterName = characterToDelete.getInfoBean().getName();
+    private void onConfirmDelete() {
+        String characterName = pendingDeleteBean.getInfoBean().getName();
         controller.deleteCharacter(characterName);
-        data.remove(characterToDelete);
+        data.remove(pendingDeleteBean);
+        refreshTable();
     }
 
     /**

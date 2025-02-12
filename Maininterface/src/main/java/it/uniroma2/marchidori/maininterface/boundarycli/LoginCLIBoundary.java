@@ -8,8 +8,10 @@ import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.control.LoginController;
 import it.uniroma2.marchidori.maininterface.entity.Session;
+import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -69,33 +71,15 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
 
         jout.print("Inserisci password: ");
         String password = scanner.nextLine().trim();
-        currentUser = new UserBean(email,password,RoleEnum.PLAYER,new ArrayList<>(),new ArrayList<>(),new ArrayList<>());
-        Session.getInstance().setCurrentUser(Converter.userBeanToEntity(currentUser));
-
-        /*User authenticatedUser = loginController.login(email, password);
+        User authenticatedUser = loginController.login(email, password);
         if (authenticatedUser != null) {
             currentUser = Converter.convert(authenticatedUser);
-            Session.getInstance().setCurrentUser(Converter.userBeanToEntity(currentUser));
-            changeScene("HOME",currentUser);
+            changeScene(SceneNames.HOME);
         } else {
             jout.print(">>> ERRORE: Login fallito. UserBean è NULL!");
-        }*/
+        }
         changeScene("home.fxml");
 
-    }
-
-    private void eseguiGuest() throws IOException {
-        currentUser = new UserBean(
-                GUEST_EMAIL,
-                "guest",  // password fittizia
-                RoleEnum.GUEST,
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ArrayList<>()
-        );
-        jout.print("Accesso come Guest effettuato.");
-        Session.getInstance().setCurrentUser(Converter.userBeanToEntity(currentUser));
-        changeScene("home.fxml");
     }
 
     private void eseguiCreateAccount() throws IOException {
@@ -107,10 +91,9 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
                     new ArrayList<>(),
                     new ArrayList<>()
             );
-            changeScene("register.fxml");
         }
         jout.print("Passaggio alla schermata di registrazione (simulazione).");
-        changeScene("register.fxml");
+        changeScene(SceneNames.REGISTER);
     }
 
     private void changeScene(String sceneName) throws IOException {

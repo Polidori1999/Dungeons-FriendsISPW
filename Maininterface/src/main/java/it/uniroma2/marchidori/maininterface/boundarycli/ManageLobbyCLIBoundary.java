@@ -88,7 +88,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
      * altrimenti, in modalità creazione.
      */
     private void initializeBoundary() {
-        String selected = currentUser.getSelectedLobbyName();
+        String selected = currentUser != null ? currentUser.getSelectedLobbyName() : null;
         if (selected == null || selected.isEmpty()) {
             creationMode = true;
             currentBean = LobbyFactory.createBean();
@@ -152,36 +152,77 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
     }
 
     private void editLiveOnline() {
-        String liveOnline = prompt("Inserisci 'Live' o 'Online': ");
-        currentBean.setLiveOnline(liveOnline);
+        jout.print("Scegli l'opzione per Live/Online:");
+        jout.print("1. Live");
+        jout.print("2. Online");
+        String choice = prompt("Inserisci il numero dell'opzione: ");
+        switch (choice) {
+            case "1":
+                currentBean.setLiveOnline("Live");
+                break;
+            case "2":
+                currentBean.setLiveOnline("Online");
+                break;
+            default:
+                jout.print("Scelta non valida. Imposto valore predefinito 'Live'.");
+                currentBean.setLiveOnline("Live");
+                break;
+        }
     }
 
+
     private void editMaxPlayers() {
-        String maxPlayers = prompt("Inserisci il numero massimo di giocatori: ");
-        int num = parseIntOrZero(maxPlayers);
+        jout.print("Scegli il numero massimo di giocatori:");
+        jout.print("1. 2 giocatori");
+        jout.print("2. 4 giocatori");
+        jout.print("3. 6 giocatori");
+        jout.print("4. 8 giocatori");
+        String choice = prompt("Inserisci il numero dell'opzione: ");
+        int num;
+        switch (choice) {
+            case "1":
+                num = 2;
+                break;
+            case "2":
+                num = 4;
+                break;
+            case "3":
+                num = 6;
+                break;
+            case "4":
+                num = 8;
+                break;
+            default:
+                jout.print("Scelta non valida. Imposto valore predefinito 2.");
+                num = 2;
+                break;
+        }
         currentBean.setNumberOfPlayers(num);
     }
 
+
     private void editDuration() {
-        String duration = prompt("Inserisci la durata della lobby (es. One-Shot o Campaign): ");
+        jout.print("Scegli la durata della lobby:");
+        jout.print("1. One-Shot");
+        jout.print("2. Campaign");
+        String choice = prompt("Inserisci il numero dell'opzione: ");
+        String duration;
+        switch (choice) {
+            case "1":
+                duration = "One-Shot";
+                break;
+            case "2":
+                duration = "Campaign";
+                break;
+            default:
+                jout.print("Scelta non valida. Imposto valore predefinito 'One-Shot'.");
+                duration = "One-Shot";
+                break;
+        }
         currentBean.setDuration(duration);
     }
 
-    /**
-     * Converte una stringa in intero, restituendo 0 in caso di input nullo o non numerico.
-     */
-    private int parseIntOrZero(String input) {
-        if (input == null || input.trim().isEmpty()) {
-            LOGGER.log(Level.SEVERE, "Il campo per il numero di giocatori è vuoto o nullo.");
-            return 0;
-        }
-        try {
-            return Integer.parseInt(input.trim());
-        } catch (NumberFormatException e) {
-            LOGGER.log(Level.SEVERE, "Valore non numerico: {0}", input);
-            return 0;
-        }
-    }
+
 
     // -------------------- Metodi per gestire il salvataggio e la navigazione --------------------
 

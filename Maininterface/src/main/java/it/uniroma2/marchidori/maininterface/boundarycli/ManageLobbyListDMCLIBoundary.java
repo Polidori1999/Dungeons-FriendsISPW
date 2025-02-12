@@ -8,6 +8,7 @@ import it.uniroma2.marchidori.maininterface.boundary.RunInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.ManageLobbyListController;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ public class ManageLobbyListDMCLIBoundary implements UserAwareInterface, Control
     private List<LobbyBean> data = new ArrayList<>();
     private final Scanner scanner = new Scanner(System.in);
     private final Jout jout = new Jout("ManageLobbyListDMCLIBoundary");
+    private LobbyBean pendingDeleteBean;
+
 
     @Override
     public void run() throws IOException {
@@ -67,8 +70,7 @@ public class ManageLobbyListDMCLIBoundary implements UserAwareInterface, Control
         jout.print("2. Modifica una lobby");
         jout.print("3. Crea una lobby");
         jout.print("4. Ricarica lista lobby");
-        jout.print("5. Torna a Home");
-        jout.print("0. Esci");
+        jout.print("0. Torna a Home");
     }
 
     private String prompt(String message) {
@@ -85,17 +87,15 @@ public class ManageLobbyListDMCLIBoundary implements UserAwareInterface, Control
                 handleEditLobby();
                 break;
             case "3":
-                changeScene("manageLobby.fxml");
+                currentUser.setSelectedLobbyName(null);
+                changeScene(SceneNames.MANAGE_LOBBY);
                 break;
             case "4":
                 refreshLobbyList();
                 jout.print("Lista aggiornata.");
                 break;
-            case "5":
-                changeScene("home.fxml");
-                return true;
             case "0":
-                jout.print("Uscita dalla gestione lobby.");
+                changeScene(SceneNames.HOME);
                 return true;
             default:
                 jout.print("Opzione non valida, riprova.");
@@ -108,21 +108,27 @@ public class ManageLobbyListDMCLIBoundary implements UserAwareInterface, Control
             jout.print("Non sei iscritto a nessuna lobby.");
             return;
         }
-        String idxStr = prompt("Inserisci il numero della lobby editare: ");
+        String idxStr = prompt("Inserisci il numero della lobby da modificare: ");
         try {
             int index = Integer.parseInt(idxStr);
             if (index < 1 || index > data.size()) {
                 jout.print("Indice non valido.");
                 return;
             }
-            LobbyBean lobbyToEdit = data.get(index - 1);
-            changeScene("manageLobby.fxml");
+            LobbyBean selectedLobby = data.get(index - 1);
+            if (!selectedLobby.isOwned()) {
+                jout.print("Questa lobby non è di tua proprietà. Non puoi modificarla.");
+                return;
+            }
+            currentUser.setSelectedLobbyName(selectedLobby.getName());
+            changeScene(SceneNames.MANAGE_LOBBY);
         } catch (NumberFormatException e) {
             jout.print("Input non valido.");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
 
     private void handleLeaveLobby() {
         if (data.isEmpty()) {
@@ -136,10 +142,10 @@ public class ManageLobbyListDMCLIBoundary implements UserAwareInterface, Control
                 jout.print("Indice non valido.");
                 return;
             }
-            LobbyBean lobbyToLeave = data.get(index - 1);
-            String conf = prompt("Sei sicuro di voler lasciare la lobby '" + lobbyToLeave.getName() + "'? (y/n): ");
+            pendingDeleteBean = data.get(index - 1);
+            String conf = prompt("Sei sicuro di voler lasciare la lobby '" + pendingDeleteBean.getName() + "'? (y/n): ");
             if (conf.equalsIgnoreCase("y")) {
-                processLeave(lobbyToLeave);
+                processLeave(pendingDeleteBean);
                 jout.print("Lobby lasciata.");
             } else {
                 jout.print("Operazione annullata.");
@@ -151,9 +157,6 @@ public class ManageLobbyListDMCLIBoundary implements UserAwareInterface, Control
 
     private void processLeave(LobbyBean lobbyToLeave) {
         controller.deleteLobby(lobbyToLeave.getName());
-        if (currentUser.getJoinedLobbies() != null) {
-            currentUser.getJoinedLobbies().remove(lobbyToLeave);
-        }
         refreshLobbyList();
     }
 
