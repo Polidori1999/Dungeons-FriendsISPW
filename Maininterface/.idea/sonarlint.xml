@@ -2,11 +2,6 @@
 <project version="4">
   <component name="SonarLintProjectSettings">
     <option name="bindingEnabled" value="true" />
-    <option name="fileExclusions">
-      <list>
-        <option value="GLOB:sonar.exclusions=**/*.fxml " />
-      </list>
-    </option>
     <option name="projectKey" value="Polidori1999_Dungeons-FriendsISPW" />
     <option name="serverId" value="SonarQubeIntellij" />
   </component>
