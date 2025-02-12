@@ -19,6 +19,7 @@ public class Main extends Application {
     // Creazione del logger
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
+
     static UserBean tempUser = new UserBean("",null,null,null);
 
 
@@ -28,6 +29,8 @@ public class Main extends Application {
         // Avvio della scena JavaFX con il file FXML "login.fxml"
         SceneSwitcher.changeScene(primaryStage, SceneNames.LOGIN, tempUser);
     }
+
+
 
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
