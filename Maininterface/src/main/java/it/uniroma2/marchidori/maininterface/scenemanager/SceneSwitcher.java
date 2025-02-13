@@ -3,12 +3,14 @@ package it.uniroma2.marchidori.maininterface.scenemanager;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.LobbyChangeListener;
 import it.uniroma2.marchidori.maininterface.boundary.RunInterface;
+import it.uniroma2.marchidori.maininterface.boundary.charactersheet.CharacterListDMBoundary;
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.enumerate.SceneIdEnum;
 import it.uniroma2.marchidori.maininterface.factory.BoundaryFactory;
 import it.uniroma2.marchidori.maininterface.factory.ControllerFactory;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -84,6 +86,7 @@ public class SceneSwitcher {
         Scene newScene = new Scene(root);
         currentStage.setScene(newScene);
         currentStage.show();
+
     }
 
     private static void injectControllerIntoBoundary(Object controller, Object boundary) {

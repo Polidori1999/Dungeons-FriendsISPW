@@ -46,10 +46,17 @@ public class CharacterSheetController implements UserAwareInterface {
         // Converti il bean in entity e aggiungilo allo User Entity (per la persistenza)
         currentEntity=Converter.userBeanToEntity(currentUser);
 
+
+        // Log: stampa il numero di personaggi attuali e i loro nomi
+        logger.info("Dopo createChar, currentUser ha " + currentUser.getCharacterSheets().size() + " personaggi.");
+        currentUser.getCharacterSheets().forEach(cs -> logger.info(" - " + cs.getInfoBean().getName()));
+
         // Ora aggiorna il file (usa updateUsersEntityData per riscrivere completamente il file)
         UserDAO dao = UserDAOFactory.getUserDAO(false);
         dao.updateUsersEntityData(currentEntity);
     }
+
+
 
     /**
      * Aggiorna un personaggio esistente (cerca per nome).

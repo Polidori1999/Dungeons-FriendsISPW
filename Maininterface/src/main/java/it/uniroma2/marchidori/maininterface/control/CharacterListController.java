@@ -88,7 +88,8 @@ public class CharacterListController implements UserAwareInterface {
         } else {
             logger.severe(">>> ERRORE: currentEntity o la sua lista di CharacterSheet è null in getCharacterSheets()");
         }
-
+        logger.info("getCharacterSheets restituisce " + beans.size() + " elementi.");
+        beans.forEach(b -> logger.info(" - " + b.getInfoBean().getName()));//display log
         return beans;
     }
 

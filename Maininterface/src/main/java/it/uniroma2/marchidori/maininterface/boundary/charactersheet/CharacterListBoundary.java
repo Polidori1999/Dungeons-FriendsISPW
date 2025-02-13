@@ -1,4 +1,4 @@
-package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
+/*package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
@@ -132,7 +132,7 @@ public class CharacterListBoundary implements UserAwareInterface, ControllerAwar
     /**
      * Modificata in modo da restituire i dati effettivi di CharacterSheetBean
      * (invece della stringa fissa "???").
-     */
+
     private record ReadOnlyObjectWrapperFactory<S>(String propertyName)
             implements Callback<TableColumn.CellDataFeatures<S, String>, javafx.beans.value.ObservableValue<String>> {
 
@@ -173,4 +173,4 @@ public class CharacterListBoundary implements UserAwareInterface, ControllerAwar
             logger.info(">>> DEBUG: Tabella ricaricata con personaggi aggiornati.");
         }
     }
-}
+}*/

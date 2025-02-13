@@ -1,187 +1,88 @@
 package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
-import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
-import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
-import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class CharacterListPlayerBoundary extends CharacterListBoundary {
+public class CharacterListPlayerBoundary extends CharacterListDMBoundary {
 
     private static final Logger logger = Logger.getLogger(CharacterListPlayerBoundary.class.getName());
 
-    // Bean selezionato per l'eliminazione
-    protected CharacterSheetBean pendingDeleteBean;
-    protected CharacterSheetController modalController;
-
-    // Controller per il popup di conferma con timer
-    protected ConfirmationPopupController confirmationPopupController;
+    // Colonna per il pulsante Edit (aggiunta)
+    @FXML
+    protected TableColumn<CharacterSheetBean, Button> tableViewCharButton;
 
     @Override
-    public void initialize() {
+    @FXML
+    protected void initialize() {
         super.initialize();
+        data.clear();
+        data.addAll(currentUser.getCharacterSheets());
 
+        // Abilita il pulsante per creare un nuovo personaggio
         newCharacterButton.setVisible(true);
         newCharacterButton.setDisable(false);
 
-        if (controller == null) {
-            logger.severe("Errore: controller non inizializzato!");
-            return;
-        }
-        data.clear();
-        data.addAll(currentUser.getCharacterSheets());
-        tableViewChar.refresh();
-        logger.log(Level.INFO, ">>> DEBUG: Numero di personaggi nella tabella: {0}", data.size());
-        // Carica il popup di conferma dal file FXML e aggiungilo al contenitore principale
-        confirmationPopupController = ConfirmationPopupController.loadPopup(characterPane);
-        // Configura la colonna "Edit"
+        // Setup della colonna Edit
         TableColumnUtils.setupButtonColumn(tableViewCharButton, "Edit", this::editChar);
+        tableViewCharButton.setVisible(true);
 
-        // Configura la colonna "Delete"
-        TableColumnUtils.setupButtonColumn(tableViewCharDelete, "Delete", characterSheet -> {
-            pendingDeleteBean = characterSheet;
-            showDeleteConfirmation();
-        });
 
-        // ---------------------------------------------------
-        // Colonna DOWNLOAD (bottone "Download")
-        // Utilizza il metodo della classe utility per impostare il pulsante statico "Download"
-        // ed eseguire l'azione download sul CharacterSheetBean della riga.
-        // ---------------------------------------------------
-        TableColumnUtils.setupButtonColumn(tableViewCharDownloadButton, "Download", this::downloadCharacter);
+        logger.info("Player Boundary inizializzato (edit e create abilitati).");
+
     }
 
     /**
-     * Mostra il popup di conferma per l'eliminazione del personaggio.
+     * Handler per la creazione di un nuovo personaggio.
      */
-    private void showDeleteConfirmation() {
-        if (confirmationPopupController != null && pendingDeleteBean != null) {
-            String message = "Vuoi eliminare il personaggio '" + pendingDeleteBean.getInfoBean().getName() + "'?";
-            confirmationPopupController.show(message, 10,
-                    this::onConfirmDelete,
-                    this::onCancelDelete);
-        } else {
-            logger.severe("Errore: ConfirmationPopupController non inizializzato o pendingDeleteBean è null");
-        }
-    }
-
-    private void onConfirmDelete() {
-        if (pendingDeleteBean != null) {
-            String characterName = pendingDeleteBean.getInfoBean().getName();
-            tableViewChar.getItems().remove(pendingDeleteBean);
-            controller.deleteCharacter(characterName);
-
-            pendingDeleteBean = null;
-        }
-    }
-
-    private void onCancelDelete() {
-        pendingDeleteBean = null;
-    }
-
-    private void editChar(CharacterSheetBean characterSheetBean) {
-        // Imposta in userBean il nome della lobby da editare
-        currentUser.setSelectedLobbyName(characterSheetBean.getInfoBean().getName());
-        // Passo alla scena "manageCharactersheet.fxml"
-        try {
-            SceneSwitcher.changeScene(
-                    (Stage) characterPane.getScene().getWindow(),
-                    SceneNames.CHARACTER_SHEET,
-                    currentUser
-            );
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena (modifica Lobby).", e);
-        }
-    }
-
-    // ===========================================================
-    //               HANDLER PER NUOVO PERSONAGGIO
-    // ===========================================================
-    @FXML
-    void onClickNewCharacter(ActionEvent event) {
-        // Invece di aprire un modal, usiamo la scena "manageLobby.fxml"
-        // e settiamo selectedLobbyName = null => creazione
-        currentUser.setSelectedLobbyName(null);
-        try {
-            SceneSwitcher.changeScene(
-                    (Stage) characterPane.getScene().getWindow(),
-                    SceneNames.CHARACTER_SHEET,
-                    currentUser
-            );
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena (nuova lobby).", e);
-        }
-    }
-
-
     @Override
-    public void refreshTable() {
-        tableViewChar.refresh();
+    @FXML
+    protected void onNavigationButtonClick(ActionEvent event) {
+        Button sourceButton = (Button) event.getSource();
+        String fxml = (String) sourceButton.getUserData();
+
+        if (SceneNames.MANAGE_LOBBY.equals(fxml)) {  // ipotizzando di avere una costante dedicata
+            newChar();
+        } else {
+            super.onNavigationButtonClick(event);
+        }
+
     }
 
-    // ===========================================================
-    //              LOGICA DI DOWNLOAD DEL PERSONAGGIO (da spostare in DOWNload)
-    // ===========================================================
-    /**
-     * Avvia il download simulato del CharacterSheetBean, creando un file di testo.
-     * Mostra una finestra con una ProgressBar che aggiorna l'avanzamento del download.
-     */
-    protected void downloadCharacter(CharacterSheetBean bean) {
-        if (controller != null) {
-            CharacterSheetDownloadTask downloadTask = controller.getDownloadTask(bean);
-            if (downloadTask != null) {
-                showDownloadProgressWindow(downloadTask);
-                new Thread(downloadTask).start();
-            } else {
-                logger.severe("Errore: Task di download non disponibile.");
-            }
-        } else {
-            logger.severe("Errore: Controller non inizializzato.");
+    protected void newChar() {
+        // Imposta la lobby da editare nel currentUser
+        currentUser.setSelectedLobbyName(null);
+        // Cambia scena (usa il metodo protetto ereditato dalla superclasse)
+        try {
+            changeScene(SceneNames.CHARACTER_SHEET);
+            reloadCharacterList();
+        } catch (IOException e) {
+            throw new SceneChangeException("Errore nel cambio scena (crea Lobby).", e);
         }
     }
-
-    private void showDownloadProgressWindow(CharacterSheetDownloadTask downloadTask) {
-        // Crea una nuova finestra di avanzamento
-        Stage progressStage = new Stage();
-        progressStage.initModality(Modality.APPLICATION_MODAL);
-        progressStage.setTitle("Download in corso...");
-
-        // Creazione UI
-        Label infoLabel = new Label("Scaricamento in corso...");
-        ProgressBar progressBar = new ProgressBar();
-        progressBar.progressProperty().bind(downloadTask.progressProperty());
-
-        VBox vbox = new VBox(10, infoLabel, progressBar);
-        vbox.setStyle("-fx-background-color: #ffffff; -fx-padding: 10;");
-        progressStage.setScene(new Scene(vbox, 350, 100));
-
-        // Chiudi la finestra automaticamente al completamento del download
-        downloadTask.setOnSucceeded(event -> {
-            progressStage.close();
-            logger.info(">>> Download completato.");
-        });
-
-        downloadTask.setOnFailed(event -> {
-            progressStage.close();
-            logger.severe("Errore durante il download: " + downloadTask.getException());
-        });
-
-        // Mostra la finestra
-        Platform.runLater(progressStage::show);
+    /**
+     * Handler per l'edit di un personaggio esistente.
+     */
+    private void editChar(CharacterSheetBean bean) {
+        currentUser.setSelectedLobbyName(bean.getInfoBean().getName());
+        try {
+            SceneSwitcher.changeScene(
+                    (Stage) characterPane.getScene().getWindow(),
+                    SceneNames.CHARACTER_SHEET,
+                    currentUser
+            );
+        } catch (IOException e) {
+            throw new SceneChangeException("Errore nel cambio scena per edit del personaggio.", e);
+        }
     }
 }

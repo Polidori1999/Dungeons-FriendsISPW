@@ -208,9 +208,9 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
 
         // Dopo il salvataggio, resetta la selezione e torna alla lista dei personaggi
         currentUser.setSelectedLobbyName(null);
-
         changeScene(SceneNames.CHARACTER_LIST);
     }
+
 
     /**
      * Helper: prova a convertire una stringa in int, restituisce 0 se il parsing fallisce.
