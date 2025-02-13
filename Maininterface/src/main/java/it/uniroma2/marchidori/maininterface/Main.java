@@ -36,7 +36,7 @@ public class Main extends Application {
         Scanner scanner = new Scanner(System.in);
         boolean exit = true;
         while(exit) {
-            System.out.println("Seleziona la modalità di esecuzione dell'applicazione:");
+            System.out.println("Seleziona la modalità di esecuzione dell'applicazione: porfavor cambiare");
             System.out.println("1. CLI");
             System.out.println("2. JavaFX");
             System.out.print("Inserisci il numero corrispondente (1 o 2): ");
