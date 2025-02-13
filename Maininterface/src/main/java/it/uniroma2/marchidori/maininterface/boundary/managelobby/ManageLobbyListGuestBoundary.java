@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
-public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
+public class ManageLobbyListGuestBoundary extends ManageLobbyListDMBoundary {
 
     protected ConfirmationPopupController confirmationPopup;
 
@@ -66,7 +66,7 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
                 manageLobbyListPane.getChildren().add(popupRoot);
 
                 // Mostra il messaggio e imposta il timer
-                confirmationPopup.show("Stai per essere rediretto al login", 10, this::redirectToLogin, this::redirectToLogin);
+                confirmationPopup.show("Stai per essere rediretto al login", 10, this::redirectToLogin, this::goToHome);
             });
         } catch (IOException e) {
             throw new PopupLoadingException("Errore durante il caricamento del popup di conferma");
@@ -91,6 +91,18 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListBoundary {
                 }
             });
         }
+    }
+
+    private void goToHome() {
+        Platform.runLater(() -> {
+            try {
+                // Verifica che la scena sia associata al currentStage
+                Stage currentStage = (Stage) manageLobbyListPane.getScene().getWindow();
+                SceneSwitcher.changeScene(currentStage, SceneNames.HOME, currentUser);
+            } catch (IOException e) {
+                logger.severe("Errore nel reindirizzamento al login: " + e.getMessage());
+            }
+        });
     }
 
     @Override

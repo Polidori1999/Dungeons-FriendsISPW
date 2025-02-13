@@ -1,9 +1,7 @@
 package it.uniroma2.marchidori.maininterface.scenemanager;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
-import it.uniroma2.marchidori.maininterface.boundary.LobbyChangeListener;
 import it.uniroma2.marchidori.maininterface.boundary.RunInterface;
-import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.enumerate.SceneIdEnum;
@@ -109,12 +107,6 @@ public class SceneSwitcher {
         loader.setController(controller);
         return loader.load();
     }
-    /*private static Parent loadFXML(String fxmlPath, Object controller) throws IOException {
-        FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource(
-                "/it/uniroma2/marchidori/maininterface/" + fxmlPath));
-        loader.setController(controller);
-        return loader.load();
-    }*/
 
 
     private static SceneIdEnum getSceneIdFromFxml(String fxmlPath) {
