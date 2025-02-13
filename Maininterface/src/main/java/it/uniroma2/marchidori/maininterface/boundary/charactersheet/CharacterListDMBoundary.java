@@ -121,6 +121,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
         }
     }
 
+    //parte grafica no logica
     protected void showDownloadProgressWindow(CharacterSheetDownloadTask downloadTask) {
         Stage progressStage = new Stage();
         progressStage.initModality(Modality.APPLICATION_MODAL);

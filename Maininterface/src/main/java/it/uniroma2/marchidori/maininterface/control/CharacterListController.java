@@ -11,12 +11,12 @@ import it.uniroma2.marchidori.maininterface.entity.*;
 import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static it.uniroma2.marchidori.maininterface.control.CharacterSheetController.getCharacterSheetDownloadTask;
 
 public class CharacterListController implements UserAwareInterface {
     private final User currentEntity = Session.getInstance().getCurrentUser();
@@ -26,30 +26,6 @@ public class CharacterListController implements UserAwareInterface {
 
     public CharacterListController() {
         // empty
-    }
-
-    private CharacterSheetBean entityToBean(CharacterSheet cs) {
-        // Crea la parte "info"
-        CharacterInfoBean infoBean = new CharacterInfoBean(
-                cs.getName(),
-                cs.getRace(),
-                cs.getAge(),
-                cs.getClasse(),
-                cs.getLevel()
-        );
-
-        // Crea la parte "ability scores"
-        CharacterStatsBean abilityBean = new CharacterStatsBean(
-                cs.getStrength(),
-                cs.getDexterity(),
-                cs.getIntelligence(),
-                cs.getWisdom(),
-                cs.getCharisma(),
-                cs.getConstitution()
-        );
-
-        // Infine crea il bean complessivo
-        return new CharacterSheetBean(infoBean, abilityBean);
     }
 
 
@@ -72,7 +48,24 @@ public class CharacterListController implements UserAwareInterface {
     }
 
     public CharacterSheetDownloadTask getDownloadTask(CharacterSheetBean bean) {
-        return getCharacterSheetDownloadTask(bean, logger);
+        try {
+            // Ottieni la cartella di download dinamica
+            String userHome = System.getProperty("user.home");
+            String downloadFolder = Paths.get(userHome, "Downloads").toString();
+
+            // Crea il nome del file
+            String fileName = "character_" + bean.getInfoBean().getName() + ".txt";
+            String destinationPath = Paths.get(downloadFolder, fileName).toString();
+
+            logger.info(() -> ">>> DEBUG: Percorso di download: " + destinationPath);
+
+            // Crea e restituisci il task di download
+            return new CharacterSheetDownloadTask(bean, destinationPath);
+
+        } catch (Exception e) {
+            logger.severe("Errore durante il download: " + e.getMessage());
+            return null;
+        }
     }
 
     public List<CharacterSheetBean> getCharacterSheets() {
@@ -82,7 +75,7 @@ public class CharacterListController implements UserAwareInterface {
         if (currentEntity != null && currentEntity.getCharacterSheets() != null) {
             for (CharacterSheet cs : currentEntity.getCharacterSheets()) {
                 // Converte la entity CharacterSheet in CharacterSheetBean
-                CharacterSheetBean bean = entityToBean(cs);
+                CharacterSheetBean bean =Converter.convertCharacterSheet(cs);
                 beans.add(bean);
             }
         } else {
