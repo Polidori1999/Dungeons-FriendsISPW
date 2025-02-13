@@ -132,7 +132,8 @@ public class Converter {
                 lobbyBean.getDuration(),
                 lobbyBean.getLiveOnline(),
                 lobbyBean.isOwned(),
-                lobbyBean.getNumberOfPlayers()
+                lobbyBean.getNumberOfPlayers(),
+                lobbyBean.getInfoLink()
         );
     }
 
@@ -151,7 +152,7 @@ public class Converter {
     }
 
     public static Lobby beanToEntity(LobbyBean bean) {
-        return new Lobby(bean.getName(), bean.getDuration(), bean.getLiveOnline(), bean.isOwned(), bean.getNumberOfPlayers());
+        return new Lobby(bean.getName(), bean.getDuration(), bean.getLiveOnline(), bean.isOwned(), bean.getNumberOfPlayers(), bean.getInfoLink());
     }
 
     public static Lobby stringToLobby(String lobbyData) {
@@ -165,8 +166,8 @@ public class Converter {
         String type = dataParts.length > 2 ? dataParts[2] : "";
         boolean owned = dataParts.length > 3 && Boolean.parseBoolean(dataParts[3]);
         int numberOfPlayers = dataParts.length > 4 ? Integer.parseInt(dataParts[4]) : 0;
-
-        return new Lobby(lobbyName, duration, type, owned, numberOfPlayers);
+        String infoLink = dataParts.length > 5 ? dataParts[5] : "";
+        return new Lobby(lobbyName, duration, type, owned, numberOfPlayers, infoLink);
     }
     //////////////////////////////////////////////
 
@@ -221,7 +222,7 @@ public class Converter {
                 .collect(Collectors.toList()));
     }
 
-    /**
+    /*
      * =====================
      *  METODI CHAR-SHEET
      * =====================

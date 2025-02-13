@@ -47,6 +47,8 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
     // TextField per il nome della lobby
     @FXML
     private TextField lobbyName;
+    @FXML
+    private TextField infoLink;
 
     // Pulsanti di navigazione
     @FXML
@@ -148,6 +150,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
         currentBean.setLiveOnline(liveOnlineBox.getValue());
         currentBean.setNumberOfPlayers(parseIntOrZero(maxPlayersBox.getValue()));
         currentBean.setDuration(durationBox.getValue());
+        currentBean.setInfoLink(infoLink.getText());
 
         // Validazione del bean
         String validationErrors = controller.validate(currentBean);
@@ -180,6 +183,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
     // -------------------------------------------------------------
     private void clearFields() {
         lobbyName.setText("");
+        infoLink.setText("");
         durationBox.setValue(null);
         liveOnlineBox.setValue(null);
         maxPlayersBox.setValue(null);
@@ -187,6 +191,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
 
     private void populateFields(LobbyBean bean) {
         lobbyName.setText(bean.getName());
+        infoLink.setText(bean.getInfoLink());
         liveOnlineBox.setValue(bean.getLiveOnline());
         maxPlayersBox.setValue(String.valueOf(bean.getNumberOfPlayers()));
         durationBox.setValue(bean.getDuration());
@@ -206,20 +211,6 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
         }
     }
 
-
-    @FXML
-    void onClickGoBackToListOfLobbies(ActionEvent event) {
-        try {
-            SceneSwitcher.changeScene(
-                    (Stage) manageLobbyPane.getScene().getWindow(),
-                    SceneNames.MANAGE_LOBBY_LIST,
-                    currentUser
-            );
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena dalla ManageLobby alla lista delle lobby.", e);
-        }
-    }
-
     @FXML
     protected void onNavigationButtonClick(ActionEvent event) {
         Button sourceButton = (Button) event.getSource();
@@ -234,11 +225,5 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
             // "Error during change scene from ManageLobbyListBoundary to " + fxml
             throw new SceneChangeException("Error during change scene.", e);
         }
-    }
-
-    @FXML
-    private void changeScene(String fxml) throws IOException {
-        Stage currentStage = (Stage) manageLobbyPane.getScene().getWindow();
-        SceneSwitcher.changeScene(currentStage, fxml, currentUser);
     }
 }

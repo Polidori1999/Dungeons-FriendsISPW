@@ -6,6 +6,7 @@ public class LobbyBean {
     private String duration;       // "Singola"/"Campagna"
     private String name;           // nome lobby
     private String liveOnline;// "Online"/"Presenza"
+    private String infoLink;
     private int currentNumberOfPlayers;
     private int maxOfPlayers;// # di giocatori
     private boolean owned;
@@ -21,16 +22,18 @@ public class LobbyBean {
         this.maxOfPlayers = lobby.getNumberOfPlayers();
         this.currentNumberOfPlayers = lobby.getPlayers().size();  // Numero di giocatori attuali
         this.owned = lobby.isOwned();
+        this.infoLink = lobby.getInfoLink();
     }
 
 
-    public LobbyBean(String duration, String name, String type, int numberOfPlayers, boolean owned) {
+    public LobbyBean(String duration, String name, String type, int numberOfPlayers, boolean owned, String infoLink) {
         this.duration = duration;
         this.name = name;
         this.liveOnline = type;
         this.maxOfPlayers = numberOfPlayers;
         this.currentNumberOfPlayers = 0;
         this.owned = owned;
+        this.infoLink = infoLink;
     }
 
     public String getDuration() {
@@ -75,5 +78,11 @@ public class LobbyBean {
     }
     public String getPlayers() {
         return currentNumberOfPlayers + "/" + maxOfPlayers;
+    }
+    public String getInfoLink() {
+        return infoLink;
+    }
+    public void setInfoLink(String infoLink) {
+        this.infoLink = infoLink;
     }
 }

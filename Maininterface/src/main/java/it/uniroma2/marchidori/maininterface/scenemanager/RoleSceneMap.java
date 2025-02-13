@@ -42,6 +42,7 @@ public class RoleSceneMap {
         MAPPING.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.HOME), HOME);
         MAPPING.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.HOME), HOME);
 
+        MAPPING.put(new Pair<>(RoleEnum.DM, SceneIdEnum.LOGIN), LOGIN);
         MAPPING.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.LOGIN), LOGIN);
         MAPPING.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.LOGIN), LOGIN);
         MAPPING.put(new Pair<>(RoleEnum.NONE, SceneIdEnum.LOGIN), LOGIN);
@@ -78,6 +79,7 @@ public class RoleSceneMap {
         MAPPING_CLI.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.HOME), HOME_CLI);
         MAPPING_CLI.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.HOME), HOME_CLI);
 
+        MAPPING_CLI.put(new Pair<>(RoleEnum.DM, SceneIdEnum.LOGIN), LOGIN_CLI);
         MAPPING_CLI.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.LOGIN), LOGIN_CLI);
         MAPPING_CLI.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.LOGIN), LOGIN_CLI);
         MAPPING_CLI.put(new Pair<>(RoleEnum.NONE, SceneIdEnum.LOGIN), LOGIN_CLI);
