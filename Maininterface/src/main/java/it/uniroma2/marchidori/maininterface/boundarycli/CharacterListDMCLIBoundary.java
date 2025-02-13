@@ -69,8 +69,7 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
         jout.print("=== Menu Personaggi ===");
         jout.print("1. Elimina un personaggio");
         jout.print("2. Aggiorna lista personaggi");
-        jout.print("3. Torna a Home");
-        jout.print("0. Esci");
+        jout.print("0. Torna a Home");
     }
 
     /**
@@ -97,11 +96,8 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
                 refreshTable();
                 jout.print("Lista aggiornata.");
                 break;
-            case "3":
-                changeScene(SceneNames.HOME);
-                return true;
             case "0":
-                jout.print("Uscita dalla gestione personaggi.");
+                changeScene(SceneNames.HOME);
                 return true;
             default:
                 jout.print("Opzione non valida, riprova.");
@@ -124,10 +120,10 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
                 jout.print("Indice non valido.");
                 return;
             }
-            CharacterSheetBean characterToDelete = data.get(index - 1);
-            String conf = prompt("Vuoi eliminare il personaggio '" + characterToDelete.getInfoBean().getName() + "'? (y/n): ");
+            pendingDeleteBean = data.get(index - 1);
+            String conf = prompt("Vuoi eliminare il personaggio '" + pendingDeleteBean.getInfoBean().getName() + "'? (y/n): ");
             if (conf.equalsIgnoreCase("y")) {
-                onConfirmDelete(characterToDelete);
+                onConfirmDelete();
                 jout.print("Personaggio eliminato.");
             } else {
                 onCancelDelete();
@@ -141,10 +137,11 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
     /**
      * Conferma l'eliminazione del personaggio, aggiornando la lista e delegando al controller.
      */
-    private void onConfirmDelete(CharacterSheetBean characterToDelete) {
-        String characterName = characterToDelete.getInfoBean().getName();
+    private void onConfirmDelete() {
+        String characterName = pendingDeleteBean.getInfoBean().getName();
         controller.deleteCharacter(characterName);
-        data.remove(characterToDelete);
+        data.remove(pendingDeleteBean);
+        refreshTable();
     }
 
     /**

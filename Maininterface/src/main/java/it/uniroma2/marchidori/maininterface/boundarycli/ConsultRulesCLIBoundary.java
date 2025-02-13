@@ -15,22 +15,10 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
 
     private UserBean currentUser;
     private ConsultRulesController controller;
-    private Jout jout = new Jout(this.getClass().getSimpleName());
+    private final Jout jout = new Jout(this.getClass().getSimpleName());
     private RuleBookBean pendingBuyBean;
 
     @Override
-    public void setCurrentUser(UserBean user) {
-        this.currentUser = user;
-    }
-
-    @Override
-    public void setLogicController(Object logicController) {
-        this.controller = (ConsultRulesController) logicController;
-    }
-
-    /**
-     * Punto di ingresso per la modalità CLI di Consult Rules.
-     */
     public void run() {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
@@ -40,12 +28,6 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
         jout.print("Ritorno alla schermata HOME...");
     }
 
-    /**
-     * Visualizza il menu principale e processa la scelta dell'utente.
-     *
-     * @param scanner lo Scanner per l'input
-     * @return true se l'utente sceglie di tornare alla home, false altrimenti.
-     */
     private boolean processMainMenu(Scanner scanner) {
         displayMainMenu();
         int choice = readChoice(scanner, "Seleziona un'opzione: ");
@@ -85,7 +67,7 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
             if (listChoice == 0) {
                 returnToMenu = true;
                 continue;
-            }else if(listChoice < 1 || listChoice > controller.getAllRuleBooks().size()){
+            } else if (listChoice < 1 || listChoice > controller.getAllRuleBooks().size()) {
                 jout.print("Scelta non valida. Riprova.");
             }
             RuleBookBean selected = ruleBooks.get(listChoice - 1);
@@ -176,9 +158,20 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
      */
     private void onConfirm() {
         if (pendingBuyBean != null) {
+            //PAYPAL
             pendingBuyBean.setObtained(true);
             controller.updateRuleBook(pendingBuyBean);
             pendingBuyBean = null;
         }
+    }
+
+    @Override
+    public void setCurrentUser(UserBean user) {
+        this.currentUser = user;
+    }
+
+    @Override
+    public void setLogicController(Object logicController) {
+        this.controller = (ConsultRulesController) logicController;
     }
 }

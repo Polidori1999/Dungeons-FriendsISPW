@@ -8,6 +8,7 @@ import it.uniroma2.marchidori.maininterface.boundary.RunInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.ManageLobbyListController;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
     private List<LobbyBean> data = new ArrayList<>();
     private final Scanner scanner = new Scanner(System.in);
     private final Jout jout = new Jout("ManageLobbyListPlayerCLIBoundary");
+    private LobbyBean pendingDeleteBean;
 
     @Override
     public void run() throws IOException {
@@ -65,8 +67,7 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
         jout.print("=== Menu Gestione Lobby ===");
         jout.print("1. Lascia una lobby");
         jout.print("2. Ricarica lista lobby");
-        jout.print("3. Torna a Home");
-        jout.print("0. Esci");
+        jout.print("0. Torna a Home");
     }
 
     private String prompt(String message) {
@@ -83,11 +84,8 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
                 refreshLobbyList();
                 jout.print("Lista aggiornata.");
                 break;
-            case "3":
-                changeScene("home.fxml");
-                return true;
             case "0":
-                jout.print("Uscita dalla gestione lobby.");
+                changeScene(SceneNames.HOME);
                 return true;
             default:
                 jout.print("Opzione non valida, riprova.");
@@ -107,10 +105,10 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
                 jout.print("Indice non valido.");
                 return;
             }
-            LobbyBean lobbyToLeave = data.get(index - 1);
-            String conf = prompt("Sei sicuro di voler lasciare la lobby '" + lobbyToLeave.getName() + "'? (y/n): ");
+            pendingDeleteBean = data.get(index - 1);
+            String conf = prompt("Sei sicuro di voler lasciare la lobby '" + pendingDeleteBean.getName() + "'? (y/n): ");
             if (conf.equalsIgnoreCase("y")) {
-                processLeave(lobbyToLeave);
+                processLeave(pendingDeleteBean);
                 jout.print("Lobby lasciata.");
             } else {
                 jout.print("Operazione annullata.");
@@ -122,9 +120,6 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
 
     private void processLeave(LobbyBean lobbyToLeave) {
         controller.deleteLobby(lobbyToLeave.getName());
-        if (currentUser.getJoinedLobbies() != null) {
-            currentUser.getJoinedLobbies().remove(lobbyToLeave);
-        }
         refreshLobbyList();
     }
 

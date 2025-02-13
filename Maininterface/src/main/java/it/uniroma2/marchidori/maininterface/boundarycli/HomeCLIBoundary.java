@@ -14,6 +14,7 @@ public class HomeCLIBoundary implements UserAwareInterface, RunInterface {
     private UserBean currentUser;
     private final Jout jout = new Jout(this.getClass().getSimpleName());
 
+
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;

@@ -51,48 +51,41 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
             String choice = prompt("Scegli un'opzione: ");
             switch (choice) {
                 case "1":
-                    editName();
-                    break;
-                case "2":
                     editRace();
                     break;
-                case "3":
+                case "2":
                     editClass();
                     break;
-                case "4":
+                case "3":
                     editAge();
                     break;
-                case "5":
+                case "4":
                     editLevel();
                     break;
-                case "6":
+                case "5":
                     editStrength();
                     break;
-                case "7":
+                case "6":
                     editDexterity();
                     break;
-                case "8":
+                case "7":
                     editConstitution();
                     break;
-                case "9":
+                case "8":
                     editIntelligence();
                     break;
-                case "10":
+                case "9":
                     editWisdom();
                     break;
-                case "11":
+                case "10":
                     editCharisma();
                     break;
-                case "12":
+                case "11":
                     onClickSaveCharacter();
                     exit = true;
                     break;
-                case "13":
-                    onClickGoBackToList();
-                    exit = true;
-                    break;
                 case "0":
-                    jout.print("Operazione annullata. Uscita senza salvare.");
+                    onClickGoBackToList();
                     exit = true;
                     break;
                 default:
@@ -114,8 +107,6 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
             creationMode = true;
             currentBean = new CharacterSheetBean();
             // Inizializza le parti info e stats se non già presenti
-            currentBean.setInfoBean(new CharacterInfoBean());
-            currentBean.setStatsBean(new CharacterStatsBean());
             oldName = null;
             clearFields();
             jout.print(">>> Modalità creazione attiva.");
@@ -128,8 +119,6 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
                 logger.log(Level.SEVERE, "Non ho trovato il personaggio con nome: {0}", selected);
                 creationMode = true;
                 currentBean = new CharacterSheetBean();
-                currentBean.setInfoBean(new CharacterInfoBean());
-                currentBean.setStatsBean(new CharacterStatsBean());
                 clearFields();
             } else {
                 jout.print(">>> Modalità modifica attiva per il personaggio: " + currentBean.getInfoBean().getName());
@@ -161,20 +150,19 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
      */
     private void displayMenu() {
         jout.print("=== Menu Scheda Personaggio ===");
-        jout.print("1. Modifica Nome");
-        jout.print("2. Modifica Razza");
-        jout.print("3. Modifica Classe");
-        jout.print("4. Modifica Età");
-        jout.print("5. Modifica Livello");
-        jout.print("6. Modifica STR");
-        jout.print("7. Modifica DEX");
-        jout.print("8. Modifica CON");
-        jout.print("9. Modifica INT");
-        jout.print("10. Modifica WIS");
-        jout.print("11. Modifica CHA");
-        jout.print("12. Salva Scheda");
-        jout.print("13. Torna alla Lista Personaggi");
-        jout.print("0. Esci senza salvare");
+        jout.print("1. Modifica Razza");
+        jout.print("2. Modifica Classe");
+        jout.print("3. Modifica Età");
+        jout.print("4. Modifica Livello");
+        jout.print("5. Modifica STR");
+        jout.print("6. Modifica DEX");
+        jout.print("7. Modifica CON");
+        jout.print("8. Modifica INT");
+        jout.print("9. Modifica WIS");
+        jout.print("10. Modifica CHA");
+        jout.print("11. Salva Scheda");
+        jout.print("0. Torna alla Lista Personaggi");
+
     }
 
     /**
@@ -186,11 +174,6 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
     }
 
     // -------------------- Metodi di modifica dei campi --------------------
-
-    private void editName() {
-        String nome = prompt("Inserisci il nuovo nome: ");
-        currentBean.getInfoBean().setName(nome);
-    }
 
     private void editRace() {
         String race = prompt("Inserisci la razza: ");

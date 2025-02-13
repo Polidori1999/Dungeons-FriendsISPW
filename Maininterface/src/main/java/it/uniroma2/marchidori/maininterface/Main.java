@@ -34,8 +34,9 @@ public class Main extends Application {
 
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
-        while(true) {
-            System.out.println("Seleziona la modalità di esecuzione dell'applicazione:");
+        boolean exit = true;
+        while(exit) {
+            System.out.println("Seleziona la modalità di esecuzione dell'applicazione: porfavor cambiare");
             System.out.println("1. CLI");
             System.out.println("2. JavaFX");
             System.out.print("Inserisci il numero corrispondente (1 o 2): ");
@@ -43,12 +44,14 @@ public class Main extends Application {
             if ("1".equals(scelta)) {
                 System.out.println("Avvio modalità CLI...");
                 // Avvio della versione CLI:
+                exit = false;
                 Session.getInstance().setCLI(true);
                 SceneSwitcher.changeScene(null, SceneNames.LOGIN, tempUser);
 
             } else if ("2".equals(scelta)) {
                 System.out.println("Avvio modalità JavaFX...");
                 // Avvio dell'applicazione JavaFX:
+                exit = false;
                 launch(args);
             }
             System.out.print("");

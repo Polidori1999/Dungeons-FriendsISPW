@@ -7,10 +7,12 @@ import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.RunInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
+import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -18,7 +20,7 @@ public class JoinLobbyPlayerCLIBoundary implements UserAwareInterface, Controlle
 
     private UserBean currentUser;
     private JoinLobbyController controller;
-    private List<LobbyBean> filteredLobbies = new ArrayList<>();
+    private ObservableList<LobbyBean> filteredLobbies;
     private final Scanner scanner = new Scanner(System.in);
     private final Jout jout = new Jout("JoinLobbyPlayerCLIBoundary");
 
@@ -34,6 +36,7 @@ public class JoinLobbyPlayerCLIBoundary implements UserAwareInterface, Controlle
             jout.print("ERRORE: Utente non inizializzato.");
             return;
         }
+        filteredLobbies = FXCollections.observableArrayList(controller.getList(LobbyRepository.getAllLobbies()));
         refreshTable();
         boolean exit = false;
         while (!exit) {
@@ -77,8 +80,7 @@ public class JoinLobbyPlayerCLIBoundary implements UserAwareInterface, Controlle
         jout.print("3. Cerca per nome");
         jout.print("4. Unisciti a una lobby");
         jout.print("5. Ricarica lista lobby");
-        jout.print("6. Torna a Home");
-        jout.print("0. Esci");
+        jout.print("0. Torna a Home");
     }
 
     /**
@@ -115,11 +117,8 @@ public class JoinLobbyPlayerCLIBoundary implements UserAwareInterface, Controlle
                 refreshTable();
                 jout.print("Lista aggiornata.");
                 break;
-            case "6":
-                changeScene("home.fxml");
-                return true;
             case "0":
-                jout.print("Uscita dalla modalità Join Lobby.");
+                changeScene("home.fxml");
                 return true;
             default:
                 jout.print("Opzione non valida, riprova.");
@@ -132,11 +131,71 @@ public class JoinLobbyPlayerCLIBoundary implements UserAwareInterface, Controlle
      * e applica il filtraggio.
      */
     private void applyFilters() {
-        filterType = prompt("Inserisci filtro per tipo (Online/Presenza) oppure lascia vuoto: ");
-        filterDuration = prompt("Inserisci filtro per durata (Singola/Campagna) oppure lascia vuoto: ");
-        filterNumPlayers = prompt("Inserisci filtro per numero di giocatori (2-8) oppure lascia vuoto: ");
+        // Filtro per tipo (Online/Presenza)
+        jout.print("Scegli filtro per tipo:");
+        jout.print("1. Online");
+        jout.print("2. Presenza");
+        jout.print("0. Lascia vuoto");
+        String choice = prompt("Inserisci il numero dell'opzione: ");
+        switch (choice) {
+            case "1":
+                filterType = "Online";
+                break;
+            case "2":
+                filterType = "Presenza";
+                break;
+            default:
+                filterType = "";
+                break;
+        }
+
+        // Filtro per durata (Singola/Campagna)
+        jout.print("Scegli filtro per durata:");
+        jout.print("1. Singola");
+        jout.print("2. Campagna");
+        jout.print("0. Lascia vuoto");
+        choice = prompt("Inserisci il numero dell'opzione: ");
+        switch (choice) {
+            case "1":
+                filterDuration = "Singola";
+                break;
+            case "2":
+                filterDuration = "Campagna";
+                break;
+            default:
+                filterDuration = "";
+                break;
+        }
+
+        // Filtro per numero di giocatori (2, 4, 6, 8)
+        jout.print("Scegli filtro per numero di giocatori:");
+        jout.print("1. 2 giocatori");
+        jout.print("2. 4 giocatori");
+        jout.print("3. 6 giocatori");
+        jout.print("4. 8 giocatori");
+        jout.print("0. Lascia vuoto");
+        choice = prompt("Inserisci il numero dell'opzione: ");
+        switch (choice) {
+            case "1":
+                filterNumPlayers = "2";
+                break;
+            case "2":
+                filterNumPlayers = "4";
+                break;
+            case "3":
+                filterNumPlayers = "6";
+                break;
+            case "4":
+                filterNumPlayers = "8";
+                break;
+            default:
+                filterNumPlayers = "";
+                break;
+        }
+
         doFilter();
     }
+
 
     /**
      * Richiede all'utente una stringa di ricerca e la applica come filtro.
@@ -162,7 +221,7 @@ public class JoinLobbyPlayerCLIBoundary implements UserAwareInterface, Controlle
      */
     private void doFilter() {
         List<LobbyBean> result = controller.filterLobbies(filterType, filterDuration, filterNumPlayers, searchQuery);
-        filteredLobbies = result != null ? result : new ArrayList<>();
+        filteredLobbies.setAll(result);
     }
 
     /**
@@ -184,13 +243,9 @@ public class JoinLobbyPlayerCLIBoundary implements UserAwareInterface, Controlle
             LobbyBean lobbyToJoin = filteredLobbies.get(index - 1);
             String conf = prompt("Vuoi unirti alla lobby '" + lobbyToJoin.getName() + "'? (y/n): ");
             if (conf.equalsIgnoreCase("y")) {
-                // Si assume che il controller gestisca l'operazione di join e restituisca true in caso di successo.
-                boolean success = true;
-                if (success) {
-                    jout.print("Sei entrato nella lobby '" + lobbyToJoin.getName() + "'.");
-                } else {
-                    jout.print("Non è stato possibile unirsi alla lobby.");
-                }
+                controller.addLobby(lobbyToJoin);
+                refreshTable();
+                resetFilters();
             } else {
                 jout.print("Operazione annullata.");
             }
