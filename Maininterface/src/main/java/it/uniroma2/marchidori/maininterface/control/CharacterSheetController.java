@@ -131,30 +131,7 @@ public class CharacterSheetController implements UserAwareInterface {
         return new CharacterSheet(infoEntity, statsEntity);
     }
 
-    public CharacterSheetDownloadTask getDownloadTask(CharacterSheetBean bean) {
-        return getCharacterSheetDownloadTask(bean, logger);
-    }
 
-    static CharacterSheetDownloadTask getCharacterSheetDownloadTask(CharacterSheetBean bean, Logger logger) {
-        try {
-            // Ottieni la cartella di download dinamica
-            String userHome = System.getProperty("user.home");
-            String downloadFolder = Paths.get(userHome, "Downloads").toString();
-
-            // Crea il nome del file
-            String fileName = "character_" + bean.getInfoBean().getName() + ".txt";
-            String destinationPath = Paths.get(downloadFolder, fileName).toString();
-
-            logger.info(() -> ">>> DEBUG: Percorso di download: " + destinationPath);
-
-            // Crea e restituisci il task di download
-            return new CharacterSheetDownloadTask(bean, destinationPath);
-
-        } catch (Exception e) {
-            logger.severe("Errore durante il download: " + e.getMessage());
-            return null;
-        }
-    }
 
     public String validate(CharacterSheetBean characterSheet) {
         StringBuilder errors = new StringBuilder();

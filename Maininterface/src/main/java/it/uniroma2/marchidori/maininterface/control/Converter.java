@@ -68,9 +68,9 @@ public class Converter {
     }
 
     /**
-     * Converte un CharacterSheetBean in un CharacterSheet.
+     * Converte un CharacterSheetBean in un CharacterSheetEntity.
      */
-    private static CharacterSheet characterSheetBeanToEntity(CharacterSheetBean csBean) {
+    public static CharacterSheet characterSheetBeanToEntity(CharacterSheetBean csBean) {
         if (csBean == null) {
             return null;
         }
@@ -84,7 +84,7 @@ public class Converter {
     /**
      * Converte un CharacterInfoBean in un CharacterInfo.
      */
-    private static CharacterInfo characterInfoBeanToEntity(CharacterInfoBean infoBean) {
+    public static CharacterInfo characterInfoBeanToEntity(CharacterInfoBean infoBean) {
         if (infoBean == null) {
             return null;
         }
@@ -102,7 +102,7 @@ public class Converter {
     /**
      * Converte un CharacterStatsBean in un CharacterStats.
      */
-    private static CharacterStats characterStatsBeanToEntity(CharacterStatsBean statsBean) {
+    public static CharacterStats characterStatsBeanToEntity(CharacterStatsBean statsBean) {
         if (statsBean == null) {
             return null;
         }
@@ -121,7 +121,7 @@ public class Converter {
     /**
      * Converte un LobbyBean in un Lobby.
      */
-    private static Lobby lobbyBeanToEntity(LobbyBean lobbyBean) {
+    public static Lobby lobbyBeanToEntity(LobbyBean lobbyBean) {
         if (lobbyBean == null) {
             return null;
         }
@@ -140,7 +140,7 @@ public class Converter {
     /**
      * Converte una lista che può contenere LobbyBean o Lobby (già convertite) in una lista di Lobby.
      */
-    private static List<Lobby> convertLobbyList(List<LobbyBean> inputList) {
+    public static List<Lobby> convertLobbyList(List<LobbyBean> inputList) {
         List<Lobby> result = new ArrayList<>();
         if (inputList == null) {
             return result;
@@ -201,7 +201,7 @@ public class Converter {
     /**
      * Converte un singolo oggetto Lobby (entity) in un oggetto LobbyBean (bean).
      */
-    private static LobbyBean convertLobby(Lobby lobby) {
+    public static LobbyBean convertLobby(Lobby lobby) {
         if (lobby == null) {
             return null;
         }
@@ -213,7 +213,7 @@ public class Converter {
      * Converte una lista di Lobby in una lista di LobbyBean.
      * Qui usiamo new ArrayList<>(...) per rendere la lista mutabile.
      */
-    private static List<LobbyBean> convertLobbyList2(List<Lobby> lobbies) {
+    public static List<LobbyBean> convertLobbyList2(List<Lobby> lobbies) {
         if (lobbies == null) {
             return new ArrayList<>();
         }
@@ -231,7 +231,7 @@ public class Converter {
     /**
      * Converte un singolo CharacterSheet (entity) in CharacterSheetBean (bean).
      */
-    private static CharacterSheetBean convertCharacterSheet(CharacterSheet sheet) {
+    public static CharacterSheetBean convertCharacterSheet(CharacterSheet sheet) {
         if (sheet == null) {
             return null;
         }
@@ -271,7 +271,7 @@ public class Converter {
      * Converte una lista di CharacterSheet in una lista di CharacterSheetBean.
      * Anche qui restituiamo una nuova ArrayList per garantire la mutabilità.
      */
-    private static List<CharacterSheetBean> convertCharacterSheetList(List<CharacterSheet> sheets) {
+    public static List<CharacterSheetBean> convertCharacterSheetList(List<CharacterSheet> sheets) {
         if (sheets == null) {
             return new ArrayList<>();
         }
