@@ -8,6 +8,7 @@ import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
 import javafx.collections.FXCollections;
 import javafx.stage.Stage;
 
+
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
