@@ -59,7 +59,7 @@ public class ManageLobbyController implements UserAwareInterface {
                 // Confronta usando oldName (il nome originale)
                 if (lobbyBean.getName().equals(oldName)) {
                     // Converte il bean aggiornato in un'entità Lobby
-                    Lobby updatedLobby = beanToEntity(bean);
+                    Lobby updatedLobby = Converter.lobbyBeanToEntity(bean);
                     // Aggiorna la lobby nella lista dello user
                     currentUser.getJoinedLobbies().set(i, bean);
                     currentEntity.getJoinedLobbies().set(i, updatedLobby);
@@ -78,12 +78,6 @@ public class ManageLobbyController implements UserAwareInterface {
         }
     }
 
-    /**
-     * Converte da Bean "spezzato" a Entity pura.
-     */
-    private Lobby beanToEntity(LobbyBean bean) {
-        return new Lobby(bean.getName(), bean.getDuration(), bean.getLiveOnline(), bean.isOwned(), bean.getNumberOfPlayers(), bean.getInfoLink());
-    }
 
     public LobbyBean findLobbyByName(String lobbyName, List<LobbyBean> beans) {
         if (beans == null) {
@@ -97,14 +91,7 @@ public class ManageLobbyController implements UserAwareInterface {
             LOGGER.log(Level.WARNING, "Nessuna lobby trovata con il nome: {0}", lobbyName);
             return null;
         }
-        return new LobbyBean(
-                foundLobby.getDuration(),
-                foundLobby.getName(),
-                foundLobby.getLiveOnline(),
-                foundLobby.getNumberOfPlayers(),
-                foundLobby.isOwned(),
-                foundLobby.getInfoLink()
-        );
+        return foundLobby;
     }
 
     public String validate(LobbyBean lobby) {
@@ -115,7 +102,7 @@ public class ManageLobbyController implements UserAwareInterface {
         validateNotEmpty(lobby.getDuration(), "Duration", errors);
         validateNotEmpty(lobby.getLiveOnline(), "Live/Online", errors);
         validateNotEmpty(lobby.getInfoLink(), "InfoLink", errors);
-        if (lobby.getNumberOfPlayers() == 0) {
+        if (lobby.getMaxOfPlayers() == 0) {
             errors.append("Max number of players cannot be 0.\n");
         }
         return errors.toString();

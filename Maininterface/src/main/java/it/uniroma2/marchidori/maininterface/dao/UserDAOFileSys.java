@@ -162,22 +162,32 @@ public class UserDAOFileSys implements UserDAO {
     /**
      * Deserializza una riga CSV in un oggetto Lobby.
      */
+
     public static Lobby deserializeLobby(String line) {
         String[] parts = line.split(";", -1);
+
         String lobbyName = parts[0];
         String duration = parts[1];
         String type = parts[2];
         boolean owned = Boolean.parseBoolean(parts[3]);
         int numberOfPlayers = Integer.parseInt(parts[4]);
         String infoLink = parts[5];
-        List<String> players = new ArrayList<>();
+
+        // Se il settimo campo esiste ed è non vuoto, deserializza la lista dei joinedPlayers
+        List<String> joinedPlayers = new ArrayList<>();
         if (parts.length > 6 && !parts[6].isEmpty()) {
-            players = new ArrayList<>(Arrays.asList(parts[6].split("\\|")));
+            joinedPlayers = new ArrayList<>(Arrays.asList(parts[6].split("\\|")));
         }
-        Lobby lobby = new Lobby(lobbyName, duration, type, owned, numberOfPlayers, infoLink);
-        lobby.getPlayers().addAll(players);
+
+        // Determina l'owner in base al flag "owned"
+        // Ad esempio: se owned è true, impostiamo l'owner su "admin"; altrimenti, lo lasciamo vuoto.
+        String owner = owned ? "admin" : "";
+
+        // Crea l'oggetto Lobby passando anche la lista dei joinedPlayers
+        Lobby lobby = new Lobby(lobbyName, duration, type, numberOfPlayers, owner, infoLink, joinedPlayers);
         return lobby;
     }
+
 
     /**
      * Deserializza una riga CSV in un oggetto CharacterSheet.
@@ -204,16 +214,18 @@ public class UserDAOFileSys implements UserDAO {
         StringBuilder sb = new StringBuilder();
         sb.append(lobby.getLobbyName()).append(";")
                 .append(lobby.getDuration()).append(";")
-                .append(lobby.getType()).append(";")
-                .append(lobby.isOwned()).append(";")
-                .append(lobby.getNumberOfPlayers()).append(";")
+                .append(lobby.getLiveOnline()).append(";")
+                .append(lobby.getOwner()).append(";")
+                .append(lobby.getMaxOfPlayers()).append(";")
                 .append(lobby.getInfoLink()).append(";");
-        List<String> players = lobby.getPlayers();
-        if (players != null && !players.isEmpty()) {
-            sb.append(String.join("|", players));
+
+        List<String> joinedPlayers = lobby.getJoinedPlayers();
+        if (joinedPlayers != null && !joinedPlayers.isEmpty()) {
+            sb.append(String.join("|", joinedPlayers));
         }
         return sb.toString();
     }
+
 
     public User loadUserData(User user) throws FileNotFoundException {
         File userDir = getUserFolder(user.getEmail());

@@ -148,7 +148,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
         // Legge il nome dalla TextField e gli altri valori dalle ComboBox
         currentBean.setName(lobbyName.getText());
         currentBean.setLiveOnline(liveOnlineBox.getValue());
-        currentBean.setNumberOfPlayers(parseIntOrZero(maxPlayersBox.getValue()));
+        currentBean.setMaxOfPlayers(parseIntOrZero(maxPlayersBox.getValue()));
         currentBean.setDuration(durationBox.getValue());
         currentBean.setInfoLink(infoLink.getText());
 
@@ -193,7 +193,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
         lobbyName.setText(bean.getName());
         infoLink.setText(bean.getInfoLink());
         liveOnlineBox.setValue(bean.getLiveOnline());
-        maxPlayersBox.setValue(String.valueOf(bean.getNumberOfPlayers()));
+        maxPlayersBox.setValue(String.valueOf(bean.getMaxOfPlayers()));
         durationBox.setValue(bean.getDuration());
     }
 

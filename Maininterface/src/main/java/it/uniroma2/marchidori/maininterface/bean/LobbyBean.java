@@ -1,6 +1,5 @@
 package it.uniroma2.marchidori.maininterface.bean;
 
-import it.uniroma2.marchidori.maininterface.entity.Lobby;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +53,8 @@ public class LobbyBean {
     public int getMaxOfPlayers() {
         return maxOfPlayers;
     }
-    public void setMAXOfPlayers(int MAXOfPlayers) {
-        this.maxOfPlayers = MAXOfPlayers;
+    public void setMaxOfPlayers(int maxOfPlayers) {
+        this.maxOfPlayers = maxOfPlayers;
     }
 
     public String getOwner() {

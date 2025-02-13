@@ -57,7 +57,7 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
             int i = 1;
             for (LobbyBean lobby : data) {
                 jout.print(String.format("%-3d %-20s %-15s %-10s %-10s",
-                        i, lobby.getName(), lobby.getNumberOfPlayers(), lobby.getDuration(), lobby.getLiveOnline()));
+                        i, lobby.getName(), lobby.getMaxOfPlayers(), lobby.getDuration(), lobby.getLiveOnline()));
                 i++;
             }
         }

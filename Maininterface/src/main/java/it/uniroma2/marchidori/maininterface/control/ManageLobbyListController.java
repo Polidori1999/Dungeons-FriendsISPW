@@ -31,16 +31,6 @@ public class ManageLobbyListController implements UserAwareInterface {
         // empty
     }
 
-    private LobbyBean entityToBean(Lobby cs) {
-        // Infine crea il bean complessivo
-        return new LobbyBean(cs.getDuration(),
-                cs.getLobbyName(),
-                cs.getType(),
-                cs.getNumberOfPlayers(),
-                cs.isOwned(),
-                cs.getInfoLink());
-    }
-
 
     public boolean deleteLobby(String lobbyName) {
         if (lobbyName == null || currentUser.getJoinedLobbies() == null) {
@@ -80,7 +70,7 @@ public class ManageLobbyListController implements UserAwareInterface {
             for (Lobby lob : currentEntity.getJoinedLobbies()) {
                 // Converte la entity Lobby in un LobbyBean
                 System.out.println(lob);
-                LobbyBean bean = entityToBean(lob);
+                LobbyBean bean = Converter.lobbyEntityToBean(lob);
                 beans.add(bean);
             }
         } else {

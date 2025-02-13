@@ -213,19 +213,17 @@ public class Converter {
         if (lobby == null) {
             return null;
         }
-        // Usa il costruttore di Lobby
-        // (String lobbyName, String duration, String type, boolean owned, int numberOfPlayers)
         return new LobbyBean(
-                lobby.getDuration(),
-                lobby.getLobbyName(),
-                lobby.getType(),
-                lobby.getNumberOfPlayers(),
-                lobby.isOwned(),
-                lobby.getInfoLink()
+                lobby.getLobbyName(),                // name
+                lobby.getDuration(),                 // duration
+                lobby.getLiveOnline(),                     // liveOnline
+                lobby.getMaxOfPlayers(),          // maxOfPlayers
+                lobby.getOwner(),     // owner (convertiamo il boolean in String)
+                lobby.getInfoLink(),                 // infoLink
+                lobby.getJoinedPlayers()                    // joinedPlayers (lista vuota)
         );
-        // Usa il costruttore di LobbyBean che accetta un Lobby
-
     }
+
 
     /**
      * Converte una lista di Lobby in una lista di LobbyBean.

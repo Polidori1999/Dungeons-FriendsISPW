@@ -118,7 +118,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         jout.print("=== Dettagli Lobby ===");
         jout.print("Nome           : " + (currentBean.getName() != null ? currentBean.getName() : ""));
         jout.print("Live/Online    : " + (currentBean.getLiveOnline() != null ? currentBean.getLiveOnline() : ""));
-        jout.print("Max Giocatori  : " + currentBean.getNumberOfPlayers());
+        jout.print("Max Giocatori  : " + currentBean.getMaxOfPlayers());
         jout.print("Durata         : " + (currentBean.getDuration() != null ? currentBean.getDuration() : ""));
     }
 
@@ -197,7 +197,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
                 num = 2;
                 break;
         }
-        currentBean.setNumberOfPlayers(num);
+        currentBean.setMaxOfPlayers(num);
     }
 
 
@@ -280,7 +280,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
     private void clearFields() {
         currentBean.setName("");
         currentBean.setLiveOnline("");
-        currentBean.setNumberOfPlayers(0);
+        currentBean.setMaxOfPlayers(0);
         currentBean.setDuration("");
     }
 
@@ -291,7 +291,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         jout.print("Popolamento dei campi con i dati della lobby esistente:");
         jout.print("Nome           : " + bean.getName());
         jout.print("Live/Online    : " + bean.getLiveOnline());
-        jout.print("Max Giocatori  : " + bean.getNumberOfPlayers());
+        jout.print("Max Giocatori  : " + bean.getMaxOfPlayers());
         jout.print("Durata         : " + bean.getDuration());
     }
 

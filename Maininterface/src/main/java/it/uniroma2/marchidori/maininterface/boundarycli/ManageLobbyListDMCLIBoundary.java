@@ -58,7 +58,7 @@ public class ManageLobbyListDMCLIBoundary implements UserAwareInterface, Control
             int i = 1;
             for (LobbyBean lobby : data) {
                 jout.print(String.format("%-3d %-20s %-15s %-10s %-10s",
-                        i, lobby.getName(), lobby.getNumberOfPlayers(), lobby.getDuration(), lobby.getLiveOnline()));
+                        i, lobby.getName(), lobby.getMaxOfPlayers(), lobby.getDuration(), lobby.getLiveOnline()));
                 i++;
             }
         }
@@ -116,7 +116,7 @@ public class ManageLobbyListDMCLIBoundary implements UserAwareInterface, Control
                 return;
             }
             LobbyBean selectedLobby = data.get(index - 1);
-            if (!selectedLobby.isOwned()) {
+            if (!selectedLobby.getOwner().equals(currentUser.getEmail())) {
                 jout.print("Questa lobby non è di tua proprietà. Non puoi modificarla.");
                 return;
             }
