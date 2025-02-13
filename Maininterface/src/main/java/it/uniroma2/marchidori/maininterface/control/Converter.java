@@ -151,9 +151,6 @@ public class Converter {
         return result;
     }
 
-    public static Lobby beanToEntity(LobbyBean bean) {
-        return new Lobby(bean.getName(), bean.getDuration(), bean.getLiveOnline(), bean.isOwned(), bean.getNumberOfPlayers(), bean.getInfoLink());
-    }
 
     public static Lobby stringToLobby(String lobbyData) {
         if (lobbyData == null || lobbyData.isEmpty()) {
@@ -177,8 +174,8 @@ public class Converter {
         }
 
         // Converte le liste di Lobby e CharacterSheet
-        List<LobbyBean> favouriteLobbies = convertLobbyList2(user.getFavouriteLobbies());
-        List<LobbyBean> joinedLobbies    = convertLobbyList2(user.getJoinedLobbies());
+        List<LobbyBean> favouriteLobbies = convertLobbyListEntityToBean(user.getFavouriteLobbies());
+        List<LobbyBean> joinedLobbies    = convertLobbyListEntityToBean(user.getJoinedLobbies());
         List<CharacterSheetBean> sheetBeans = convertCharacterSheetList(user.getCharacterSheets());
 
         // Crea il UserBean
@@ -201,24 +198,34 @@ public class Converter {
     /**
      * Converte un singolo oggetto Lobby (entity) in un oggetto LobbyBean (bean).
      */
-    public static LobbyBean convertLobby(Lobby lobby) {
+    public static LobbyBean lobbyEntityToBean(Lobby lobby) {
         if (lobby == null) {
             return null;
         }
+        // Usa il costruttore di Lobby
+        // (String lobbyName, String duration, String type, boolean owned, int numberOfPlayers)
+        return new LobbyBean(
+                lobby.getLobbyName(),
+                lobby.getDuration(),
+                lobby.getType(),
+                lobby.getNumberOfPlayers(),
+                lobby.isOwned(),
+                lobby.getInfoLink()
+        );
         // Usa il costruttore di LobbyBean che accetta un Lobby
-        return new LobbyBean(lobby);
+
     }
 
     /**
      * Converte una lista di Lobby in una lista di LobbyBean.
      * Qui usiamo new ArrayList<>(...) per rendere la lista mutabile.
      */
-    public static List<LobbyBean> convertLobbyList2(List<Lobby> lobbies) {
+    public static List<LobbyBean> convertLobbyListEntityToBean(List<Lobby> lobbies) {
         if (lobbies == null) {
             return new ArrayList<>();
         }
         return new ArrayList<>(lobbies.stream()
-                .map(Converter::convertLobby)
+                .map(Converter::lobbyEntityToBean)
                 .collect(Collectors.toList()));
     }
 

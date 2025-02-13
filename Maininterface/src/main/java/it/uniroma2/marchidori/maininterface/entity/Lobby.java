@@ -18,14 +18,14 @@ public class Lobby {
     private int numberOfPlayers;
 
 
-    private Lobby() {
+    /*private Lobby() {
         this.lobbyName = "lobbyName";
         this.duration = "duration";
         this.type = "type";
         this.infoLink = "infoLink";
         this.owned = false;
         this.players = new ArrayList<>();
-    }
+    }*/
 
 
     // costruttore

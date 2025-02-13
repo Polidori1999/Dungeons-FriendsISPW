@@ -15,7 +15,7 @@ public class LobbyBean {
     public LobbyBean(){
     }
 
-    public LobbyBean(Lobby lobby) {
+    /*public LobbyBean(Lobby lobby) {
         this.name = lobby.getLobbyName();
         this.duration = lobby.getDuration();
         this.liveOnline = lobby.getType();
@@ -23,7 +23,7 @@ public class LobbyBean {
         this.currentNumberOfPlayers = lobby.getPlayers().size();  // Numero di giocatori attuali
         this.owned = lobby.isOwned();
         this.infoLink = lobby.getInfoLink();
-    }
+    }*/
 
 
     public LobbyBean(String duration, String name, String type, int numberOfPlayers, boolean owned, String infoLink) {

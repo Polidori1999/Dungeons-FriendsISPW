@@ -36,20 +36,11 @@ public class JoinLobbyController implements UserAwareInterface {
     public List<LobbyBean> getList(List<Lobby> lobbyList) {
         List<LobbyBean> beans = new ArrayList<>();
         for (Lobby lobby : lobbyList) {
-            beans.add(entityToBean(lobby));
+            beans.add(Converter.lobbyEntityToBean(lobby));
         }
         return beans;
     }
 
-    // Conversione da Entity -> Bean
-    private LobbyBean entityToBean(Lobby lob) {
-        LobbyBean bean = new LobbyBean();
-        bean.setName(lob.getLobbyName());
-        bean.setLiveOnline(lob.getType());
-        bean.setDuration(lob.getDuration());
-        bean.setNumberOfPlayers(lob.getNumberOfPlayers());
-        return bean;
-    }
 
     // Aggiungi una lobby all'utente e salva nel file
     public void addLobby(LobbyBean lobbyBean) {
@@ -57,7 +48,7 @@ public class JoinLobbyController implements UserAwareInterface {
             currentUser.setJoinedLobbies(FXCollections.observableArrayList());
         }
         currentUser.getJoinedLobbies().add(lobbyBean);
-        currentEntity.getJoinedLobbies().add(Converter.beanToEntity(lobbyBean));
+        currentEntity.getJoinedLobbies().add(Converter.lobbyBeanToEntity(lobbyBean));
         // Aggiorna la lista tramite DAO...
         UserDAO dao = UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB());
 
@@ -75,7 +66,7 @@ public class JoinLobbyController implements UserAwareInterface {
             currentUser.setFavouriteLobbies(new ArrayList<>());
         }
         currentUser.getFavouriteLobbies().add(lobbyBean);
-        currentEntity.getFavouriteLobbies().add(Converter.beanToEntity(lobbyBean));
+        currentEntity.getFavouriteLobbies().add(Converter.lobbyBeanToEntity(lobbyBean));
         UserDAO dao = UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB());
         dao.updateUsersEntityData(currentEntity);
     }
@@ -97,7 +88,7 @@ public class JoinLobbyController implements UserAwareInterface {
             }
 
             if (matchesType && matchesDuration && matchesPlayers && matchesSearch) {
-                result.add(entityToBean(lob));
+                result.add(Converter.lobbyEntityToBean(lob));
             }
         }
         return result;
