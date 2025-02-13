@@ -5,6 +5,7 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.LobbyChangeListener;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
+import it.uniroma2.marchidori.maininterface.dao.LobbyDaoFileSys;
 import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
 import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
@@ -15,6 +16,7 @@ import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 import javafx.collections.FXCollections;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -126,5 +128,10 @@ public class JoinLobbyController implements UserAwareInterface {
     @Override
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;
+    }
+
+    public List<Lobby> getLobbies() throws IOException {
+        LobbyDaoFileSys lobbyDaoFileSys = new LobbyDaoFileSys();
+        return lobbyDaoFileSys.getLobbiesFromSys();
     }
 }

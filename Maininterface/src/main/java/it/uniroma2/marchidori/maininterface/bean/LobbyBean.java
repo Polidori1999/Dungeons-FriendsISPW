@@ -2,38 +2,32 @@ package it.uniroma2.marchidori.maininterface.bean;
 
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LobbyBean {
     private String duration;       // "Singola"/"Campagna"
     private String name;           // nome lobby
     private String liveOnline;// "Online"/"Presenza"
     private String infoLink;
-    private int currentNumberOfPlayers;
     private int maxOfPlayers;// # di giocatori
-    private boolean owned;
+    private String owner;
+    private List<String> joinedPlayers;
 
 
     public LobbyBean(){
     }
 
-    /*public LobbyBean(Lobby lobby) {
-        this.name = lobby.getLobbyName();
-        this.duration = lobby.getDuration();
-        this.liveOnline = lobby.getType();
-        this.maxOfPlayers = lobby.getNumberOfPlayers();
-        this.currentNumberOfPlayers = lobby.getPlayers().size();  // Numero di giocatori attuali
-        this.owned = lobby.isOwned();
-        this.infoLink = lobby.getInfoLink();
-    }*/
 
 
-    public LobbyBean(String duration, String name, String type, int numberOfPlayers, boolean owned, String infoLink) {
-        this.duration = duration;
+    public LobbyBean(String name,String duration, String type, int numberOfPlayers,String owner, String infoLink,List<String> joinedPlayers) {
         this.name = name;
+        this.duration = duration;
         this.liveOnline = type;
         this.maxOfPlayers = numberOfPlayers;
-        this.currentNumberOfPlayers = 0;
-        this.owned = owned;
+        this.owner = owner;
         this.infoLink = infoLink;
+        this.joinedPlayers = new ArrayList<>();
     }
 
     public String getDuration() {
@@ -57,32 +51,33 @@ public class LobbyBean {
         this.liveOnline = type;
     }
 
-    public int getNumberOfPlayers() {
+    public int getMaxOfPlayers() {
         return maxOfPlayers;
     }
-    public void setNumberOfPlayers(int numberOfPlayers) {
-        this.maxOfPlayers = numberOfPlayers;
+    public void setMAXOfPlayers(int MAXOfPlayers) {
+        this.maxOfPlayers = MAXOfPlayers;
     }
 
-    public boolean isOwned() {
-        return owned;
+    public String getOwner() {
+        return owner;
     }
-    public void setOwned(boolean owned) {
-        this.owned = owned;
+    public void setOwned(String owner) {
+        this.owner = owner;
     }
-    public int getCurrentNumberOfPlayers() {
-        return currentNumberOfPlayers;
-    }
-    public void setCurrentNumberOfPlayers(int currentNumberOfPlayers) {
-        this.currentNumberOfPlayers = currentNumberOfPlayers;
-    }
+
     public String getPlayers() {
-        return currentNumberOfPlayers + "/" + maxOfPlayers;
+        return joinedPlayers.size() + "/" + maxOfPlayers;
     }
     public String getInfoLink() {
         return infoLink;
     }
     public void setInfoLink(String infoLink) {
         this.infoLink = infoLink;
+    }
+    public List<String> getJoinedPlayers() {
+        return joinedPlayers;
+    }
+    public void setJoinedPlayers(List<String> joinedPlayers) {
+        this.joinedPlayers = joinedPlayers;
     }
 }

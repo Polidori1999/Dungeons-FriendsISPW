@@ -92,7 +92,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     private ObservableList<LobbyBean> filteredLobbies;
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
 
         // Inizializza il JoinLobbyController e il popup di conferma
         try {
@@ -139,10 +139,13 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
 
 
 
-    public void refreshTable() {
+    public void refreshTable() throws IOException {
         if (controller != null) {
+
+            ////if-else demo non demo
             List<Lobby> rawLobbies = LobbyRepository.getAllLobbies();
-            List<LobbyBean> updatedList = controller.getList(rawLobbies);
+            List<Lobby> rawLobbies2 = controller.getLobbies();
+            List<LobbyBean> updatedList = controller.getList(rawLobbies2);
 
             // LOGGING DEBUG
             logger.info("📌 LobbyRepository attuale: " + rawLobbies);

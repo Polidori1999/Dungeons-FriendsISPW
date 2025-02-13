@@ -22,7 +22,7 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
     }
 
     @Override
-    public void initialize() {
+    public void initialize() throws IOException {
         super.initialize();
 
         // Setup dynamic button for joining lobby

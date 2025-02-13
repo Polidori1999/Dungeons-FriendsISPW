@@ -9,62 +9,50 @@ import java.util.List;
  *
  */
 public class Lobby {
-    private final String lobbyName;
+    private final String name;
     private final String duration;  // "Singola"/"Campagna"
-    private final String type;      // "Online"/"Presenza"
+    private final String liveOnline;      // "Online"/"Presenza"
     private final String infoLink;
-    private final boolean owned;
-    private List<String> players;
-    private int numberOfPlayers;
+    private int maxOfPlayers;
+    private String owner;
+    private List<String> joinedPlayers;
 
 
-    /*private Lobby() {
-        this.lobbyName = "lobbyName";
-        this.duration = "duration";
-        this.type = "type";
-        this.infoLink = "infoLink";
-        this.owned = false;
-        this.players = new ArrayList<>();
-    }*/
 
-
-    // costruttore
-    public Lobby(String lobbyName, String duration, String type, boolean owned, int numberOfPlayers, String infoLink) {
-        this.lobbyName = lobbyName;
+    public Lobby(String name,String duration, String type, int numberOfPlayers,String owner, String infoLink,List<String> joinedPlayers) {
+        this.name = name;
         this.duration = duration;
-        this.type = type;
-        this.owned = owned;
-        this.numberOfPlayers = numberOfPlayers;
-        this.players = new ArrayList<>();
+        this.liveOnline = type;
+        this.maxOfPlayers = numberOfPlayers;
+
+        this.owner = owner;
         this.infoLink = infoLink;
+        this.joinedPlayers = new ArrayList<>();
     }
 
     public String getLobbyName() {
-        return lobbyName;
+        return name;
     }
     public String getDuration() {
         return duration;
     }
-    public String getType() {
-        return type;
+    public String getLiveOnline() {
+        return liveOnline;
     }
 
-    public List<String> getPlayers(){
-        return players;
+    public List<String> getJoinedPlayers(){
+        return joinedPlayers;
     }
 
     public boolean isFull(){
-        return players.size() >= 8;
+        return joinedPlayers.size() >= maxOfPlayers;
     }
 
-    public int getNumberOfPlayers() {
-        return numberOfPlayers;
+    public int getMaxOfPlayers() {
+        return maxOfPlayers;
     }
-    public void setNumberOfPlayers(int numberOfPlayers) {
-        this.numberOfPlayers = numberOfPlayers;
-    }
-    public boolean isOwned() {
-        return owned;
+    public String getOwner() {
+        return owner;
     }
     public String getInfoLink() {
         return infoLink;

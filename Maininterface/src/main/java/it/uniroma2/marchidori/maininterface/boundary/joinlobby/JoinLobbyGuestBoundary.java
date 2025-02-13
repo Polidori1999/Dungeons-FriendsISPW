@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class JoinLobbyGuestBoundary extends JoinLobbyPlayerBoundary {
 
     @Override
-    public void initialize() {
+    public void initialize() throws IOException {
         super.initialize();
         if (currentUser == null) {
             currentUser = new UserBean(

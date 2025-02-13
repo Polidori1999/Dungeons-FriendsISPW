@@ -102,7 +102,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
     private void initialize() {
         // Imposta i valori predefiniti delle ComboBox
         durationBox.setItems(FXCollections.observableArrayList("One-Shot", "Campaign"));
-        maxPlayersBox.setItems(FXCollections.observableArrayList("2", "4", "8"));
+        maxPlayersBox.setItems(FXCollections.observableArrayList("2", "4", "6"));
         liveOnlineBox.setItems(FXCollections.observableArrayList("Live", "Online"));
 
         // Stampa di debug per verificare l'iniezione dell'utente
@@ -139,7 +139,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
     //                    LOGICA DI SALVATAGGIO
     // -------------------------------------------------------------
     @FXML
-    void onClickSaveLobby(ActionEvent event) {
+    void onClickSaveLobby(ActionEvent event) throws IOException {
         if (currentBean == null) {
             LOGGER.severe("ERRORE: currentBean è NULL! Non posso salvare.");
             return;

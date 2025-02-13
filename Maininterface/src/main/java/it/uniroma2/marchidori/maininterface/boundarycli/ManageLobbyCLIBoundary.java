@@ -229,7 +229,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
     /**
      * Simula il salvataggio della lobby.
      */
-    private void onClickSaveLobby() {
+    private void onClickSaveLobby() throws IOException {
         // Legge i dati già impostati (i metodi edit hanno aggiornato il bean)
         // Validazione del bean tramite il controller
         String validationErrors = controller.validate(currentBean);

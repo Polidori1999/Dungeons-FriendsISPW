@@ -15,6 +15,7 @@ import it.uniroma2.marchidori.maininterface.entity.CharacterStats;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -131,9 +132,10 @@ public class Converter {
                 lobbyBean.getName(),
                 lobbyBean.getDuration(),
                 lobbyBean.getLiveOnline(),
-                lobbyBean.isOwned(),
-                lobbyBean.getNumberOfPlayers(),
-                lobbyBean.getInfoLink()
+                lobbyBean.getMaxOfPlayers(),
+                lobbyBean.getOwner(),
+                lobbyBean.getInfoLink(),
+                lobbyBean.getJoinedPlayers()
         );
     }
 
@@ -157,14 +159,23 @@ public class Converter {
             return null;
         }
 
+        // Suddivide la stringa in parti usando ";" come delimitatore.
         String[] dataParts = lobbyData.split(";");
+
+        // Recupera i vari campi, verificando la lunghezza dell'array.
         String lobbyName = dataParts.length > 0 ? dataParts[0] : "";
         String duration = dataParts.length > 1 ? dataParts[1] : "";
         String type = dataParts.length > 2 ? dataParts[2] : "";
-        boolean owned = dataParts.length > 3 && Boolean.parseBoolean(dataParts[3]);
-        int numberOfPlayers = dataParts.length > 4 ? Integer.parseInt(dataParts[4]) : 0;
+        String owner = dataParts.length > 3 ? dataParts[3] : "";
+        int maxOfPlayers = dataParts.length > 4 ? Integer.parseInt(dataParts[4]) : 0;
         String infoLink = dataParts.length > 5 ? dataParts[5] : "";
-        return new Lobby(lobbyName, duration, type, owned, numberOfPlayers, infoLink);
+
+        List<String> joinedPlayers = new ArrayList<>();
+        if (dataParts.length > 6 && !dataParts[6].isEmpty()) {
+            joinedPlayers = Arrays.asList(dataParts[6].split(","));
+        }
+
+        return new Lobby(lobbyName, duration, type, maxOfPlayers, owner, infoLink, joinedPlayers);
     }
     //////////////////////////////////////////////
 
@@ -205,8 +216,8 @@ public class Converter {
         // Usa il costruttore di Lobby
         // (String lobbyName, String duration, String type, boolean owned, int numberOfPlayers)
         return new LobbyBean(
-                lobby.getLobbyName(),
                 lobby.getDuration(),
+                lobby.getLobbyName(),
                 lobby.getType(),
                 lobby.getNumberOfPlayers(),
                 lobby.isOwned(),

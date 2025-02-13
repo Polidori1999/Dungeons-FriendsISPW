@@ -3,11 +3,13 @@ package it.uniroma2.marchidori.maininterface.control;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
+import it.uniroma2.marchidori.maininterface.dao.LobbyDaoFileSys;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,17 +30,20 @@ public class ManageLobbyController implements UserAwareInterface {
         this.currentUser = user;
     }
 
-    public void createLobby(LobbyBean bean) {
+    public void createLobby(LobbyBean bean) throws IOException {
         if (bean == null) {
             LOGGER.log(Level.SEVERE, "ERRORE: Il Bean passato a createLobby() è NULL!");
             return;
         }
-        Lobby newlobby = beanToEntity(bean);
+        Lobby newlobby = Converter.lobbyBeanToEntity(bean);
         if (currentUser != null && currentUser.getJoinedLobbies() != null) {
             LOGGER.log(Level.INFO, "Aggiungendo lobby a UserBean: {0}", newlobby.getLobbyName());
             currentUser.getJoinedLobbies().add(bean);
             currentEntity.getJoinedLobbies().add(newlobby);
             LobbyRepository.addLobby(newlobby);
+            //add to file sys missing dao repository
+            LobbyDaoFileSys lobbyDaoFileSys = new LobbyDaoFileSys();
+            lobbyDaoFileSys.addLobby(newlobby);
             currentUser.setSelectedLobbyName(null);
             LOGGER.log(Level.INFO, "Lista attuale delle lobby: {0}", currentUser.getJoinedLobbies());
         } else {
