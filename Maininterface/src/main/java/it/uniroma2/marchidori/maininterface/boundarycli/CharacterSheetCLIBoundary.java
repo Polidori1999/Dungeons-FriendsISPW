@@ -176,14 +176,144 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
     // -------------------- Metodi di modifica dei campi --------------------
 
     private void editRace() {
-        String race = prompt("Inserisci la razza: ");
+        // Display the available races menu
+        jout.print("Choose your character's race:");
+        jout.print("1. Human");
+        jout.print("2. Elf");
+        jout.print("3. Dwarf");
+        jout.print("4. Halfling");
+        jout.print("5. Dragonborn");
+        jout.print("6. Gnome");
+        jout.print("7. Half-Elf");
+        jout.print("8. Half-Orc");
+        jout.print("9. Tiefling");
+
+        // Prompt the user for their selection
+        String input = prompt("Enter the number corresponding to your choice: ");
+        int choice;
+        try {
+            choice = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            jout.print("Invalid input. Race not updated.");
+            return;
+        }
+
+        String race;
+        // Switch-case to associate the number with a race name
+        switch (choice) {
+            case 1:
+                race = "Human";
+                break;
+            case 2:
+                race = "Elf";
+                break;
+            case 3:
+                race = "Dwarf";
+                break;
+            case 4:
+                race = "Halfling";
+                break;
+            case 5:
+                race = "Dragonborn";
+                break;
+            case 6:
+                race = "Gnome";
+                break;
+            case 7:
+                race = "Half-Elf";
+                break;
+            case 8:
+                race = "Half-Orc";
+                break;
+            case 9:
+                race = "Tiefling";
+                break;
+            default:
+                jout.print("Invalid choice. Race not updated.");
+                return;
+        }
+
+        // Update the character's race in the current bean
         currentBean.getInfoBean().setRace(race);
+        jout.print("Race updated to: " + race);
     }
 
+
     private void editClass() {
-        String clazz = prompt("Inserisci la classe: ");
+        // Display the available classes menu
+        jout.print("Choose your character's class:");
+        jout.print("1. Barbarian");
+        jout.print("2. Bard");
+        jout.print("3. Cleric");
+        jout.print("4. Druid");
+        jout.print("5. Fighter");
+        jout.print("6. Rogue");
+        jout.print("7. Wizard");
+        jout.print("8. Monk");
+        jout.print("9. Paladin");
+        jout.print("10. Ranger");
+        jout.print("11. Sorcerer");
+        jout.print("12. Warlock");
+
+        // Prompt the user for their selection
+        String input = prompt("Enter the number corresponding to your choice: ");
+        int choice;
+        try {
+            choice = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            jout.print("Invalid input. Class not updated.");
+            return;
+        }
+
+        String clazz;
+        // Switch-case to associate the number with a class name
+        switch (choice) {
+            case 1:
+                clazz = "Barbarian";
+                break;
+            case 2:
+                clazz = "Bard";
+                break;
+            case 3:
+                clazz = "Cleric";
+                break;
+            case 4:
+                clazz = "Druid";
+                break;
+            case 5:
+                clazz = "Fighter";
+                break;
+            case 6:
+                clazz = "Rogue";
+                break;
+            case 7:
+                clazz = "Wizard";
+                break;
+            case 8:
+                clazz = "Monk";
+                break;
+            case 9:
+                clazz = "Paladin";
+                break;
+            case 10:
+                clazz = "Ranger";
+                break;
+            case 11:
+                clazz = "Sorcerer";
+                break;
+            case 12:
+                clazz = "Warlock";
+                break;
+            default:
+                jout.print("Invalid choice. Class not updated.");
+                return;
+        }
+
+        // Update the character's class in the current bean
         currentBean.getInfoBean().setClasse(clazz);
+        jout.print("Class updated to: " + clazz);
     }
+
 
     private void editAge() {
         String ageStr = prompt("Inserisci l'età: ");
