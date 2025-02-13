@@ -81,4 +81,45 @@ public class ConsultRulesController implements UserAwareInterface {
         // Persiste le modifiche: si assume che il repository offra questo metodo.
         RulesRepository.setAllBooks(ruleBooks);
     }
+
+
+    //VEDERE SE SPOSTARE IN CONTROLLER
+    public void startPayPalPayment(double amount) {
+        try {
+            RulesRepository.getAllBooks().get(1).setObtained(true);
+            PayPalPaymentController payCtrl = new PayPalPaymentController();
+
+            // 1) Ottieni access token
+            String accessToken = payCtrl.getAccessToken();
+            jout.print("AccessToken = " + accessToken);
+
+            // 2) Crea ordine (EUR e importo a piacere)
+            String createOrderResponse = payCtrl.createOrder(accessToken, "EUR", String.valueOf(amount));
+            jout.print("createOrderResponse = " + createOrderResponse);
+
+            // 3) Estrai link "approve"
+            String approveLink = payCtrl.extractApproveLink(createOrderResponse);
+            if (approveLink == null) {
+                jout.print( "Impossibile trovare il link di approvazione nel JSON di risposta PayPal");
+                return;
+            }
+
+            // 4) Apri il browser con il link PayPal
+            // In un'app desktop JavaFX, puoi fare:
+            Desktop desktop = Desktop.getDesktop();
+            if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                desktop.browse(new java.net.URI(approveLink));
+            } else {
+                jout.print("Apertura browser non supportata su questo sistema!");
+            }
+
+            // A questo punto l'utente vede la pagina PayPal, effettua il login e completa il pagamento.
+            // Se desideri catturare in un secondo momento, dovrai salvare l'orderID e
+            // chiamare "capture" su /v2/checkout/orders/{orderID}/capture.
+
+        } catch (Exception e) {
+            jout.print("Errore durante il pagamento PayPal: ");
+            throw new RuntimeException(e);
+        }
+    }
 }

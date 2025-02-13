@@ -70,8 +70,7 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
             } else if (listChoice < 1 || listChoice > controller.getAllRuleBooks().size()) {
                 jout.print("Scelta non valida. Riprova.");
             }
-            RuleBookBean selected = ruleBooks.get(listChoice - 1);
-            processRuleBookSelection(selected, scanner);
+            processRuleBookSelection(ruleBooks.get(listChoice - 1), scanner);
             jout.print(""); // Riga vuota per separare le iterazioni
         }
     }
@@ -134,9 +133,9 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
      */
     private void handleBuyAction(RuleBookBean bean, Scanner scanner) {
         pendingBuyBean = bean;
-        jout.print("Vuoi comprare il libro: " + bean.getRulesBookName() + "? (S/N)");
+        jout.print("Vuoi comprare il libro: " + bean.getRulesBookName() + "? (Y/N)");
         String input = scanner.nextLine().trim();
-        if (input.equalsIgnoreCase("S") || input.equalsIgnoreCase("Yes")) {
+        if (input.equalsIgnoreCase("Y") || input.equalsIgnoreCase("Yes")) {
             onConfirm();
             jout.print("Hai acquistato il RuleBook: " + bean.getRulesBookName());
         } else {
@@ -158,10 +157,13 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
      */
     private void onConfirm() {
         if (pendingBuyBean != null) {
-            //PAYPAL
+            double price = 0.01;
+            controller.startPayPalPayment(price);
+
             pendingBuyBean.setObtained(true);
-            controller.updateRuleBook(pendingBuyBean);
+
             pendingBuyBean = null;
+            refreshList();
         }
     }
 
