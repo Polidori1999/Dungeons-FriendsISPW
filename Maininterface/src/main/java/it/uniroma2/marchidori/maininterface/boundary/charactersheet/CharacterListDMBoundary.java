@@ -61,6 +61,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
 
     protected static final Logger logger = Logger.getLogger(CharacterListDMBoundary.class.getName());
 
+
     @FXML
     protected void initialize() {
         if (controller == null) {
