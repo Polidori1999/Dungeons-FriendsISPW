@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.control;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
+import it.uniroma2.marchidori.maininterface.entity.Session;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,7 +15,7 @@ public class RegisterController implements UserAwareInterface {
 
     // ✅ Costruttore senza parametri per la Factory
     public RegisterController() {
-        this.userService=UserService.getInstance(false);
+        this.userService=UserService.getInstance(Session.getInstance().getDB());
         if (logger.isLoggable(Level.INFO)) {
             logger.info("🔍 [DEBUG] RegisterController inizializzato.");
         }
