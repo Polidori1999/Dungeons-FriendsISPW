@@ -1,13 +1,11 @@
 package it.uniroma2.marchidori.maininterface.boundary.consultrules;
 
-import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.bean.RuleBookBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.control.ConsultRulesController;
-import it.uniroma2.marchidori.maininterface.control.PayPalPaymentController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
@@ -23,11 +21,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+
+//persistenza da implementare questo caso d'uso non rientra nelle funzioni principali del progetto
 public class ConsultRulesBoundary implements UserAwareInterface, ControllerAwareInterface {
 
     private UserBean currentUser;
@@ -64,7 +64,6 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
     protected ConfirmationPopupController confirmationPopupController;
 
     private static final Logger logger = Logger.getLogger(ConsultRulesBoundary.class.getName());
-    private final Jout jout = new Jout(this.getClass().getSimpleName());
 
 
     /**
@@ -126,7 +125,7 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
             // ESEMPIO: Prezzo fisso (oppure puoi derivarlo dal bean)
             double price = 0.01;
             // Avvia la procedura di pagamento PayPal
-            startPayPalPayment(price);
+            controller.startPayPalPayment(price);
 
             // Se vuoi segnare subito come "obtained":
             pendingBuyBean.setObtained(true);
@@ -140,50 +139,6 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
         }
     }
 
-    /**
-     * Esempio di metodo che richiama PayPalPaymentController per creare un ordine
-     * e aprire il link di checkout nel browser di sistema.
-     */
-
-    //VEDERE SE SPOSTARE IN CONTROLLER
-    private void startPayPalPayment(double amount) {
-        try {
-            PayPalPaymentController payCtrl = new PayPalPaymentController();
-
-            // 1) Ottieni access token
-            String accessToken = payCtrl.getAccessToken();
-            jout.print("AccessToken = " + accessToken);
-
-            // 2) Crea ordine (EUR e importo a piacere)
-            String createOrderResponse = payCtrl.createOrder(accessToken, "EUR", String.valueOf(amount));
-            jout.print("createOrderResponse = " + createOrderResponse);
-
-            // 3) Estrai link "approve"
-            String approveLink = payCtrl.extractApproveLink(createOrderResponse);
-            if (approveLink == null) {
-                logger.log(Level.SEVERE, "Impossibile trovare il link di approvazione nel JSON di risposta PayPal");
-                return;
-            }
-
-            // 4) Apri il browser con il link PayPal
-            // In un'app desktop JavaFX, puoi fare:
-            Desktop desktop = Desktop.getDesktop();
-            if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                desktop.browse(new java.net.URI(approveLink));
-            } else {
-                logger.warning("Apertura browser non supportata su questo sistema!");
-            }
-
-            // A questo punto l'utente vede la pagina PayPal, effettua il login e completa il pagamento.
-            // Se desideri catturare in un secondo momento, dovrai salvare l'orderID e
-            // chiamare "capture" su /v2/checkout/orders/{orderID}/capture.
-
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Errore durante il pagamento PayPal: ", e);
-
-            throw new RuntimeException(e);
-        }
-    }
 
     @FXML
     protected void onNavigationButtonClick(ActionEvent event) {
