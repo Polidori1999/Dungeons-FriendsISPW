@@ -1,11 +1,9 @@
 package it.uniroma2.marchidori.maininterface.dao;
 
-import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.User;
-import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.FileNotFoundException;

@@ -55,7 +55,7 @@ public class ManageLobbyListController implements UserAwareInterface {
         boolean removedFromEntity = currentEntity.getJoinedLobbies().removeIf(lobby -> lobby.getLobbyName().equals(lobbyName));
 
         // Aggiorna la persistenza riscrivendo completamente il file
-        UserDAO dao = UserDAOFactory.getUserDAO(false);
+        UserDAO dao = UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB());
         dao.updateUsersEntityData(currentEntity);
         // Notifica eventuali listener
 

@@ -8,6 +8,8 @@ public class Session {
     // Campo che contiene l'utente corrente (non statico)
     private User currentUser;
     private boolean isCLI;
+    private boolean isDB;
+    private boolean isDemo;
 
     // Costruttore privato per evitare istanziazioni esterne
     private Session() { }
@@ -40,5 +42,17 @@ public class Session {
     }
     public void setCLI(boolean isCLI) {
         this.isCLI = isCLI;
+    }
+    public boolean getDB() {
+        return isDB;
+    }
+    public void setDB(boolean isDB) {
+        this.isDB = isDB;
+    }
+    public boolean getDemo() {
+        return isDemo;
+    }
+    public void setDemo(boolean isDemo) {
+        this.isDemo = isDemo;
     }
 }

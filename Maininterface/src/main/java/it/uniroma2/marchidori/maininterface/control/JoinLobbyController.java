@@ -59,7 +59,7 @@ public class JoinLobbyController implements UserAwareInterface {
         currentUser.getJoinedLobbies().add(lobbyBean);
         currentEntity.getJoinedLobbies().add(Converter.beanToEntity(lobbyBean));
         // Aggiorna la lista tramite DAO...
-        UserDAO dao = UserDAOFactory.getUserDAO(false);
+        UserDAO dao = UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB());
 
         dao.updateUsersEntityData(currentEntity);
 
@@ -76,7 +76,7 @@ public class JoinLobbyController implements UserAwareInterface {
         }
         currentUser.getFavouriteLobbies().add(lobbyBean);
         currentEntity.getFavouriteLobbies().add(Converter.beanToEntity(lobbyBean));
-        UserDAO dao = UserDAOFactory.getUserDAO(false);
+        UserDAO dao = UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB());
         dao.updateUsersEntityData(currentEntity);
     }
 

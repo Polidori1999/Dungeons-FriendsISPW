@@ -59,7 +59,7 @@ public class CharacterListController implements UserAwareInterface {
                 if (currentUser.getCharacterSheets().get(i).getInfoBean().getName().equals(characterName)) {
                     currentUser.getCharacterSheets().remove(i);
                     currentEntity.getCharacterSheets().remove(i);
-                    UserDAO userDAO= UserDAOFactory.getUserDAO(false);
+                    UserDAO userDAO = UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB());
                     userDAO.updateUsersEntityData(currentEntity);
                     logger.info(() -> ">>> DEBUG: Personaggio eliminato dallo UserBean: " + characterName);
                     return;

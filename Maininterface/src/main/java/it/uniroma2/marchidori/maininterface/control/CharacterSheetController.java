@@ -52,7 +52,7 @@ public class CharacterSheetController implements UserAwareInterface {
         currentUser.getCharacterSheets().forEach(cs -> logger.info(" - " + cs.getInfoBean().getName()));
 
         // Ora aggiorna il file (usa updateUsersEntityData per riscrivere completamente il file)
-        UserDAO dao = UserDAOFactory.getUserDAO(false);
+        UserDAO dao = UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB());
         dao.updateUsersEntityData(currentEntity);
     }
 
@@ -88,7 +88,7 @@ public class CharacterSheetController implements UserAwareInterface {
             // Aggiorna anche la repository:
             oldName=characterSheetBean.getInfoBean().getName();
             currentEntity=Converter.userBeanToEntity(currentUser);
-            UserDAO userDAO = UserDAOFactory.getUserDAO(false);
+            UserDAO userDAO = UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB());
 
             userDAO.updateUsersEntityData(currentEntity);
 

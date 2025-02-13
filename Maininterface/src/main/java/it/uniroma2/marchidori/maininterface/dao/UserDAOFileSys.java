@@ -2,7 +2,6 @@ package it.uniroma2.marchidori.maininterface.dao;
 
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.entity.*;
-import it.uniroma2.marchidori.maininterface.control.Converter;
 
 import java.io.*;
 import java.util.*;
