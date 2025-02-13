@@ -54,7 +54,7 @@ public class LoginController implements UserAwareInterface {
             /*if (retrievedUser.getJoinedLobbies() != null) {
                 logger.info("🔄 Numero di lobby joinate: " + retrievedUser.getJoinedLobbies().size());
             }*/
-
+            retrievedUser=userService.loadUserData(retrievedUser);
             // Converte l'entity User in un UserBean per l'interfaccia utente
             UserBean convertedUser = Converter.convert(retrievedUser);
             logger.info("🔄 Conversione User -> UserBean completata: " + convertedUser.getEmail());

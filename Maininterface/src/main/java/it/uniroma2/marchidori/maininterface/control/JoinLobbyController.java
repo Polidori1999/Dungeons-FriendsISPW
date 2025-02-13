@@ -70,11 +70,14 @@ public class JoinLobbyController implements UserAwareInterface {
 
 
     // Metodo per aggiungere un nuovo personaggio
-    public void addLobbyToFavourite(LobbyBean lobby) {
+    public void addLobbyToFavourite(LobbyBean lobbyBean) {
         if (currentUser.getFavouriteLobbies() == null) {
             currentUser.setFavouriteLobbies(new ArrayList<>());
         }
-        currentUser.getFavouriteLobbies().add(lobby);
+        currentUser.getFavouriteLobbies().add(lobbyBean);
+        currentEntity.getFavouriteLobbies().add(Converter.beanToEntity(lobbyBean));
+        UserDAO dao = UserDAOFactory.getUserDAO(false);
+        dao.updateUsersEntityData(currentEntity);
     }
 
     // Metodo per filtrare le lobby in base ai parametri

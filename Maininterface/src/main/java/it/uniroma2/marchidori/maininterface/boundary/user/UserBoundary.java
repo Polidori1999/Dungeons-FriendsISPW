@@ -130,7 +130,6 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
         roleUser.setText(currentUser.getRoleBehavior().getRoleName());
         setSwitchRoleButtonText(currentUser.getRoleBehavior());
         LOGGER.log(Level.INFO, () -> "Switched role to: " + currentUser.getRoleBehavior().getRoleName());
-        jout.print("ciao mondo!");
     }
 
     @FXML

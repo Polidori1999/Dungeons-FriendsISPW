@@ -72,7 +72,7 @@ public class ManageLobbyListController implements UserAwareInterface {
         List<LobbyBean> beans = new ArrayList<>();
 
         // Verifichiamo che currentEntity non sia null e che abbia la lista di joinedLobbies valorizzata
-        UserDAO dao = UserDAOFactory.getUserDAO(false);
+        //UserDAO dao = UserDAOFactory.getUserDAO(false);
 
         if (currentEntity != null && currentEntity.getJoinedLobbies() != null) {
 

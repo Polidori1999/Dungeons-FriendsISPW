@@ -46,9 +46,9 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListBoundary {
     }
 
 
-    private void editLobby(LobbyBean beanToEdit) {
+    private void editLobby(LobbyBean lobbyBean) {
         // Imposta la lobby da editare nel currentUser
-        currentUser.setSelectedLobbyName(beanToEdit.getName());
+        currentUser.setSelectedLobbyName(lobbyBean.getName());
         // Cambia scena (usa il metodo protetto ereditato dalla superclasse)
         try {
             changeScene(SceneNames.MANAGE_LOBBY);

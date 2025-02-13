@@ -125,7 +125,7 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
                     logger.info(">>> Sto passando currentUser con ruolo: " + currentUser.getRoleBehavior());
                     SceneSwitcher.changeScene(currentStage, SceneNames.REGISTER, currentUser);
                 }
-                default -> logger.log(Level.INFO,"boh");
+                default -> logger.log(Level.INFO,"default");
             }
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene.", e);

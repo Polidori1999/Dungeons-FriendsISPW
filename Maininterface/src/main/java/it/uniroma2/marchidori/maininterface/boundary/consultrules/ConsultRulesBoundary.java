@@ -144,6 +144,8 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
      * Esempio di metodo che richiama PayPalPaymentController per creare un ordine
      * e aprire il link di checkout nel browser di sistema.
      */
+
+    //VEDERE SE SPOSTARE IN CONTROLLER
     private void startPayPalPayment(double amount) {
         try {
             PayPalPaymentController payCtrl = new PayPalPaymentController();

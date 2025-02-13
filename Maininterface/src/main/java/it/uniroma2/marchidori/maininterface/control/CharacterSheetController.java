@@ -69,7 +69,7 @@ public class CharacterSheetController implements UserAwareInterface {
                     CharacterSheet updatedCharacter = beanToEntity(characterSheetBean);
                     // Aggiorna la lobby nella lista dello user
 
-                    currentEntity.getCharacterSheets().add(i, updatedCharacter);
+                    currentEntity.getCharacterSheets().set(i, updatedCharacter);
                     found=true;
                     break;
                 }

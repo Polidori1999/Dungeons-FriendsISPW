@@ -271,8 +271,8 @@ public class UserDAOFileSys implements UserDAO {
             }
         }
         // Impostiamo una password dummy; per il login la password viene recuperata da getUserByEmail
-        String dummyPassword = "******";
-        return new User(user.getEmail(), dummyPassword, characterSheets, favouriteLobbies, joinedLobbies);
+        String dummy = "******";
+        return new User(user.getEmail(), dummy, characterSheets, favouriteLobbies, joinedLobbies);
     }
 
     @Override

@@ -94,10 +94,10 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
         pendingDeleteBean = null;
     }
 
-    private void editChar(CharacterSheetBean beanToEdit) {
+    private void editChar(CharacterSheetBean characterSheetBean) {
         // Imposta in userBean il nome della lobby da editare
-        currentUser.setSelectedLobbyName(beanToEdit.getInfoBean().getName());
-        // Passo alla scena "manageLobby.fxml"
+        currentUser.setSelectedLobbyName(characterSheetBean.getInfoBean().getName());
+        // Passo alla scena "manageCharactersheet.fxml"
         try {
             SceneSwitcher.changeScene(
                     (Stage) characterPane.getScene().getWindow(),
@@ -128,36 +128,6 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
         }
     }
 
-    // ===========================================================
-    //               METODI PER AGGIORNARE LA TABELLA
-    // ===========================================================
-    public void addNewCharacterBean(CharacterSheetBean newBean) {
-        if (newBean != null) {
-            logger.info(">>> Aggiungendo il nuovo personaggio alla tabella...");
-            data.add(newBean);
-            tableViewChar.refresh();
-        } else {
-            logger.severe(">>> ERRORE: newBean è NULL in addNewCharacterBean()!");
-        }
-    }
-
-    public void addCharacterToTable(CharacterSheetBean character) {
-        data.add(character);
-        tableViewChar.refresh();
-        logger.info(">>> DEBUG: Personaggio aggiunto alla tabella: " + character.getInfoBean().getName());
-    }
-
-    public void updateExistingCharacterInTable(CharacterSheetBean updatedCharacter) {
-        for (int i = 0; i < data.size(); i++) {
-            if (data.get(i).getInfoBean().getName().equals(updatedCharacter.getInfoBean().getName())) {
-                data.set(i, updatedCharacter);
-
-                break;
-            }
-        }
-        tableViewChar.refresh();
-        logger.info(">>> DEBUG: Personaggio aggiornato nella tabella: " + updatedCharacter.getInfoBean().getName());
-    }
 
     @Override
     public void refreshTable() {
@@ -165,7 +135,7 @@ public class CharacterListPlayerBoundary extends CharacterListBoundary {
     }
 
     // ===========================================================
-    //              LOGICA DI DOWNLOAD DEL PERSONAGGIO
+    //              LOGICA DI DOWNLOAD DEL PERSONAGGIO (da spostare in DOWNload)
     // ===========================================================
     /**
      * Avvia il download simulato del CharacterSheetBean, creando un file di testo.
