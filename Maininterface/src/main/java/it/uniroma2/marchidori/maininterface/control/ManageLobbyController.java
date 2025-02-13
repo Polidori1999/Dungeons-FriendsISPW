@@ -51,7 +51,7 @@ public class ManageLobbyController implements UserAwareInterface {
         }
     }
 
-    public void updateLobby(String oldName, LobbyBean bean) {
+    public void updateLobby(String oldName, LobbyBean bean) throws IOException {
         if (currentUser != null && currentUser.getJoinedLobbies() != null) {
             // Cerca la lobby nella lista dello user
             for (int i = 0; i < currentUser.getJoinedLobbies().size(); i++) {
@@ -67,6 +67,8 @@ public class ManageLobbyController implements UserAwareInterface {
                     // Rimuove la vecchia lobby e aggiunge quella aggiornata.
                     LobbyRepository.removeLobby(oldName);
                     LobbyRepository.addLobby(updatedLobby);
+                    LobbyDaoFileSys lobbyDaoFileSys = new LobbyDaoFileSys();
+                    lobbyDaoFileSys.updateLobby(updatedLobby);
                     currentUser.setSelectedLobbyName(null);
                     LOGGER.log(Level.INFO, "Lobby aggiornata correttamente in UserBean e Repository.");
                     return;

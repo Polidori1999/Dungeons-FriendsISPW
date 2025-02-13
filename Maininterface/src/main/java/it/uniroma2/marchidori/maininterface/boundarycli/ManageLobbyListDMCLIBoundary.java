@@ -152,11 +152,13 @@ public class ManageLobbyListDMCLIBoundary implements UserAwareInterface, Control
             }
         } catch (NumberFormatException e) {
             jout.print("Input non valido.");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private void processLeave(LobbyBean lobbyToLeave) {
-        controller.deleteLobby(lobbyToLeave.getName());
+    private void processLeave(LobbyBean lobbyToLeave) throws IOException {
+        controller.deleteLobby(lobbyToLeave);
         refreshLobbyList();
     }
 

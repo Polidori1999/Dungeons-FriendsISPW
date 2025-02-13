@@ -62,7 +62,7 @@ public class JoinLobbyPlayerCLIBoundary implements UserAwareInterface, Controlle
                 jout.print(String.format("%-3d %-20s %-15s %-10s %-10s",
                         i,
                         lobby.getName(),
-                        lobby.getNumberOfPlayers(),
+                        lobby.getMaxOfPlayers(),
                         lobby.getDuration(),
                         lobby.getLiveOnline()));
                 i++;
@@ -130,7 +130,7 @@ public class JoinLobbyPlayerCLIBoundary implements UserAwareInterface, Controlle
      * Richiede all'utente di impostare i filtri per tipo, durata e numero di giocatori,
      * e applica il filtraggio.
      */
-    private void applyFilters() {
+    private void applyFilters() throws IOException {
         // Filtro per tipo (Online/Presenza)
         jout.print("Scegli filtro per tipo:");
         jout.print("1. Online");
@@ -200,7 +200,7 @@ public class JoinLobbyPlayerCLIBoundary implements UserAwareInterface, Controlle
     /**
      * Richiede all'utente una stringa di ricerca e la applica come filtro.
      */
-    private void applySearch() {
+    private void applySearch() throws IOException {
         searchQuery = prompt("Inserisci stringa di ricerca: ").toLowerCase();
         doFilter();
     }
@@ -208,7 +208,7 @@ public class JoinLobbyPlayerCLIBoundary implements UserAwareInterface, Controlle
     /**
      * Resetta tutti i filtri impostati e riapplica il filtraggio.
      */
-    private void resetFilters() {
+    private void resetFilters() throws IOException {
         filterType = "";
         filterDuration = "";
         filterNumPlayers = "";
@@ -219,7 +219,7 @@ public class JoinLobbyPlayerCLIBoundary implements UserAwareInterface, Controlle
     /**
      * Applica i filtri impostati chiamando il metodo di filtraggio del controller.
      */
-    private void doFilter() {
+    private void doFilter() throws IOException {
         List<LobbyBean> result = controller.filterLobbies(filterType, filterDuration, filterNumPlayers, searchQuery);
         filteredLobbies.setAll(result);
     }
@@ -251,6 +251,8 @@ public class JoinLobbyPlayerCLIBoundary implements UserAwareInterface, Controlle
             }
         } catch (NumberFormatException e) {
             jout.print("Input non valido.");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -258,7 +260,7 @@ public class JoinLobbyPlayerCLIBoundary implements UserAwareInterface, Controlle
      * Ricarica la lista delle lobby disponibili, ottenendola dal controller e
      * applica i filtri correnti.
      */
-    private void refreshTable() {
+    private void refreshTable() throws IOException {
         if (controller != null) {
             doFilter();
         }

@@ -89,14 +89,18 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
         data.addAll(controller.getJoinedLobbies());
         //se usiakmo observable la atble view si aggiorna auto ma possiamo anche fare refresh manuake
         tableViewLobbyName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tableViewMaxPlayers.setCellValueFactory(new PropertyValueFactory<>("numberOfPlayers"));
+        tableViewMaxPlayers.setCellValueFactory(new PropertyValueFactory<>("maxOfPlayers"));
         tableViewDuration.setCellValueFactory(new PropertyValueFactory<>("duration"));
         tableViewLiveOrNot.setCellValueFactory(new PropertyValueFactory<>("liveOnline"));
         tableViewLobbyInfoLink.setCellValueFactory(new PropertyValueFactory<>("infoLink"));
         // Configura la colonna "Delete"
         TableColumnUtils.setupButtonColumn(tableViewLobbyDelete, "Leave", lobby -> {
             pendingDeleteBean = lobby;
-            showLeaveConfirmation();
+            try {
+                showLeaveConfirmation();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
 
         tableViewLobby.setItems(data);
@@ -106,13 +110,20 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
 
 
 
-    private void showLeaveConfirmation() {
+
+    private void showLeaveConfirmation() throws IOException {
         if (confirmationPopupController != null && pendingDeleteBean != null) {
             String message = "Vuoi eliminare la lobby '" + pendingDeleteBean.getName() + "'?";
             confirmationPopupController.show(
                     message,
                     10,                // timer di scadenza popup
-                    this::onConfirmLeave,
+                    () -> {
+                        try {
+                            onConfirmLeave();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    },
                     this::onCancel
             );
         } else {
@@ -121,7 +132,7 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
     }
 
 
-    private void onConfirmLeave() {
+    private void onConfirmLeave() throws IOException {
         if (pendingDeleteBean != null) {
             String lobbyName = pendingDeleteBean.getName();
 
@@ -129,7 +140,7 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
             tableViewLobby.getItems().remove(pendingDeleteBean);
 
             // Chiedi al controller di rimuoverla (la logica differenziata in base al ruolo viene gestita all'interno del controller)
-            controller.deleteLobby(lobbyName);
+            controller.deleteLobby(pendingDeleteBean);
 
             // Rimuovi la chiamata seguente, poiché il controller già gestisce la rimozione dalla repository in caso di proprietario
             // LobbyRepository.removeLobby(lobbyName);

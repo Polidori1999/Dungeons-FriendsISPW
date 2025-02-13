@@ -45,20 +45,36 @@ public class JoinLobbyController implements UserAwareInterface {
 
 
     // Aggiungi una lobby all'utente e salva nel file
-    public void addLobby(LobbyBean lobbyBean) {
+    public void addLobby(LobbyBean lobbyBean) throws IOException {
+        lobbyBean.getJoinedPlayers().add(currentUser.getEmail());
+        printStringList(lobbyBean.getJoinedPlayers());
         if (currentUser.getJoinedLobbies() == null) {
             currentUser.setJoinedLobbies(FXCollections.observableArrayList());
         }
+        lobbyBean.setOwner(currentUser.getEmail());
         currentUser.getJoinedLobbies().add(lobbyBean);
         currentEntity.getJoinedLobbies().add(Converter.lobbyBeanToEntity(lobbyBean));
-        // Aggiorna la lista tramite DAO...
-        UserDAO dao = UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB());
 
+        // Aggiorna la lista tramite DAO...
+        LobbyDaoFileSys lobbyDaoFileSys = new LobbyDaoFileSys();
+        UserDAO dao = UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB());
+        lobbyDaoFileSys.updateLobby(Converter.lobbyBeanToEntity(lobbyBean));
         dao.updateUsersEntityData(currentEntity);
 
         logger.log(Level.INFO, "Lobby aggiunta! Lista aggiornata: {0}", currentUser.getJoinedLobbies());
 
     }
+
+    public static void printStringList(List<String> list) {
+        if (list == null || list.isEmpty()) {
+            System.out.println("La lista è vuota.");
+        } else {
+            for (String s : list) {
+                System.out.println(s);
+            }
+        }
+    }
+
 
 
 
@@ -74,11 +90,11 @@ public class JoinLobbyController implements UserAwareInterface {
     }
 
     // Metodo per filtrare le lobby in base ai parametri
-    public List<LobbyBean> filterLobbies(String type, String duration, String numPlayersStr, String searchQuery) {
+    public List<LobbyBean> filterLobbies(String type, String duration, String numPlayersStr, String searchQuery) throws IOException {
         List<LobbyBean> result = new ArrayList<>();
-
-        for (Lobby lob : LobbyRepository.getAllLobbies()) {
-            boolean matchesType = (type == null || type.isEmpty() || lob.getType().equals(type));
+        LobbyDaoFileSys lobbyDaoFileSys = new LobbyDaoFileSys();
+        for (Lobby lob : lobbyDaoFileSys.getLobbiesFromSys()) {
+            boolean matchesType = (type == null || type.isEmpty() || lob.getLiveOnline().equals(type));
             boolean matchesDuration = (duration == null || duration.isEmpty() || lob.getDuration().equals(duration));
             boolean matchesPlayers = true;
             boolean matchesSearch = (searchQuery == null || searchQuery.isEmpty() ||
@@ -86,7 +102,7 @@ public class JoinLobbyController implements UserAwareInterface {
 
             if (numPlayersStr != null && !numPlayersStr.isEmpty()) {
                 int n = Integer.parseInt(numPlayersStr);
-                matchesPlayers = (lob.getPlayers().size() == n);
+                matchesPlayers = (lob.getJoinedPlayers().size() == n);
             }
 
             if (matchesType && matchesDuration && matchesPlayers && matchesSearch) {

@@ -4,6 +4,7 @@ import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
+import it.uniroma2.marchidori.maininterface.dao.LobbyDaoFileSys;
 import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
@@ -12,6 +13,7 @@ import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -32,26 +34,25 @@ public class ManageLobbyListController implements UserAwareInterface {
     }
 
 
-    public boolean deleteLobby(String lobbyName) {
-        if (lobbyName == null || currentUser.getJoinedLobbies() == null) {
+    public void deleteLobby(LobbyBean lobbyBean) throws IOException {
+        if (lobbyBean == null || currentUser.getJoinedLobbies() == null) {
             logger.warning("Impossibile rimuovere la lobby: il nome o la lista delle lobby è null");
-            return false;
+            return;
         }
 
         // Rimuovi la lobby dalla lista dei LobbyBean (UI)
-        boolean removedFromBean = currentUser.getJoinedLobbies().removeIf(lobby -> lobby.getName().equals(lobbyName));
+        boolean removedFromBean = currentUser.getJoinedLobbies().removeIf(lobby -> lobby.getName().equals(lobbyBean.getName()));
 
         // Rimuovi la lobby dalla lista dell'entity User (persistenza)
-        boolean removedFromEntity = currentEntity.getJoinedLobbies().removeIf(lobby -> lobby.getLobbyName().equals(lobbyName));
+        boolean removedFromEntity = currentEntity.getJoinedLobbies().removeIf(lobby -> lobby.getLobbyName().equals(lobbyBean.getName()));
+        if(lobbyBean.getOwner().equals(currentUser.getEmail())){
+            LobbyDaoFileSys lobbyDaoFileSys = new LobbyDaoFileSys();
+            lobbyDaoFileSys.deleteLobby(lobbyBean.getName());
+        }
 
         // Aggiorna la persistenza riscrivendo completamente il file
         UserDAO dao = UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB());
         dao.updateUsersEntityData(currentEntity);
-        // Notifica eventuali listener
-
-
-
-        return removedFromEntity;
     }
 
     @Override

@@ -116,24 +116,49 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         comboBox3.setItems(FXCollections.observableArrayList("2", "3", "4", "5", "6", "7", "8"));
 
         //barra di ricerca
-        searchBar.textProperty().addListener((observable, oldValue, newValue) -> doFilter());
+        searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                doFilter();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         // Listener per i filtri
-        comboBox1.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
-        comboBox2.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
-        comboBox3.valueProperty().addListener((obs, oldVal, newVal) -> doFilter());
+        comboBox1.valueProperty().addListener((obs, oldVal, newVal) -> {
+            try {
+                doFilter();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        comboBox2.valueProperty().addListener((obs, oldVal, newVal) -> {
+            try {
+                doFilter();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        comboBox3.valueProperty().addListener((obs, oldVal, newVal) -> {
+            try {
+                doFilter();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         // Carica le lobby iniziali
-        List<LobbyBean> initial = controller.getList(LobbyRepository.getAllLobbies());
+        List<LobbyBean> initial = controller.getList(controller.getLobbies());
         filteredLobbies = FXCollections.observableArrayList(initial);
 
         // Imposta le colonne: usa una lambda per la colonna "players"
         lobbyNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        numberOfPlayersColumn.setCellValueFactory(new PropertyValueFactory<>("players"));
+        numberOfPlayersColumn.setCellValueFactory(new PropertyValueFactory<>("maxOfPlayers"));
         durationColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
         liveOnlineColumn.setCellValueFactory(new PropertyValueFactory<>("liveOnline"));
 
         lobbyTableView.setItems(filteredLobbies);
+        lobbyTableView.refresh();
         refreshTable();
     }
 
@@ -143,9 +168,10 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         if (controller != null) {
 
             ////if-else demo non demo
-            List<Lobby> rawLobbies = LobbyRepository.getAllLobbies();
-            List<Lobby> rawLobbies2 = controller.getLobbies();
-            List<LobbyBean> updatedList = controller.getList(rawLobbies2);
+            //List<Lobby> rawLobbies = LobbyRepository.getAllLobbies();
+            List<Lobby> rawLobbies = controller.getLobbies();
+            List<LobbyBean> updatedList = controller.getList(rawLobbies);
+
 
             // LOGGING DEBUG
             logger.info("📌 LobbyRepository attuale: " + rawLobbies);
@@ -158,7 +184,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     }
 
 
-    private void doFilter() {
+    private void doFilter() throws IOException {
         String type = comboBox1.getValue();
         String duration = comboBox2.getValue();
         String numPlayers = comboBox3.getValue();
@@ -168,7 +194,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     }
 
     @FXML
-    public void resetFilters(ActionEvent event) {
+    public void resetFilters(ActionEvent event) throws IOException {
         comboBox1.setValue(null);
         comboBox2.setValue(null);
         comboBox3.setValue(null);

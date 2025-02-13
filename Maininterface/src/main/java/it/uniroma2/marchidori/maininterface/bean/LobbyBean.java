@@ -60,7 +60,7 @@ public class LobbyBean {
     public String getOwner() {
         return owner;
     }
-    public void setOwned(String owner) {
+    public void setOwner(String owner) {
         this.owner = owner;
     }
 

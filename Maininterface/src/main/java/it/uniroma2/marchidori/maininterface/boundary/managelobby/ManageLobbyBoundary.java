@@ -150,6 +150,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
         currentBean.setLiveOnline(liveOnlineBox.getValue());
         currentBean.setMaxOfPlayers(parseIntOrZero(maxPlayersBox.getValue()));
         currentBean.setDuration(durationBox.getValue());
+        currentBean.setOwner(currentUser.getEmail());
         currentBean.setInfoLink(infoLink.getText());
 
         // Validazione del bean

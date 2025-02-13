@@ -33,12 +33,11 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListPlayerBoundary {
 
         logger.log(Level.INFO, "Numero di lobby nella tabella: {0}", data.size());
 
-        // Configura la colonna "Edit"
         TableColumnUtils.setupConditionalButtonColumn(
                 tableViewLobbyEdit,
-                LobbyBean::isOwned,  // il bottone sarà visibile solo se isOwned restituisce true
+                lobbyBean -> lobbyBean.getOwner().equals(currentUser.getEmail()),
                 "Edit",
-                this::editLobby          // azione da eseguire al click
+                this::editLobby
         );
         // Rendo cliccabile il bottone "New Lobby"
         // (nel FXML, newLobbyButton chiama onNavigationButtonClick con userData="manageLobby.fxml")

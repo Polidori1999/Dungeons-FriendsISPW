@@ -1,16 +1,10 @@
 package it.uniroma2.marchidori.maininterface.boundary.joinlobby;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
-import it.uniroma2.marchidori.maininterface.entity.Lobby;
-import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
-import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
-import javafx.collections.FXCollections;
-import javafx.stage.Stage;
 
 
 import java.io.IOException;
-import java.util.List;
 import java.util.logging.Logger;
 
 public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
@@ -36,7 +30,11 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
                             message,
                             10,
                             () -> {
-                                controller.addLobby(lobbyBean);//questo è il join lobby
+                                try {
+                                    controller.addLobby(lobbyBean);//questo è il join lobby
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
                                 joinButtonColumn.getTableView().refresh();
 
                             },
