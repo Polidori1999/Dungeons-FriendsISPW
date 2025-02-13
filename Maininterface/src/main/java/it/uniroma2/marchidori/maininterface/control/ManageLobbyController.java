@@ -77,7 +77,7 @@ public class ManageLobbyController implements UserAwareInterface {
      * Converte da Bean "spezzato" a Entity pura.
      */
     private Lobby beanToEntity(LobbyBean bean) {
-        return new Lobby(bean.getName(), bean.getDuration(), bean.getLiveOnline(), bean.isOwned(), bean.getNumberOfPlayers());
+        return new Lobby(bean.getName(), bean.getDuration(), bean.getLiveOnline(), bean.isOwned(), bean.getNumberOfPlayers(), bean.getInfoLink());
     }
 
     public LobbyBean findLobbyByName(String lobbyName, List<LobbyBean> beans) {
@@ -97,7 +97,8 @@ public class ManageLobbyController implements UserAwareInterface {
                 foundLobby.getName(),
                 foundLobby.getLiveOnline(),
                 foundLobby.getNumberOfPlayers(),
-                foundLobby.isOwned()
+                foundLobby.isOwned(),
+                foundLobby.getInfoLink()
         );
     }
 
@@ -108,6 +109,7 @@ public class ManageLobbyController implements UserAwareInterface {
         validateNotEmpty(lobby.getName(), "Name", errors);
         validateNotEmpty(lobby.getDuration(), "Duration", errors);
         validateNotEmpty(lobby.getLiveOnline(), "Live/Online", errors);
+        validateNotEmpty(lobby.getInfoLink(), "InfoLink", errors);
         if (lobby.getNumberOfPlayers() == 0) {
             errors.append("Max number of players cannot be 0.\n");
         }

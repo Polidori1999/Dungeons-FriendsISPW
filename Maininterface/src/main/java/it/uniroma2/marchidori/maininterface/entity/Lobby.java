@@ -12,6 +12,7 @@ public class Lobby {
     private final String lobbyName;
     private final String duration;  // "Singola"/"Campagna"
     private final String type;      // "Online"/"Presenza"
+    private final String infoLink;
     private final boolean owned;
     private List<String> players;
     private int numberOfPlayers;
@@ -21,19 +22,21 @@ public class Lobby {
         this.lobbyName = "lobbyName";
         this.duration = "duration";
         this.type = "type";
+        this.infoLink = "infoLink";
         this.owned = false;
         this.players = new ArrayList<>();
     }
 
 
     // costruttore
-    public Lobby(String lobbyName, String duration, String type, boolean owned, int numberOfPlayers) {
+    public Lobby(String lobbyName, String duration, String type, boolean owned, int numberOfPlayers, String infoLink) {
         this.lobbyName = lobbyName;
         this.duration = duration;
         this.type = type;
         this.owned = owned;
         this.numberOfPlayers = numberOfPlayers;
         this.players = new ArrayList<>();
+        this.infoLink = infoLink;
     }
 
     public String getLobbyName() {
@@ -62,6 +65,9 @@ public class Lobby {
     }
     public boolean isOwned() {
         return owned;
+    }
+    public String getInfoLink() {
+        return infoLink;
     }
 
 

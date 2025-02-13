@@ -37,7 +37,8 @@ public class ManageLobbyListController implements UserAwareInterface {
                 cs.getLobbyName(),
                 cs.getType(),
                 cs.getNumberOfPlayers(),
-                cs.isOwned());
+                cs.isOwned(),
+                cs.getInfoLink());
     }
 
 

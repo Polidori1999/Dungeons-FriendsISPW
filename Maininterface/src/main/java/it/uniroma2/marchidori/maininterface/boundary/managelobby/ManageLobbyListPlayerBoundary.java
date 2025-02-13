@@ -9,7 +9,6 @@ import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.control.ManageLobbyListController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
-import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -65,6 +64,8 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
     protected TableColumn<LobbyBean, Button> tableViewLobbyDelete;
     @FXML
     protected TableColumn<LobbyBean, Button> tableViewLobbyEdit;
+    @FXML
+    protected TableColumn<LobbyBean, String> tableViewLobbyInfoLink;
 
     protected UserBean currentUser;
     protected ManageLobbyListController controller;
@@ -91,6 +92,7 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
         tableViewMaxPlayers.setCellValueFactory(new PropertyValueFactory<>("numberOfPlayers"));
         tableViewDuration.setCellValueFactory(new PropertyValueFactory<>("duration"));
         tableViewLiveOrNot.setCellValueFactory(new PropertyValueFactory<>("liveOnline"));
+        tableViewLobbyInfoLink.setCellValueFactory(new PropertyValueFactory<>("infoLink"));
         // Configura la colonna "Delete"
         TableColumnUtils.setupButtonColumn(tableViewLobbyDelete, "Leave", lobby -> {
             pendingDeleteBean = lobby;

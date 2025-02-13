@@ -170,11 +170,12 @@ public class UserDAOFileSys implements UserDAO {
         String type = parts[2];
         boolean owned = Boolean.parseBoolean(parts[3]);
         int numberOfPlayers = Integer.parseInt(parts[4]);
+        String infoLink = parts[5];
         List<String> players = new ArrayList<>();
-        if (parts.length > 5 && !parts[5].isEmpty()) {
-            players = new ArrayList<>(Arrays.asList(parts[5].split("\\|")));
+        if (parts.length > 6 && !parts[6].isEmpty()) {
+            players = new ArrayList<>(Arrays.asList(parts[6].split("\\|")));
         }
-        Lobby lobby = new Lobby(lobbyName, duration, type, owned, numberOfPlayers);
+        Lobby lobby = new Lobby(lobbyName, duration, type, owned, numberOfPlayers, infoLink);
         lobby.getPlayers().addAll(players);
         return lobby;
     }
@@ -206,7 +207,8 @@ public class UserDAOFileSys implements UserDAO {
                 .append(lobby.getDuration()).append(";")
                 .append(lobby.getType()).append(";")
                 .append(lobby.isOwned()).append(";")
-                .append(lobby.getNumberOfPlayers()).append(";");
+                .append(lobby.getNumberOfPlayers()).append(";")
+                .append(lobby.getInfoLink()).append(";");
         List<String> players = lobby.getPlayers();
         if (players != null && !players.isEmpty()) {
             sb.append(String.join("|", players));

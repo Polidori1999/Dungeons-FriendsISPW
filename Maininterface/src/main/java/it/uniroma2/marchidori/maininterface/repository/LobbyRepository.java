@@ -14,10 +14,10 @@ public class LobbyRepository {
     // Inizializza la lista in un blocco statico
     static {
         // Inizializziamo con lobby statiche per ora
-        lobbyList.add(LobbyFactory.createLobby("edogay", "Singola", "Presenza", 3, false));
-        lobbyList.add(LobbyFactory.createLobby("edonegro", "Campagna", "Presenza", 5, false));
-        lobbyList.add(LobbyFactory.createLobby("edomerda", "Campagna", "Online", 8, false));
-        lobbyList.add(LobbyFactory.createLobby("Gay Legends", "Singola", "Online", 6, false));
+        lobbyList.add(LobbyFactory.createLobby("edogay", "Singola", "Presenza", 3, false,"maps.example.com/?q=edogay"));
+        lobbyList.add(LobbyFactory.createLobby("edonegro", "Campagna", "Presenza", 5, false,"maps.example.com/?q=edonegro"));
+        lobbyList.add(LobbyFactory.createLobby("edomerda", "Campagna", "Online", 8, false,"discord.gg/edomerda"));
+        lobbyList.add(LobbyFactory.createLobby("Gay Legends", "Singola", "Online", 6, false,"discord.gg/GayLegends"));
     }
 
     /**

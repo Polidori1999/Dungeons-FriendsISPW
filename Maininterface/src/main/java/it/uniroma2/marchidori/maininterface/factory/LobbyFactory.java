@@ -10,11 +10,11 @@ public class LobbyFactory {
     }
 
     public static LobbyBean createBean() {
-        return new LobbyBean("", "", "", 0, true);
+        return new LobbyBean("", "", "", 0, true,"");
     }
 
-    public static Lobby createLobby(String name, String duration, String type, int initialPlayers, boolean owned) {
-        return new Lobby(name, duration, type, owned, initialPlayers);
+    public static Lobby createLobby(String name, String duration, String type, int initialPlayers, boolean owned, String infoLink) {
+        return new Lobby(name, duration, type, owned, initialPlayers, infoLink);
     }
 }
 
