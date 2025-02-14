@@ -5,6 +5,7 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.CharacterListController;
+import it.uniroma2.marchidori.maininterface.control.CharacterSheetDownloadController;
 import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
@@ -61,6 +62,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
     protected CharacterSheetBean pendingDeleteBean;
     protected ObservableList<CharacterSheetBean> data = FXCollections.observableArrayList();
     protected ConfirmationPopupController confirmationPopupController;
+    private CharacterSheetDownloadController downloadController;
 
     protected static final Logger logger = Logger.getLogger(CharacterListDMBoundary.class.getName());
 
@@ -142,8 +144,9 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
      * Scarica il personaggio (con progress bar).
      */
     protected void downloadCharacter(CharacterSheetBean bean) {
-        if (controller != null) {
-            CharacterSheetDownloadTask downloadTask = controller.getDownloadTask(bean);
+        downloadController = new CharacterSheetDownloadController();
+        if (downloadController != null) {
+            CharacterSheetDownloadTask downloadTask = downloadController.getDownloadTask(bean);
             if (downloadTask != null) {
                 showDownloadProgressWindow(downloadTask);
                 new Thread(downloadTask).start();
@@ -151,7 +154,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
                 logger.severe("Task di download non disponibile.");
             }
         } else {
-            logger.severe("Controller non inizializzato.");
+            logger.severe("DownloadController non inizializzato.");
         }
     }
 
