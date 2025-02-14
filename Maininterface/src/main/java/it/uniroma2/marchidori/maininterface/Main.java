@@ -16,6 +16,7 @@ public class Main extends Application {
     private static final Jout jout = new Jout("Main");
     private static final String choice = "Enter the corresponding number (1 or 2): ";
 
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         // Avvio della scena JavaFX utilizzando il file LOGIN
