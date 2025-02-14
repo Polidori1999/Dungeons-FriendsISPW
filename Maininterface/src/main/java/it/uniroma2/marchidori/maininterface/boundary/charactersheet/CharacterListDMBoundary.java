@@ -5,6 +5,7 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.CharacterListController;
+import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
@@ -57,7 +58,9 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
 
     protected UserBean currentUser;
     protected CharacterListController controller;
+    protected CharacterSheetBean pendingDeleteBean;
     protected ObservableList<CharacterSheetBean> data = FXCollections.observableArrayList();
+    protected ConfirmationPopupController confirmationPopupController;
 
     protected static final Logger logger = Logger.getLogger(CharacterListDMBoundary.class.getName());
 
@@ -68,10 +71,10 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
             logger.warning("Controller non inizializzato in DM Boundary.");
             return;
         }
-        //reloadCharacterList();
         // Carica i dati (ad es. dal controller)
         data.clear();
         data.addAll(controller.getCharacterSheets());
+        confirmationPopupController = ConfirmationPopupController.loadPopup(characterPane);
 
         // Imposta le colonne base
         tableViewCharName.setCellValueFactory(new ReadOnlyObjectWrapperFactory<>("name"));
@@ -88,21 +91,52 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
         newCharacterButton.setDisable(true);
 
         tableViewChar.setItems(data);
-
-
     }
 
-    /**
-     * Gestisce la cancellazione del personaggio.
-     */
     protected void handleDelete(CharacterSheetBean bean) {
         if (bean != null) {
-            String name = bean.getInfoBean().getName();
-            tableViewChar.getItems().remove(bean);
-            controller.deleteCharacter(name);
-            logger.info("Personaggio '" + name + "' cancellato (DM).");
+            pendingDeleteBean = bean;
+            try {
+                showDeleteConfirmation();
+            } catch (IOException e) {
+                logger.severe("Errore durante la visualizzazione del popup di conferma: " + e.getMessage());
+            }
         }
     }
+
+    private void showDeleteConfirmation() throws IOException {
+        if (confirmationPopupController != null && pendingDeleteBean != null) {
+            String message = "Vuoi eliminare il personaggio '" + pendingDeleteBean.getInfoBean().getName() + "'?";
+            confirmationPopupController.show(
+                    message,
+                    10,  // timer di scadenza popup
+                    () -> {
+                        try {
+                            onConfirmDelete();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    },
+                    this::onCancelDelete
+            );
+        } else {
+            logger.severe("Errore: ConfirmationPopupController non inizializzato o pendingDeleteBean è null");
+        }
+    }
+
+    private void onConfirmDelete() throws IOException {
+        String name = pendingDeleteBean.getInfoBean().getName();
+        tableViewChar.getItems().remove(pendingDeleteBean);
+        controller.deleteCharacter(name);
+        logger.info("Personaggio '" + name + "' cancellato (DM).");
+        pendingDeleteBean = null;
+    }
+
+    private void onCancelDelete() {
+        logger.info("Eliminazione annullata.");
+        pendingDeleteBean = null;
+    }
+
 
     /**
      * Scarica il personaggio (con progress bar).
@@ -187,6 +221,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
             reloadCharacterList();
         }
     }
+
     private record ReadOnlyObjectWrapperFactory<S>(String propertyName)
             implements Callback<TableColumn.CellDataFeatures<S, String>, ObservableValue<String>> {
 
@@ -210,5 +245,4 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
             return new ReadOnlyObjectWrapper<>("???");
         }
     }
-
 }

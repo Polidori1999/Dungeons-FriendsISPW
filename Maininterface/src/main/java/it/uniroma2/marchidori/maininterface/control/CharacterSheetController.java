@@ -5,20 +5,16 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsB
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
-import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
 import it.uniroma2.marchidori.maininterface.entity.*;
-import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
-import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
 
-import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CharacterSheetController implements UserAwareInterface {
 
     private UserBean currentUser;
-    private User currentEntity;
+    private User currentEntity = Session.getInstance().getCurrentUser();
 
     private static final Logger logger = Logger.getLogger(CharacterSheetController.class.getName());
 
@@ -44,16 +40,13 @@ public class CharacterSheetController implements UserAwareInterface {
     public void createChar(CharacterSheetBean characterSheetBean) {
         // Aggiungi il nuovo character sheet alla lista dell'utente
         currentUser.getCharacterSheets().add(characterSheetBean);
+        currentEntity.getCharacterSheets().add(Converter.characterSheetBeanToEntity(characterSheetBean));
         // Converti il bean in entity e aggiungilo allo User Entity (per la persistenza)
-        currentEntity=Converter.userBeanToEntity(currentUser);
-
 
         // Log: stampa il numero di personaggi attuali e i loro nomi
         logger.info("Dopo createChar, currentUser ha " + currentUser.getCharacterSheets().size() + " personaggi.");
-        currentUser.getCharacterSheets().forEach(cs -> logger.info(" - " + cs.getInfoBean().getName()));
-
         // Ora aggiorna il file (usa updateUsersEntityData per riscrivere completamente il file)
-        UserDAOFileSys dao =Session.getInstance().getUserDAOFileSys();
+        UserDAOFileSys dao = Session.getInstance().getUserDAOFileSys();
         dao.updateUsersEntityData(currentEntity);
     }
 
@@ -86,11 +79,7 @@ public class CharacterSheetController implements UserAwareInterface {
                 logger.log(Level.SEVERE,()->"Errore nessun personaggio trovato");
                 return;
             }
-            // Aggiorna anche la repository:
-            oldName=characterSheetBean.getInfoBean().getName();
-            currentEntity=Converter.userBeanToEntity(currentUser);
             UserDAOFileSys userDAO = Session.getInstance().getUserDAOFileSys();
-
             userDAO.updateUsersEntityData(currentEntity);
 
 

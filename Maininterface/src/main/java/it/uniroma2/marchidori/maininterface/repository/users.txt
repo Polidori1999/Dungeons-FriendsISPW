@@ -7,3 +7,4 @@
 edo,$2a$10$apyaC/S/u/O3oJuZzD9sZezbdNqL6/YO09MV3Dc8wBoMLBAAuckTe
 gpz,$2a$10$izFT.L8L8.VoIduzjlPByO5BzuGb7tgk8KKxp1M1lDkx7PP1jAhTi
 leo,$2a$10$0GFxxAG0DrUkeDAMQbV9j.HpstQ8SsLyO12LzoKWOu3H2boIIin2y
+ciao,$2a$10$SZWPaDDSxNAxQBpCNksP5ulzLY3eV2Ca0VoJoju/q4tXIh33dd2iC
