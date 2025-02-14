@@ -46,7 +46,7 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
     /**
      * Visualizza in console l'elenco dei personaggi.
      */
-    private void displayCharacterList() {
+    protected void displayCharacterList() {
         jout.print("=== Lista Personaggi ===");
         if (data.isEmpty()) {
             jout.print("Nessun personaggio presente.");
@@ -75,7 +75,7 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
     /**
      * Richiede un input all'utente.
      */
-    private String prompt(String message) {
+    protected String prompt(String message) {
         jout.print(message);
         return scanner.nextLine().trim();
     }
@@ -108,7 +108,7 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
     /**
      * Gestisce l'eliminazione di un personaggio.
      */
-    private void handleDeleteCharacter() {
+    protected void handleDeleteCharacter() {
         if (data.isEmpty()) {
             jout.print("Nessun personaggio da eliminare.");
             return;
@@ -137,7 +137,7 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
     /**
      * Conferma l'eliminazione del personaggio, aggiornando la lista e delegando al controller.
      */
-    private void onConfirmDelete() {
+    protected void onConfirmDelete() {
         String characterName = pendingDeleteBean.getInfoBean().getName();
         controller.deleteCharacter(characterName);
         data.remove(pendingDeleteBean);
@@ -147,14 +147,14 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
     /**
      * Annulla l'operazione di eliminazione.
      */
-    private void onCancelDelete() {
+    protected void onCancelDelete() {
         pendingDeleteBean = null;
     }
 
     /**
      * Aggiorna la lista dei personaggi leggendo i dati dal currentUser.
      */
-    public void refreshTable() {
+    protected void refreshTable() {
         if (currentUser.getCharacterSheets() != null) {
             data = new ArrayList<>(currentUser.getCharacterSheets());
         } else {
@@ -166,7 +166,7 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
     /**
      * Simula il cambio scena in ambiente CLI.
      */
-    private void changeScene(String fxml) throws IOException {
+    protected void changeScene(String fxml) throws IOException {
         jout.print("Cambio scena verso " + fxml + "...");
         SceneSwitcher.changeScene(null, fxml, currentUser);
     }

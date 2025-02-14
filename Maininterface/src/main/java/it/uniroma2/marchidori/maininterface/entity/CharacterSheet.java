@@ -24,15 +24,9 @@ public class CharacterSheet {
     public CharacterInfo getCharacterInfo() {
         return characterInfo;
     }
-    public void setCharacterInfo(CharacterInfo characterInfo) {
-        this.characterInfo = characterInfo;
-    }
 
     public CharacterStats getCharacterStats() {
         return characterStats;
-    }
-    public void setCharacterStats(CharacterStats characterStats) {
-        this.characterStats = characterStats;
     }
 
     // ---------- METODI DELEGATI PER LA PARTE "INFO" ----------
@@ -45,16 +39,6 @@ public class CharacterSheet {
 
     public String getRace() {
         return characterInfo.getRace();
-    }
-    public void setRace(String race) {
-        characterInfo.setRace(race);
-    }
-
-    public int getAge() {
-        return characterInfo.getAge();
-    }
-    public void setAge(int age) {
-        characterInfo.setAge(age);
     }
 
     public String getClasse() {
@@ -69,49 +53,6 @@ public class CharacterSheet {
     }
     public void setLevel(int level) {
         characterInfo.setLevel(level);
-    }
-
-    // ---------- METODI DELEGATI PER LA PARTE "STATS" ----------
-    public int getStrength() {
-        return characterStats.getStrength();
-    }
-    public void setStrength(int strength) {
-        characterStats.setStrength(strength);
-    }
-
-    public int getDexterity() {
-        return characterStats.getDexterity();
-    }
-    public void setDexterity(int dexterity) {
-        characterStats.setDexterity(dexterity);
-    }
-
-    public int getIntelligence() {
-        return characterStats.getIntelligence();
-    }
-    public void setIntelligence(int intelligence) {
-        characterStats.setIntelligence(intelligence);
-    }
-
-    public int getWisdom() {
-        return characterStats.getWisdom();
-    }
-    public void setWisdom(int wisdom) {
-        characterStats.setWisdom(wisdom);
-    }
-
-    public int getCharisma() {
-        return characterStats.getCharisma();
-    }
-    public void setCharisma(int charisma) {
-        characterStats.setCharisma(charisma);
-    }
-
-    public int getConstitution() {
-        return characterStats.getConstitution();
-    }
-    public void setConstitution(int constitution) {
-        characterStats.setConstitution(constitution);
     }
 
     @Override

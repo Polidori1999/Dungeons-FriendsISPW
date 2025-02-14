@@ -39,7 +39,7 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
         }
     }
 
-    private boolean initBoundary() {
+    protected boolean initBoundary() {
         if (currentUser == null) {
             jout.print("ERRORE: Utente non inizializzato.");
             return false;
@@ -48,7 +48,7 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
         return true;
     }
 
-    private void displayLobbyList() {
+    protected void displayLobbyList() {
         jout.print("=== Lista Lobby Iscritte ===");
         if (data.isEmpty()) {
             jout.print("Non sei iscritto a nessuna lobby.");
@@ -70,7 +70,7 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
         jout.print("0. Torna a Home");
     }
 
-    private String prompt(String message) {
+    protected String prompt(String message) {
         jout.print(message);
         return scanner.nextLine().trim();
     }
@@ -93,7 +93,7 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
         return false;
     }
 
-    private void handleLeaveLobby() {
+    protected void handleLeaveLobby() {
         if (data.isEmpty()) {
             jout.print("Non sei iscritto a nessuna lobby.");
             return;
@@ -120,12 +120,12 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
         }
     }
 
-    private void processLeave(LobbyBean lobbyToLeave) throws IOException {
+    protected void processLeave(LobbyBean lobbyToLeave) throws IOException {
         controller.deleteLobby(lobbyToLeave);
         refreshLobbyList();
     }
 
-    private void refreshLobbyList() {
+    protected void refreshLobbyList() {
         if (controller != null) {
             data = controller.getJoinedLobbies();
             if (currentUser.getJoinedLobbies() == null) {
@@ -134,7 +134,7 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
         }
     }
 
-    private void changeScene(String fxml) throws IOException {
+    protected void changeScene(String fxml) throws IOException {
         jout.print("Cambio scena verso " + fxml + "...");
         SceneSwitcher.changeScene(null, fxml, currentUser);
     }
