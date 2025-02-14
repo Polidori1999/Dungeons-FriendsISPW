@@ -77,6 +77,8 @@ class ManageLobbyListControllerTest {
         LobbyDaoFileSys lobbyDao = new LobbyDaoFileSys();
         lobbyDao.addLobby(Converter.lobbyBeanToEntity(createTestLobbyBean("TestLobby")));
         // Passa una lobby bean con lo stesso nome per l'eliminazione
+        UserDAOFileSys userDAOFileSys = new UserDAOFileSys();
+        Session.getInstance().setUserDAOFileSys(userDAOFileSys);
         controller.leaveLobby(createTestLobbyBean("TestLobby"));
 
         assertEquals(0, testUserBean.getJoinedLobbies().size(),
@@ -98,6 +100,8 @@ class ManageLobbyListControllerTest {
 
         // Prova a eliminare una lobby con nome "NonExistingLobby"
         LobbyBean lobbyToDelete = createTestLobbyBean("NonExistingLobby");
+        UserDAOFileSys userDAOFileSys = new UserDAOFileSys();
+        Session.getInstance().setUserDAOFileSys(userDAOFileSys);
         controller.leaveLobby(lobbyToDelete);
 
         assertEquals(1, testUserBean.getJoinedLobbies().size(),
@@ -113,7 +117,8 @@ class ManageLobbyListControllerTest {
         testUser.getJoinedLobbies().add(createTestLobbyEntity("TestLobby"));
         LobbyDaoFileSys lobbyDao = new LobbyDaoFileSys();
         lobbyDao.addLobby(Converter.lobbyBeanToEntity(createTestLobbyBean("TestLobby")));
-
+        UserDAOFileSys userDAOFileSys = new UserDAOFileSys();
+        Session.getInstance().setUserDAOFileSys(userDAOFileSys);
         controller.leaveLobby(Converter.lobbyEntityToBean(createTestLobbyEntity("TestLobby")));
 
         assertEquals(1, testUser.getJoinedLobbies().size(),
