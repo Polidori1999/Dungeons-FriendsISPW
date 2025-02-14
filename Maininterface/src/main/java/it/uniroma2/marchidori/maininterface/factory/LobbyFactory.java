@@ -13,11 +13,11 @@ public class LobbyFactory {
     }
 
     public static LobbyBean createBean() {
-        return new LobbyBean("", "", "", 0, "","", new ArrayList<>());
+        return new LobbyBean("", "", "", 0, "","", 0);
     }
 
-    public static Lobby createLobby(String name, String duration, String type, int initialPlayers, String owner, String infoLink, List<String> joinedPlayers) {
-        return new Lobby(name, duration, type,initialPlayers , owner, infoLink, joinedPlayers);
+    public static Lobby createLobby(String name, String duration, String type, int maxPlayers, String owner, String infoLink,int joinedPlayersCount) {
+        return new Lobby(name, duration, type,maxPlayers , owner, infoLink, joinedPlayersCount);
     }
 }
 

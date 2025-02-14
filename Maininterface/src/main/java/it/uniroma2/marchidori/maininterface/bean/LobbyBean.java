@@ -1,33 +1,39 @@
 package it.uniroma2.marchidori.maininterface.bean;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class LobbyBean {
     private String duration;       // "Singola"/"Campagna"
     private String name;           // nome lobby
-    private String liveOnline;// "Online"/"Presenza"
+    private String liveOnline;     // "Online"/"Presenza"
     private String infoLink;
-    private int maxOfPlayers;// # di giocatori
+    private int maxOfPlayers;      // Numero massimo di giocatori
     private String owner;
-    private List<String> joinedPlayers;
+    private int joinedPlayersCount; // Nuovo contatore per il numero di giocatori joinati
 
-
-    public LobbyBean(){
+    public LobbyBean() {
     }
 
-
-
-    public LobbyBean(String name,String duration, String type, int numberOfPlayers,String owner, String infoLink,List<String> joinedPlayers) {
+    /**
+     * Costruttore che utilizza un contatore per i giocatori joinati.
+     *
+     * @param name                  nome della lobby
+     * @param duration              durata (es. "Singola" o "Campagna")
+     * @param type                  modalità ("Online" o "Presenza")
+     * @param numberOfPlayers       numero massimo di giocatori
+     * @param owner                 proprietario della lobby
+     * @param infoLink              link di informazioni
+     * @param joinedPlayersCount    numero di giocatori che hanno joinato la lobby
+     */
+    public LobbyBean(String name, String duration, String type, int numberOfPlayers, String owner, String infoLink, int joinedPlayersCount) {
         this.name = name;
         this.duration = duration;
         this.liveOnline = type;
         this.maxOfPlayers = numberOfPlayers;
         this.owner = owner;
         this.infoLink = infoLink;
-        this.joinedPlayers = new ArrayList<>();
+        this.joinedPlayersCount = joinedPlayersCount;
     }
+
+    // Getters e Setters
 
     public String getDuration() {
         return duration;
@@ -46,8 +52,8 @@ public class LobbyBean {
     public String getLiveOnline() {
         return liveOnline;
     }
-    public void setLiveOnline(String type) {
-        this.liveOnline = type;
+    public void setLiveOnline(String liveOnline) {
+        this.liveOnline = liveOnline;
     }
 
     public int getMaxOfPlayers() {
@@ -64,19 +70,25 @@ public class LobbyBean {
         this.owner = owner;
     }
 
-    public String getPlayers() {
-        return joinedPlayers.size() + "/" + maxOfPlayers;
-    }
     public String getInfoLink() {
         return infoLink;
     }
     public void setInfoLink(String infoLink) {
         this.infoLink = infoLink;
     }
-    public List<String> getJoinedPlayers() {
-        return joinedPlayers;
+
+    public int getJoinedPlayersCount() {
+        return joinedPlayersCount;
     }
-    public void setJoinedPlayers(List<String> joinedPlayers) {
-        this.joinedPlayers = joinedPlayers;
+    public void setJoinedPlayersCount(int joinedPlayersCount) {
+        this.joinedPlayersCount = joinedPlayersCount;
+    }
+
+    /**
+     * Restituisce una stringa formattata che mostra il numero di giocatori joinati
+     * rispetto al numero massimo.
+     */
+    public String getPlayers() {
+        return joinedPlayersCount + "/" + maxOfPlayers;
     }
 }

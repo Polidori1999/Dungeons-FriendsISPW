@@ -2,12 +2,10 @@ package it.uniroma2.marchidori.maininterface.control;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
-import it.uniroma2.marchidori.maininterface.boundary.LobbyChangeListener;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.dao.LobbyDaoFileSys;
 import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
-import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
@@ -15,7 +13,6 @@ import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 import javafx.collections.FXCollections;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +29,9 @@ public class JoinLobbyController implements UserAwareInterface {
         // empty
     }
 
-
-
-
+    /**
+     * Converte una lista di Lobby in una lista di LobbyBean.
+     */
     public List<LobbyBean> getList(List<Lobby> lobbyList) {
         List<LobbyBean> beans = new ArrayList<>();
         for (Lobby lobby : lobbyList) {
@@ -43,55 +40,62 @@ public class JoinLobbyController implements UserAwareInterface {
         return beans;
     }
 
-
-    // Aggiungi una lobby all'utente e salva nel file
+    /**
+     * Aggiunge l'utente corrente alla lobby se c'è spazio disponibile.
+     * Utilizza un contatore (joinedPlayersCount) per tenere traccia del numero di giocatori.
+     */
     public void addLobby(LobbyBean lobbyBean) throws IOException {
-        lobbyBean.getJoinedPlayers().add(currentUser.getEmail());
-        printStringList(lobbyBean.getJoinedPlayers());
+        // Recupera il contatore corrente
+        int currentCount = lobbyBean.getJoinedPlayersCount();
+
+        // Se c'è spazio, incrementa il contatore; altrimenti, segnala che la lobby è piena.
+        if (currentCount < lobbyBean.getMaxOfPlayers()) {
+            lobbyBean.setJoinedPlayersCount(currentCount + 1);
+        } else {
+            System.out.println("La lobby è piena.");
+            return;
+        }
+
+        // Debug: stampa il nuovo numero di giocatori
+        System.out.println("Numero di giocatori ora: " + lobbyBean.getJoinedPlayersCount());
+
+        // Aggiorna le strutture dell'utente e della sessione
         if (currentUser.getJoinedLobbies() == null) {
             currentUser.setJoinedLobbies(FXCollections.observableArrayList());
         }
         currentUser.getJoinedLobbies().add(lobbyBean);
         currentEntity.getJoinedLobbies().add(Converter.lobbyBeanToEntity(lobbyBean));
 
-        // Aggiorna la lista tramite DAO...
+        // Aggiorna la lobby nella repository
         LobbyDaoFileSys lobbyDaoFileSys = new LobbyDaoFileSys();
         UserDAOFileSys dao = Session.getInstance().getUserDAOFileSys();
 
         lobbyDaoFileSys.deleteLobby(lobbyBean.getName());
         lobbyDaoFileSys.addLobby(Converter.lobbyBeanToEntity(lobbyBean));
 
+        // Aggiorna la persistenza dell'utente
         dao.updateUsersEntityData(currentEntity);
 
-        logger.log(Level.INFO, "Lobby aggiunta! Lista aggiornata: {0}", currentUser.getJoinedLobbies());
-
+        logger.log(Level.INFO, "Lobby aggiornata! Numero giocatori: {0}", lobbyBean.getJoinedPlayersCount());
     }
 
-    public static void printStringList(List<String> list) {
-        if (list == null || list.isEmpty()) {
-            System.out.println("La lista è vuota.");
-        } else {
-            for (String s : list) {
-                System.out.println(s);
-            }
-        }
-    }
-
-
-
-
-    // Metodo per aggiungere un nuovo personaggio
+    /**
+     * Aggiunge la lobby ai preferiti dell'utente.
+     */
     public void addLobbyToFavourite(LobbyBean lobbyBean) {
         if (currentUser.getFavouriteLobbies() == null) {
             currentUser.setFavouriteLobbies(new ArrayList<>());
         }
         currentUser.getFavouriteLobbies().add(lobbyBean);
+        // Aggiorna anche la lista nell'entity
         currentEntity.getFavouriteLobbies().add(Converter.lobbyBeanToEntity(lobbyBean));
         UserDAOFileSys dao = Session.getInstance().getUserDAOFileSys();
         dao.updateUsersEntityData(currentEntity);
     }
 
-    // Metodo per filtrare le lobby in base ai parametri
+    /**
+     * Filtra le lobby in base ai parametri.
+     */
     public List<LobbyBean> filterLobbies(String type, String duration, String numPlayersStr, String searchQuery) throws IOException {
         List<LobbyBean> result = new ArrayList<>();
         LobbyDaoFileSys lobbyDaoFileSys = new LobbyDaoFileSys();
@@ -100,11 +104,12 @@ public class JoinLobbyController implements UserAwareInterface {
             boolean matchesDuration = (duration == null || duration.isEmpty() || lob.getDuration().equals(duration));
             boolean matchesPlayers = true;
             boolean matchesSearch = (searchQuery == null || searchQuery.isEmpty() ||
-                    lob.getLobbyName().toLowerCase().contains(searchQuery));
+                    lob.getLobbyName().toLowerCase().contains(searchQuery.toLowerCase()));
 
             if (numPlayersStr != null && !numPlayersStr.isEmpty()) {
                 int n = Integer.parseInt(numPlayersStr);
-                matchesPlayers = (lob.getJoinedPlayers().size() == n);
+                // Utilizza il contatore invece della dimensione della lista
+                matchesPlayers = (lob.getJoinedPlayersCount() == n);
             }
 
             if (matchesType && matchesDuration && matchesPlayers && matchesSearch) {
@@ -114,7 +119,9 @@ public class JoinLobbyController implements UserAwareInterface {
         return result;
     }
 
-    // Check if a lobby is in the user's favorite list
+    /**
+     * Verifica se una lobby è nei preferiti dell'utente.
+     */
     public boolean isLobbyFavorite(String lobbyName, List<LobbyBean> favouriteLobbies) {
         if (favouriteLobbies == null) {
             return false;
@@ -123,19 +130,21 @@ public class JoinLobbyController implements UserAwareInterface {
                 .anyMatch(lobby -> lobby.getName().equals(lobbyName));
     }
 
-    // Remove a lobby from the user's favorite list by its name
+    /**
+     * Rimuove una lobby dai preferiti dell'utente dato il nome.
+     */
     public boolean removeLobbyByName(String name) {
         if (currentUser.getFavouriteLobbies() == null || name == null) {
             return false;
         }
-        // Remove the lobby if it's found in the favorites
         boolean removed = currentUser.getFavouriteLobbies().removeIf(lobby -> lobby.getName().equals(name));
-        // Also remove the lobby from the current entity's favorite lobbies
         currentEntity.getFavouriteLobbies().removeIf(lobby -> lobby.getLobbyName().equals(name));
         return removed;
     }
 
-    // Check if the user has joined a particular lobby
+    /**
+     * Controlla se l'utente ha già joinato una lobby.
+     */
     public boolean isLobbyJoined(LobbyBean lobby) {
         return currentUser != null &&
                 currentUser.getJoinedLobbies() != null &&

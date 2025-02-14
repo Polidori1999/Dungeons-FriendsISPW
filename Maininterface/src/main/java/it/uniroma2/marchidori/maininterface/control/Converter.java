@@ -126,8 +126,6 @@ public class Converter {
         if (lobbyBean == null) {
             return null;
         }
-        // Usa il costruttore di Lobby
-        // (String lobbyName, String duration, String type, boolean owned, int numberOfPlayers)
         return new Lobby(
                 lobbyBean.getName(),
                 lobbyBean.getDuration(),
@@ -135,7 +133,7 @@ public class Converter {
                 lobbyBean.getMaxOfPlayers(),
                 lobbyBean.getOwner(),
                 lobbyBean.getInfoLink(),
-                lobbyBean.getJoinedPlayers()
+                lobbyBean.getJoinedPlayersCount()
         );
     }
 
@@ -162,21 +160,19 @@ public class Converter {
         // Suddivide la stringa in parti usando ";" come delimitatore.
         String[] dataParts = lobbyData.split(";");
 
-        // Recupera i vari campi, verificando la lunghezza dell'array.
+        // Recupera i vari campi:
+        // [0] lobbyName, [1] duration, [2] liveOnline, [3] maxOfPlayers, [4] owner, [5] infoLink, [6] joinedPlayersCount
         String lobbyName = dataParts.length > 0 ? dataParts[0] : "";
         String duration = dataParts.length > 1 ? dataParts[1] : "";
         String type = dataParts.length > 2 ? dataParts[2] : "";
-        String owner = dataParts.length > 3 ? dataParts[3] : "";
-        int maxOfPlayers = dataParts.length > 4 ? Integer.parseInt(dataParts[4]) : 0;
+        int maxOfPlayers = dataParts.length > 3 ? Integer.parseInt(dataParts[3]) : 0;
+        String owner = dataParts.length > 4 ? dataParts[4] : "";
         String infoLink = dataParts.length > 5 ? dataParts[5] : "";
+        int joinedPlayersCount = dataParts.length > 6 ? Integer.parseInt(dataParts[6]) : 0;
 
-        List<String> joinedPlayers = new ArrayList<>();
-        if (dataParts.length > 6 && !dataParts[6].isEmpty()) {
-            joinedPlayers = Arrays.asList(dataParts[6].split(","));
-        }
-
-        return new Lobby(lobbyName, duration, type, maxOfPlayers, owner, infoLink, joinedPlayers);
+        return new Lobby(lobbyName, duration, type, maxOfPlayers, owner, infoLink, joinedPlayersCount);
     }
+
     //////////////////////////////////////////////
 
     public static UserBean convert(User user) {
@@ -214,13 +210,13 @@ public class Converter {
             return null;
         }
         return new LobbyBean(
-                lobby.getLobbyName(),                // name
-                lobby.getDuration(),                 // duration
-                lobby.getLiveOnline(),                     // liveOnline
-                lobby.getMaxOfPlayers(),          // maxOfPlayers
-                lobby.getOwner(),     // owner (convertiamo il boolean in String)
-                lobby.getInfoLink(),                 // infoLink
-                lobby.getJoinedPlayers()                    // joinedPlayers (lista vuota)
+                lobby.getLobbyName(),
+                lobby.getDuration(),
+                lobby.getLiveOnline(),
+                lobby.getMaxOfPlayers(),
+                lobby.getOwner(),
+                lobby.getInfoLink(),
+                lobby.getJoinedPlayersCount()
         );
     }
 
@@ -233,9 +229,9 @@ public class Converter {
         if (lobbies == null) {
             return new ArrayList<>();
         }
-        return new ArrayList<>(lobbies.stream()
+        return lobbies.stream()
                 .map(Converter::lobbyEntityToBean)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
     }
 
     /*

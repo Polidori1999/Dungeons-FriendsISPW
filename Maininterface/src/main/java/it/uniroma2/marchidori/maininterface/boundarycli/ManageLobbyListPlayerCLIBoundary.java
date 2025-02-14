@@ -121,7 +121,7 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
     }
 
     protected void processLeave(LobbyBean lobbyToLeave) throws IOException {
-        controller.deleteLobby(lobbyToLeave);
+        controller.leaveLobby(lobbyToLeave,currentUser.getEmail());
         refreshLobbyList();
     }
 
