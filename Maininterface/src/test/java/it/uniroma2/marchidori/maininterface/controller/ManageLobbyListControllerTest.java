@@ -119,6 +119,7 @@ class ManageLobbyListControllerTest {
         lobbyDao.addLobby(Converter.lobbyBeanToEntity(createTestLobbyBean("TestLobby")));
         UserDAOFileSys userDAOFileSys = new UserDAOFileSys();
         Session.getInstance().setUserDAOFileSys(userDAOFileSys);
+
         controller.leaveLobby(Converter.lobbyEntityToBean(createTestLobbyEntity("TestLobby")));
 
         assertEquals(1, testUser.getJoinedLobbies().size(),
