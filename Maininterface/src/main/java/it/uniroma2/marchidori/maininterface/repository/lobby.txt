@@ -1,0 +1,3 @@
+ciaoaa tt;One-Shot;Online;4;2;asds;0
+TestLobby;One-shot;Online;4;prova1;htpps://prova1;0
+TestLobby;One-shot;Online;4;prova1;htpps://prova1;3

@@ -72,11 +72,20 @@ public class ManageLobbyListController implements UserAwareInterface {
             System.err.println("Errore durante l'aggiornamento della lobby: " + e.getMessage());
         }
 
-        // 4. Rimuovi la lobby dalla lista delle lobby joinate dell'utente.
-        boolean removedFromBean = currentUser.getJoinedLobbies().removeIf(lobby -> lobby.getName().equals(lobbyBean.getName()));
-        boolean removedFromEntity = currentEntity.getJoinedLobbies().removeIf(lobby -> lobby.getLobbyName().equals(lobbyBean.getName()));
-        System.out.println("[DEBUG] Rimosso dalla lista UI: " + removedFromBean + ", dalla lista entity: " + removedFromEntity);
+        if (currentUser.getJoinedLobbies() != null) {
+            boolean removedFromBean = currentUser.getJoinedLobbies().removeIf(lobby -> lobby.getName().equals(lobbyBean.getName()));
+            System.out.println("[DEBUG] Rimosso dalla lista UI: " + removedFromBean);
+        } else {
+            System.out.println("[DEBUG] La lista dei LobbyBean è null, nessuna rimozione effettuata.");
+        }
 
+// Rimuovi la lobby dalla lista delle lobby joinate dell'entity (User)
+        if (currentEntity.getJoinedLobbies() != null) {
+            boolean removedFromEntity = currentEntity.getJoinedLobbies().removeIf(lobby -> lobby.getLobbyName().equals(lobbyBean.getName()));
+            System.out.println("[DEBUG] Rimosso dalla lista entity: " + removedFromEntity);
+        } else {
+            System.out.println("[DEBUG] La lista delle entity Lobby è null, nessuna rimozione effettuata.");
+        }
         // 5. Aggiorna la persistenza dell'utente.
         UserDAOFileSys dao = Session.getInstance().getUserDAOFileSys();
         dao.updateUsersEntityData(currentEntity);
