@@ -125,6 +125,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
             }
         }
 
+
         if (creationMode) {
             clearFields();
             LOGGER.info("Modalità creazione attiva.");
