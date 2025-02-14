@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAwareInterface, RunInterface {
 
-    private UserBean currentUser;
+
     private ConsultRulesController controller;
     private final Jout jout = new Jout(this.getClass().getSimpleName());
     private RuleBookBean pendingBuyBean;
@@ -169,7 +169,8 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
 
     @Override
     public void setCurrentUser(UserBean user) {
-        this.currentUser = user;
+        UserBean currentUser;
+        currentUser = user;
     }
 
     @Override

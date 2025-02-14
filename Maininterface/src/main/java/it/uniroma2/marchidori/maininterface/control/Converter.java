@@ -15,9 +15,7 @@ import it.uniroma2.marchidori.maininterface.entity.CharacterStats;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Classe che fornisce i metodi di conversione da Bean a Entity.
@@ -231,7 +229,7 @@ public class Converter {
         }
         return lobbies.stream()
                 .map(Converter::lobbyEntityToBean)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /*
@@ -285,10 +283,13 @@ public class Converter {
      */
     public static List<CharacterSheetBean> convertCharacterSheetList(List<CharacterSheet> sheets) {
         if (sheets == null) {
+            // Puoi anche usare List.of() se vuoi una lista immutabile vuota
             return new ArrayList<>();
         }
-        return new ArrayList<>(sheets.stream()
+        return sheets.stream()
                 .map(Converter::convertCharacterSheet)
-                .collect(Collectors.toList()));
+                .toList(); // Restituisce una lista non modificabile (Java 16+)
     }
+
+
 }

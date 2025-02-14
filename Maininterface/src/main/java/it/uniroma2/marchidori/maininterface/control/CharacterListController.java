@@ -1,14 +1,11 @@
 package it.uniroma2.marchidori.maininterface.control;
 
+import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
-import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
-import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
-import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
 import it.uniroma2.marchidori.maininterface.entity.*;
-import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
 
 import java.nio.file.Paths;
@@ -21,6 +18,8 @@ import java.util.logging.Logger;
 public class CharacterListController implements UserAwareInterface {
     private final User currentEntity = Session.getInstance().getCurrentUser();
     private UserBean currentUser;
+    private final Jout jout = new Jout("CharacterListController");
+
 
     private static final Logger logger = Logger.getLogger(CharacterListController.class.getName());
 
@@ -81,7 +80,7 @@ public class CharacterListController implements UserAwareInterface {
         } else {
             logger.severe(">>> ERRORE: currentEntity o la sua lista di CharacterSheet è null in getCharacterSheets()");
         }
-        logger.info("getCharacterSheets restituisce " + beans.size() + " elementi.");
+        jout.print("getCharacterSheets restituisce " + beans.size() + " elementi.");
         beans.forEach(b -> logger.info(" - " + b.getInfoBean().getName()));//display log
         return beans;
     }
