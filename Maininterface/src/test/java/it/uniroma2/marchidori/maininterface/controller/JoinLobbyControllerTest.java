@@ -14,7 +14,10 @@ class JoinLobbyControllerTest {
 
     @Test
     void testEntityToBeanConversion_SingleLobby() {
-        Lobby lobby = new Lobby("TestLobby", "30", "Online", false, 5);
+        List<String> listTest = new ArrayList<>();
+        listTest.add("test1");
+        listTest.add("test2");
+        Lobby lobby = new Lobby("TestLobby", "30", "Online", 4, "Smith", "https://test",listTest);
         List<Lobby> lobbyList = new ArrayList<>();
         lobbyList.add(lobby);
 
@@ -27,14 +30,19 @@ class JoinLobbyControllerTest {
         LobbyBean bean = beans.get(0);
         assertEquals(lobby.getLobbyName(), bean.getName(), "Il nome della lobby deve corrispondere.");
         assertEquals(lobby.getDuration(), bean.getDuration(), "La durata della lobby deve corrispondere.");
-        assertEquals(lobby.getType(), bean.getLiveOnline(), "Il tipo (Live/Online) deve corrispondere.");
-        assertEquals(lobby.getNumberOfPlayers(), bean.getNumberOfPlayers(), "Il numero di giocatori deve corrispondere.");
+        assertEquals(lobby.getLiveOnline(), bean.getLiveOnline(), "Il tipo (Live/Online) deve corrispondere.");
+        assertEquals(lobby.getMaxOfPlayers(), bean.getMaxOfPlayers(), "Il numero di giocatori deve corrispondere.");
+        assertEquals(lobby.getJoinedPlayers().size(), bean.getJoinedPlayers().size(), "Il numero di giocatori corrispondere.");
     }
 
     @Test
     void testEntityToBeanConversion_MultipleLobbies() {
-        Lobby lobby1 = new Lobby("Lobby1", "30", "Online", false, 4);
-        Lobby lobby2 = new Lobby("Lobby2", "45", "Live", true, 6);
+        List<String> listTest1 = new ArrayList<>();
+        List<String> listTest2 = new ArrayList<>();
+        listTest1.add("test1");
+        listTest2.add("test2");
+        Lobby lobby1 = new Lobby("Lobby1", "30", "Online", 4, "prova1","https://prova2", listTest1);
+        Lobby lobby2 = new Lobby("Lobby2", "45", "Live", 6, "prova2", "https://prova2", listTest2);
         List<Lobby> lobbyList = new ArrayList<>();
         lobbyList.add(lobby1);
         lobbyList.add(lobby2);
@@ -48,13 +56,17 @@ class JoinLobbyControllerTest {
         LobbyBean bean1 = beans.get(0);
         assertEquals(lobby1.getLobbyName(), bean1.getName(), "Il nome della prima lobby deve corrispondere.");
         assertEquals(lobby1.getDuration(), bean1.getDuration(), "La durata della prima lobby deve corrispondere.");
-        assertEquals(lobby1.getType(), bean1.getLiveOnline(), "Il tipo della prima lobby deve corrispondere.");
-        assertEquals(lobby1.getNumberOfPlayers(), bean1.getNumberOfPlayers(), "Il numero di giocatori della prima lobby deve corrispondere.");
+        assertEquals(lobby1.getLiveOnline(), bean1.getLiveOnline(), "Il tipo della prima lobby deve corrispondere.");
+        assertEquals(lobby1.getMaxOfPlayers(), bean1.getMaxOfPlayers(), "Il numero di giocatori della prima lobby deve corrispondere.");
+        assertEquals(lobby1.getJoinedPlayers().size(), bean1.getJoinedPlayers().size(), "Il numero di giocatori corrispondere.");
+
 
         LobbyBean bean2 = beans.get(1);
         assertEquals(lobby2.getLobbyName(), bean2.getName(), "Il nome della seconda lobby deve corrispondere.");
         assertEquals(lobby2.getDuration(), bean2.getDuration(), "La durata della seconda lobby deve corrispondere.");
-        assertEquals(lobby2.getType(), bean2.getLiveOnline(), "Il tipo della seconda lobby deve corrispondere.");
-        assertEquals(lobby2.getNumberOfPlayers(), bean2.getNumberOfPlayers(), "Il numero di giocatori della seconda lobby deve corrispondere.");
+        assertEquals(lobby2.getLiveOnline(), bean2.getLiveOnline(), "Il tipo della seconda lobby deve corrispondere.");
+        assertEquals(lobby2.getMaxOfPlayers(), bean2.getMaxOfPlayers(), "Il numero di giocatori della seconda lobby deve corrispondere.");
+        assertEquals(lobby2.getJoinedPlayers().size(), bean2.getJoinedPlayers().size(), "Il numero di giocatori corrispondere.");
+
     }
 }

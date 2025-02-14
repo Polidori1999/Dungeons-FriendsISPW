@@ -14,8 +14,8 @@ class ManageLobbyControllerTest {
     @Test
     void testFindLobbyByName_Found() {
         List<LobbyBean> lobbyList = new ArrayList<>();
-        LobbyBean lobby1 = new LobbyBean("30", "Lobby1", "Online", 4, false);
-        LobbyBean lobby2 = new LobbyBean("45", "Lobby2", "Live", 5, true);
+        LobbyBean lobby1 = new LobbyBean("Lobby1", "One-shot", "Online", 4, "prova1","htpps://prova1",null);
+        LobbyBean lobby2 = new LobbyBean("lobby2", "Campaign", "Live", 5, "prova2","https://prova2",null);
         lobbyList.add(lobby1);
         lobbyList.add(lobby2);
 
@@ -26,14 +26,15 @@ class ManageLobbyControllerTest {
         assertEquals(lobby1.getName(), foundLobby.getName());
         assertEquals(lobby1.getDuration(), foundLobby.getDuration());
         assertEquals(lobby1.getLiveOnline(), foundLobby.getLiveOnline());
-        assertEquals(lobby1.getNumberOfPlayers(), foundLobby.getNumberOfPlayers());
-        assertEquals(lobby1.isOwned(), foundLobby.isOwned());
+        assertEquals(lobby1.getMaxOfPlayers(), foundLobby.getMaxOfPlayers());
+        assertEquals(lobby1.getOwner(), foundLobby.getOwner());
+        assertEquals(lobby1.getJoinedPlayers(), foundLobby.getJoinedPlayers());
     }
 
     @Test
     void testFindLobbyByName_NotFound() {
         List<LobbyBean> lobbyList = new ArrayList<>();
-        LobbyBean lobby1 = new LobbyBean("30", "Lobby1", "Online", 4, false);
+        LobbyBean lobby1 = new LobbyBean("lobby1", "One-shot", "Online", 4, "prova1","htpps://prova1",null);
         lobbyList.add(lobby1);
 
         ManageLobbyController controller = new ManageLobbyController();
@@ -65,7 +66,7 @@ class ManageLobbyControllerTest {
     @Test
     void testFindLobbyByName_CaseSensitivity() {
         List<LobbyBean> lobbyList = new ArrayList<>();
-        LobbyBean lobby1 = new LobbyBean("30", "Lobby1", "Online", 4, false);
+        LobbyBean lobby1 = new LobbyBean("Lobby1", "One-shot", "Online", 4, "prova1","htpps://prova1",null);
         lobbyList.add(lobby1);
 
         ManageLobbyController controller = new ManageLobbyController();
