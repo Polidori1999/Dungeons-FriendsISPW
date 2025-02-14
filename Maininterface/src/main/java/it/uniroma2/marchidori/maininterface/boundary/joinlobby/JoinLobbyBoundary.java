@@ -153,7 +153,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
 
         // Imposta le colonne: usa una lambda per la colonna "players"
         lobbyNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        numberOfPlayersColumn.setCellValueFactory(new PropertyValueFactory<>("maxOfPlayers"));
+        numberOfPlayersColumn.setCellValueFactory(new PropertyValueFactory<>("players"));
         durationColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
         liveOnlineColumn.setCellValueFactory(new PropertyValueFactory<>("liveOnline"));
 

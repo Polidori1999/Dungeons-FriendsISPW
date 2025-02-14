@@ -154,6 +154,7 @@ public class UserDAOFileSys implements UserDAO {
         return new Lobby(lobbyName, duration, type, numberOfPlayers, owner, infoLink, joinedPlayersCount);
     }
 
+
     public String serializeLobby(Lobby lobby) {
         if (lobby == null) {
             return "Lobby is null";
