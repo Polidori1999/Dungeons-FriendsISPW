@@ -5,6 +5,7 @@ import it.uniroma2.marchidori.maininterface.control.ManageLobbyListController;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.dao.LobbyDaoFileSys;
+import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
 import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
@@ -57,6 +58,8 @@ class ManageLobbyListControllerTest {
 
     @BeforeEach
     void setUp() {
+        UserDAOFileSys userDAOFileSys = new UserDAOFileSys();
+        Session.getInstance().setUserDAOFileSys(userDAOFileSys);
         testUserBean = new UserBean("Test", "test", PLAYER, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         testUser = new User("", PLAYER, new ArrayList<CharacterSheet>(), new ArrayList<Lobby>(), new ArrayList<Lobby>());
         Session.getInstance().setCurrentUser(testUser);
