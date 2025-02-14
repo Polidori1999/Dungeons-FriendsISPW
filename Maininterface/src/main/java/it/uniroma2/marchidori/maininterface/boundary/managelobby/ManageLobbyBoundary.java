@@ -100,13 +100,13 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
     // -------------------------------------------------------------
     @FXML
     private void initialize() {
-        // Imposta i valori predefiniti delle ComboBox
+
         durationBox.setItems(FXCollections.observableArrayList("One-Shot", "Campaign"));
         maxPlayersBox.setItems(FXCollections.observableArrayList("2", "4", "6"));
         liveOnlineBox.setItems(FXCollections.observableArrayList("Live", "Online"));
 
-        // Stampa di debug per verificare l'iniezione dell'utente
-        LOGGER.log(Level.INFO, "User in ManageLobbyBoundary: {0}", (currentUser != null ? currentUser.getEmail() : "null"));
+        LOGGER.log(Level.INFO, "User in ManageLobbyBoundary: {0}",
+                (currentUser != null ? currentUser.getEmail() : "null"));
 
         // Determina la modalità in base al campo selectedLobbyName del currentUser
         String selected = currentUser != null ? currentUser.getSelectedLobbyName() : null;
@@ -124,14 +124,19 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
                 currentBean = LobbyFactory.createBean();
             }
         }
+
         if (creationMode) {
             clearFields();
             LOGGER.info("Modalità creazione attiva.");
         } else {
             populateFields(currentBean);
+            // Disabilita il campo del nome per impedire la modifica in modalità edit
+            lobbyName.setEditable(false);
+            lobbyName.setFocusTraversable(false);
+            // Disabilita il ComboBox del numero di giocatori per renderlo immutabile
+            maxPlayersBox.setDisable(true);
             LOGGER.log(Level.INFO, "Modalità modifica attiva per lobby: {0}", currentBean.getName());
         }
-
 
     }
 
