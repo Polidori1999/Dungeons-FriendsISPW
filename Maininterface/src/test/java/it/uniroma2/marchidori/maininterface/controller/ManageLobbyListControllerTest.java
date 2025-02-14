@@ -83,12 +83,15 @@ class ManageLobbyListControllerTest {
     }
 
     @Test
-    void testDeleteLobby_NonExistingLobby(){
+    void testDeleteLobby_NonExistingLobby() throws IOException {
         // Aggiungi una lobby con nome "ExistingLobby"
         addLobbyToUser("ExistingLobby");
 
         assertEquals(1, testUserBean.getJoinedLobbies().size());
         assertEquals(1, testUser.getJoinedLobbies().size());
+
+        LobbyDaoFileSys lobbyDao = new LobbyDaoFileSys();
+        lobbyDao.addLobby(Converter.lobbyBeanToEntity(createTestLobbyBean("TestLobby")));
 
         // Prova a eliminare una lobby con nome "NonExistingLobby"
         LobbyBean lobbyToDelete = createTestLobbyBean("NonExistingLobby");
