@@ -14,8 +14,8 @@ class ManageLobbyControllerTest {
     @Test
     void testFindLobbyByName_Found() {
         List<LobbyBean> lobbyList = new ArrayList<>();
-        LobbyBean lobby1 = new LobbyBean("Lobby1", "One-shot", "Online", 4, "prova1","htpps://prova1",null);
-        LobbyBean lobby2 = new LobbyBean("lobby2", "Campaign", "Live", 5, "prova2","https://prova2",null);
+        LobbyBean lobby1 = new LobbyBean("Lobby1", "One-shot", "Online", 4, "prova1","htpps://prova1",2);
+        LobbyBean lobby2 = new LobbyBean("lobby2", "Campaign", "Live", 5, "prova2","https://prova2",3);
         lobbyList.add(lobby1);
         lobbyList.add(lobby2);
 
@@ -28,13 +28,13 @@ class ManageLobbyControllerTest {
         assertEquals(lobby1.getLiveOnline(), foundLobby.getLiveOnline());
         assertEquals(lobby1.getMaxOfPlayers(), foundLobby.getMaxOfPlayers());
         assertEquals(lobby1.getOwner(), foundLobby.getOwner());
-        assertEquals(lobby1.getJoinedPlayers(), foundLobby.getJoinedPlayers());
+        assertEquals(lobby1.getJoinedPlayersCount(), foundLobby.getJoinedPlayersCount());
     }
 
     @Test
     void testFindLobbyByName_NotFound() {
         List<LobbyBean> lobbyList = new ArrayList<>();
-        LobbyBean lobby1 = new LobbyBean("lobby1", "One-shot", "Online", 4, "prova1","htpps://prova1",null);
+        LobbyBean lobby1 = new LobbyBean("lobby1", "One-shot", "Online", 4, "prova1","htpps://prova1",2);
         lobbyList.add(lobby1);
 
         ManageLobbyController controller = new ManageLobbyController();
@@ -66,7 +66,7 @@ class ManageLobbyControllerTest {
     @Test
     void testFindLobbyByName_CaseSensitivity() {
         List<LobbyBean> lobbyList = new ArrayList<>();
-        LobbyBean lobby1 = new LobbyBean("Lobby1", "One-shot", "Online", 4, "prova1","htpps://prova1",null);
+        LobbyBean lobby1 = new LobbyBean("Lobby1", "One-shot", "Online", 4, "prova1","htpps://prova1",2);
         lobbyList.add(lobby1);
 
         ManageLobbyController controller = new ManageLobbyController();

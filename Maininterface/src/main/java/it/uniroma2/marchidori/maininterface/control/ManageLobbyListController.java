@@ -33,8 +33,7 @@ public class ManageLobbyListController implements UserAwareInterface {
         // empty
     }
 
-    public void leaveLobby(LobbyBean lobbyBean, String userEmail) {
-        System.out.println("[DEBUG] Richiesta di leave per utente " + userEmail + " dalla lobby " + lobbyBean.getName());
+    public void leaveLobby(LobbyBean lobbyBean) {
 
         // 1. Recupera la lobby dal repository (versione persistente) cercandola per nome.
         LobbyDaoFileSys lobbyDao = new LobbyDaoFileSys();
@@ -82,7 +81,6 @@ public class ManageLobbyListController implements UserAwareInterface {
         UserDAOFileSys dao = Session.getInstance().getUserDAOFileSys();
         dao.updateUsersEntityData(currentEntity);
 
-        System.out.println("L'utente " + userEmail + " ha lasciato la lobby " + lobbyBean.getName());
     }
 
 
