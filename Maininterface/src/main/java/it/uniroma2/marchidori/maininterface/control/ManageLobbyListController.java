@@ -33,8 +33,61 @@ public class ManageLobbyListController implements UserAwareInterface {
         // empty
     }
 
+    public void leaveLobby(LobbyBean lobbyBean, String userEmail) {
+        System.out.println("[DEBUG] Richiesta di leave per utente " + userEmail + " dalla lobby " + lobbyBean.getName());
 
-    public void deleteLobby(LobbyBean lobbyBean) throws IOException {
+        // 1. Recupera la lobby dal repository (versione persistente) cercandola per nome.
+        LobbyDaoFileSys lobbyDao = new LobbyDaoFileSys();
+        List<Lobby> repoLobbies = LobbyDaoFileSys.getLobbiesFromSys();
+        Lobby repoLobby = null;
+        for (Lobby l : repoLobbies) {
+            if (l.getLobbyName().equals(lobbyBean.getName())) {
+                repoLobby = l;
+                break;
+            }
+        }
+        if (repoLobby == null) {
+            System.out.println("Lobby " + lobbyBean.getName() + " non trovata nel repository.");
+            return;
+        }
+        System.out.println("[DEBUG] Lobby nel repository trovata: " + repoLobby.getLobbyName() +
+                " con count = " + repoLobby.getJoinedPlayersCount());
+
+        // 2. Decrementa il contatore della lobby (solo sulla versione repository)
+        int currentCount = repoLobby.getJoinedPlayersCount();
+        if (currentCount > 0) {
+            repoLobby.setJoinedPlayersCount(currentCount - 1);
+        } else {
+            System.out.println("La lobby " + repoLobby.getLobbyName() + " non ha giocatori da rimuovere.");
+            return;
+        }
+        System.out.println("[DEBUG] Nuovo count nel repository per la lobby '"
+                + repoLobby.getLobbyName() + "': " + repoLobby.getJoinedPlayersCount());
+
+        // 3. Aggiorna il file della lobby: elimina la riga esistente e aggiungi quella aggiornata.
+        try {
+            lobbyDao.deleteLobby(repoLobby.getLobbyName());
+            lobbyDao.addLobby(repoLobby);
+            System.out.println("[DEBUG] File repository aggiornato per la lobby " + repoLobby.getLobbyName());
+        } catch (IOException e) {
+            System.err.println("Errore durante l'aggiornamento della lobby: " + e.getMessage());
+        }
+
+        // 4. Rimuovi la lobby dalla lista delle lobby joinate dell'utente.
+        boolean removedFromBean = currentUser.getJoinedLobbies().removeIf(lobby -> lobby.getName().equals(lobbyBean.getName()));
+        boolean removedFromEntity = currentEntity.getJoinedLobbies().removeIf(lobby -> lobby.getLobbyName().equals(lobbyBean.getName()));
+        System.out.println("[DEBUG] Rimosso dalla lista UI: " + removedFromBean + ", dalla lista entity: " + removedFromEntity);
+
+        // 5. Aggiorna la persistenza dell'utente.
+        UserDAOFileSys dao = Session.getInstance().getUserDAOFileSys();
+        dao.updateUsersEntityData(currentEntity);
+
+        System.out.println("L'utente " + userEmail + " ha lasciato la lobby " + lobbyBean.getName());
+    }
+
+
+
+    /*public void deleteLobby(LobbyBean lobbyBean) throws IOException {
         if (lobbyBean == null || currentUser.getJoinedLobbies() == null) {
             logger.warning("Impossibile rimuovere la lobby: il nome o la lista delle lobby è null");
             return;
@@ -53,7 +106,7 @@ public class ManageLobbyListController implements UserAwareInterface {
         // Aggiorna la persistenza riscrivendo completamente il file
         UserDAOFileSys dao = Session.getInstance().getUserDAOFileSys();
         dao.updateUsersEntityData(currentEntity);
-    }
+    }*/
 
     @Override
     public void setCurrentUser(UserBean user) {
@@ -63,13 +116,8 @@ public class ManageLobbyListController implements UserAwareInterface {
     public List<LobbyBean> getJoinedLobbies() {
         List<LobbyBean> beans = new ArrayList<>();
 
-        // Verifichiamo che currentEntity non sia null e che abbia la lista di joinedLobbies valorizzata
-        //UserDAO dao = UserDAOFactory.getUserDAO(false);
-
         if (currentEntity != null && currentEntity.getJoinedLobbies() != null) {
-
             for (Lobby lob : currentEntity.getJoinedLobbies()) {
-                // Converte la entity Lobby in un LobbyBean
                 System.out.println(lob);
                 LobbyBean bean = Converter.lobbyEntityToBean(lob);
                 beans.add(bean);
@@ -80,6 +128,4 @@ public class ManageLobbyListController implements UserAwareInterface {
 
         return beans;
     }
-
-
 }

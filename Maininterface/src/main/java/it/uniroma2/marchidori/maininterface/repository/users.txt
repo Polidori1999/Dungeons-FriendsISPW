@@ -1,9 +1,6 @@
-2,$2a$10$y9EA4Blgj.wbFOhcv987xuJE.WwlHe.KFbXCP2Xei2fdvE9Hd7sI6
-1,$2a$10$FRiTKJaqTXFGwtkbA2D5.uJGDxYHvYSQPugYswxuL5qdQn7oaW19u
-2,$2a$10$Y9tng3Uw/tqlPXNH1N97ueZFO6lIUtz7cm/FhYQUQvLioGffharbW
-1,$2a$10$gn23ycCYEXPBunQRVMXBG.cR7nB8wjtr66pLmqQJmYqKRPlsQ7kfm
-1,$2a$10$Gm9saWODPpZHwfR46XpT6.GjbIc3uClusLScg6DHcr/FjNjYQRv.2
-2,$2a$10$B79mRjPup8juNXxtwszX9.YC4T3.69wd12Jv6eTGH3En7uAMiX/kq
-edo,$2a$10$apyaC/S/u/O3oJuZzD9sZezbdNqL6/YO09MV3Dc8wBoMLBAAuckTe
-gpz,$2a$10$izFT.L8L8.VoIduzjlPByO5BzuGb7tgk8KKxp1M1lDkx7PP1jAhTi
-leo,$2a$10$0GFxxAG0DrUkeDAMQbV9j.HpstQ8SsLyO12LzoKWOu3H2boIIin2y
+2,$2a$10$kKeWzIB8ofNTvs2o1ELZc.J7cLClkM38Rb8xayQPz8xEpJALaG.lu
+smith,$2a$10$uC1rewh6.litsimlp8cLtOoIh1gw/QIgUy3TWs1NNZtqJZVZ60Ow6
+gianluca,$2a$10$Xq20j100t21W4HdsnSYMiulhtYMOLKCTnsmVeDUnjZYKKk0Am.MoC
+luca,$2a$10$0MOiErzDpMFYWgaMNgJQ1erW9rD47znKfBgfgxfgDU/7DNLzkdL6K
+alessio,$2a$10$O6ePRn610bO8olXweAkomu65307UHzk3jD71TKMF6hoSBYbHBRQtS
+beatrice,$2a$10$NCTSKiAbO/fmh3Mrb.Lh.u98AM5/nLg3oRLWD7VEswC11/xsX22hK

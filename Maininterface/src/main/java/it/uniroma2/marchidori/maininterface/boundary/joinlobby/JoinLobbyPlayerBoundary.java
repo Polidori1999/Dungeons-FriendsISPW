@@ -1,6 +1,7 @@
 package it.uniroma2.marchidori.maininterface.boundary.joinlobby;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
+import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
 
 
@@ -31,16 +32,18 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
                             10,
                             () -> {
                                 try {
-                                    controller.addLobby(lobbyBean);//questo è il join lobby
+                                    // Aggiungi il nuovo giocatore nel primo slot vuoto
+                                    //controller.addPlayerToLobby(Converter.lobbyBeanToEntity(lobbyBean), currentUser.getEmail());
+                                    controller.addLobby(lobbyBean); // oppure aggiorna la lobby
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
                                 joinButtonColumn.getTableView().refresh();
-
                             },
                             () -> logger.info("Azione annullata o scaduta.")
                     );
                 }
+
         );
 
         // Setup dynamic button for adding/removing lobby from favourites

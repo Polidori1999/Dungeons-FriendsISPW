@@ -47,7 +47,7 @@ public class ManageLobbyController implements UserAwareInterface {
             LobbyDaoFileSys lobbyDaoFileSys = new LobbyDaoFileSys();
             lobbyDaoFileSys.addLobby(newlobby);
             UserDAOFileSys userDAOFileSys = Session.getInstance().getUserDAOFileSys();
-            userDAOFileSys.saveUsersEntityData(currentEntity);
+            userDAOFileSys.updateUsersEntityData(currentEntity);
             currentUser.setSelectedLobbyName(null);
             LOGGER.log(Level.INFO, "Lista attuale delle lobby: {0}", currentUser.getJoinedLobbies());
         } else {
