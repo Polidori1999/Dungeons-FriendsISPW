@@ -1,5 +1,7 @@
 package it.uniroma2.marchidori.maininterface.entity;
 
+import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
+
 public class Session {
 
     // L'istanza singleton
@@ -7,9 +9,10 @@ public class Session {
 
     // Campo che contiene l'utente corrente (non statico)
     private User currentUser;
-    private boolean isCLI;
-    private boolean isDB;
-    private boolean isDemo;
+    private UserDAOFileSys userDAOFileSys;
+    private boolean isCLI = false;
+    private boolean isDB = false;
+    private boolean isDemo = false;
 
     // Costruttore privato per evitare istanziazioni esterne
     private Session() { }
@@ -35,7 +38,6 @@ public class Session {
     // Pulisce la sessione (ad es. logout)
     public void clear() {
         this.currentUser = null;
-        this.isCLI = false;
     }
     public boolean getCLI() {
         return isCLI;
@@ -54,5 +56,11 @@ public class Session {
     }
     public void setDemo(boolean isDemo) {
         this.isDemo = isDemo;
+    }
+    public UserDAOFileSys getUserDAOFileSys() {
+        return userDAOFileSys;
+    }
+    public void setUserDAOFileSys(UserDAOFileSys userDAOFileSys) {
+        this.userDAOFileSys = userDAOFileSys;
     }
 }

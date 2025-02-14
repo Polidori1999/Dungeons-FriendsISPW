@@ -1,8 +1,10 @@
 package it.uniroma2.marchidori.maininterface.control;
 
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
+import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
 import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
+import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 
@@ -11,6 +13,7 @@ import java.io.*;
 public class UserService {
     private static UserService instance;
     private final UserDAO userDAO;
+    private final UserDAOFileSys userDAOFileSys = new UserDAOFileSys();
 
     private UserService(boolean useDatabase) {
         this.userDAO = UserDAOFactory.getInstance().getUserDAO(useDatabase);
@@ -31,16 +34,10 @@ public class UserService {
         return userDAO.getUserByEmail(email);
     }
 
-    public String serializeCharacterSheet(CharacterSheet cs){
-        return userDAO.serializeCharacterSheet(cs);
-    }
-
-    public String serializeLobby(Lobby lobby){
-        return userDAO.serializeLobby(lobby);
-    }
 
     public User loadUserData(User user) throws FileNotFoundException {
-        return userDAO.loadUserData(user);
+        Session.getInstance().setUserDAOFileSys(userDAOFileSys);
+        return Session.getInstance().getUserDAOFileSys().loadUserData(user);
     }
 
 

@@ -9,69 +9,94 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.logging.Logger;
 
 public class Main extends Application {
 
     static UserBean tempUser = new UserBean("", null, null, null);
-    private final Jout jout = new Jout("Main");
+    private static final Jout jout = new Jout("Main");
+    private static final String choice = "Enter the corresponding number (1 or 2): ";
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        // Start the JavaFX scene using the LOGIN FXML
+        // Avvio della scena JavaFX utilizzando il file LOGIN
         SceneSwitcher.changeScene(primaryStage, SceneNames.LOGIN, tempUser);
     }
 
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
 
-        // -------------------------------
-        // DATA SOURCE SELECTION MECHANISM
-        // -------------------------------
-        boolean validDataSourceSelection = false;
-        while (!validDataSourceSelection) {
-            System.out.println("Select the data source option:");
-            System.out.println("1. DAO Database");
-            System.out.println("2. DAO FileSystem");
-            System.out.print("Enter the corresponding number (1 or 2): ");
-            String dataSourceChoice = scanner.nextLine().trim();
+        // 1. Seleziona la modalità applicazione (Demo / Non-Demo)
+        boolean isDemo = chooseAppMode(scanner);
+        Session.getInstance().setDemo(isDemo);
 
-            if ("1".equals(dataSourceChoice)) {
-                System.out.println("DAO Database selected.");
-                // Set your flag to true (for using the database)
-                Session.getInstance().setDB(true);
-                validDataSourceSelection = true;
-            } else if ("2".equals(dataSourceChoice)) {
-                System.out.println("DAO FileSystem selected.");
-                // Set your flag to false (for using the filesystem)
-                Session.getInstance().setDB(false);
-                validDataSourceSelection = true;
-            } else {
-                System.out.println("Invalid input. Please try again.");
-            }
+        // 2. Se la modalità non è demo, chiedi la scelta della data source
+        if (!isDemo) {
+            chooseDataSource(scanner);
         }
 
-        // ----------------------------------
-        // EXECUTION MODE SELECTION (CLI/JavaFX)
-        // ----------------------------------
-        boolean exit = true;
-        while (exit) {
-            System.out.println("Select the execution mode of the application:");
-            System.out.println("1. CLI");
-            System.out.println("2. JavaFX");
-            System.out.print("Enter the corresponding number (1 or 2): ");
+        // 3. Seleziona la modalità di esecuzione (CLI / JavaFX)
+        chooseExecutionMode(scanner, args);
+    }
+
+    private static boolean chooseAppMode(Scanner scanner) {
+        while (true) {
+            jout.print("Select application mode:");
+            jout.print("1. Demo Mode");
+            jout.print("2. Non-Demo Mode");
+            jout.print(choice);
+            String appModeChoice = scanner.nextLine().trim();
+            if ("1".equals(appModeChoice)) {
+                jout.print("Demo Mode selected.");
+                return true;
+            } else if ("2".equals(appModeChoice)) {
+                jout.print("Non-Demo Mode selected.");
+                return false;
+            } else {
+                jout.print("Invalid input. Please try again.");
+            }
+        }
+    }
+
+    private static void chooseDataSource(Scanner scanner) {
+        while (true) {
+            jout.print("Select the data source option:");
+            jout.print("1. DAO Database");
+            jout.print("2. DAO FileSystem");
+            jout.print(choice);
+            String dataSourceChoice = scanner.nextLine().trim();
+            if ("1".equals(dataSourceChoice)) {
+                jout.print("DAO Database selected.");
+                Session.getInstance().setDB(true);
+                return;
+            } else if ("2".equals(dataSourceChoice)) {
+                jout.print("DAO FileSystem selected.");
+                Session.getInstance().setDB(false);
+                return;
+            } else {
+                jout.print("Invalid input. Please try again.");
+            }
+        }
+    }
+
+    private static void chooseExecutionMode(Scanner scanner, String[] args) throws IOException {
+        while (true) {
+            jout.print("Select the execution mode of the application:");
+            jout.print("1. CLI");
+            jout.print("2. JavaFX");
+            jout.print(choice);
             String modeChoice = scanner.nextLine().trim();
             if ("1".equals(modeChoice)) {
-                System.out.println("Launching CLI mode...");
-                exit = false;
+                jout.print("Launching CLI mode...");
                 Session.getInstance().setCLI(true);
                 SceneSwitcher.changeScene(null, SceneNames.LOGIN, tempUser);
+                return;
             } else if ("2".equals(modeChoice)) {
-                System.out.println("Launching JavaFX mode...");
-                exit = false;
+                jout.print("Launching JavaFX mode...");
+                Session.getInstance().setCLI(false);
                 launch(args);
+                return;
             } else {
-                System.out.println("Invalid choice. Please try again.");
+                jout.print("Invalid choice. Please try again.");
             }
         }
     }

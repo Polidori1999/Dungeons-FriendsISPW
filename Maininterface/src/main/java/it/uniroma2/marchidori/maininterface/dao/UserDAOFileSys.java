@@ -184,8 +184,7 @@ public class UserDAOFileSys implements UserDAO {
 
 
         // Crea l'oggetto Lobby passando anche la lista dei joinedPlayers
-        Lobby lobby = new Lobby(lobbyName, duration, type, numberOfPlayers, owner, infoLink, joinedPlayers);
-        return lobby;
+        return new Lobby(lobbyName, duration, type, numberOfPlayers, owner, infoLink, joinedPlayers);
     }
 
 
@@ -303,7 +302,7 @@ public class UserDAOFileSys implements UserDAO {
         return new User(user.getEmail(), dummy, characterSheets, favouriteLobbies, joinedLobbies);
     }
 
-    @Override
+
     public void updateUsersEntityData(User user) {
         File userDir = getUserFolder(user.getEmail());
         if (!userDir.exists() && !userDir.mkdirs()) {
@@ -344,89 +343,4 @@ public class UserDAOFileSys implements UserDAO {
             logger.severe("Errore durante l'aggiornamento delle favourite lobbies: " + e.getMessage());
         }
     }
-
-
-    /*public void updateUsersEntityData(User user) {
-        File userDir = getUserFolder(user.getEmail());
-        if (!userDir.exists() && !userDir.mkdirs()) {
-            logger.severe("Errore nella creazione della cartella per: " + user.getEmail());
-            return;
-        }
-
-        // Riscrive il file dei character sheets
-        File characterFile = new File(userDir, "characterSheets.csv");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(characterFile, false))) {
-            for (CharacterSheet cs : user.getCharacterSheets()) {
-                writer.write(serializeCharacterSheet(cs));
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        // Riscrive il file delle joined lobbies
-        File joinedFile = new File(userDir, "joinedLobbies.csv");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(joinedFile, false))) {
-            for (Lobby lobby : user.getJoinedLobbies()) {
-                writer.write(serializeLobby(lobby));
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            logger.severe("Errore durante l'aggiornamento delle joined lobbies: " + e.getMessage());
-        }
-
-        // Riscrive il file delle favourite lobbies
-        File favFile = new File(userDir, "favouriteLobbies.csv");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(favFile, false))) {
-            for (Lobby lobby : user.getFavouriteLobbies()) {
-                writer.write(serializeLobby(lobby));
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            logger.severe("Errore durante l'aggiornamento delle favourite lobbies: " + e.getMessage());
-        }
-    }*/
-    public void removeJoinedLobby(String email, String lobbyName) {
-        File userDir = getUserFolder(email);
-        File joinedFile = new File(userDir, "joinedLobbies.csv");
-
-        if (!joinedFile.exists()) {
-            logger.warning("Il file joinedLobbies.csv non esiste per l'utente: " + email);
-            return;
-        }
-
-        List<String> remainingLines = new ArrayList<>();
-
-        // Leggi tutte le righe del file e mantieni solo quelle che non corrispondono a lobbyName
-        try (BufferedReader reader = new BufferedReader(new FileReader(joinedFile))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.trim().isEmpty()) continue;
-                // Il primo campo (prima del ';') contiene il nome della lobby
-                String[] parts = line.split(";", -1);
-                if (parts.length > 0 && parts[0].equals(lobbyName)) {
-                    // Salta questa riga, perché corrisponde alla lobby da eliminare
-                    continue;
-                }
-                remainingLines.add(line);
-            }
-        } catch (IOException e) {
-            logger.severe("Errore durante la lettura del file joinedLobbies.csv: " + e.getMessage());
-            return;
-        }
-
-        // Riscrivi il file con le righe rimanenti (overwrite)
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(joinedFile, false))) {
-            for (String l : remainingLines) {
-                writer.write(l);
-                writer.newLine();
-            }
-            logger.info("Lobby '" + lobbyName + "' rimossa con successo dal file delle joined lobbies per l'utente: " + email);
-        } catch (IOException e) {
-            logger.severe("Errore durante la scrittura del file joinedLobbies.csv: " + e.getMessage());
-        }
-    }
-
-
-
 }

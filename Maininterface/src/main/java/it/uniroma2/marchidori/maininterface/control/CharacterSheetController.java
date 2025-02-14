@@ -6,6 +6,7 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBe
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
+import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
 import it.uniroma2.marchidori.maininterface.entity.*;
 import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
@@ -52,7 +53,7 @@ public class CharacterSheetController implements UserAwareInterface {
         currentUser.getCharacterSheets().forEach(cs -> logger.info(" - " + cs.getInfoBean().getName()));
 
         // Ora aggiorna il file (usa updateUsersEntityData per riscrivere completamente il file)
-        UserDAO dao = UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB());
+        UserDAOFileSys dao =Session.getInstance().getUserDAOFileSys();
         dao.updateUsersEntityData(currentEntity);
     }
 
@@ -73,7 +74,7 @@ public class CharacterSheetController implements UserAwareInterface {
 
                     currentUser.getCharacterSheets().set(i, characterSheetBean);
                     // Converte il bean aggiornato in un'entità CharacterSheet
-                    CharacterSheet updatedCharacter = beanToEntity(characterSheetBean);
+                    CharacterSheet updatedCharacter = Converter.characterSheetBeanToEntity(characterSheetBean);
                     // Aggiorna la lobby nella lista dello user
 
                     currentEntity.getCharacterSheets().set(i, updatedCharacter);
@@ -88,7 +89,7 @@ public class CharacterSheetController implements UserAwareInterface {
             // Aggiorna anche la repository:
             oldName=characterSheetBean.getInfoBean().getName();
             currentEntity=Converter.userBeanToEntity(currentUser);
-            UserDAO userDAO = UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB());
+            UserDAOFileSys userDAO = Session.getInstance().getUserDAOFileSys();
 
             userDAO.updateUsersEntityData(currentEntity);
 

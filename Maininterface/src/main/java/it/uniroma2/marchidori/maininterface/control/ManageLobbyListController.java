@@ -51,7 +51,7 @@ public class ManageLobbyListController implements UserAwareInterface {
         }
 
         // Aggiorna la persistenza riscrivendo completamente il file
-        UserDAO dao = UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB());
+        UserDAOFileSys dao = Session.getInstance().getUserDAOFileSys();
         dao.updateUsersEntityData(currentEntity);
     }
 
