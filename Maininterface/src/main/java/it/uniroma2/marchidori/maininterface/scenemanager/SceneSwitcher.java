@@ -1,16 +1,12 @@
 package it.uniroma2.marchidori.maininterface.scenemanager;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
-import it.uniroma2.marchidori.maininterface.boundary.LobbyChangeListener;
 import it.uniroma2.marchidori.maininterface.boundary.RunInterface;
-import it.uniroma2.marchidori.maininterface.boundary.charactersheet.CharacterListDMBoundary;
-import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.enumerate.SceneIdEnum;
 import it.uniroma2.marchidori.maininterface.factory.BoundaryFactory;
 import it.uniroma2.marchidori.maininterface.factory.ControllerFactory;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -28,66 +24,69 @@ public class SceneSwitcher {
         RoleEnum role = (currentUser != null) ? currentUser.getRoleBehavior() : RoleEnum.NONE;
         SceneIdEnum sceneId = getSceneIdFromFxml(fxmlPath);
 
-        if(Session.getInstance().getCLI()){
+        if (Session.getInstance().getCLI()) {
             SceneConfigCLIEnum config = RoleSceneMap.getCLIConfig(role, sceneId);
-            Class<?> boundaryClass = config.getBoundaryClass();
-            logger.info(">>> [SceneSwitcher] Boundary risolta: " + boundaryClass.getSimpleName());
-            Object boundaryInstance = BoundaryFactory.createBoundary(boundaryClass);
+            Object boundaryInstance = createAndInjectBoundary(config, currentUser);
+            logger.info(">>> [SceneSwitcher] Boundary risolta: " + config.getBoundaryClass().getSimpleName());
             logger.info(">>> [SceneSwitcher] Istanza della boundary creata: " + boundaryInstance.getClass().getSimpleName());
-            injectCurrentUser(boundaryInstance, currentUser);
-            Class<?> controllerClass = config.getControllerClass();
-            Object controllerInstance = null;
-            if (controllerClass != null) {
-                controllerInstance = ControllerFactory.createController(controllerClass);
-                injectCurrentUser(controllerInstance, currentUser);
-                injectControllerIntoBoundary(controllerInstance, boundaryInstance);
 
-            }
-            if (boundaryInstance instanceof RunInterface runInterface){
+            if (boundaryInstance instanceof RunInterface runInterface) {
                 runInterface.run();
             }
             return;
         }
 
-
         // Evitare scene duplicate
-        if (!Session.getInstance().getCLI() && currentStage.getScene() != null && fxmlPath.equals(currentStage.getScene().getUserData())) {
+        if (!Session.getInstance().getCLI() && currentStage.getScene() != null &&
+                fxmlPath.equals(currentStage.getScene().getUserData())) {
             return; // Se la scena è già attiva, non fare nulla
         }
-        // Ottieni lo SceneIdEnum corrispondente al file FXML richiesto
+
         SceneConfigEnum config = RoleSceneMap.getConfig(role, sceneId);
-
-        // Recupera la classe della boundary tramite il metodo pubblico di BoundaryMap
-        Class<?> boundaryClass = config.getBoundaryClass();
-        logger.info(">>> [SceneSwitcher] Boundary risolta: " + boundaryClass.getSimpleName());
-
-        // Istanzia la boundary
-        // Istanzia la boundary
-        Object boundaryInstance = BoundaryFactory.createBoundary(boundaryClass);
+        Object boundaryInstance = createAndInjectBoundary(config, currentUser);
+        logger.info(">>> [SceneSwitcher] Boundary risolta: " + config.getBoundaryClass().getSimpleName());
         logger.info(">>> [SceneSwitcher] Istanza della boundary creata: " + boundaryInstance.getClass().getSimpleName());
 
-        injectCurrentUser(boundaryInstance, currentUser);
-
-// Recupera la classe del controller tramite il metodo pubblico di ControllerMap (se prevista)
-        // Recupera la classe del controller tramite il metodo pubblico di ControllerMap (se prevista)
-        Class<?> controllerClass = config.getControllerClass();
-        Object controllerInstance = null;
-        if (controllerClass != null) {
-            controllerInstance = ControllerFactory.createController(controllerClass);
-            injectCurrentUser(controllerInstance, currentUser);
-            injectControllerIntoBoundary(controllerInstance, boundaryInstance);
-
-
-
-        }
-
-        // Carica il file FXML impostando la boundary come controller
         Parent root = loadFXML(fxmlPath, boundaryInstance);
         Scene newScene = new Scene(root);
         currentStage.setScene(newScene);
         currentStage.show();
-
     }
+
+    /**
+     * Metodo helper che crea la boundary e, se previsto, il relativo controller,
+     * iniettando il currentUser in entrambi.
+     *
+     * Il parametro 'config' può essere un'istanza di SceneConfigCLIEnum o SceneConfigEnum,
+     * purché entrambi offrano i metodi getBoundaryClass() e getControllerClass().
+     */
+    private static Object createAndInjectBoundary(Object config, UserBean currentUser) {
+        Class<?> boundaryClass;
+        Class<?> controllerClass;
+
+        // Determina le classi in base al tipo di config passato
+        if (config instanceof SceneConfigCLIEnum cliConfig) {
+            boundaryClass = cliConfig.getBoundaryClass();
+            controllerClass = cliConfig.getControllerClass();
+        } else if (config instanceof SceneConfigEnum guiConfig) {
+            boundaryClass = guiConfig.getBoundaryClass();
+            controllerClass = guiConfig.getControllerClass();
+        } else {
+            throw new IllegalArgumentException("Tipo di config non supportato: " + config.getClass());
+        }
+
+        Object boundaryInstance = BoundaryFactory.createBoundary(boundaryClass);
+        injectCurrentUser(boundaryInstance, currentUser);
+
+        if (controllerClass != null) {
+            Object controllerInstance = ControllerFactory.createController(controllerClass);
+            injectCurrentUser(controllerInstance, currentUser);
+            injectControllerIntoBoundary(controllerInstance, boundaryInstance);
+        }
+
+        return boundaryInstance;
+    }
+
 
     private static void injectControllerIntoBoundary(Object controller, Object boundary) {
         if (controller != null && boundary instanceof it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface controllerAware) {
@@ -112,12 +111,6 @@ public class SceneSwitcher {
         loader.setController(controller);
         return loader.load();
     }
-    /*private static Parent loadFXML(String fxmlPath, Object controller) throws IOException {
-        FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource(
-                "/it/uniroma2/marchidori/maininterface/" + fxmlPath));
-        loader.setController(controller);
-        return loader.load();
-    }*/
 
 
     private static SceneIdEnum getSceneIdFromFxml(String fxmlPath) {

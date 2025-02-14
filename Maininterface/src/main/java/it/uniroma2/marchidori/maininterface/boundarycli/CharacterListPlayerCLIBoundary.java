@@ -10,8 +10,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
-public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary{
+public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary {
 
     private UserBean currentUser;
     private CharacterListController controller;
@@ -39,7 +40,6 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary{
         }
     }
 
-
     /**
      * Visualizza il menu delle operazioni disponibili.
      */
@@ -51,9 +51,7 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary{
         jout.print("4. Crea un nuovo personaggio");
         jout.print("5. Aggiorna lista personaggi");
         jout.print("0. Torna a Home");
-
     }
-
 
     /**
      * Elabora la scelta dell'utente e richiama la relativa operazione.
@@ -71,7 +69,7 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary{
                 handleDeleteCharacter();
                 break;
             case "3":
-                handleDownloadCharacter(); //domani
+                handleDownloadCharacter();
                 break;
             case "4":
                 handleNewCharacter();
@@ -90,25 +88,56 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary{
     }
 
     /**
-     * Gestisce la modifica di un personaggio selezionato.
+     * Metodo helper per gestire la selezione di un personaggio.
+     * Se la lista è vuota, stampa il messaggio di errore passato.
+     * Altrimenti, chiede all'utente l'indice e, se valido, esegue l'azione definita nel consumer.
+     *
+     * @param emptyMessage  Messaggio da mostrare se la lista è vuota.
+     * @param promptMessage Messaggio da mostrare per richiedere l'indice.
+     * @param action        Azione da eseguire sul personaggio selezionato.
+     * @throws IOException se il prompt genera un'eccezione.
      */
-    private void handleEditCharacter() throws IOException {
+    private void handleCharacterSelection(String emptyMessage, String promptMessage,
+                                          Consumer<CharacterSheetBean> action) throws IOException {
         if (data.isEmpty()) {
-            jout.print("Nessun personaggio da modificare.");
+            jout.print(emptyMessage);
             return;
         }
-        String idxStr = prompt("Inserisci il numero del personaggio da modificare: ");
+        String idxStr = prompt(promptMessage);
         try {
             int index = Integer.parseInt(idxStr);
             if (index < 1 || index > data.size()) {
                 jout.print("Indice non valido.");
                 return;
             }
-            CharacterSheetBean characterToEdit = data.get(index - 1);
-            editCharacter(characterToEdit);
+            action.accept(data.get(index - 1));
         } catch (NumberFormatException e) {
             jout.print("Input non valido.");
         }
+    }
+
+    /**
+     * Gestisce la modifica di un personaggio selezionato.
+     */
+    private void handleEditCharacter() throws IOException {
+        handleCharacterSelection("Nessun personaggio da modificare.",
+                "Inserisci il numero del personaggio da modificare: ",
+                characterSheetBean -> {
+                    try {
+                        editCharacter(characterSheetBean);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+    }
+
+    /**
+     * Gestisce il download di un personaggio.
+     */
+    private void handleDownloadCharacter() throws IOException {
+        handleCharacterSelection("Nessun personaggio disponibile per il download.",
+                "Inserisci il numero del personaggio da scaricare: ",
+                this::downloadCharacter);
     }
 
     /**
@@ -119,29 +148,6 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary{
         currentUser.setSelectedLobbyName(characterSheetBean.getInfoBean().getName());
         jout.print("Modifica del personaggio '" + characterSheetBean.getInfoBean().getName() + "'.");
         changeScene(SceneNames.CHARACTER_SHEET);
-    }
-
-
-    /**
-     * Gestisce il download di un personaggio.
-     */
-    private void handleDownloadCharacter() {
-        if (data.isEmpty()) {
-            jout.print("Nessun personaggio disponibile per il download.");
-            return;
-        }
-        String idxStr = prompt("Inserisci il numero del personaggio da scaricare: ");
-        try {
-            int index = Integer.parseInt(idxStr);
-            if (index < 1 || index > data.size()) {
-                jout.print("Indice non valido.");
-                return;
-            }
-            CharacterSheetBean characterToDownload = data.get(index - 1);
-            downloadCharacter(characterToDownload);
-        } catch (NumberFormatException e) {
-            jout.print("Input non valido.");
-        }
     }
 
     /**

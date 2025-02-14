@@ -247,7 +247,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         }
         // Dopo il salvataggio, simula il cambio scena verso la lista delle lobby
         try {
-            changeScene(SceneNames.MANAGE_LOBBY_LIST);
+            SceneSwitcher.changeScene(null, SceneNames.MANAGE_LOBBY_LIST, currentUser);
         } catch (IOException e) {
             throw new SceneChangeException("Errore nel cambio scena verso la lista delle lobby.", e);
         }
@@ -258,18 +258,10 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
      */
     private void onClickGoBackToListOfLobbies() {
         try {
-            changeScene(SceneNames.MANAGE_LOBBY_LIST);
+            SceneSwitcher.changeScene(null, SceneNames.MANAGE_LOBBY_LIST, currentUser);
         } catch (IOException e) {
             throw new SceneChangeException("Errore nel cambio scena dalla gestione lobby alla lista delle lobby.", e);
         }
-    }
-
-    /**
-     * Simula il cambio scena in ambiente CLI.
-     */
-    private void changeScene(String fxml) throws IOException {
-        jout.print("Cambio scena verso " + fxml + "...");
-        SceneSwitcher.changeScene(null, fxml, currentUser);
     }
 
     // -------------------- Metodi di supporto per la gestione dei campi --------------------
@@ -287,13 +279,18 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
     /**
      * Simula il popolamento dei campi con i dati di un bean esistente.
      */
+    private void printField(String label, Object value) {
+        jout.print(String.format("%-15s: %s", label, value));
+    }
+
     private void populateFields(LobbyBean bean) {
         jout.print("Popolamento dei campi con i dati della lobby esistente:");
-        jout.print("Nome           : " + bean.getName());
-        jout.print("Live/Online    : " + bean.getLiveOnline());
-        jout.print("Max Giocatori  : " + bean.getMaxOfPlayers());
-        jout.print("Durata         : " + bean.getDuration());
+        printField("Nome", bean.getName());
+        printField("Live/Online", bean.getLiveOnline());
+        printField("Max Giocatori", bean.getMaxOfPlayers());
+        printField("Durata", bean.getDuration());
     }
+
 
     // -------------------- Iniezione delle dipendenze --------------------
 

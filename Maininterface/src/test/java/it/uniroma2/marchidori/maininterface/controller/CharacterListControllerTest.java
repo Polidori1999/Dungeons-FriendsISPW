@@ -20,51 +20,58 @@ class CharacterListControllerTest {
     private UserBean testUserBean;
     private User testUser;
 
+    // Costanti per i valori di default
+    private static final String DEFAULT_RACE = "Human";
+    private static final int DEFAULT_AGE = 25;
+    private static final String DEFAULT_CLASS = "Warrior";
+    private static final int DEFAULT_LEVEL = 5;
+    private static final int DEFAULT_STAT = 10;
 
     private CharacterSheetBean createTestCharacterSheetBean(String name) {
         CharacterInfoBean infoBean = new CharacterInfoBean();
         infoBean.setName(name);
-        infoBean.setRace("Human");
-        infoBean.setAge(25);
-        infoBean.setClasse("Warrior");
-        infoBean.setLevel(5);
+        infoBean.setRace(DEFAULT_RACE);
+        infoBean.setAge(DEFAULT_AGE);
+        infoBean.setClasse(DEFAULT_CLASS);
+        infoBean.setLevel(DEFAULT_LEVEL);
 
         CharacterStatsBean statsBean = new CharacterStatsBean();
-        statsBean.setStrength(10);
-        statsBean.setDexterity(10);
-        statsBean.setIntelligence(10);
-        statsBean.setWisdom(10);
-        statsBean.setCharisma(10);
-        statsBean.setConstitution(10);
+        statsBean.setStrength(DEFAULT_STAT);
+        statsBean.setDexterity(DEFAULT_STAT);
+        statsBean.setIntelligence(DEFAULT_STAT);
+        statsBean.setWisdom(DEFAULT_STAT);
+        statsBean.setCharisma(DEFAULT_STAT);
+        statsBean.setConstitution(DEFAULT_STAT);
 
         return new CharacterSheetBean(infoBean, statsBean);
     }
 
-
     private CharacterSheet createTestCharacterSheetEntity(String name) {
-        CharacterInfo info = new CharacterInfo(name, "Human", 25, "Warrior", 5);
-        CharacterStats stats = new CharacterStats(10, 10, 10, 10, 10, 10);
+        CharacterInfo info = new CharacterInfo(name, DEFAULT_RACE, DEFAULT_AGE, DEFAULT_CLASS, DEFAULT_LEVEL);
+        CharacterStats stats = new CharacterStats(DEFAULT_STAT, DEFAULT_STAT, DEFAULT_STAT, DEFAULT_STAT, DEFAULT_STAT, DEFAULT_STAT);
         return new CharacterSheet(info, stats);
+    }
+
+    /**
+     * Metodo helper per aggiungere un foglio personaggio sia al bean che all'entity.
+     */
+    private void addCharacterSheetToUser(String name) {
+        testUserBean.getCharacterSheets().add(createTestCharacterSheetBean(name));
+        testUser.getCharacterSheets().add(createTestCharacterSheetEntity(name));
     }
 
     @BeforeEach
     void setUp() {
-        testUserBean = new UserBean("Test","test",PLAYER,new ArrayList<>(),new ArrayList<>(),new ArrayList<>());
-
-        testUser = new User("", PLAYER, new ArrayList<>(),new ArrayList<>(),new ArrayList<>());
+        testUserBean = new UserBean("Test", "test", PLAYER, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        testUser = new User("", PLAYER, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         Session.getInstance().setCurrentUser(testUser);
         controller = new CharacterListController();
         controller.setCurrentUser(testUserBean);
     }
 
-
     @Test
     void testDeleteCharacter_ExistingCharacter() {
-        CharacterSheetBean sheetBean = createTestCharacterSheetBean("TestCharacter");
-        CharacterSheet sheetEntity = createTestCharacterSheetEntity("TestCharacter");
-
-        testUserBean.getCharacterSheets().add(sheetBean);
-        testUser.getCharacterSheets().add(sheetEntity);
+        addCharacterSheetToUser("TestCharacter");
 
         assertEquals(1, testUserBean.getCharacterSheets().size());
         assertEquals(1, testUser.getCharacterSheets().size());
@@ -77,14 +84,9 @@ class CharacterListControllerTest {
                 "La lista delle entity CharacterSheet dovrebbe essere vuota dopo l'eliminazione");
     }
 
-
     @Test
     void testDeleteCharacter_NonExistingCharacter() {
-        CharacterSheetBean sheetBean = createTestCharacterSheetBean("ExistingCharacter");
-        CharacterSheet sheetEntity = createTestCharacterSheetEntity("ExistingCharacter");
-
-        testUserBean.getCharacterSheets().add(sheetBean);
-        testUser.getCharacterSheets().add(sheetEntity);
+        addCharacterSheetToUser("ExistingCharacter");
 
         assertEquals(1, testUserBean.getCharacterSheets().size());
         assertEquals(1, testUser.getCharacterSheets().size());
@@ -97,13 +99,12 @@ class CharacterListControllerTest {
                 "La lista delle entity CharacterSheet non dovrebbe essere modificata");
     }
 
-
     @Test
     void testDeleteCharacter_NullUser() {
         controller.setCurrentUser(null);
 
-        CharacterSheet sheetEntity = createTestCharacterSheetEntity("TestCharacter");
-        testUser.getCharacterSheets().add(sheetEntity);
+        // Aggiungo solo l'entity, dato che il bean non viene usato se currentUser è null
+        testUser.getCharacterSheets().add(createTestCharacterSheetEntity("TestCharacter"));
 
         controller.deleteCharacter("TestCharacter");
 
@@ -111,13 +112,11 @@ class CharacterListControllerTest {
                 "La lista delle entity CharacterSheet dovrebbe rimanere invariata se currentUser è null");
     }
 
-
     @Test
     void testDeleteCharacter_NullCharacterSheetsInUserBean() {
         testUserBean.setCharacterSheets(null);
 
-        CharacterSheet sheetEntity = createTestCharacterSheetEntity("TestCharacter");
-        testUser.getCharacterSheets().add(sheetEntity);
+        testUser.getCharacterSheets().add(createTestCharacterSheetEntity("TestCharacter"));
 
         controller.deleteCharacter("TestCharacter");
 
