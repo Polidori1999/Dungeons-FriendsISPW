@@ -4,6 +4,7 @@ import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.dao.LobbyDaoFileSys;
+import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
@@ -44,6 +45,8 @@ public class ManageLobbyController implements UserAwareInterface {
             //add to file sys missing dao repository
             LobbyDaoFileSys lobbyDaoFileSys = new LobbyDaoFileSys();
             lobbyDaoFileSys.addLobby(newlobby);
+            UserDAOFileSys userDAOFileSys = new UserDAOFileSys();
+            userDAOFileSys.saveUsersEntityData(currentEntity);
             currentUser.setSelectedLobbyName(null);
             LOGGER.log(Level.INFO, "Lista attuale delle lobby: {0}", currentUser.getJoinedLobbies());
         } else {

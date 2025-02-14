@@ -51,14 +51,16 @@ public class JoinLobbyController implements UserAwareInterface {
         if (currentUser.getJoinedLobbies() == null) {
             currentUser.setJoinedLobbies(FXCollections.observableArrayList());
         }
-        lobbyBean.setOwner(currentUser.getEmail());
         currentUser.getJoinedLobbies().add(lobbyBean);
         currentEntity.getJoinedLobbies().add(Converter.lobbyBeanToEntity(lobbyBean));
 
         // Aggiorna la lista tramite DAO...
         LobbyDaoFileSys lobbyDaoFileSys = new LobbyDaoFileSys();
         UserDAO dao = UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB());
-        lobbyDaoFileSys.updateLobby(Converter.lobbyBeanToEntity(lobbyBean));
+
+        lobbyDaoFileSys.deleteLobby(lobbyBean.getName());
+        lobbyDaoFileSys.addLobby(Converter.lobbyBeanToEntity(lobbyBean));
+
         dao.updateUsersEntityData(currentEntity);
 
         logger.log(Level.INFO, "Lobby aggiunta! Lista aggiornata: {0}", currentUser.getJoinedLobbies());

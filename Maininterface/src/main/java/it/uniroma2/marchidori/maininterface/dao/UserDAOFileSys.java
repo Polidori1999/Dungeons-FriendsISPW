@@ -169,19 +169,19 @@ public class UserDAOFileSys implements UserDAO {
         String lobbyName = parts[0];
         String duration = parts[1];
         String type = parts[2];
-        boolean owned = Boolean.parseBoolean(parts[3]);
-        int numberOfPlayers = Integer.parseInt(parts[4]);
+        int numberOfPlayers = Integer.parseInt(parts[3]);
+        String owner = parts[4];
         String infoLink = parts[5];
 
         // Se il settimo campo esiste ed è non vuoto, deserializza la lista dei joinedPlayers
         List<String> joinedPlayers = new ArrayList<>();
         if (parts.length > 6 && !parts[6].isEmpty()) {
-            joinedPlayers = new ArrayList<>(Arrays.asList(parts[6].split("\\|")));
+            joinedPlayers = new ArrayList<>(Arrays.asList(parts[6].split(";")));
         }
 
         // Determina l'owner in base al flag "owned"
         // Ad esempio: se owned è true, impostiamo l'owner su "admin"; altrimenti, lo lasciamo vuoto.
-        String owner = owned ? "admin" : "";
+
 
         // Crea l'oggetto Lobby passando anche la lista dei joinedPlayers
         Lobby lobby = new Lobby(lobbyName, duration, type, numberOfPlayers, owner, infoLink, joinedPlayers);
@@ -211,19 +211,34 @@ public class UserDAOFileSys implements UserDAO {
     }
 
     public String serializeLobby(Lobby lobby) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(lobby.getLobbyName()).append(";")
-                .append(lobby.getDuration()).append(";")
-                .append(lobby.getLiveOnline()).append(";")
-                .append(lobby.getOwner()).append(";")
-                .append(lobby.getMaxOfPlayers()).append(";")
-                .append(lobby.getInfoLink()).append(";");
-
-        List<String> joinedPlayers = lobby.getJoinedPlayers();
-        if (joinedPlayers != null && !joinedPlayers.isEmpty()) {
-            sb.append(String.join("|", joinedPlayers));
+        if (lobby == null) {
+            return "Lobby is null";
         }
-        return sb.toString();
+
+        // Numero totale di campi = 6 campi base + maxOfPlayers
+        int totalFields = 6 + lobby.getMaxOfPlayers();
+        String[] fields = new String[totalFields];
+
+        // Campi base
+        fields[0] = lobby.getLobbyName();                       // nome
+        fields[1] = lobby.getDuration();                        // durata
+        fields[2] = lobby.getLiveOnline();                      // liveOnline
+        fields[3] = String.valueOf(lobby.getMaxOfPlayers());    // maxPlayers
+        fields[4] = lobby.getOwner();                           // owner
+        fields[5] = lobby.getInfoLink();                        // infoLink
+
+        // Campi dedicati ai giocatori
+        List<String> joinedPlayers = lobby.getJoinedPlayers();
+        for (int i = 0; i < lobby.getMaxOfPlayers(); i++) {
+            if (joinedPlayers != null && i < joinedPlayers.size()) {
+                fields[6 + i] = joinedPlayers.get(i);
+            } else {
+                fields[6 + i] = "";  // slot vuoto
+            }
+        }
+
+        // Unisci tutti i campi con ";"
+        return String.join(";", fields);
     }
 
 
