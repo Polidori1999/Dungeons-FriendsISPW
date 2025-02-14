@@ -142,7 +142,7 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
             //
 
             // Chiedi al controller di rimuoverla (la logica differenziata in base al ruolo viene gestita all'interno del controller)
-            controller.leaveLobby(pendingDeleteBean, currentUser.getEmail());
+            controller.leaveLobby(pendingDeleteBean);
 
             // Rimuovi la chiamata seguente, poiché il controller già gestisce la rimozione dalla repository in caso di proprietario
             // LobbyRepository.removeLobby(lobbyName);

@@ -4,6 +4,7 @@ import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.control.ManageLobbyListController;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.dao.LobbyDaoFileSys;
 import it.uniroma2.marchidori.maininterface.entity.CharacterSheet;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
@@ -34,7 +35,7 @@ class ManageLobbyListControllerTest {
      * Metodo helper per creare un LobbyBean di test con un nome specifico.
      */
     private LobbyBean createTestLobbyBean(String name) {
-        LobbyBean lobby = new LobbyBean("lobby1", DEFAULT_TYPE, DEFAULT_MODE, DEFAULT_MAX_PLAYERS, DEFAULT_FIELD1, DEFAULT_FIELD2, null);
+        LobbyBean lobby = new LobbyBean("lobby1", DEFAULT_TYPE, DEFAULT_MODE, DEFAULT_MAX_PLAYERS, DEFAULT_FIELD1, DEFAULT_FIELD2, 3);
         lobby.setName(name);
         return lobby;
     }
@@ -43,7 +44,7 @@ class ManageLobbyListControllerTest {
      * Metodo helper per creare una Lobby entity di test con un nome specifico.
      */
     private Lobby createTestLobbyEntity(String name) {
-        return new Lobby(name, DEFAULT_TYPE, DEFAULT_MODE, DEFAULT_MAX_PLAYERS, DEFAULT_FIELD1, DEFAULT_FIELD2, null);
+        return new Lobby(name, DEFAULT_TYPE, DEFAULT_MODE, DEFAULT_MAX_PLAYERS, DEFAULT_FIELD1, DEFAULT_FIELD2,3 );
     }
 
     /**
@@ -70,9 +71,10 @@ class ManageLobbyListControllerTest {
 
         assertEquals(1, testUserBean.getJoinedLobbies().size());
         assertEquals(1, testUser.getJoinedLobbies().size());
-
+        LobbyDaoFileSys lobbyDao = new LobbyDaoFileSys();
+        lobbyDao.addLobby(Converter.lobbyBeanToEntity(createTestLobbyBean("TestLobby")));
         // Passa una lobby bean con lo stesso nome per l'eliminazione
-        controller.deleteLobby(createTestLobbyBean("TestLobby"));
+        controller.leaveLobby(createTestLobbyBean("TestLobby"));
 
         assertEquals(0, testUserBean.getJoinedLobbies().size(),
                 "La lista dei LobbyBean dovrebbe essere vuota dopo l'eliminazione");
@@ -81,7 +83,7 @@ class ManageLobbyListControllerTest {
     }
 
     @Test
-    void testDeleteLobby_NonExistingLobby() throws IOException {
+    void testDeleteLobby_NonExistingLobby(){
         // Aggiungi una lobby con nome "ExistingLobby"
         addLobbyToUser("ExistingLobby");
 
@@ -90,7 +92,7 @@ class ManageLobbyListControllerTest {
 
         // Prova a eliminare una lobby con nome "NonExistingLobby"
         LobbyBean lobbyToDelete = createTestLobbyBean("NonExistingLobby");
-        controller.deleteLobby(lobbyToDelete);
+        controller.leaveLobby(lobbyToDelete);
 
         assertEquals(1, testUserBean.getJoinedLobbies().size(),
                 "La lista dei LobbyBean non dovrebbe essere modificata se la lobby non viene trovata");
@@ -103,8 +105,10 @@ class ManageLobbyListControllerTest {
         testUserBean.setJoinedLobbies(null);
 
         testUser.getJoinedLobbies().add(createTestLobbyEntity("TestLobby"));
+        LobbyDaoFileSys lobbyDao = new LobbyDaoFileSys();
+        lobbyDao.addLobby(Converter.lobbyBeanToEntity(createTestLobbyBean("TestLobby")));
 
-        controller.deleteLobby(Converter.lobbyEntityToBean(createTestLobbyEntity("TestLobby")));
+        controller.leaveLobby(Converter.lobbyEntityToBean(createTestLobbyEntity("TestLobby")));
 
         assertEquals(1, testUser.getJoinedLobbies().size(),
                 "La lista delle entity Lobby dovrebbe rimanere invariata se la lista del UserBean è null");
