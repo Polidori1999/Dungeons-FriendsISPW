@@ -24,6 +24,7 @@ public class UserService {
             instance = new UserService(useDatabase);
         }
         return instance;
+
     }
 
     public void registerUser(String email, String password) {
