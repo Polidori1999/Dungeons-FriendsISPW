@@ -95,7 +95,7 @@ public class JoinLobbyController implements UserAwareInterface {
     public List<LobbyBean> filterLobbies(String type, String duration, String numPlayersStr, String searchQuery) throws IOException {
         List<LobbyBean> result = new ArrayList<>();
         LobbyDaoFileSys lobbyDaoFileSys = new LobbyDaoFileSys();
-        for (Lobby lob : lobbyDaoFileSys.getLobbiesFromSys()) {
+        for (Lobby lob : LobbyDaoFileSys.getLobbiesFromSys()) {
             boolean matchesType = (type == null || type.isEmpty() || lob.getLiveOnline().equals(type));
             boolean matchesDuration = (duration == null || duration.isEmpty() || lob.getDuration().equals(duration));
             boolean matchesPlayers = true;

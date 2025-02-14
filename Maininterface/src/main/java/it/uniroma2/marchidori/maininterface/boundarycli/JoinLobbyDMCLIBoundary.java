@@ -49,7 +49,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
     /**
      * Visualizza la lista (tabellare) delle lobby filtrate.
      */
-    private void displayLobbyList() {
+    protected void displayLobbyList() {
         jout.print("=== Lista Lobby Disponibili ===");
         if (filteredLobbies.isEmpty()) {
             jout.print("Nessuna lobby trovata con i filtri attuali.");
@@ -83,7 +83,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
     /**
      * Richiede in console un input all'utente.
      */
-    private String prompt(String message) {
+    protected String prompt(String message) {
         jout.print(message);
         return scanner.nextLine().trim();
     }
@@ -124,7 +124,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
      * Richiede all'utente di impostare i filtri per tipo, durata e numero di giocatori,
      * e applica il filtraggio.
      */
-    private void applyFilters() throws IOException {
+    protected void applyFilters() throws IOException {
         // Filtro per tipo (Online/Presenza)
         jout.print("Scegli filtro per tipo:");
         jout.print("1. Online");
@@ -193,7 +193,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
     /**
      * Richiede all'utente una stringa di ricerca e la applica come filtro.
      */
-    private void applySearch() throws IOException {
+    protected void applySearch() throws IOException {
         searchQuery = prompt("Inserisci stringa di ricerca: ").toLowerCase();
         doFilter();
     }
@@ -201,7 +201,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
     /**
      * Resetta tutti i filtri impostati e riapplica il filtraggio.
      */
-    private void resetFilters() throws IOException {
+    protected void resetFilters() throws IOException {
         filterType = "";
         filterDuration = "";
         filterNumPlayers = "";
@@ -212,7 +212,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
     /**
      * Applica i filtri impostati chiamando il metodo di filtraggio del controller.
      */
-    private void doFilter() throws IOException {
+    protected void doFilter() throws IOException {
         List<LobbyBean> result = controller.filterLobbies(filterType, filterDuration, filterNumPlayers, searchQuery);
         filteredLobbies.setAll(result);
     }
@@ -222,7 +222,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
      * Ricarica la lista delle lobby disponibili, ottenendola dal controller e
      * applica i filtri correnti.
      */
-    private void refreshTable() throws IOException {
+    protected void refreshTable() throws IOException {
         if (controller != null) {
             doFilter();
         }
@@ -234,7 +234,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
      * @param fxml Il nome della scena verso cui cambiare.
      * @throws IOException in caso di errori nel cambio scena.
      */
-    private void changeScene(String fxml) throws IOException {
+    protected void changeScene(String fxml) throws IOException {
         jout.print("Cambio scena verso " + fxml + "...");
         SceneSwitcher.changeScene(null, fxml, currentUser);
     }

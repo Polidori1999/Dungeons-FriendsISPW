@@ -11,20 +11,22 @@ public class ConsultRulesGuestBoundary extends ConsultRulesBoundary {
     @Override
     public void initialize() {
         super.initialize();
-        // Assicurati che consultButton e buyButton siano di tipo TableColumn<RuleBookBean, Button>
-        TableColumnUtils.setupButtonColumn(consultButton, "Consult Now", ruleBook -> {
-            try {
-                changeScene(SceneNames.LOGIN);
-            } catch (IOException e) {
-                throw new SceneChangeException(e.getMessage());
-            }
-        });
-        TableColumnUtils.setupButtonColumn(buyButton, "buy now!", ruleBook -> {
-            try {
-                changeScene(SceneNames.LOGIN);
-            } catch (IOException e) {
-                throw new SceneChangeException(e.getMessage());
-            }
-        });
+        initializeButton("Consult Now");
+        initializeButton("buy now!");
     }
+
+    private void initializeButton(String string){
+        TableColumnUtils.setupButtonColumn(buyButton, string, ruleBook -> {
+            try {
+                changeScene(SceneNames.LOGIN);
+            } catch (IOException e) {
+                throw new SceneChangeException(e.getMessage());
+            }
+        });
+
+    }
+
+
+
+
 }

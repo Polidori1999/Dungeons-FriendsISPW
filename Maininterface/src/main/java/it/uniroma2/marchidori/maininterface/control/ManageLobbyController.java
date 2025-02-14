@@ -11,6 +11,7 @@ import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -103,19 +104,29 @@ public class ManageLobbyController implements UserAwareInterface {
         StringBuilder errors = new StringBuilder();
 
         // Validazione dei campi di testo (non vuoti)
-        validateNotEmpty(lobby.getName(), "Name", errors);
-        validateNotEmpty(lobby.getDuration(), "Duration", errors);
-        validateNotEmpty(lobby.getLiveOnline(), "Live/Online", errors);
-        validateNotEmpty(lobby.getInfoLink(), "InfoLink", errors);
+        List<String> validationErrors = new ArrayList<>();
+        validationErrors.add(lobby.getName());
+        validationErrors.add(lobby.getDuration());
+        validationErrors.add(lobby.getLiveOnline());
+        validationErrors.add(lobby.getInfoLink());
+        List<String> fieldNames = new ArrayList<>();
+        fieldNames.add("name");
+        fieldNames.add("duration");
+        fieldNames.add("liveOnline");
+        fieldNames.add("infoLink");
+        validateNotEmpty(validationErrors,fieldNames,errors);
         if (lobby.getMaxOfPlayers() == 0) {
             errors.append("Max number of players cannot be 0.\n");
         }
         return errors.toString();
     }
 
-    private static void validateNotEmpty(String value, String fieldName, StringBuilder errors) {
-        if (value == null || value.trim().isEmpty()) {
-            errors.append(fieldName).append(" cannot be empty.\n");
+    private static void validateNotEmpty(List<String> value, List<String> fieldName, StringBuilder errors) {
+        for(int i = 0; i < value.size(); i++) {
+            if (value.get(i) == null || value.get(i).trim().isEmpty()) {
+                errors.append(fieldName.get(i)).append(" cannot be empty.\n");
+            }
         }
+
     }
 }

@@ -16,9 +16,7 @@ public class ManageLobbyListDMCLIBoundary extends ManageLobbyListPlayerCLIBounda
     private UserBean currentUser;
     private ManageLobbyListController controller;
     private List<LobbyBean> data = new ArrayList<>();
-    private final Scanner scanner = new Scanner(System.in);
     private final Jout jout = new Jout("ManageLobbyListDMCLIBoundary");
-    private LobbyBean pendingDeleteBean;
 
 
     @Override
