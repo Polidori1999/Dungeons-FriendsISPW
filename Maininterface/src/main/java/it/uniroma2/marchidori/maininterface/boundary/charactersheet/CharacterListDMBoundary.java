@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
+import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
@@ -62,7 +63,9 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
     protected CharacterSheetBean pendingDeleteBean;
     protected ObservableList<CharacterSheetBean> data = FXCollections.observableArrayList();
     protected ConfirmationPopupController confirmationPopupController;
-    private CharacterSheetDownloadController downloadController;
+
+    private final Jout jout = new Jout("CharacterListDMBoundary");
+
 
     protected static final Logger logger = Logger.getLogger(CharacterListDMBoundary.class.getName());
 
@@ -98,27 +101,17 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
     protected void handleDelete(CharacterSheetBean bean) {
         if (bean != null) {
             pendingDeleteBean = bean;
-            try {
-                showDeleteConfirmation();
-            } catch (IOException e) {
-                logger.severe("Errore durante la visualizzazione del popup di conferma: " + e.getMessage());
-            }
+            showDeleteConfirmation();
         }
     }
 
-    private void showDeleteConfirmation() throws IOException {
+    private void showDeleteConfirmation() {
         if (confirmationPopupController != null && pendingDeleteBean != null) {
             String message = "Vuoi eliminare il personaggio '" + pendingDeleteBean.getInfoBean().getName() + "'?";
             confirmationPopupController.show(
                     message,
                     10,  // timer di scadenza popup
-                    () -> {
-                        try {
-                            onConfirmDelete();
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    },
+                    this::onConfirmDelete,
                     this::onCancelDelete
             );
         } else {
@@ -126,11 +119,11 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
         }
     }
 
-    private void onConfirmDelete() throws IOException {
+    private void onConfirmDelete() {
         String name = pendingDeleteBean.getInfoBean().getName();
         tableViewChar.getItems().remove(pendingDeleteBean);
         controller.deleteCharacter(name);
-        logger.info("Personaggio '" + name + "' cancellato (DM).");
+        jout.print("Personaggio '" + name + "' cancellato (DM).");
         pendingDeleteBean = null;
     }
 
@@ -144,17 +137,14 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
      * Scarica il personaggio (con progress bar).
      */
     protected void downloadCharacter(CharacterSheetBean bean) {
+        CharacterSheetDownloadController downloadController;
         downloadController = new CharacterSheetDownloadController();
-        if (downloadController != null) {
-            CharacterSheetDownloadTask downloadTask = downloadController.getDownloadTask(bean);
-            if (downloadTask != null) {
-                showDownloadProgressWindow(downloadTask);
-                new Thread(downloadTask).start();
-            } else {
-                logger.severe("Task di download non disponibile.");
-            }
+        CharacterSheetDownloadTask downloadTask = downloadController.getDownloadTask(bean);
+        if (downloadTask != null) {
+            showDownloadProgressWindow(downloadTask);
+            new Thread(downloadTask).start();
         } else {
-            logger.severe("DownloadController non inizializzato.");
+            logger.severe("Task di download non disponibile.");
         }
     }
 

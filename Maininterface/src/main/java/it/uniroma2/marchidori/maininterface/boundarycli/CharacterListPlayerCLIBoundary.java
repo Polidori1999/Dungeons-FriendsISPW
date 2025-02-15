@@ -9,7 +9,6 @@ import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.function.Consumer;
 
 public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary {
@@ -18,7 +17,6 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary {
     private CharacterListController controller;
     // Lista dei personaggi (CharacterSheetBean) da mostrare
     private List<CharacterSheetBean> data = new ArrayList<>();
-    private final Scanner scanner = new Scanner(System.in);
     // Eventuale bean in attesa di eliminazione
     private final Jout jout = new Jout("CharacterListPlayerCLIBoundary");
 
@@ -97,7 +95,7 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary {
      * @throws IOException se il prompt genera un'eccezione.
      */
     private void handleCharacterSelection(String emptyMessage, String promptMessage,
-                                          Consumer<CharacterSheetBean> action)  {
+                                          Consumer<CharacterSheetBean> action) {
         if (data.isEmpty()) {
             jout.print(emptyMessage);
             return;
@@ -118,7 +116,7 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary {
     /**
      * Gestisce la modifica di un personaggio selezionato.
      */
-    private void handleEditCharacter() throws IOException {
+    private void handleEditCharacter() {
         handleCharacterSelection("Nessun personaggio da modificare.",
                 "Inserisci il numero del personaggio da modificare: ",
                 characterSheetBean -> {
@@ -133,7 +131,7 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary {
     /**
      * Gestisce il download di un personaggio.
      */
-    private void handleDownloadCharacter() throws IOException {
+    private void handleDownloadCharacter() {
         handleCharacterSelection("Nessun personaggio disponibile per il download.",
                 "Inserisci il numero del personaggio da scaricare: ",
                 this::downloadCharacter);

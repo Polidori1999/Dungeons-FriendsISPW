@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.control;
 
+import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBean;
@@ -14,6 +15,8 @@ import java.util.logging.Logger;
 public class CharacterSheetController implements UserAwareInterface {
 
     private UserBean currentUser;
+    private final Jout jout = new Jout("CharacterSheetController");
+
     private User currentEntity = Session.getInstance().getCurrentUser();
 
     private static final Logger logger = Logger.getLogger(CharacterSheetController.class.getName());
@@ -43,6 +46,8 @@ public class CharacterSheetController implements UserAwareInterface {
         currentEntity.getCharacterSheets().add(Converter.characterSheetBeanToEntity(characterSheetBean));
         // Converti il bean in entity e aggiungilo allo User Entity (per la persistenza)
 
+        // Log: stampa il numero di personaggi attuali e i loro nomi
+        jout.print("Dopo createChar, currentUser ha " + currentUser.getCharacterSheets().size() + " personaggi.");
         // Ora aggiorna il file (usa updateUsersEntityData per riscrivere completamente il file)
         UserDAOFileSys dao = Session.getInstance().getUserDAOFileSys();
         dao.updateUsersEntityData(currentEntity);

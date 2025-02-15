@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.control;
 
+import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
@@ -17,6 +18,8 @@ import java.util.logging.Logger;
 public class CharacterListController implements UserAwareInterface {
     private final User currentEntity = Session.getInstance().getCurrentUser();
     private UserBean currentUser;
+    private final Jout jout = new Jout("CharacterListController");
+
 
     private static final Logger logger = Logger.getLogger(CharacterListController.class.getName());
 
@@ -77,6 +80,7 @@ public class CharacterListController implements UserAwareInterface {
         } else {
             logger.severe(">>> ERRORE: currentEntity o la sua lista di CharacterSheet è null in getCharacterSheets()");
         }
+        jout.print("getCharacterSheets restituisce " + beans.size() + " elementi.");
         beans.forEach(b -> logger.info(" - " + b.getInfoBean().getName()));//display log
         return beans;
     }
