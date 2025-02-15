@@ -10,13 +10,12 @@ import java.util.logging.Logger;
 public class CharacterListGuestBoundary extends CharacterListPlayerBoundary {
 
     private static final Logger logger = Logger.getLogger(CharacterListGuestBoundary.class.getName());
-    private ConfirmationPopupController confirmationPopupController;
 
     @Override
     public void initialize() {
         super.initialize();
         // Carica il popup di conferma per il download
-        confirmationPopupController = ConfirmationPopupController.loadPopup(characterPane);
+        ConfirmationPopupController.loadPopup(characterPane);
     }
 
     /**

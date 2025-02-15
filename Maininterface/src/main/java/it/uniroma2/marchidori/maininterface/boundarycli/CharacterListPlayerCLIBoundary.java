@@ -20,7 +20,6 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary {
     private List<CharacterSheetBean> data = new ArrayList<>();
     private final Scanner scanner = new Scanner(System.in);
     // Eventuale bean in attesa di eliminazione
-    private CharacterSheetBean pendingDeleteBean;
     private final Jout jout = new Jout("CharacterListPlayerCLIBoundary");
 
     @Override
@@ -98,7 +97,7 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary {
      * @throws IOException se il prompt genera un'eccezione.
      */
     private void handleCharacterSelection(String emptyMessage, String promptMessage,
-                                          Consumer<CharacterSheetBean> action) throws IOException {
+                                          Consumer<CharacterSheetBean> action)  {
         if (data.isEmpty()) {
             jout.print(emptyMessage);
             return;
