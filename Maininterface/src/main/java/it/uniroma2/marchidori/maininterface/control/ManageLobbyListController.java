@@ -33,7 +33,7 @@ public class ManageLobbyListController implements UserAwareInterface {
         // empty
     }
 
-    public void leaveLobby(LobbyBean lobbyBean) {
+    public void leaveLobby(LobbyBean lobbyBean) throws IOException {
 
         // 1. Recupera la lobby dal repository (versione persistente) cercandola per nome.
         LobbyDAO lobbyDao=Session.getInstance().getLobbyDAO();
@@ -49,28 +49,31 @@ public class ManageLobbyListController implements UserAwareInterface {
             System.out.println("Lobby " + lobbyBean.getName() + " non trovata nel repository.");
             return;
         }
+
+
         System.out.println("[DEBUG] Lobby nel repository trovata: " + repoLobby.getLobbyName() +
                 " con count = " + repoLobby.getJoinedPlayersCount());
 
         // 2. Decrementa il contatore della lobby (solo sulla versione repository)
         int currentCount = repoLobby.getJoinedPlayersCount();
-        if (currentCount > 0) {
-            repoLobby.setJoinedPlayersCount(currentCount - 1);
+        if(repoLobby.getOwner().equals(currentUser.getEmail())){
+            lobbyDao.deleteLobby(repoLobby.getLobbyName());
+        }else if (currentCount > 0) {
+            // 3. Aggiorna il file della lobby: elimina la riga esistente e aggiungi quella aggiornata.
+            try {
+                repoLobby.setJoinedPlayersCount(currentCount - 1);
+                lobbyDao.deleteLobby(repoLobby.getLobbyName());
+                lobbyDao.addLobby(repoLobby);
+                System.out.println("[DEBUG] File repository aggiornato per la lobby " + repoLobby.getLobbyName());
+            } catch (IOException e) {
+                System.err.println("Errore durante l'aggiornamento della lobby: " + e.getMessage());
+            }
         } else {
             System.out.println("La lobby " + repoLobby.getLobbyName() + " non ha giocatori da rimuovere.");
             return;
         }
         System.out.println("[DEBUG] Nuovo count nel repository per la lobby '"
                 + repoLobby.getLobbyName() + "': " + repoLobby.getJoinedPlayersCount());
-
-        // 3. Aggiorna il file della lobby: elimina la riga esistente e aggiungi quella aggiornata.
-        try {
-            lobbyDao.deleteLobby(repoLobby.getLobbyName());
-            lobbyDao.addLobby(repoLobby);
-            System.out.println("[DEBUG] File repository aggiornato per la lobby " + repoLobby.getLobbyName());
-        } catch (IOException e) {
-            System.err.println("Errore durante l'aggiornamento della lobby: " + e.getMessage());
-        }
 
         if (currentUser.getJoinedLobbies() != null) {
             boolean removedFromBean = currentUser.getJoinedLobbies().removeIf(lobby -> lobby.getName().equals(lobbyBean.getName()));

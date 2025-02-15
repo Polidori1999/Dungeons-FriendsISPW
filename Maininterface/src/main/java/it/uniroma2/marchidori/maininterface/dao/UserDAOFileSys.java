@@ -175,6 +175,8 @@ public class UserDAOFileSys implements UserDAO {
     public User loadUserData(User user) throws FileNotFoundException {
         File userDir = getUserFolder(user.getEmail());
         if (!userDir.exists() || !userDir.isDirectory()) {
+            System.out.println("non mi dire che mi incappio");
+
             return null;
         }
         // Carica i character sheets

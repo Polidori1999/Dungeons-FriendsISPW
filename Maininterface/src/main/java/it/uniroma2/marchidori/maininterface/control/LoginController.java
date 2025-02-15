@@ -43,9 +43,10 @@ public class LoginController implements UserAwareInterface {
         if (BCrypt.checkpw(password, retrievedUser.getPassword())) {
             logger.info("✅ Password corretta per: " + email);
             if(Session.getInstance().getDemo()){
-
+                logger.info("demo true!");
                 retrievedUser = userService.loadUserDataDemo(email);
-            }else {
+            }else{
+                logger.info("demo false!");
                 retrievedUser = userService.loadUserData(retrievedUser);
             }
             // Converte l'entity User in un UserBean per l'interfaccia utente
