@@ -74,7 +74,7 @@ public class CharacterListController implements UserAwareInterface {
         if (currentEntity != null && currentEntity.getCharacterSheets() != null) {
             for (CharacterSheet cs : currentEntity.getCharacterSheets()) {
                 // Converte la entity CharacterSheet in CharacterSheetBean
-                CharacterSheetBean bean =Converter.convertCharacterSheet(cs);
+                CharacterSheetBean bean = Converter.characterSheetEntityToBean(cs);
                 beans.add(bean);
             }
         } else {
