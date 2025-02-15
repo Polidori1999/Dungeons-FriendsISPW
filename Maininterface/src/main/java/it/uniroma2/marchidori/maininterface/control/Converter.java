@@ -227,9 +227,11 @@ public class Converter {
         if (lobbies == null) {
             return new ArrayList<>();
         }
-        return lobbies.stream()
-                .map(Converter::lobbyEntityToBean)
-                .toList();
+        List<LobbyBean> result = new ArrayList<>();
+        for (Lobby lobbyBean : lobbies) {
+            result.add(lobbyEntityToBean(lobbyBean));
+        }
+        return result;
     }
 
     /*
@@ -241,7 +243,7 @@ public class Converter {
     /**
      * Converte un singolo CharacterSheet (entity) in CharacterSheetBean (bean).
      */
-    public static CharacterSheetBean convertCharacterSheet(CharacterSheet sheet) {
+    public static CharacterSheetBean characterSheetEntityToBean(CharacterSheet sheet) {
         if (sheet == null) {
             return null;
         }
@@ -286,10 +288,10 @@ public class Converter {
             // Puoi anche usare List.of() se vuoi una lista immutabile vuota
             return new ArrayList<>();
         }
-        return sheets.stream()
-                .map(Converter::convertCharacterSheet)
-                .toList(); // Restituisce una lista non modificabile (Java 16+)
+        ArrayList<CharacterSheetBean> result = new ArrayList<>();
+        for(CharacterSheet cs : sheets){
+            result.add(characterSheetEntityToBean(cs));
+        }
+        return result;
     }
-
-
 }
