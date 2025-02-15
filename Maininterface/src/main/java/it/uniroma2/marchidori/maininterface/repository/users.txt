@@ -3,3 +3,7 @@
 edo,$2a$10$0/AL/lwn/YDD2uCWypNiTujP/nH/WUpDwgDo73BaA3UsVm.P6m1Ty
 edo,$2a$10$FHFjjq3CBdGTIAM1qYKQC.l2S184TFAKk1HUYb01/jkGhhD.p7IOO
 luca,$2a$10$nfI12rJ7J2qyhsGy.lZkS.is9tYTMtfDOA7dpiOqhOdbu/yD9j7g.
+falessi,$2a$10$nfS06ie8xpszLO..R9R1zeeRPbmfBpYo27KMxK/OzkjzUdjlTnL1S
+2,$2a$10$Uoe7NQn8nLhIZpA9om6yveWELXBiUzbGpp6Fn/RxWLLSLCIZB/.bm
+4,$2a$10$HfTlZH7li.3aXD.yAe449evr4wto/.C3TrvVvrNrfQfZ.K9m1t1Vi
+ty,$2a$10$Nqy4ZOKM8ar1z702GzrEq.9z6QkfGYnLaYi.NIu3LoN3xo1jQ.OAW

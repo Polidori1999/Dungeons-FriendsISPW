@@ -3,6 +3,7 @@ package it.uniroma2.marchidori.maininterface.boundarycli;
 import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
+import it.uniroma2.marchidori.maininterface.boundary.RunInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.RegisterController;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
@@ -11,7 +12,7 @@ import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class RegisterCLIBoundary implements UserAwareInterface, ControllerAwareInterface {
+public class RegisterCLIBoundary implements UserAwareInterface, ControllerAwareInterface, RunInterface {
 
     private UserBean currentUser;
     private RegisterController registerController;

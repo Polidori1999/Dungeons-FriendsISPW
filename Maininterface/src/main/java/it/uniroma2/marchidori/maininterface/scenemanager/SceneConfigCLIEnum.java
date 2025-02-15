@@ -8,79 +8,81 @@ public enum SceneConfigCLIEnum {
     CHAR_LIST_DM_CLI(
             "characterList.fxml",
             forNameNoException("it.uniroma2.marchidori.maininterface.boundarycli.CharacterListDMCLIBoundary"),
-    forNameNoException("it.uniroma2.marchidori.maininterface.control.CharacterListController")
+            forNameNoException("it.uniroma2.marchidori.maininterface.control.CharacterListController")
     ),
 
     CHAR_LIST_PLAYER_CLI(
             CHAR_LIST_DM_CLI.fxmlPath,
             forNameNoException("it.uniroma2.marchidori.maininterface.boundarycli.CharacterListPlayerCLIBoundary"),
-    CHAR_LIST_DM_CLI.controllerClass    ),
+            CHAR_LIST_DM_CLI.controllerClass
+    ),
 
 
     CHAR_SHEET_CLI(
             "characterSheet.fxml",
             forNameNoException("it.uniroma2.marchidori.maininterface.boundarycli.CharacterSheetCLIBoundary"),
-    forNameNoException("it.uniroma2.marchidori.maininterface.control.CharacterSheetController")
+            forNameNoException("it.uniroma2.marchidori.maininterface.control.CharacterSheetController")
     ),
 
     CONSULT_RULES_CLI(
             "consultRules.fxml",
             forNameNoException("it.uniroma2.marchidori.maininterface.boundarycli.ConsultRulesCLIBoundary"),
-    forNameNoException("it.uniroma2.marchidori.maininterface.control.ConsultRulesController")
+            forNameNoException("it.uniroma2.marchidori.maininterface.control.ConsultRulesController")
     ),
 
 
     JOIN_LOBBY_DM_CLI(
             "joinLobby.fxml",
             forNameNoException("it.uniroma2.marchidori.maininterface.boundarycli.JoinLobbyDMCLIBoundary"),
-    forNameNoException("it.uniroma2.marchidori.maininterface.control.JoinLobbyController")
+            forNameNoException("it.uniroma2.marchidori.maininterface.control.JoinLobbyController")
     ),
 
-        JOIN_LOBBY_PLAYER_CLI(
-                JOIN_LOBBY_DM_CLI.fxmlPath,
-                forNameNoException("it.uniroma2.marchidori.maininterface.boundarycli.JoinLobbyPlayerCLIBoundary"),
-        JOIN_LOBBY_DM_CLI.controllerClass    ),
+    JOIN_LOBBY_PLAYER_CLI(
+            JOIN_LOBBY_DM_CLI.fxmlPath,
+            forNameNoException("it.uniroma2.marchidori.maininterface.boundarycli.JoinLobbyPlayerCLIBoundary"),
+            JOIN_LOBBY_DM_CLI.controllerClass
+        ),
 
     LOGIN_CLI(
             "login.fxml",
             forNameNoException("it.uniroma2.marchidori.maininterface.boundarycli.LoginCLIBoundary"),
-    forNameNoException("it.uniroma2.marchidori.maininterface.control.LoginController")
+            forNameNoException("it.uniroma2.marchidori.maininterface.control.LoginController")
     ),
 
     REGISTER_CLI(
             "register.fxml",
             forNameNoException("it.uniroma2.marchidori.maininterface.boundarycli.RegisterCLIBoundary"),
-    forNameNoException("it.uniroma2.marchidori.maininterface.control.RegisterController")
+            forNameNoException("it.uniroma2.marchidori.maininterface.control.RegisterController")
     ),
 
     MANAGE_LOBBY_CLI(
             "manageLobby.fxml",
             forNameNoException("it.uniroma2.marchidori.maininterface.boundarycli.ManageLobbyCLIBoundary"),
-    forNameNoException("it.uniroma2.marchidori.maininterface.control.ManageLobbyController")
+            forNameNoException("it.uniroma2.marchidori.maininterface.control.ManageLobbyController")
     ),
 
     MANAGE_LOBBY_LIST_DM_CLI(
             "manageLobbyList.fxml",
             forNameNoException("it.uniroma2.marchidori.maininterface.boundarycli.ManageLobbyListDMCLIBoundary"),
-    forNameNoException("it.uniroma2.marchidori.maininterface.control.ManageLobbyListController")
+            forNameNoException("it.uniroma2.marchidori.maininterface.control.ManageLobbyListController")
     ),
 
     MANAGE_LOBBY_LIST_PLAYER_CLI(
         "manageLobbyList.fxml",
             forNameNoException("it.uniroma2.marchidori.maininterface.boundarycli.ManageLobbyListPlayerCLIBoundary"),
-        forNameNoException("it.uniroma2.marchidori.maininterface.control.ManageLobbyListController")
+            forNameNoException("it.uniroma2.marchidori.maininterface.control.ManageLobbyListController")
     ),
 
     HOME_CLI(
             "home.fxml",
             forNameNoException("it.uniroma2.marchidori.maininterface.boundarycli.HomeCLIBoundary"),
             null // se non hai un controller
-                    ),
+    ),
 
     USER_CLI(
             "user.fxml",
             forNameNoException("it.uniroma2.marchidori.maininterface.boundarycli.UserCLIBoundary"),
-    forNameNoException("it.uniroma2.marchidori.maininterface.control.UserController")
+            forNameNoException("it.uniroma2.marchidori.maininterface.control.UserController")
     );
 
     // Punto e virgola ^ dopo l'ultima costante.

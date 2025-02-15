@@ -6,24 +6,18 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 
+import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 public class JoinLobbyPlayerCLIBoundary extends JoinLobbyDMCLIBoundary{
 
     private UserBean currentUser;
     private JoinLobbyController controller;
-    private ObservableList<LobbyBean> filteredLobbies;
     private final Jout jout = new Jout("JoinLobbyPlayerCLIBoundary");
 
-    // Parametri per il filtraggio
-    private String filterType = "";
-    private String filterDuration = "";
-    private String filterNumPlayers = "";
-    private String searchQuery = "";
 
     @Override
     public void run() throws IOException {
@@ -85,7 +79,6 @@ public class JoinLobbyPlayerCLIBoundary extends JoinLobbyDMCLIBoundary{
                 jout.print("Lista aggiornata.");
                 break;
             case "0":
-                changeScene("home.fxml");
                 return true;
             default:
                 jout.print("Opzione non valida, riprova.");

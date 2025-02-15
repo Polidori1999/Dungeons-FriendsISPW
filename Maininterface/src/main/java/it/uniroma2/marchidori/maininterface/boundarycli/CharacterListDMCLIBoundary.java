@@ -97,7 +97,6 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
                 jout.print("Lista aggiornata.");
                 break;
             case "0":
-                changeScene(SceneNames.HOME);
                 return true;
             default:
                 jout.print("Opzione non valida, riprova.");
@@ -155,6 +154,10 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
      * Aggiorna la lista dei personaggi leggendo i dati dal currentUser.
      */
     protected void refreshTable() {
+        if (currentUser == null) {
+            jout.print("ERRORE: currentUser non inizializzato.");
+            return;
+        }
         if (currentUser.getCharacterSheets() != null) {
             data = new ArrayList<>(currentUser.getCharacterSheets());
         } else {
@@ -162,6 +165,7 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
         }
         jout.print("Tabella personaggi aggiornata.");
     }
+
 
     /**
      * Simula il cambio scena in ambiente CLI.

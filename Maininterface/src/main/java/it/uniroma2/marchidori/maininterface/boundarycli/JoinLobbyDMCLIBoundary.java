@@ -6,9 +6,11 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.RunInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
+import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
@@ -19,18 +21,20 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
 
     private UserBean currentUser;
     private JoinLobbyController controller;
-    private ObservableList<LobbyBean> filteredLobbies;
+    protected ObservableList<LobbyBean> filteredLobbies;
     private final Scanner scanner = new Scanner(System.in);
     private final Jout jout = new Jout("JoinLobbyDMCLIBoundary");
 
     // Parametri per il filtraggio
-    private String filterType = "";
-    private String filterDuration = "";
-    private String filterNumPlayers = "";
-    private String searchQuery = "";
+    protected String filterType = "";
+    protected String filterDuration = "";
+    protected String filterNumPlayers = "";
+    protected String searchQuery = "";
 
     @Override
     public void run() throws IOException {
+        List<LobbyBean> initial = Converter.convertLobbyListEntityToBean(controller.getLobbies());
+        filteredLobbies = FXCollections.observableArrayList(initial);
         if (currentUser == null) {
             jout.print("ERRORE: Utente non inizializzato.");
             return;
@@ -166,7 +170,6 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
         jout.print("1. 2 giocatori");
         jout.print("2. 4 giocatori");
         jout.print("3. 6 giocatori");
-        jout.print("4. 8 giocatori");
         jout.print("0. Lascia vuoto");
         choice = prompt("Inserisci il numero dell'opzione: ");
         switch (choice) {
@@ -178,9 +181,6 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
                 break;
             case "3":
                 filterNumPlayers = "6";
-                break;
-            case "4":
-                filterNumPlayers = "8";
                 break;
             default:
                 filterNumPlayers = "";

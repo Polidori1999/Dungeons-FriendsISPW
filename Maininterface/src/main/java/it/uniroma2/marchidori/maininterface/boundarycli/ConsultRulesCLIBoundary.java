@@ -13,10 +13,10 @@ import java.util.Scanner;
 
 public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAwareInterface, RunInterface {
 
-
     private ConsultRulesController controller;
     private final Jout jout = new Jout(this.getClass().getSimpleName());
     private RuleBookBean pendingBuyBean;
+    private UserBean currentUser;
 
     @Override
     public void run() {
@@ -29,18 +29,21 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
     }
 
     private boolean processMainMenu(Scanner scanner) {
-        displayMainMenu();
-        int choice = readChoice(scanner, "Seleziona un'opzione: ");
-        switch (choice) {
-            case 0:
-                return true;
-            case 1:
-                showRuleBooksMenu(scanner);
-                break;
-            default:
+        int choice;
+        do {
+            displayMainMenu();
+            choice = readChoice(scanner, "Seleziona un'opzione: ");
+            if (choice != 0 && choice != 1) {
                 jout.print("Scelta non valida. Riprova.");
+            }
+        } while (choice != 0 && choice != 1);
+
+        if (choice == 0) {
+            return true;
+        } else {
+            showRuleBooksMenu(scanner);
+            return false;
         }
-        return false;
     }
 
     /**
@@ -67,8 +70,9 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
             if (listChoice == 0) {
                 returnToMenu = true;
                 continue;
-            } else if (listChoice < 1 || listChoice > controller.getAllRuleBooks().size()) {
+            } else if (listChoice < 1 || listChoice > ruleBooks.size()) {
                 jout.print("Scelta non valida. Riprova.");
+                continue;
             }
             processRuleBookSelection(ruleBooks.get(listChoice - 1), scanner);
             jout.print(""); // Riga vuota per separare le iterazioni
@@ -169,9 +173,9 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
 
     @Override
     public void setCurrentUser(UserBean user) {
-        UserBean currentUser;
-        currentUser = user;
+        this.currentUser = user;
     }
+
 
     @Override
     public void setLogicController(Object logicController) {
