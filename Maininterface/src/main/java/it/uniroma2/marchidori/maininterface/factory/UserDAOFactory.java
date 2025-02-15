@@ -3,6 +3,7 @@ package it.uniroma2.marchidori.maininterface.factory;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.dao.UserDAODatabase;
 import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
+import it.uniroma2.marchidori.maininterface.dao.UserDaoMem;
 
 import java.util.logging.Logger;
 
@@ -37,5 +38,14 @@ public class UserDAOFactory {
             }
             return fileSysInstance;
         }
+    }
+
+    public UserDAO getUserDAO(boolean useDatabase, boolean demo) {
+        UserDAO memoryInstance;
+        if(demo){
+            memoryInstance = new UserDaoMem();
+            return memoryInstance;
+        }
+        return getUserDAO(useDatabase);
     }
 }

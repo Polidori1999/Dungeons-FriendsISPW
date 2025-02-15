@@ -99,4 +99,9 @@ public class UserDAODatabase implements UserDAO {
         }
         return null;
     }
+
+    @Override
+    public void updateUsersEntityData(User currentEntity) {
+        //never used
+    }
 }

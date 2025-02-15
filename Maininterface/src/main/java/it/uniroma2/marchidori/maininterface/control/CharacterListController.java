@@ -4,6 +4,7 @@ import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
+import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
 import it.uniroma2.marchidori.maininterface.entity.*;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
@@ -34,7 +35,7 @@ public class CharacterListController implements UserAwareInterface {
                 if (currentUser.getCharacterSheets().get(i).getInfoBean().getName().equals(characterName)) {
                     currentUser.getCharacterSheets().remove(i);
                     currentEntity.getCharacterSheets().remove(i);
-                    UserDAOFileSys dao = Session.getInstance().getUserDAOFileSys();
+                    UserDAO dao = Session.getInstance().getUserDAO();
                     dao.updateUsersEntityData(currentEntity);
                     logger.info(() -> ">>> DEBUG: Personaggio eliminato dallo UserBean: " + characterName);
                     return;

@@ -7,4 +7,5 @@ public interface UserDAO {
     void saveUser(String email, String password);
     User getUserByEmail(String email);
 
+    void updateUsersEntityData(User currentEntity);
 }

@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.entity;
 
+import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
 
 public class Session {
@@ -10,6 +11,7 @@ public class Session {
     // Campo che contiene l'utente corrente (non statico)
     private User currentUser;
     private UserDAOFileSys userDAOFileSys;
+    private UserDAO userDAO;
     private boolean isCLI = false;
     private boolean isDB = false;
     private boolean isDemo = false;
@@ -62,5 +64,11 @@ public class Session {
     }
     public void setUserDAOFileSys(UserDAOFileSys userDAOFileSys) {
         this.userDAOFileSys = userDAOFileSys;
+    }
+    public UserDAO getUserDAO() {
+        return userDAO;
+    }
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 }

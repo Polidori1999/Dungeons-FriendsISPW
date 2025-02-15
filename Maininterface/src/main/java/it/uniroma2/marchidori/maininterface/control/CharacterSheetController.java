@@ -6,6 +6,7 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsB
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
+import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
 import it.uniroma2.marchidori.maininterface.entity.*;
 
@@ -49,7 +50,7 @@ public class CharacterSheetController implements UserAwareInterface {
         // Log: stampa il numero di personaggi attuali e i loro nomi
         jout.print("Dopo createChar, currentUser ha " + currentUser.getCharacterSheets().size() + " personaggi.");
         // Ora aggiorna il file (usa updateUsersEntityData per riscrivere completamente il file)
-        UserDAOFileSys dao = Session.getInstance().getUserDAOFileSys();
+        UserDAO dao = Session.getInstance().getUserDAO();
         dao.updateUsersEntityData(currentEntity);
     }
 
@@ -82,7 +83,7 @@ public class CharacterSheetController implements UserAwareInterface {
                 logger.log(Level.SEVERE,()->"Errore nessun personaggio trovato");
                 return;
             }
-            UserDAOFileSys userDAO = Session.getInstance().getUserDAOFileSys();
+            UserDAO userDAO = Session.getInstance().getUserDAO();
             userDAO.updateUsersEntityData(currentEntity);
 
 
