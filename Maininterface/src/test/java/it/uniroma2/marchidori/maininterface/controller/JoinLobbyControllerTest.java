@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.controller;
 
+import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
@@ -21,7 +22,7 @@ class JoinLobbyControllerTest {
         lobbyList.add(lobby);
 
         JoinLobbyController controller = new JoinLobbyController();
-        List<LobbyBean> beans = controller.getList(lobbyList);
+        List<LobbyBean> beans = Converter.convertLobbyListEntityToBean(lobbyList);
 
         assertNotNull(beans, "La lista dei LobbyBean non dovrebbe essere null.");
         assertEquals(1, beans.size(), "La lista dovrebbe contenere un solo LobbyBean.");
@@ -46,7 +47,7 @@ class JoinLobbyControllerTest {
         lobbyList.add(lobby2);
 
         JoinLobbyController controller = new JoinLobbyController();
-        List<LobbyBean> beans = controller.getList(lobbyList);
+        List<LobbyBean> beans = Converter.convertLobbyListEntityToBean(lobbyList);
 
         assertNotNull(beans, "La lista dei LobbyBean non dovrebbe essere null.");
         assertEquals(2, beans.size(), "La lista dovrebbe contenere due LobbyBean.");

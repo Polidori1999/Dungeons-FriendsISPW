@@ -1,4 +1,4 @@
-package it.uniroma2.marchidori.maininterface.repository;
+/*package it.uniroma2.marchidori.maininterface.repository;
 
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.factory.LobbyFactory;
@@ -22,14 +22,14 @@ public class LobbyRepository {
 
     /**
      * Restituisce tutte le lobby disponibili.
-     */
+
     public static List<Lobby> getAllLobbies() {
         return new ArrayList<>(lobbyList); // Ritorniamo una copia per evitare modifiche dirette
     }
 
     /**
      * Trova una lobby per nome.
-     */
+
     public static Lobby findLobbyByName(String name) {
         for (Lobby lobby : lobbyList) {
             if (lobby.getLobbyName().equals(name)) {
@@ -41,15 +41,15 @@ public class LobbyRepository {
 
     /**
      * Aggiunge una nuova lobby alla lista.
-     */
+
     public static void addLobby(Lobby lobby) {
         lobbyList.add(lobby);
     }
 
     /**
      * Rimuove una lobby per nome.
-     */
+
     public static void removeLobby(String name) {
         lobbyList.removeIf(lobby -> lobby.getLobbyName().equals(name));
     }
-}
+}*/

@@ -2,12 +2,13 @@ package it.uniroma2.marchidori.maininterface.control;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.boundary.LobbyDAO;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
-import it.uniroma2.marchidori.maininterface.dao.LobbyDaoFileSys;
-import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
+import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
+
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
-import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
+
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 
 import java.io.IOException;
@@ -42,12 +43,13 @@ public class ManageLobbyController implements UserAwareInterface {
             LOGGER.log(Level.INFO, "Aggiungendo lobby a UserBean: {0}", newlobby.getLobbyName());
             currentUser.getJoinedLobbies().add(bean);
             currentEntity.getJoinedLobbies().add(newlobby);
-            LobbyRepository.addLobby(newlobby);
+
             //add to file sys missing dao repository
-            LobbyDaoFileSys lobbyDaoFileSys = new LobbyDaoFileSys();
-            lobbyDaoFileSys.addLobby(newlobby);
-            UserDAOFileSys userDAOFileSys = Session.getInstance().getUserDAOFileSys();
-            userDAOFileSys.updateUsersEntityData(currentEntity);
+
+            LobbyDAO lobbyDAO=Session.getInstance().getLobbyDAO();
+            lobbyDAO.addLobby(newlobby);
+            UserDAO userDAO = Session.getInstance().getUserDAO();
+            userDAO.updateUsersEntityData(currentEntity);
             currentUser.setSelectedLobbyName(null);
             LOGGER.log(Level.INFO, "Lista attuale delle lobby: {0}", currentUser.getJoinedLobbies());
         } else {
@@ -69,10 +71,11 @@ public class ManageLobbyController implements UserAwareInterface {
                     currentEntity.getJoinedLobbies().set(i, updatedLobby);
                     // Aggiorna anche la repository:
                     // Rimuove la vecchia lobby e aggiunge quella aggiornata.
-                    LobbyRepository.removeLobby(oldName);
-                    LobbyRepository.addLobby(updatedLobby);
-                    LobbyDaoFileSys lobbyDaoFileSys = new LobbyDaoFileSys();
-                    lobbyDaoFileSys.updateLobby(updatedLobby);
+                    /*LobbyRepository.removeLobby(oldName);
+                    LobbyRepository.addLobby(updatedLobby);*/
+
+                    LobbyDAO lobbyDAO=Session.getInstance().getLobbyDAO();
+                    lobbyDAO.updateLobby(updatedLobby);
                     currentUser.setSelectedLobbyName(null);
                     LOGGER.log(Level.INFO, "Lobby aggiornata correttamente in UserBean e Repository.");
                     return;

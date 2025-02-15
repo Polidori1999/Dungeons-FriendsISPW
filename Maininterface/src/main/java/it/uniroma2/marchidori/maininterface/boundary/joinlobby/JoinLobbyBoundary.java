@@ -4,13 +4,13 @@ import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
+import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
-import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -148,7 +148,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         });
 
         // Carica le lobby iniziali
-        List<LobbyBean> initial = controller.getList(controller.getLobbies());
+        List<LobbyBean> initial = Converter.convertLobbyListEntityToBean(controller.getLobbies());
         filteredLobbies = FXCollections.observableArrayList(initial);
 
         // Imposta le colonne: usa una lambda per la colonna "players"
@@ -170,7 +170,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
             ////if-else demo non demo
             //List<Lobby> rawLobbies = LobbyRepository.getAllLobbies();
             List<Lobby> rawLobbies = controller.getLobbies();
-            List<LobbyBean> updatedList = controller.getList(rawLobbies);
+            List<LobbyBean> updatedList = Converter.convertLobbyListEntityToBean(rawLobbies);
 
 
             // LOGGING DEBUG

@@ -7,7 +7,7 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBe
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
-import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
+
 import it.uniroma2.marchidori.maininterface.entity.*;
 
 import java.util.logging.Level;

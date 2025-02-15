@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.dao;
 
+import it.uniroma2.marchidori.maininterface.boundary.LobbyDAO;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 
 import java.io.*;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class LobbyDaoFileSys {
+public class LobbyDaoFileSys implements LobbyDAO {
 
     private static final String BASE_DIR = "src/main/java/it/uniroma2/marchidori/maininterface/repository/";
     private static final String LOBBY_FILE_PATH = BASE_DIR + "lobby.txt";
@@ -72,9 +73,12 @@ public class LobbyDaoFileSys {
         Files.write(Paths.get(LOBBY_FILE_PATH), lines);
     }
 
+
+
     /**
      * Elimina dal file la lobby avente il nome specificato.
      */
+    @Override
     public void deleteLobby(String lobbyName) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(LOBBY_FILE_PATH));
         List<String> updatedLines = lines.stream()
@@ -89,7 +93,7 @@ public class LobbyDaoFileSys {
     /**
      * Legge il file e restituisce la lista di tutte le lobby (deserializzate).
      */
-    public static List<Lobby> getLobbiesFromSys() {
+    public List<Lobby> getLobby() {
         List<Lobby> lobbyList = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(LOBBY_FILE_PATH))) {
             String linea;

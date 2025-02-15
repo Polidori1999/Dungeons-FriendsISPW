@@ -3,8 +3,9 @@ package it.uniroma2.marchidori.maininterface.boundarycli;
 import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
-import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -30,7 +31,7 @@ public class JoinLobbyPlayerCLIBoundary extends JoinLobbyDMCLIBoundary{
             jout.print("ERRORE: Utente non inizializzato.");
             return;
         }
-        filteredLobbies = FXCollections.observableArrayList(controller.getList(LobbyRepository.getAllLobbies()));
+        filteredLobbies = FXCollections.observableArrayList(Converter.convertLobbyListEntityToBean(controller.getLobbies()));
         refreshTable();
         boolean exit = false;
         while (!exit) {

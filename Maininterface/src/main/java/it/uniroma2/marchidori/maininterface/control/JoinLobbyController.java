@@ -2,15 +2,15 @@ package it.uniroma2.marchidori.maininterface.control;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.boundary.LobbyDAO;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
-import it.uniroma2.marchidori.maininterface.dao.LobbyDaoFileSys;
-import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
+
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
-import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
+
 import javafx.collections.FXCollections;
 
 import java.io.IOException;
@@ -29,16 +29,6 @@ public class JoinLobbyController implements UserAwareInterface {
         // empty
     }
 
-    /**
-     * Converte una lista di Lobby in una lista di LobbyBean.
-     */
-    public List<LobbyBean> getList(List<Lobby> lobbyList) {
-        List<LobbyBean> beans = new ArrayList<>();
-        for (Lobby lobby : lobbyList) {
-            beans.add(Converter.lobbyEntityToBean(lobby));
-        }
-        return beans;
-    }
 
     /**
      * Aggiunge l'utente corrente alla lobby se c'è spazio disponibile.
@@ -67,11 +57,13 @@ public class JoinLobbyController implements UserAwareInterface {
         currentEntity.getJoinedLobbies().add(Converter.lobbyBeanToEntity(lobbyBean));
 
         // Aggiorna la lobby nella repository
-        LobbyDaoFileSys lobbyDaoFileSys = new LobbyDaoFileSys();
-        UserDAOFileSys dao = Session.getInstance().getUserDAOFileSys();
 
-        lobbyDaoFileSys.deleteLobby(lobbyBean.getName());
-        lobbyDaoFileSys.addLobby(Converter.lobbyBeanToEntity(lobbyBean));
+        LobbyDAO lobbyDAO=Session.getInstance().getLobbyDAO();
+        UserDAO dao = Session.getInstance().getUserDAO();
+
+        //fare update per migliorare invece di delete e add
+        lobbyDAO.deleteLobby(lobbyBean.getName());
+        lobbyDAO.addLobby(Converter.lobbyBeanToEntity(lobbyBean));
 
         // Aggiorna la persistenza dell'utente
         dao.updateUsersEntityData(currentEntity);
@@ -89,7 +81,7 @@ public class JoinLobbyController implements UserAwareInterface {
         currentUser.getFavouriteLobbies().add(lobbyBean);
         // Aggiorna anche la lista nell'entity
         currentEntity.getFavouriteLobbies().add(Converter.lobbyBeanToEntity(lobbyBean));
-        UserDAOFileSys dao = Session.getInstance().getUserDAOFileSys();
+        UserDAO dao = Session.getInstance().getUserDAO();
         dao.updateUsersEntityData(currentEntity);
     }
 
@@ -98,8 +90,8 @@ public class JoinLobbyController implements UserAwareInterface {
      */
     public List<LobbyBean> filterLobbies(String type, String duration, String numPlayersStr, String searchQuery) throws IOException {
         List<LobbyBean> result = new ArrayList<>();
-        LobbyDaoFileSys lobbyDaoFileSys = new LobbyDaoFileSys();
-        for (Lobby lob : LobbyDaoFileSys.getLobbiesFromSys()) {
+        LobbyDAO lobbyDAO = Session.getInstance().getLobbyDAO();
+        for (Lobby lob : lobbyDAO.getLobby()) {
             boolean matchesType = (type == null || type.isEmpty() || lob.getLiveOnline().equals(type));
             boolean matchesDuration = (duration == null || duration.isEmpty() || lob.getDuration().equals(duration));
             boolean matchesPlayers = true;
@@ -158,7 +150,7 @@ public class JoinLobbyController implements UserAwareInterface {
     }
 
     public List<Lobby> getLobbies() throws IOException {
-        LobbyDaoFileSys lobbyDaoFileSys = new LobbyDaoFileSys();
-        return lobbyDaoFileSys.getLobbiesFromSys();
+        LobbyDAO lobbyDAO=Session.getInstance().getLobbyDAO();
+        return lobbyDAO.getLobby();
     }
 }

@@ -155,13 +155,7 @@ public class UserDAOFileSys implements UserDAO {
     }
 
 
-//    public static int parse(String line) {
-//        if (line.equals("")){
-//            return Integer.parseInt("0");
-//        }else{
-//            return Integer.parseInt(line);
-//        }
-//    }
+
 
     public String serializeLobby(Lobby lobby) {
         if (lobby == null) {

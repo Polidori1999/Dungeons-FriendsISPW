@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.entity;
 
+import it.uniroma2.marchidori.maininterface.boundary.LobbyDAO;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
 
@@ -12,6 +13,7 @@ public class Session {
     private User currentUser;
     private UserDAOFileSys userDAOFileSys;
     private UserDAO userDAO;
+    private LobbyDAO lobbyDAO;
     private boolean isCLI = false;
     private boolean isDB = false;
     private boolean isDemo = false;
@@ -71,4 +73,7 @@ public class Session {
     public void setUserDAO(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
+    public void setLobbyDAO(LobbyDAO lobbyDAO) {this.lobbyDAO = lobbyDAO;}
+    public LobbyDAO getLobbyDAO() {return lobbyDAO;}
+
 }

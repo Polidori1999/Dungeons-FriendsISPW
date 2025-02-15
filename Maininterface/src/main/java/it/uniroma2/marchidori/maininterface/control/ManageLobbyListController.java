@@ -2,16 +2,16 @@ package it.uniroma2.marchidori.maininterface.control;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.boundary.LobbyDAO;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
-import it.uniroma2.marchidori.maininterface.dao.LobbyDaoFileSys;
-import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
+
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
-import it.uniroma2.marchidori.maininterface.repository.LobbyRepository;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,8 +36,8 @@ public class ManageLobbyListController implements UserAwareInterface {
     public void leaveLobby(LobbyBean lobbyBean) {
 
         // 1. Recupera la lobby dal repository (versione persistente) cercandola per nome.
-        LobbyDaoFileSys lobbyDao = new LobbyDaoFileSys();
-        List<Lobby> repoLobbies = LobbyDaoFileSys.getLobbiesFromSys();
+        LobbyDAO lobbyDao=Session.getInstance().getLobbyDAO();
+        List<Lobby> repoLobbies = lobbyDao.getLobby();
         Lobby repoLobby = null;
         for (Lobby l : repoLobbies) {
             if (l.getLobbyName().equals(lobbyBean.getName())) {
@@ -87,33 +87,11 @@ public class ManageLobbyListController implements UserAwareInterface {
             System.out.println("[DEBUG] La lista delle entity Lobby è null, nessuna rimozione effettuata.");
         }
         // 5. Aggiorna la persistenza dell'utente.
-        UserDAOFileSys dao = Session.getInstance().getUserDAOFileSys();
+        UserDAO dao = Session.getInstance().getUserDAO();
         dao.updateUsersEntityData(currentEntity);
 
     }
 
-
-
-    /*public void deleteLobby(LobbyBean lobbyBean) throws IOException {
-        if (lobbyBean == null || currentUser.getJoinedLobbies() == null) {
-            logger.warning("Impossibile rimuovere la lobby: il nome o la lista delle lobby è null");
-            return;
-        }
-
-        // Rimuovi la lobby dalla lista dei LobbyBean (UI)
-        boolean removedFromBean = currentUser.getJoinedLobbies().removeIf(lobby -> lobby.getName().equals(lobbyBean.getName()));
-
-        // Rimuovi la lobby dalla lista dell'entity User (persistenza)
-        boolean removedFromEntity = currentEntity.getJoinedLobbies().removeIf(lobby -> lobby.getLobbyName().equals(lobbyBean.getName()));
-        if(lobbyBean.getOwner().equals(currentUser.getEmail())){
-            LobbyDaoFileSys lobbyDaoFileSys = new LobbyDaoFileSys();
-            lobbyDaoFileSys.deleteLobby(lobbyBean.getName());
-        }
-
-        // Aggiorna la persistenza riscrivendo completamente il file
-        UserDAOFileSys dao = Session.getInstance().getUserDAOFileSys();
-        dao.updateUsersEntityData(currentEntity);
-    }*/
 
     @Override
     public void setCurrentUser(UserBean user) {
