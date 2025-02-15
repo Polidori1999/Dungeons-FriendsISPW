@@ -47,7 +47,7 @@ public class UserService {
 
     public User loadUserDataDemo(String email){
         Session.getInstance().setUserDAO(userDAO);
-        Session.getInstance().setLobbyDAO(new LobbyDAOMem());
+        Session.getInstance().setLobbyDAO(LobbyDAOMem.getInstance());
         return getUserByEmail(email);
     }
 }

@@ -9,6 +9,17 @@ import java.util.List;
 
 public class LobbyDAOMem implements LobbyDAO {
 
+    private static LobbyDAOMem instance=null;
+
+    private LobbyDAOMem() {}
+
+    public static synchronized LobbyDAO getInstance(){
+        if(instance==null){
+            instance=new LobbyDAOMem();
+        }
+        return instance;
+    }
+
     private List<Lobby> lobbies = new ArrayList<>();
 
     @Override
