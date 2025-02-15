@@ -1,7 +1,7 @@
 package it.uniroma2.marchidori.maininterface.control;
 
-import it.uniroma2.marchidori.maininterface.boundary.LobbyDAO;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
+import it.uniroma2.marchidori.maininterface.dao.LobbyDAOMem;
 import it.uniroma2.marchidori.maininterface.dao.LobbyDaoFileSys;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
@@ -41,12 +41,13 @@ public class UserService {
     public User loadUserData(User user) throws FileNotFoundException {
         Session.getInstance().setLobbyDAO(new LobbyDaoFileSys());
         Session.getInstance().setUserDAO(UserDAOFactory.getInstance().getUserDAO(false));
-        return Session.getInstance().getUserDAOFileSys().loadUserData(user);
+        return Session.getInstance().getUserDAO().loadUserData(user);
     }
 
 
     public User loadUserDataDemo(String email){
         Session.getInstance().setUserDAO(userDAO);
+        Session.getInstance().setLobbyDAO(new LobbyDAOMem());
         return getUserByEmail(email);
     }
 }

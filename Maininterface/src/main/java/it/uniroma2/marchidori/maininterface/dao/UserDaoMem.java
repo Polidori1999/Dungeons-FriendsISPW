@@ -3,6 +3,7 @@ package it.uniroma2.marchidori.maininterface.dao;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.entity.User;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,5 +45,10 @@ public class UserDaoMem implements UserDAO {
     public void updateUsersEntityData(User user){
         User oldUser = getUserByEmail(user.getEmail());
         oldUser = user;
+    }
+
+    @Override
+    public User loadUserData(User user) throws FileNotFoundException {
+        return getUserByEmail(user.getEmail());
     }
 }

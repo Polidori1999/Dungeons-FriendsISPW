@@ -40,6 +40,7 @@ public class UserDAOFactory {
         }
     }
 
+
     public UserDAO getUserDAO(boolean useDatabase, boolean demo) {
         UserDAO memoryInstance;
         if(demo){

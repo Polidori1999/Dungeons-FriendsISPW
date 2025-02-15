@@ -149,8 +149,8 @@ public class JoinLobbyController implements UserAwareInterface {
         this.currentUser = user;
     }
 
-    public List<Lobby> getLobbies() throws IOException {
-        LobbyDAO lobbyDAO=Session.getInstance().getLobbyDAO();
+    public List<Lobby> getLobbies() {
+        LobbyDAO lobbyDAO = Session.getInstance().getLobbyDAO();
         return lobbyDAO.getLobby();
     }
 }

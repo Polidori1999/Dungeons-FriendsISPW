@@ -74,7 +74,7 @@ public class ManageLobbyController implements UserAwareInterface {
                     /*LobbyRepository.removeLobby(oldName);
                     LobbyRepository.addLobby(updatedLobby);*/
 
-                    LobbyDAO lobbyDAO=Session.getInstance().getLobbyDAO();
+                    LobbyDAO lobbyDAO = Session.getInstance().getLobbyDAO();
                     lobbyDAO.updateLobby(updatedLobby);
                     currentUser.setSelectedLobbyName(null);
                     LOGGER.log(Level.INFO, "Lobby aggiornata correttamente in UserBean e Repository.");

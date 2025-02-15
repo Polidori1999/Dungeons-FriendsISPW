@@ -4,6 +4,7 @@ import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -103,5 +104,10 @@ public class UserDAODatabase implements UserDAO {
     @Override
     public void updateUsersEntityData(User currentEntity) {
         //never used
+    }
+
+    @Override
+    public User loadUserData(User user) throws FileNotFoundException {
+        return null;
     }
 }
