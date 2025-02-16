@@ -8,6 +8,7 @@ import it.uniroma2.marchidori.maininterface.entity.User;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class LoginController implements UserAwareInterface {
@@ -50,6 +51,11 @@ public class LoginController implements UserAwareInterface {
                 retrievedUser = userService.loadUserData(retrievedUser);
             }
             // Converte l'entity User in un UserBean per l'interfaccia utente
+            System.out.println("Sto per stampare lo user:"+retrievedUser);
+            /*if(retrievedUser==null) {
+                retrievedUser = new User("temp", "temp", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            }*/
+            System.out.println("Sto per stampare lo user pt2:"+retrievedUser);
             UserBean convertedUser = Converter.convert(retrievedUser);
             logger.info("🔄 Conversione User -> UserBean completata: " + convertedUser.getEmail());
 

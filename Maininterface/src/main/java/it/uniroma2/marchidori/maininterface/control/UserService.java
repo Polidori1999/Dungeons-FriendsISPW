@@ -5,6 +5,7 @@ import it.uniroma2.marchidori.maininterface.dao.LobbyDAOMem;
 import it.uniroma2.marchidori.maininterface.dao.LobbyDaoFileSys;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
+import it.uniroma2.marchidori.maininterface.exception.AccountAlreadyExistsException;
 import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 
 import java.io.*;
@@ -29,7 +30,7 @@ public class UserService {
 
     }
 
-    public void registerUser(String email, String password) {
+    public void registerUser(String email, String password) throws AccountAlreadyExistsException {
         userDAO.saveUser(email, password);
     }
 
@@ -40,7 +41,8 @@ public class UserService {
 
     public User loadUserData(User user) throws FileNotFoundException {
         Session.getInstance().setLobbyDAO(new LobbyDaoFileSys());
-        Session.getInstance().setUserDAO(UserDAOFactory.getInstance().getUserDAO(false));
+        Session.getInstance().setUserDAO(UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB()));
+        System.out.println("sto vedendo quale dao sto usando: "+ Session.getInstance().getDB());
         return Session.getInstance().getUserDAO().loadUserData(user);
     }
 

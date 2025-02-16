@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.dao;
 
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.entity.*;
+import it.uniroma2.marchidori.maininterface.exception.AccountAlreadyExistsException;
 
 import java.io.*;
 import java.util.*;
@@ -31,8 +32,16 @@ public class UserDAOFileSys implements UserDAO {
     }
 
     @Override
-    public void saveUser(String email, String password) {
+    public void saveUser(String email, String password) throws AccountAlreadyExistsException {
+
+        if (userExists(email)) {
+            logger.warning("L'utente " + email + " esiste già. Registrazione annullata.");
+            throw new AccountAlreadyExistsException("Account already exists for email: "+email);
+        }
+
+
         String hashedPassword = org.mindrot.jbcrypt.BCrypt.hashpw(password, org.mindrot.jbcrypt.BCrypt.gensalt());
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(USERS_FILE_PATH, true))) {
             writer.write(email + "," + hashedPassword);
             writer.newLine();
@@ -48,6 +57,26 @@ public class UserDAOFileSys implements UserDAO {
             }
         }
         createUserDataFiles(userDir, email);
+    }
+
+    private boolean userExists(String email) {
+        File file=new File(USERS_FILE_PATH);
+        if(!file.exists()){
+            return false;
+        }
+        try (BufferedReader reader=new BufferedReader(new FileReader(file))){
+            String line;
+            while((line=reader.readLine())!=null){
+                String[] parts = line.split(",");
+                if(parts.length>0 && parts[0].equals(email)){
+                    return true;
+                }
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
     }
 
     private static File getUserFolder(String email) {

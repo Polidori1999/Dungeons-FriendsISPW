@@ -5,6 +5,7 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.RegisterController;
+import it.uniroma2.marchidori.maininterface.exception.AccountAlreadyExistsException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 
@@ -51,11 +52,17 @@ public class RegisterCLIBoundary implements UserAwareInterface, ControllerAwareI
         }
 
         // Esegue la registrazione chiamando il controller
-        registerController.register(email, password);
+        //registerController.register(email, password);
+        try {
+            registerController.register(email, password);
+            changeScene(SceneNames.LOGIN);
+        } catch (AccountAlreadyExistsException e) {
+            jout.print("Errore: Email already exists!");
+        }
         jout.print("Registrazione completata per l'email: " + email);
 
         // Dopo la registrazione, passa alla schermata di login
-        changeScene(SceneNames.LOGIN);
+        //changeScene(SceneNames.LOGIN);
     }
 
     private void changeScene(String sceneName) throws IOException {

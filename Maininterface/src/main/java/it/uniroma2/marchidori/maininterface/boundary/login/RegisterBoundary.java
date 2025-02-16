@@ -4,6 +4,7 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.RegisterController;
+import it.uniroma2.marchidori.maininterface.exception.AccountAlreadyExistsException;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
@@ -76,13 +77,20 @@ public class RegisterBoundary implements UserAwareInterface, ControllerAwareInte
                 logger.info(String.format("✅ Tentativo di registrazione con email: %s", emailText));
             }
 
-            controller.register(emailText, passwordText);
+            try{
+                controller.register(emailText, passwordText);
+                logger.info(String.format("Registrazione completata per l'email: %s",emailText));
+                changeScene(SceneNames.LOGIN);
+            }catch (AccountAlreadyExistsException e){
+                logger.warning("Tentativo di registrazione fallito"+e.getMessage());
+                wrongLogin.setText("Account already exists!");
+            }
 
             if (logger.isLoggable(Level.INFO)) {
                 logger.info(String.format("Registrazione completata per l'email: %s", emailText));
             }
 
-            changeScene(SceneNames.LOGIN);
+            //changeScene(SceneNames.LOGIN);
         } catch (IOException e) {
             throw new SceneChangeException("Error during change scene from register to login.", e);
         }

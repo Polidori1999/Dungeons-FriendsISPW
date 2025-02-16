@@ -35,11 +35,12 @@
             <Font size="19.0" />
          </font>
       </Button>
-      <Label fx:id="wrongLogin" layoutX="186.0" layoutY="135.0" prefHeight="21.0" prefWidth="250.0" textFill="#e90000">
+      <Label fx:id="wrongLogin" layoutX="250.0" layoutY="100.0" prefHeight="21.0" prefWidth="250.0" textFill="#e90000">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
+
       <ImageView fitHeight="720.0" fitWidth="640.0" layoutX="640.0">
          <image>
             <Image url="@login_img.jpg" />
