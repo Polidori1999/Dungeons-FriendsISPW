@@ -7,9 +7,7 @@ import it.uniroma2.marchidori.maininterface.boundary.RunInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.control.LoginController;
-import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
-import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 
@@ -55,7 +53,6 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
             }
             jout.print("");
         }
-        scanner.close();
     }
 
     private void mostraMenu() {
@@ -68,7 +65,6 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
     private void eseguiLogin(Scanner scanner) throws IOException {
         jout.print("Inserisci email: ");
         String email = scanner.nextLine().trim();
-
         jout.print("Inserisci password: ");
         String password = scanner.nextLine().trim();
         User authenticatedUser = loginController.login(email, password);
@@ -78,18 +74,16 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
         } else {
             jout.print(">>> ERRORE: Login fallito. UserBean è NULL!");
         }
-        changeScene("home.fxml");
-
     }
 
     private void eseguiCreateAccount() throws IOException {
         if (currentUser == null) {
             jout.print("Creazione di un UserBean temporaneo per la registrazione.");
-            currentUser = new UserBean(
+            setCurrentUser(new UserBean(
                     "temp@example.com",
                     new ArrayList<>(),
                     new ArrayList<>(),
-                    new ArrayList<>()
+                    new ArrayList<>())
             );
         }
         jout.print("Passaggio alla schermata di registrazione (simulazione).");

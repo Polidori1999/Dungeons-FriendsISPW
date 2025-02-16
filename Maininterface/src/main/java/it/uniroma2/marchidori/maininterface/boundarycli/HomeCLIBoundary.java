@@ -4,6 +4,8 @@ import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.RunInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
+import it.uniroma2.marchidori.maininterface.control.Converter;
+import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 
 import java.io.IOException;
@@ -11,7 +13,8 @@ import java.util.Scanner;
 
 public class HomeCLIBoundary implements UserAwareInterface, RunInterface {
 
-    private UserBean currentUser;
+
+    private UserBean currentUser = Converter.convert(Session.getInstance().getCurrentUser());
     private final Jout jout = new Jout(this.getClass().getSimpleName());
 
 
@@ -21,6 +24,10 @@ public class HomeCLIBoundary implements UserAwareInterface, RunInterface {
         jout.print("Benvenuto nella schermata HOME (CLI) per: " + currentUser.getEmail());
         while (!exit) {
             mostraMenu();
+            if (!scanner.hasNextLine()) {
+                jout.print("Input terminato. Uscita dalla modalità CLI.");
+                break;
+            }
             jout.print("Scegli un'opzione: ");
             String choice = scanner.nextLine().trim();
             switch (choice) {
@@ -62,7 +69,6 @@ public class HomeCLIBoundary implements UserAwareInterface, RunInterface {
             }
             jout.print("");
         }
-        scanner.close();
     }
 
     private void mostraMenu() {

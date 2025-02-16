@@ -76,7 +76,6 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary {
                 jout.print("Lista aggiornata.");
                 break;
             case "0":
-                changeScene(SceneNames.HOME);
                 return true;
             default:
                 jout.print("Opzione non valida, riprova.");

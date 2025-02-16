@@ -61,14 +61,12 @@ public class UserCLIBoundary implements UserAwareInterface, ControllerAwareInter
                 case "0":
                     jout.print("Go to Home...");
                     exit = true;
-                    changeScene(SceneNames.HOME);
                     break;
                 default:
                     jout.print("Opzione non valida, riprova.");
             }
             jout.print(""); // Riga vuota per separare le iterazioni
         }
-        scanner.close();
     }
 
     /**
