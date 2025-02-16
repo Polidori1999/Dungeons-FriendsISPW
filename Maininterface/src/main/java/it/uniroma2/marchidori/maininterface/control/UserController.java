@@ -8,6 +8,7 @@ import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 
 import static it.uniroma2.marchidori.maininterface.enumerate.RoleEnum.DM;
 import static it.uniroma2.marchidori.maininterface.enumerate.RoleEnum.PLAYER;
+import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
 public class UserController implements UserAwareInterface {
     private User currentEntity = Session.getInstance().getCurrentUser();
@@ -28,8 +29,8 @@ public class UserController implements UserAwareInterface {
         this.currentUser = user;
     }
 
-    // Metodo per cambiare il ruolo tra PLAYER e DM
     public void switchRole(RoleEnum role) {
+        logger.info("SwitchRole chiamato con role: " + role);
         if(role == PLAYER) {
             currentUser.setRoleBehavior(DM);
             currentEntity.setRoleBehavior(DM);
@@ -37,5 +38,7 @@ public class UserController implements UserAwareInterface {
             currentUser.setRoleBehavior(PLAYER);
             currentEntity.setRoleBehavior(PLAYER);
         }
+        logger.info("Nuovo ruolo impostato: " + currentUser.getRoleBehavior());
     }
+
 }

@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+
 public class ManageLobbyListDMBoundary extends ManageLobbyListPlayerBoundary {
     private static final Logger logger = Logger.getLogger(ManageLobbyListDMBoundary.class.getName());
 
@@ -47,15 +49,17 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListPlayerBoundary {
 
 
     private void editLobby(LobbyBean lobbyBean) {
-        // Imposta la lobby da editare nel currentUser
+        // Imposta il nome della lobby selezionata nel currentUser
         currentUser.setSelectedLobbyName(lobbyBean.getName());
-        // Cambia scena (usa il metodo protetto ereditato dalla superclasse)
+        System.out.println("Selected lobby name impostato: " + currentUser.getSelectedLobbyName());
+        // Cambia scena verso ManageLobbyBoundary
         try {
             changeScene(SceneNames.MANAGE_LOBBY);
         } catch (IOException e) {
             throw new SceneChangeException("Errore nel cambio scena (modifica Lobby).", e);
         }
     }
+
 
     private void newLobby() {
         // Imposta la lobby da editare nel currentUser

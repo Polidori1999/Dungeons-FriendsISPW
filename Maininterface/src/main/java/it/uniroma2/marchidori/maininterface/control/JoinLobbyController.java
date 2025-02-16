@@ -11,6 +11,7 @@ import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 
+import it.uniroma2.marchidori.maininterface.utils.Alert;
 import javafx.collections.FXCollections;
 
 import java.io.IOException;
@@ -42,7 +43,8 @@ public class JoinLobbyController implements UserAwareInterface {
         if (currentCount < lobbyBean.getMaxOfPlayers()) {
             lobbyBean.setJoinedPlayersCount(currentCount + 1);
         } else {
-            System.out.println("La lobby è piena.");
+
+            Alert.showError("Lobby piena","La lobby è piena!");
             return;
         }
 

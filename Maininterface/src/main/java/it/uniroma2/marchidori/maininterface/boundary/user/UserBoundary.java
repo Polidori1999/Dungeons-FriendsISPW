@@ -4,6 +4,7 @@ import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
+import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.control.UserController;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
@@ -25,6 +26,7 @@ import java.util.logging.Logger;
 
 import static it.uniroma2.marchidori.maininterface.enumerate.RoleEnum.DM;
 import static it.uniroma2.marchidori.maininterface.enumerate.RoleEnum.PLAYER;
+import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
 public class UserBoundary implements UserAwareInterface, ControllerAwareInterface {
 
@@ -126,11 +128,17 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
 
     @FXML
     protected void onClickSwitchRole(ActionEvent event) {
+        logger.info("Ruolo prima dello switch: " + currentUser.getRoleBehavior());
         controller.switchRole(currentUser.getRoleBehavior());
+        // Recupera il ruolo aggiornato dalla Session (o dal controller) e aggiorna il currentUser nel boundary
+        // Ad esempio, se il controller fornisce un metodo getCurrentUser():
+        currentUser = Converter.convert(Session.getInstance().getCurrentUser());
         roleUser.setText(currentUser.getRoleBehavior().getRoleName());
         setSwitchRoleButtonText(currentUser.getRoleBehavior());
-        LOGGER.log(Level.INFO, () -> "Switched role to: " + currentUser.getRoleBehavior().getRoleName());
+        LOGGER.info("Switched role to: " + currentUser.getRoleBehavior().getRoleName());
     }
+
+
 
     @FXML
     protected void changeScene(String fxml) throws IOException {

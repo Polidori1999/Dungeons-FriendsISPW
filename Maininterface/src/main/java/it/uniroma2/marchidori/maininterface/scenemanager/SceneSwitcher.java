@@ -77,11 +77,12 @@ public class SceneSwitcher {
         }
 
         Object boundaryInstance = BoundaryFactory.createBoundary(boundaryClass);
-        injectCurrentUser(boundaryInstance, Converter.convert(Session.getInstance().getCurrentUser()));
+        //injectCurrentUser(boundaryInstance, Converter.convert(Session.getInstance().getCurrentUser()));
+        injectCurrentUser(boundaryInstance, currentUser);
 
         if (controllerClass != null) {
             Object controllerInstance = ControllerFactory.createController(controllerClass);
-            injectCurrentUser(controllerInstance, Converter.convert(Session.getInstance().getCurrentUser()));
+            injectCurrentUser(controllerInstance, currentUser);
             injectControllerIntoBoundary(controllerInstance, boundaryInstance);
         }
 

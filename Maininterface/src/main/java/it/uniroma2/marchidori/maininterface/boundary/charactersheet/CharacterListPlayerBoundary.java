@@ -1,6 +1,8 @@
 package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
+import it.uniroma2.marchidori.maininterface.control.Converter;
+import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
@@ -73,7 +75,14 @@ public class CharacterListPlayerBoundary extends CharacterListDMBoundary {
      * Handler per l'edit di un personaggio esistente.
      */
     private void editChar(CharacterSheetBean bean) {
+        if (bean != null && bean.getInfoBean() != null) {
+            logger.info("editChar: bean passato con nome: " + bean.getInfoBean().getName());
+        } else {
+            logger.warning("editChar: bean o infoBean è null");
+        }
         currentUser.setSelectedLobbyName(bean.getInfoBean().getName());
+        logger.info("editChar: selectedLobbyName settato a: " + currentUser.getSelectedLobbyName());
+
         try {
             SceneSwitcher.changeScene(
                     (Stage) characterPane.getScene().getWindow(),

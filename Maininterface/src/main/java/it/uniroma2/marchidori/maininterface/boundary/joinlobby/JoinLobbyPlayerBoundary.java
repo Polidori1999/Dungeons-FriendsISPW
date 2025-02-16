@@ -3,6 +3,7 @@ package it.uniroma2.marchidori.maininterface.boundary.joinlobby;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
+import javafx.application.Platform;
 
 
 import java.io.IOException;
@@ -19,6 +20,10 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
     @Override
     public void initialize() throws IOException {
         super.initialize();
+        Platform.runLater(() -> {
+            System.out.println("joinLobbyPane dimensions: "
+                    + joinLobbyPane.getWidth() + " x " + joinLobbyPane.getHeight());
+        });
 
         // Setup dynamic button for joining lobby
         TableColumnUtils.<LobbyBean>setupDynamicButtonColumn(
@@ -38,7 +43,8 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
-                                joinButtonColumn.getTableView().refresh();
+                                //joinButtonColumn.getTableView().refresh();
+                                Platform.runLater(() -> joinButtonColumn.getTableView().refresh());
                             },
                             () -> logger.info("Azione annullata o scaduta.")
                     );

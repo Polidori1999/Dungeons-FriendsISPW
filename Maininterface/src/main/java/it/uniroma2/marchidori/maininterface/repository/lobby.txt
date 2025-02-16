@@ -1,1 +1,2 @@
-lobbydi3;One-Shot;Live;2;3;unfo;2
+lobbydi2;One-Shot;Online;2;2;info2;0
+lobbydi1;One-Shot;Live;4;1;info1;0

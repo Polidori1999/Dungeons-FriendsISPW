@@ -205,7 +205,6 @@ public class UserDAOFileSys implements UserDAO {
         File userDir = getUserFolder(user.getEmail());
         if (!userDir.exists() || !userDir.isDirectory()) {
             System.out.println("non mi dire che mi incappio");
-
             return null;
         }
         // Carica i character sheets

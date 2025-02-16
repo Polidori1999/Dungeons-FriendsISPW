@@ -72,10 +72,17 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
     // Controller associato, iniettato tramite setLogicController
     protected CharacterSheetController controller;
 
+
+
     @FXML
     public void initialize() {
-        // Verifica l'iniezione dell'utente
-        String selected = currentUser != null ? currentUser.getSelectedLobbyName() : null;
+        // Log per verificare che currentUser sia stato iniettato
+        logger.info("CharacterSheetBoundary.initialize: currentUser = " + currentUser);
+
+        // Legge il campo selectedLobbyName e lo logga
+        String selected = (currentUser != null) ? currentUser.getSelectedLobbyName() : null;
+        logger.info("CharacterSheetBoundary.initialize: selectedLobbyName = " + selected);
+
         if (selected == null || selected.isEmpty()) {
             creationMode = true;
             currentBean = new CharacterSheetBean();
@@ -85,21 +92,24 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
             currentBean = findCharByName(selected);
             oldName = selected;
             if (currentBean == null) {
+                logger.warning("CharacterSheetBoundary.initialize: Nessun character sheet trovato con nome: " + selected);
                 creationMode = true;
                 currentBean = new CharacterSheetBean();
             }
         }
+
         if (creationMode) {
             clearFields();
-            logger.info(">>> Modalità creazione attiva.");
+            logger.info("CharacterSheetBoundary.initialize: Modalità creazione attiva.");
         } else {
             populateFields(currentBean);
-            // Disabilita il campo del nome per impedire la modifica
             charName.setEditable(false);
             charName.setFocusTraversable(false);
-            logger.info(">>> Modalità modifica attiva per personaggio: " + currentBean.getInfoBean().getName());
+            logger.info("CharacterSheetBoundary.initialize: Modalità modifica attiva per personaggio: "
+                    + currentBean.getInfoBean().getName());
         }
     }
+
 
     /**
      * Popola i campi della UI con i dati presenti nel CharacterSheetBean.

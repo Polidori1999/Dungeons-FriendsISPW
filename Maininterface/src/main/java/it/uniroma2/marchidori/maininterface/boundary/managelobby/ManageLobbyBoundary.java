@@ -87,7 +87,11 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
     // -------------------------------------------------------------
     @Override
     public void setCurrentUser(UserBean user) {
+
         this.currentUser = user;
+        if (controller != null) {
+            controller.setCurrentUser(user);
+        }
     }
 
     @Override
@@ -110,6 +114,9 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
 
         // Determina la modalità in base al campo selectedLobbyName del currentUser
         String selected = currentUser != null ? currentUser.getSelectedLobbyName() : null;
+        LOGGER.log(Level.INFO, "Current user email: {0}", currentUser.getEmail());
+        LOGGER.log(Level.INFO, "Selected Lobby Name: {0}", currentUser.getSelectedLobbyName());
+
         if (selected == null || selected.isEmpty()) {
             creationMode = true;
             currentBean = LobbyFactory.createBean();
@@ -138,6 +145,24 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
             maxPlayersBox.setDisable(true);
             LOGGER.log(Level.INFO, "Modalità modifica attiva per lobby: {0}", currentBean.getName());
         }
+        /*if (!creationMode) { // cioè in modalità modifica
+            populateFields(currentBean);
+            // Se l'utente corrente è il proprietario della lobby, disabilita i campi che non devono essere modificabili
+            if (currentBean.getOwner().equals(currentUser.getEmail())) {
+                // L'utente è il proprietario, quindi blocca la modifica del nome e del numero di giocatori
+                lobbyName.setEditable(false);
+                lobbyName.setFocusTraversable(false);
+                maxPlayersBox.setDisable(true);
+                LOGGER.log(Level.INFO, "Modalità modifica attiva per lobby: {0}. L'utente è il proprietario.", currentBean.getName());
+            } else {
+                // Se non è il proprietario, puoi decidere se bloccare l'edit o abilitare alcune modifiche
+                LOGGER.log(Level.INFO, "Modalità modifica attiva per lobby: {0}. L'utente NON è il proprietario.", currentBean.getName());
+            }
+        } else {
+            clearFields();
+            LOGGER.info("Modalità creazione attiva.");
+        }*/
+
 
     }
 

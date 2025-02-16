@@ -1,6 +1,7 @@
 package it.uniroma2.marchidori.maininterface.control;
 
 import it.uniroma2.marchidori.maininterface.exception.PopupLoadingException;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 
 import java.io.IOException;
 
@@ -109,7 +111,7 @@ public class ConfirmationPopupController {
         });
     }
 
-    public static ConfirmationPopupController loadPopup(AnchorPane container) {
+    /*public static ConfirmationPopupController loadPopup(AnchorPane container) {
         try {
             FXMLLoader loader = new FXMLLoader(
                     ConfirmationPopupController.class.getResource("/it/uniroma2/marchidori/maininterface/confirmationPopup.fxml")
@@ -120,6 +122,56 @@ public class ConfirmationPopupController {
         } catch (IOException e) {
             throw new PopupLoadingException("Errore durante il caricamento del popup di conferma");
         }
+    }*/
+
+    //questa versione funziona mette il pop in alto a sx
+    public static ConfirmationPopupController loadPopup(AnchorPane container) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    ConfirmationPopupController.class.getResource("/it/uniroma2/marchidori/maininterface/confirmationPopup.fxml")
+            );
+            Parent popupRoot = loader.load();
+            container.getChildren().add(popupRoot);
+
+            // Assicurati di eseguire il posizionamento dopo che il container è stato layouttato
+            Platform.runLater(() -> {
+                double layoutX = (container.getWidth() - popupRoot.prefWidth(-1)) / 2;
+                double layoutY = (container.getHeight() - popupRoot.prefHeight(-1)) / 2;
+                popupRoot.setLayoutX(layoutX);
+                popupRoot.setLayoutY(layoutY);
+            });
+
+            return loader.getController();
+        } catch (IOException e) {
+            throw new PopupLoadingException("Errore durante il caricamento del popup di conferma");
+        }
     }
+
+    /*public static ConfirmationPopupController loadPopup(AnchorPane container) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    ConfirmationPopupController.class.getResource("/it/uniroma2/marchidori/maininterface/confirmationPopup.fxml")
+            );
+            Parent popupRoot = loader.load();
+            container.getChildren().add(popupRoot);
+
+            // Forza il layout del container prima di calcolare la posizione
+            container.applyCss();
+            container.layout();
+
+            // Usa Platform.runLater per centrare il popup
+            Platform.runLater(() -> {
+                double layoutX = (container.getWidth() - popupRoot.prefWidth(-1)) / 2;
+                double layoutY = (container.getHeight() - popupRoot.prefHeight(-1)) / 2;
+                popupRoot.setLayoutX(layoutX);
+                popupRoot.setLayoutY(layoutY);
+            });
+
+            return loader.getController();
+        } catch (IOException e) {
+            throw new PopupLoadingException("Errore durante il caricamento del popup di conferma");
+        }
+    }*/
+
 
 }

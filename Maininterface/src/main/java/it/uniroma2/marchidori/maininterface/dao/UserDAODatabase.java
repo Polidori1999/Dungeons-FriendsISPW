@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.dao;
 
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.entity.*;
+import it.uniroma2.marchidori.maininterface.exception.AccountAlreadyExistsException;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.FileNotFoundException;
@@ -20,11 +21,11 @@ public class UserDAODatabase implements UserDAO {
     private static final Logger logger = Logger.getLogger(UserDAODatabase.class.getName());
 
     @Override
-    public void saveUser(String email, String password) {
+    public void saveUser(String email, String password) throws AccountAlreadyExistsException {
         // Verifica se l'utente esiste già
         if (getUserByEmail(email) != null) {
             logger.severe(String.format("❌ Errore: Email già registrata - %s", email));
-            return;
+            throw new AccountAlreadyExistsException("Account already exists for email: " + email);
         }
 
         // Controllo se la password è già criptata (per evitare doppia cifratura)
