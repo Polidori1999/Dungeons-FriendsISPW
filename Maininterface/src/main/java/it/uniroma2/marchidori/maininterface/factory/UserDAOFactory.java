@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 public class UserDAOFactory {
     private static final Logger logger = Logger.getLogger(UserDAOFactory.class.getName());
 
+
     private static UserDAOFactory instance = null;
     private UserDAO fileSysInstance;
     private UserDAO databaseInstance;
