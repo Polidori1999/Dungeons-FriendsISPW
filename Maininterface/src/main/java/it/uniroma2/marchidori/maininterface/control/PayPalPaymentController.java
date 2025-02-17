@@ -27,21 +27,18 @@ public class PayPalPaymentController {
         String clientSecret;
         HttpClient httpClient = HttpClient.newHttpClient();
 
-        FileInputStream fis = null ;
-        try {
-            fis = new FileInputStream("src/main/resources/pp_config.properties");
-            // Usa fis qui dentro
-            // Il file verrà chiuso automaticamente quando il blocco try termina
+        // Usa try-with-resources per garantire che fis venga chiuso automaticamente
+        try (FileInputStream fis = new FileInputStream("src/main/resources/pp_config.properties")) {
+            Properties properties = new Properties();
+            properties.load(fis);
+            clientId = properties.getProperty("pp.user");
+            clientSecret = properties.getProperty("pp.password");
         } catch (IOException e) {
             // Gestisci l'eccezione qui
             jout.print("IO exception thrown");
+            throw e;  // Rilancia l'eccezione se necessario
         }
 
-        Properties properties = new Properties();
-        properties.load(fis);
-
-        clientId = properties.getProperty("pp.user");
-        clientSecret = properties.getProperty("pp.password");
         String auth = clientId + ":" + clientSecret;
         String base64Auth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
 
@@ -67,6 +64,7 @@ public class PayPalPaymentController {
                     + response.statusCode() + "\n" + response.body());
         }
     }
+
 
     /**
      * Crea un ordine di pagamento su PayPal (v2/checkout/orders) con importo e valuta specificati.
