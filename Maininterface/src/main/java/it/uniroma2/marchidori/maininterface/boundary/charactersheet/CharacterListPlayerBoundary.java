@@ -76,11 +76,17 @@ public class CharacterListPlayerBoundary extends CharacterListDMBoundary {
     private void editChar(CharacterSheetBean bean) {
         if (bean != null && bean.getInfoBean() != null) {
             logger.info("editChar: bean passato con nome: " + bean.getInfoBean().getName());
+
+            // Aggiungi il controllo su null per evitare NullPointerException
+            if (bean.getInfoBean().getName() != null) {
+                currentUser.setSelectedLobbyName(bean.getInfoBean().getName());
+                logger.info("editChar: selectedLobbyName settato a: " + currentUser.getSelectedLobbyName());
+            } else {
+                logger.warning("editChar: name nel InfoBean è null");
+            }
         } else {
             logger.warning("editChar: bean o infoBean è null");
         }
-        currentUser.setSelectedLobbyName(bean.getInfoBean().getName());
-        logger.info("editChar: selectedLobbyName settato a: " + currentUser.getSelectedLobbyName());
 
         try {
             SceneSwitcher.changeScene(
@@ -92,4 +98,5 @@ public class CharacterListPlayerBoundary extends CharacterListDMBoundary {
             throw new SceneChangeException("Errore nel cambio scena per edit del personaggio.", e);
         }
     }
+
 }
