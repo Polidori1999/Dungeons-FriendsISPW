@@ -45,7 +45,7 @@ public class RoleSceneMap {
         MAPPING.put(new Pair<>(RoleEnum.DM, SceneIdEnum.LOGIN), LOGIN);
         MAPPING.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.LOGIN), LOGIN);
         MAPPING.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.LOGIN), LOGIN);
-        MAPPING.put(new Pair<>(RoleEnum.NONE, SceneIdEnum.LOGIN), LOGIN);
+        //MAPPING.put(new Pair<>(RoleEnum.NONE, SceneIdEnum.LOGIN), LOGIN);
 
         MAPPING.put(new Pair<>(RoleEnum.DM, SceneIdEnum.REGISTER), REGISTER);
         MAPPING.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.REGISTER), REGISTER);

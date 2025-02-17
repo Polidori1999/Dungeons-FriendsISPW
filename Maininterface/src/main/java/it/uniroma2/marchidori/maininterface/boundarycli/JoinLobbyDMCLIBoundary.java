@@ -19,7 +19,7 @@ import java.util.Scanner;
 
 public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwareInterface, RunInterface {
 
-    private UserBean currentUser;
+    protected UserBean currentUser;
     protected JoinLobbyController controller;
     protected ObservableList<LobbyBean> filteredLobbies;
     private final Scanner scanner = new Scanner(System.in);
@@ -48,6 +48,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
             exit = processInput(input);
             jout.print(""); // Riga vuota per separare le iterazioni
         }
+        changeScene(SceneNames.HOME);
     }
 
     /**
@@ -126,7 +127,6 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
                 jout.print("Lista aggiornata.");
                 break;
             case "0":
-                changeScene(SceneNames.HOME);
                 return true;
             default:
                 jout.print("Opzione non valida, riprova.");

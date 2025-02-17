@@ -2,14 +2,10 @@ package it.uniroma2.marchidori.maininterface.boundarycli;
 
 import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
-import it.uniroma2.marchidori.maininterface.bean.UserBean;
-import it.uniroma2.marchidori.maininterface.control.CharacterListController;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
+
 
 public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary {
 
@@ -30,6 +26,7 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary {
             exit = manageInput(input);
             jout.print(""); // Riga vuota per separare le iterazioni
         }
+        changeScene(SceneNames.HOME);
     }
 
     /**

@@ -44,6 +44,7 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
             exit = processInput(input);
             jout.print(""); // Riga vuota per separare le iterazioni
         }
+        changeScene(SceneNames.HOME);
     }
 
     /**
@@ -156,8 +157,11 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
             jout.print("Download: " + progress + "%");
         }
         CharacterSheetDownloadTask downloadTask = downloadController.getDownloadTask(bean);
-
-        jout.print("Download completato per '" + bean.getInfoBean().getName() + "'.");
+        if (downloadTask != null) {
+            new Thread(downloadTask).start();
+        } else {
+            jout.print("Task di download non disponibile.");
+        }
     }
 
     /**

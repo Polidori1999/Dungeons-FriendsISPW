@@ -7,7 +7,10 @@ import it.uniroma2.marchidori.maininterface.boundary.RunInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.ConsultRulesController;
+import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,13 +22,15 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
     private UserBean currentUser;
 
     @Override
-    public void run() {
+    public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
         while (!exit) {
             exit = processMainMenu(scanner);
         }
         jout.print("Ritorno alla schermata HOME...");
+        changeScene(SceneNames.HOME);
+
     }
 
     private boolean processMainMenu(Scanner scanner) {
@@ -169,6 +174,11 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
             pendingBuyBean = null;
             refreshList();
         }
+    }
+
+    private void changeScene(String sceneName) throws IOException {
+        jout.print("Cambio scena verso: " + sceneName);
+        SceneSwitcher.changeScene(null, sceneName, currentUser);
     }
 
     @Override

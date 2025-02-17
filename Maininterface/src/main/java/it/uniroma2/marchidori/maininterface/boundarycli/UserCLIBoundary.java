@@ -67,6 +67,7 @@ public class UserCLIBoundary implements UserAwareInterface, ControllerAwareInter
             }
             jout.print(""); // Riga vuota per separare le iterazioni
         }
+        changeScene(SceneNames.HOME);
     }
 
     /**

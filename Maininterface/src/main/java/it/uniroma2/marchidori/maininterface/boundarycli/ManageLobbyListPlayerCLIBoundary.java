@@ -37,6 +37,7 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
             exit = processInput(input);
             jout.print(""); // Riga vuota per separare le iterazioni
         }
+        changeScene(SceneNames.HOME);
     }
 
     protected boolean initBoundary() {
@@ -85,7 +86,6 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
                 jout.print("Lista aggiornata.");
                 break;
             case "0":
-                changeScene(SceneNames.HOME);
                 return true;
             default:
                 jout.print("Opzione non valida, riprova.");

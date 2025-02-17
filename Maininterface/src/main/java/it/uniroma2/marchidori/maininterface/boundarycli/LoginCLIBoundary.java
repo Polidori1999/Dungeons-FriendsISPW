@@ -8,6 +8,7 @@ import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.control.LoginController;
 import it.uniroma2.marchidori.maininterface.entity.User;
+import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 
@@ -20,9 +21,6 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
     private UserBean currentUser;
     private LoginController loginController;
     private final Jout jout = new Jout(this.getClass().getSimpleName());
-
-    private static final String GUEST_EMAIL = "guest@example.com";
-
 
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
@@ -48,7 +46,6 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
                     break;
                 default:
                     jout.print("Opzione non valida, riprova.");
-
                     break;
             }
             jout.print("");
@@ -70,6 +67,7 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
         User authenticatedUser = loginController.login(email, password);
         if (authenticatedUser != null) {
             currentUser = Converter.convert(authenticatedUser);
+            currentUser.setRoleBehavior(RoleEnum.PLAYER);
             changeScene(SceneNames.HOME);
         } else {
             jout.print(">>> ERRORE: Login fallito. UserBean è NULL!");

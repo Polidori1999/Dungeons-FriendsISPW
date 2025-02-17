@@ -32,6 +32,7 @@ public class ManageLobbyListDMCLIBoundary extends ManageLobbyListPlayerCLIBounda
             exit = manageInput(input);
             jout.print(""); // Riga vuota per separare le iterazioni
         }
+        changeScene(SceneNames.HOME);
     }
 
 
@@ -62,7 +63,6 @@ public class ManageLobbyListDMCLIBoundary extends ManageLobbyListPlayerCLIBounda
                 jout.print("Lista aggiornata.");
                 break;
             case "0":
-                changeScene(SceneNames.HOME);
                 return true;
             default:
                 jout.print("Opzione non valida, riprova.");

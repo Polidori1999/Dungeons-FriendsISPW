@@ -8,13 +8,11 @@ import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 import java.io.IOException;
 
 public class JoinLobbyPlayerCLIBoundary extends JoinLobbyDMCLIBoundary{
 
-    private UserBean currentUser;
     private final Jout jout = new Jout("JoinLobbyPlayerCLIBoundary");
 
 
@@ -34,6 +32,8 @@ public class JoinLobbyPlayerCLIBoundary extends JoinLobbyDMCLIBoundary{
             exit = manageInput(input);
             jout.print(""); // Riga vuota per separare le iterazioni
         }
+        jout.print(currentUser.getRoleBehavior().getRoleName());
+        changeScene(SceneNames.HOME);
     }
 
 
@@ -116,16 +116,5 @@ public class JoinLobbyPlayerCLIBoundary extends JoinLobbyDMCLIBoundary{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-
-    @Override
-    public void setCurrentUser(UserBean user) {
-        this.currentUser = user;
-    }
-
-    @Override
-    public void setLogicController(Object logicController) {
-        this.controller = (JoinLobbyController) logicController;
     }
 }
