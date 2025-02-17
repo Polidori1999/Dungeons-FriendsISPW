@@ -3,7 +3,7 @@ package it.uniroma2.marchidori.maininterface.control;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.dao.LobbyDAOMem;
 import it.uniroma2.marchidori.maininterface.dao.LobbyDaoFileSys;
-import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
+
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
@@ -11,8 +11,8 @@ import it.uniroma2.marchidori.maininterface.exception.AccountAlreadyExistsExcept
 import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UserService {
     private static UserService instance;
@@ -46,7 +46,6 @@ public class UserService {
     public User loadUserData(User user) throws FileNotFoundException {
         Session.getInstance().setLobbyDAO(new LobbyDaoFileSys());
         Session.getInstance().setUserDAO(UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB()));
-        System.out.println("sto vedendo quale dao sto usando: "+ Session.getInstance().getDB());
         User loadedUser = Session.getInstance().getUserDAO().loadUserData(user);
 
         // Pulizia delle lobby obsolete
@@ -56,7 +55,6 @@ public class UserService {
 
         return loadedUser;
 
-        //return Session.getInstance().getUserDAO().loadUserData(user);
     }
 
 
@@ -73,10 +71,7 @@ public class UserService {
         List<Lobby> activeLobbies = lobbyDao.getLobby();
 
         // Filtra le lobby joinate dell'utente, tenendo solo quelle che sono attive
-        List<Lobby> filteredLobbies = user.getJoinedLobbies().stream()
-                .filter(joined -> activeLobbies.stream()
-                        .anyMatch(active -> active.getLobbyName().equals(joined.getLobbyName())))
-                .collect(Collectors.toList());
+        List<Lobby> filteredLobbies = new ArrayList<>(user.getJoinedLobbies().stream().filter(joined -> activeLobbies.stream().anyMatch(active->active.getLobbyName().equals(joined.getLobbyName()))).toList());
 
         // Aggiorna la lista delle lobby dell'utente
         user.setJoinedLobbies(filteredLobbies);
