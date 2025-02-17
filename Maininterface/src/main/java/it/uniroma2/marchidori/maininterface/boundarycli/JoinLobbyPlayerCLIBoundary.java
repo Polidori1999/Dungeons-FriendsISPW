@@ -57,7 +57,7 @@ public class JoinLobbyPlayerCLIBoundary extends JoinLobbyDMCLIBoundary{
      * @return true se si vuole uscire dalla modalità CLI, false altrimenti.
      * @throws IOException in caso di errori nel cambio scena.
      */
-    private boolean manageInput(String input) throws IOException {
+    private boolean manageInput(String input)  {
         switch (input) {
             case "1":
                 applyFilters();
