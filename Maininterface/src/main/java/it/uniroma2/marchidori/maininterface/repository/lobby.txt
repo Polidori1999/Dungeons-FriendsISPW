@@ -1,2 +1,1 @@
-lobbydi2;One-Shot;Online;2;2;info2;0
-lobbydi1;One-Shot;Live;4;1;info1;0
+lobby3;One-Shot;Live;4;1;sd;1

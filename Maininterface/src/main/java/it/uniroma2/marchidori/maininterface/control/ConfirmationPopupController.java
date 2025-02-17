@@ -57,15 +57,13 @@ public class ConfirmationPopupController {
      * @param confirmAction azione da eseguire se l'utente conferma
      * @param cancelAction  azione da eseguire se l'utente annulla o scade il timer
      */
+
     public void show(String message, int duration, Runnable confirmAction, Runnable cancelAction) {
         this.confirmAction = confirmAction;
         this.cancelAction = cancelAction;
 
         messageLabel.setText(message);
         popupPane.setVisible(true);
-
-
-
 
         // Avvia il TimerController
         timerController = new TimerController(timerLabel, duration, this::onTimeOut);
