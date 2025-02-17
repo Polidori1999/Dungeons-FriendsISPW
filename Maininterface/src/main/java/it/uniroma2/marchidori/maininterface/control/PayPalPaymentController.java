@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.control;
 
+import it.uniroma2.marchidori.maininterface.exception.PayPalPaymentException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
@@ -15,24 +16,21 @@ public class PayPalPaymentController {
     // Per la Sandbox
     private static final String PAYPAL_API_BASE = "https://api-m.sandbox.paypal.com";
 
-    // Inserisci le TUE credenziali (client id e secret) create su PayPal Developer
-    private static String CLIENT_ID;
-    private static String CLIENT_SECRET;
-
     /**
      * Ottiene l'access token per autenticare le richieste all'API PayPal (OAuth2 client_credentials).
      */
-    public String getAccessToken() throws IOException, InterruptedException {
+    public String getAccessToken() throws IOException, InterruptedException, PayPalPaymentException {
+        String clientId;
+        String clientSecret;
         HttpClient httpClient = HttpClient.newHttpClient();
-
 
         FileInputStream fis = new FileInputStream("src/main/resources/pp_config.properties");
         Properties properties = new Properties();
         properties.load(fis);
-        // Basic Auth: clientId + ":" + clientSecret in Base64
-        CLIENT_ID=properties.getProperty("pp.user");
-        CLIENT_SECRET=properties.getProperty("pp.password");
-        String auth = CLIENT_ID + ":" + CLIENT_SECRET;
+
+        clientId = properties.getProperty("pp.user");
+        clientSecret = properties.getProperty("pp.password");
+        String auth = clientId + ":" + clientSecret;
         String base64Auth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -45,16 +43,15 @@ public class PayPalPaymentController {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
             String body = response.body();
-            // Estrazione manuale del token (in un progetto reale conviene usare una libreria JSON)
             int index = body.indexOf("\"access_token\":\"");
             if (index == -1) {
-                throw new RuntimeException("access_token non trovato nel JSON!");
+                throw new PayPalPaymentException("access_token non trovato nel JSON!");
             }
             int start = index + "\"access_token\":\"".length();
             int end = body.indexOf("\"", start);
             return body.substring(start, end);
         } else {
-            throw new RuntimeException("Errore getAccessToken - HTTP "
+            throw new PayPalPaymentException("Errore getAccessToken - HTTP "
                     + response.statusCode() + "\n" + response.body());
         }
     }
@@ -65,12 +62,10 @@ public class PayPalPaymentController {
      * ci saranno i link da cui estrarre l'URL "approve" (dove l'utente deve andare per pagare).
      */
     public String createOrder(String accessToken, String currency, String amount)
-            throws IOException, InterruptedException {
+            throws IOException, InterruptedException, PayPalPaymentException {
 
         HttpClient httpClient = HttpClient.newHttpClient();
 
-        // Corpo JSON molto semplificato per la creazione dell'ordine
-        // "intent": "CAPTURE" -> per catturare direttamente l'importo al momento del pagamento
         String jsonBody = "{\n"
                 + "  \"intent\": \"CAPTURE\",\n"
                 + "  \"purchase_units\": [\n"
@@ -93,9 +88,9 @@ public class PayPalPaymentController {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 201) {
-            return response.body(); // JSON di risposta
+            return response.body();
         } else {
-            throw new RuntimeException("Errore createOrder - HTTP "
+            throw new PayPalPaymentException("Errore createOrder - HTTP "
                     + response.statusCode() + "\n" + response.body());
         }
     }
@@ -111,15 +106,12 @@ public class PayPalPaymentController {
      *  ]
      */
     public String extractApproveLink(String createOrderResponse) {
-        // Ricerca primitiva nel JSON
-        // Link come:
-        // "rel":"approve","method":"GET","href":"https://www.sandbox.paypal.com/checkoutnow?token=..."
         String relApprove = "\"rel\":\"approve\"";
         int index = createOrderResponse.indexOf(relApprove);
         if (index == -1) {
             return null;
         }
-        // cerchiamo "href":"...":
+
         int hrefIndex = createOrderResponse.lastIndexOf("\"href\":\"", index);
         if (hrefIndex == -1) {
             return null;

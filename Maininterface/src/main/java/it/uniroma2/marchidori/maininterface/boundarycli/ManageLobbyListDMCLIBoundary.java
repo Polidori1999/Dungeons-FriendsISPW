@@ -90,10 +90,8 @@ public class ManageLobbyListDMCLIBoundary extends ManageLobbyListPlayerCLIBounda
             }
             currentUser.setSelectedLobbyName(selectedLobby.getName());
             changeScene(SceneNames.MANAGE_LOBBY);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | IOException e) {
             jout.print("Input non valido.");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }

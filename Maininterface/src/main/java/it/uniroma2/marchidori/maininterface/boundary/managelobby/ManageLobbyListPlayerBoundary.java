@@ -1,12 +1,12 @@
 package it.uniroma2.marchidori.maininterface.boundary.managelobby;
 
-import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.control.ManageLobbyListController;
+import it.uniroma2.marchidori.maininterface.exception.PopupLoadingException;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
 public class ManageLobbyListPlayerBoundary implements UserAwareInterface, ControllerAwareInterface {
-    private final Jout jout = new Jout(this.getClass().getSimpleName());
 
     @FXML
     protected AnchorPane manageLobbyListPane;
@@ -96,11 +95,7 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
         // Configura la colonna "Delete"
         TableColumnUtils.setupButtonColumn(tableViewLobbyDelete, "Leave", lobby -> {
             pendingDeleteBean = lobby;
-            try {
-                showLeaveConfirmation();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            showLeaveConfirmation();
         });
 
         tableViewLobby.setItems(data);
@@ -111,7 +106,7 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
 
 
 
-    private void showLeaveConfirmation() throws IOException {
+    private void showLeaveConfirmation() {
         if (confirmationPopupController != null && pendingDeleteBean != null) {
             String message = "Vuoi eliminare la lobby '" + pendingDeleteBean.getName() + "'?";
             confirmationPopupController.show(
@@ -121,7 +116,7 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
                         try {
                             onConfirmLeave();
                         } catch (IOException e) {
-                            throw new RuntimeException(e);
+                            throw new PopupLoadingException(e);
                         }
                     },
                     this::onCancel
@@ -134,18 +129,11 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
 
     private void onConfirmLeave() throws IOException {
         if (pendingDeleteBean != null) {
-            String lobbyName = pendingDeleteBean.getName();
-
             // Rimuovi dalla TableView
             tableViewLobby.getItems().remove(pendingDeleteBean);
 
-            //
-
             // Chiedi al controller di rimuoverla (la logica differenziata in base al ruolo viene gestita all'interno del controller)
             controller.leaveLobby(pendingDeleteBean);
-
-            // Rimuovi la chiamata seguente, poiché il controller già gestisce la rimozione dalla repository in caso di proprietario
-            // LobbyRepository.removeLobby(lobbyName);
 
             pendingDeleteBean = null;
         }

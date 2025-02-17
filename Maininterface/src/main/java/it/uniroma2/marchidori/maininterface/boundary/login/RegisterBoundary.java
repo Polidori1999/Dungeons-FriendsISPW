@@ -45,54 +45,42 @@ public class RegisterBoundary implements UserAwareInterface, ControllerAwareInte
     private RegisterController controller;
 
     public RegisterBoundary() {
-        if (logger.isLoggable(Level.INFO)) {
-            logger.info(">>> RegisterBoundary creato");
-        }
+        //empty builder
     }
 
     @FXML
-    void clickRegister(ActionEvent event) throws IOException {
-        try {
-            String emailText = email.getText();
-            String passwordText = password.getText();
-            String confirmPasswordText = confirmPassword.getText();
+    void clickRegister(ActionEvent event) {
+        String emailText = email.getText();
+        String passwordText = password.getText();
+        String confirmPasswordText = confirmPassword.getText();
 
-            if (emailText.isEmpty() || passwordText.isEmpty() || confirmPasswordText.isEmpty()) {
-                if (logger.isLoggable(Level.WARNING)) {
-                    logger.warning("⚠️ Campi vuoti, registrazione non possibile!");
-                }
-                wrongLogin.setText("Riempi tutti i campi!");
-                return;
+        if (emailText.isEmpty() || passwordText.isEmpty() || confirmPasswordText.isEmpty()) {
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.warning("⚠️ Campi vuoti, registrazione non possibile!");
             }
+            wrongLogin.setText("Riempi tutti i campi!");
+            return;
+        }
 
-            if (!passwordText.equals(confirmPasswordText)) {
-                if (logger.isLoggable(Level.WARNING)) {
-                    logger.warning("⚠️ Le password non coincidono!");
-                }
-                wrongLogin.setText("Le password non coincidono!");
-                return;
+        if (!passwordText.equals(confirmPasswordText)) {
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.warning("⚠️ Le password non coincidono!");
             }
+            wrongLogin.setText("Le password non coincidono!");
+            return;
+        }
 
-            if (logger.isLoggable(Level.INFO)) {
-                logger.info(String.format("✅ Tentativo di registrazione con email: %s", emailText));
-            }
+        registerMethod(emailText, passwordText);
 
-            try{
-                controller.register(emailText, passwordText);
-                logger.info(String.format("Registrazione completata per l'email: %s",emailText));
-                changeScene(SceneNames.LOGIN);
-            }catch (AccountAlreadyExistsException e){
-                logger.warning("Tentativo di registrazione fallito"+e.getMessage());
-                wrongLogin.setText("Account already exists!");
-            }
+    }
 
-            if (logger.isLoggable(Level.INFO)) {
-                logger.info(String.format("Registrazione completata per l'email: %s", emailText));
-            }
-
-            //changeScene(SceneNames.LOGIN);
-        } catch (IOException e) {
-            throw new SceneChangeException("Error during change scene from register to login.", e);
+    public void registerMethod(String emailText, String passwordText){
+        try{
+            controller.register(emailText, passwordText);
+            changeScene(SceneNames.LOGIN);
+        } catch (AccountAlreadyExistsException | IOException e){
+            logger.warning("Tentativo di registrazione fallito"+e.getMessage());
+            wrongLogin.setText("Account already exists!");
         }
     }
 

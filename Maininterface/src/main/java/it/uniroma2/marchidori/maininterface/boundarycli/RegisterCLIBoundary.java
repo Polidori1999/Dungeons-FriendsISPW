@@ -52,8 +52,6 @@ public class RegisterCLIBoundary implements UserAwareInterface, ControllerAwareI
             return;
         }
 
-        // Esegue la registrazione chiamando il controller
-        //registerController.register(email, password);
         try {
             registerController.register(email, password);
             changeScene(SceneNames.LOGIN);
@@ -61,9 +59,6 @@ public class RegisterCLIBoundary implements UserAwareInterface, ControllerAwareI
             jout.print("Errore: Email already exists!");
         }
         jout.print("Registrazione completata per l'email: " + email);
-
-        // Dopo la registrazione, passa alla schermata di login
-        //changeScene(SceneNames.LOGIN);
     }
 
     private void changeScene(String sceneName) throws IOException {

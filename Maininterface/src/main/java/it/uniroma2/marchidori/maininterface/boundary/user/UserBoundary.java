@@ -1,6 +1,5 @@
 package it.uniroma2.marchidori.maininterface.boundary.user;
 
-import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
@@ -21,7 +20,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static it.uniroma2.marchidori.maininterface.enumerate.RoleEnum.DM;
@@ -75,8 +73,6 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
     protected UserController controller;
     private static final Logger LOGGER = Logger.getLogger(UserBoundary.class.getName());
     private static final String SWITCHTO = "Switch Role to ";
-    private Jout jout = new Jout(this.getClass().getSimpleName());
-
 
 
     /**

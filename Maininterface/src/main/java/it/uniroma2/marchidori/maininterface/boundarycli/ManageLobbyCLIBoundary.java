@@ -24,6 +24,8 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
     private UserBean currentUser;
     private ManageLobbyController controller;
 
+    private String stringa = "Inserisci il numero dell'opzione: ";
+
     // Modalità: true = creazione nuova lobby, false = modifica di una lobby esistente
     private boolean creationMode;
     // Bean della lobby in creazione/modifica
@@ -164,7 +166,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         jout.print("Scegli l'opzione per Live/Online:");
         jout.print("1. Live");
         jout.print("2. Online");
-        String choice = prompt("Inserisci il numero dell'opzione: ");
+        String choice = prompt(stringa);
         switch (choice) {
             case "1":
                 currentBean.setLiveOnline("Live");
@@ -185,7 +187,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         jout.print("2. 4 giocatori");
         jout.print("3. 6 giocatori");
         String choice = prompt("Inserisci il numero dell'opzione: ");
-        int num = currentBean.getMaxOfPlayers();;
+        int num = currentBean.getMaxOfPlayers();
         switch (choice) {
             case "1":
                 num = 2;
@@ -208,7 +210,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         jout.print("Scegli la durata della lobby:");
         jout.print("1. One-Shot");
         jout.print("2. Campaign");
-        String choice = prompt("Inserisci il numero dell'opzione: ");
+        String choice = prompt(stringa);
         String duration;
         switch (choice) {
             case "1":
