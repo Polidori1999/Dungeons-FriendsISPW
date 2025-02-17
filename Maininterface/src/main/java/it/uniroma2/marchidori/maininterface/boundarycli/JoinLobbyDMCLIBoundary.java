@@ -110,7 +110,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
      * @return true se si vuole uscire dalla modalità CLI, false altrimenti.
      * @throws IOException in caso di errori nel cambio scena.
      */
-    private boolean processInput(String input) throws IOException {
+    private boolean processInput(String input) {
         switch (input) {
             case "1":
                 applyFilters();
@@ -138,7 +138,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
      * Richiede all'utente di impostare i filtri per tipo, durata e numero di giocatori,
      * e applica il filtraggio.
      */
-    protected void applyFilters() throws IOException {
+    protected void applyFilters()  {
         // Filtro per tipo (Online/Presenza)
         jout.print("Scegli filtro per tipo:");
         jout.print("1. Online");
@@ -180,7 +180,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
     /**
      * Richiede all'utente una stringa di ricerca e la applica come filtro.
      */
-    protected void applySearch() throws IOException {
+    protected void applySearch() {
         searchQuery = prompt("Inserisci stringa di ricerca: ").toLowerCase();
         doFilter();
     }
@@ -188,7 +188,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
     /**
      * Resetta tutti i filtri impostati e riapplica il filtraggio.
      */
-    protected void resetFilters() throws IOException {
+    protected void resetFilters() {
         filterType = "";
         filterDuration = "";
         filterNumPlayers = "";
@@ -199,7 +199,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
     /**
      * Applica i filtri impostati chiamando il metodo di filtraggio del controller.
      */
-    protected void doFilter() throws IOException {
+    protected void doFilter() {
         List<LobbyBean> result = controller.filterLobbies(filterType, filterDuration, searchQuery);
         filteredLobbies.setAll(result);
     }
@@ -209,7 +209,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
      * Ricarica la lista delle lobby disponibili, ottenendola dal controller e
      * applica i filtri correnti.
      */
-    protected void refreshTable() throws IOException {
+    protected void refreshTable() {
         if (controller != null) {
             doFilter();
         }
