@@ -162,6 +162,7 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
 
     /**
      * Gestisce l'eliminazione di un personaggio.
+     *
      */
     protected void handleDeleteCharacter() {
         if (data.isEmpty()) {
