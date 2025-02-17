@@ -24,10 +24,9 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
 
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
-        boolean exit = false;
 
         jout.print("Benvenuto nel sistema di login (CLI)");
-        while (!exit) {
+        while (true) {
             mostraMenu();
             jout.print("Scegli un'opzione: ");
             String choice = scanner.nextLine().trim();
@@ -41,7 +40,6 @@ public class LoginCLIBoundary implements UserAwareInterface, ControllerAwareInte
                     break;
                 case "0":
                     jout.print("Uscita dal programma.");
-                    exit = true;
                     System.exit(0);
                     break;
                 default:
