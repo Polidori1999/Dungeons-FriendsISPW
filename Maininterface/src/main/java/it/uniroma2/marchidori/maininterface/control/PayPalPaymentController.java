@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.control;
 
+import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.exception.PayPalPaymentException;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,6 +16,8 @@ public class PayPalPaymentController {
 
     // Per la Sandbox
     private static final String PAYPAL_API_BASE = "https://api-m.sandbox.paypal.com";
+    private final Jout jout = new Jout(this.getClass().getSimpleName());
+
 
     /**
      * Ottiene l'access token per autenticare le richieste all'API PayPal (OAuth2 client_credentials).
@@ -24,7 +27,16 @@ public class PayPalPaymentController {
         String clientSecret;
         HttpClient httpClient = HttpClient.newHttpClient();
 
-        FileInputStream fis = new FileInputStream("src/main/resources/pp_config.properties");
+        FileInputStream fis = null ;
+        try {
+            fis = new FileInputStream("src/main/resources/pp_config.properties");
+            // Usa fis qui dentro
+            // Il file verrà chiuso automaticamente quando il blocco try termina
+        } catch (IOException e) {
+            // Gestisci l'eccezione qui
+            jout.print("IO exception thrown");
+        }
+
         Properties properties = new Properties();
         properties.load(fis);
 
