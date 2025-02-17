@@ -51,7 +51,6 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListPlayerBoundary {
     private void editLobby(LobbyBean lobbyBean) {
         // Imposta il nome della lobby selezionata nel currentUser
         currentUser.setSelectedLobbyName(lobbyBean.getName());
-        System.out.println("Selected lobby name impostato: " + currentUser.getSelectedLobbyName());
         // Cambia scena verso ManageLobbyBoundary
         try {
             changeScene(SceneNames.MANAGE_LOBBY);

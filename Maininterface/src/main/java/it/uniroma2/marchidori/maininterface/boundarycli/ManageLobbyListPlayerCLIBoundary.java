@@ -76,7 +76,7 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
         return scanner.nextLine().trim();
     }
 
-    private boolean processInput(String input) throws IOException {
+    private boolean processInput(String input) {
         switch (input) {
             case "1":
                 handleLeaveLobby();
@@ -113,10 +113,8 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
             } else {
                 jout.print("Operazione annullata.");
             }
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | IOException e) {
             jout.print("Input non valido.");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 

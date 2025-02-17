@@ -8,6 +8,7 @@ import it.uniroma2.marchidori.maininterface.entity.RuleBook;
 import it.uniroma2.marchidori.maininterface.repository.RulesRepository;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import it.uniroma2.marchidori.maininterface.exception.PayPalPaymentException;
 
 import java.awt.*;
 import java.io.File;
@@ -84,7 +85,7 @@ public class ConsultRulesController implements UserAwareInterface {
 
 
     //VEDERE SE SPOSTARE IN CONTROLLER
-    public void startPayPalPayment(double amount) {
+    public void startPayPalPayment(double amount) throws PayPalPaymentException {
         try {
             RulesRepository.getAllBooks().get(1).setObtained(true);
             PayPalPaymentController payCtrl = new PayPalPaymentController();
@@ -117,9 +118,13 @@ public class ConsultRulesController implements UserAwareInterface {
             // Se desideri catturare in un secondo momento, dovrai salvare l'orderID e
             // chiamare "capture" su /v2/checkout/orders/{orderID}/capture.
 
+        } catch (IOException | InterruptedException e) {
+            jout.print("Errore durante la comunicazione con PayPal: " + e.getMessage());
+            Thread.currentThread().interrupt();
+            throw new PayPalPaymentException("Errore durante il pagamento PayPal.", e);  // Usa l'eccezione personalizzata
         } catch (Exception e) {
             jout.print("Errore durante il pagamento PayPal: ");
-            throw new RuntimeException(e);
+            throw new PayPalPaymentException("Errore sconosciuto durante il pagamento PayPal.", e);  // Gestisci altre eccezioni
         }
     }
 }

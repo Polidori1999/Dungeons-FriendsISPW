@@ -9,8 +9,6 @@ import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
-import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
-import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 
 
 import java.io.IOException;
@@ -18,8 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
 
 public class ManageLobbyListController implements UserAwareInterface {
@@ -46,13 +42,9 @@ public class ManageLobbyListController implements UserAwareInterface {
             }
         }
         if (repoLobby == null) {
-            System.out.println("Lobby " + lobbyBean.getName() + " non trovata nel repository.");
             return;
         }
 
-
-        System.out.println("[DEBUG] Lobby nel repository trovata: " + repoLobby.getLobbyName() +
-                " con count = " + repoLobby.getJoinedPlayersCount());
 
         // 2. Decrementa il contatore della lobby (solo sulla versione repository)
         int currentCount = repoLobby.getJoinedPlayersCount();
@@ -64,30 +56,19 @@ public class ManageLobbyListController implements UserAwareInterface {
                 repoLobby.setJoinedPlayersCount(currentCount - 1);
                 lobbyDao.deleteLobby(repoLobby.getLobbyName());
                 lobbyDao.addLobby(repoLobby);
-                System.out.println("[DEBUG] File repository aggiornato per la lobby " + repoLobby.getLobbyName());
             } catch (IOException e) {
-                System.err.println("Errore durante l'aggiornamento della lobby: " + e.getMessage());
+                throw new IOException(e.getMessage());
             }
         } else {
-            System.out.println("La lobby " + repoLobby.getLobbyName() + " non ha giocatori da rimuovere.");
             return;
         }
-        System.out.println("[DEBUG] Nuovo count nel repository per la lobby '"
-                + repoLobby.getLobbyName() + "': " + repoLobby.getJoinedPlayersCount());
-
         if (currentUser.getJoinedLobbies() != null) {
-            boolean removedFromBean = currentUser.getJoinedLobbies().removeIf(lobby -> lobby.getName().equals(lobbyBean.getName()));
-            System.out.println("[DEBUG] Rimosso dalla lista UI: " + removedFromBean);
-        } else {
-            System.out.println("[DEBUG] La lista dei LobbyBean è null, nessuna rimozione effettuata.");
+            currentUser.getJoinedLobbies().removeIf(lobby -> lobby.getName().equals(lobbyBean.getName()));
         }
 
 // Rimuovi la lobby dalla lista delle lobby joinate dell'entity (User)
         if (currentEntity.getJoinedLobbies() != null) {
-            boolean removedFromEntity = currentEntity.getJoinedLobbies().removeIf(lobby -> lobby.getLobbyName().equals(lobbyBean.getName()));
-            System.out.println("[DEBUG] Rimosso dalla lista entity: " + removedFromEntity);
-        } else {
-            System.out.println("[DEBUG] La lista delle entity Lobby è null, nessuna rimozione effettuata.");
+            currentEntity.getJoinedLobbies().removeIf(lobby -> lobby.getLobbyName().equals(lobbyBean.getName()));
         }
         // 5. Aggiorna la persistenza dell'utente.
         UserDAO dao = Session.getInstance().getUserDAO();
@@ -106,7 +87,6 @@ public class ManageLobbyListController implements UserAwareInterface {
 
         if (currentEntity != null && currentEntity.getJoinedLobbies() != null) {
             for (Lobby lob : currentEntity.getJoinedLobbies()) {
-                System.out.println(lob);
                 LobbyBean bean = Converter.lobbyEntityToBean(lob);
                 beans.add(bean);
             }

@@ -69,10 +69,7 @@ public class ManageLobbyController implements UserAwareInterface {
                     // Aggiorna la lobby nella lista dello user
                     currentUser.getJoinedLobbies().set(i, bean);
                     currentEntity.getJoinedLobbies().set(i, updatedLobby);
-                    // Aggiorna anche la repository:
-                    // Rimuove la vecchia lobby e aggiunge quella aggiornata.
-                    /*LobbyRepository.removeLobby(oldName);
-                    LobbyRepository.addLobby(updatedLobby);*/
+
 
                     LobbyDAO lobbyDAO = Session.getInstance().getLobbyDAO();
                     lobbyDAO.updateLobby(updatedLobby);
