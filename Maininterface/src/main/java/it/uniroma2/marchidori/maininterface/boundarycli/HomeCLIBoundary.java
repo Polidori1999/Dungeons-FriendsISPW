@@ -20,9 +20,8 @@ public class HomeCLIBoundary implements UserAwareInterface, RunInterface {
 
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
-        boolean exit = false;
         jout.print("Benvenuto nella schermata HOME (CLI) per: " + currentUser.getEmail());
-        while (!exit) {
+        while (true) {
             mostraMenu();
             if (!scanner.hasNextLine()) {
                 jout.print("Input terminato. Uscita dalla modalità CLI.");
@@ -61,7 +60,6 @@ public class HomeCLIBoundary implements UserAwareInterface, RunInterface {
                     break;
                 case "6":
                     jout.print("Uscita dalla schermata HOME, terminazione programma...");
-                    exit = true;
                     System.exit(0);
                     break;
                 default:
