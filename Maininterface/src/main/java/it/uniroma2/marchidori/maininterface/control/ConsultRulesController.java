@@ -13,6 +13,7 @@ import it.uniroma2.marchidori.maininterface.exception.PayPalPaymentException;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class ConsultRulesController implements UserAwareInterface {
@@ -84,8 +85,7 @@ public class ConsultRulesController implements UserAwareInterface {
     }
 
 
-    //VEDERE SE SPOSTARE IN CONTROLLER
-    public void startPayPalPayment(double amount) throws PayPalPaymentException {
+    public void startPayPalPayment(double amount) {
         try {
             RulesRepository.getAllBooks().get(1).setObtained(true);
             PayPalPaymentController payCtrl = new PayPalPaymentController();
@@ -101,12 +101,11 @@ public class ConsultRulesController implements UserAwareInterface {
             // 3) Estrai link "approve"
             String approveLink = payCtrl.extractApproveLink(createOrderResponse);
             if (approveLink == null) {
-                jout.print( "Impossibile trovare il link di approvazione nel JSON di risposta PayPal");
+                jout.print("Impossibile trovare il link di approvazione nel JSON di risposta PayPal");
                 return;
             }
 
             // 4) Apri il browser con il link PayPal
-            // In un'app desktop JavaFX, puoi fare:
             Desktop desktop = Desktop.getDesktop();
             if (desktop.isSupported(Desktop.Action.BROWSE)) {
                 desktop.browse(new java.net.URI(approveLink));
@@ -114,17 +113,13 @@ public class ConsultRulesController implements UserAwareInterface {
                 jout.print("Apertura browser non supportata su questo sistema!");
             }
 
-            // A questo punto l'utente vede la pagina PayPal, effettua il login e completa il pagamento.
-            // Se desideri catturare in un secondo momento, dovrai salvare l'orderID e
-            // chiamare "capture" su /v2/checkout/orders/{orderID}/capture.
-
-        } catch (IOException | InterruptedException e) {
-            jout.print("Errore durante la comunicazione con PayPal: " + e.getMessage());
-            Thread.currentThread().interrupt();
-            throw new PayPalPaymentException("Errore durante il pagamento PayPal.", e);  // Usa l'eccezione personalizzata
-        } catch (Exception e) {
-            jout.print("Errore durante il pagamento PayPal: ");
-            throw new PayPalPaymentException("Errore sconosciuto durante il pagamento PayPal.", e);  // Gestisci altre eccezioni
+        } catch (InterruptedException e) {
+            // Re-interrupt the thread if an InterruptedException is caught
+            Thread.currentThread().interrupt();  // Preserve the interrupt status
+            jout.print("helo");
+        } catch (IOException | PayPalPaymentException | URISyntaxException e) {
+            jout.print("help");
         }
     }
+
 }

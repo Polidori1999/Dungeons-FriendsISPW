@@ -113,29 +113,17 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         comboBox2.setItems(FXCollections.observableArrayList("One-Shot", "Campaign"));
 
         //barra di ricerca
-        searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                doFilter();
-            } catch (IOException e) {
-                throw new LobbyFilterException("Error while filtering lobbies in search bar.", e);
-            }
-        });
+        searchBar.textProperty().addListener((observable, oldValue, newValue) ->
+            doFilter()
+        );
 
         // Listener per i filtri
-        comboBox1.valueProperty().addListener((obs, oldVal, newVal) -> {
-            try {
-                doFilter();
-            } catch (IOException e) {
-                throw new LobbyFilterException("Error while filtering lobbies in box1.", e);
-            }
-        });
-        comboBox2.valueProperty().addListener((obs, oldVal, newVal) -> {
-            try {
-                doFilter();
-            } catch (IOException e) {
-                throw new LobbyFilterException("Error while filtering lobbies in box2.", e);
-            }
-        });
+        comboBox1.valueProperty().addListener((obs, oldVal, newVal) ->
+            doFilter()
+        );
+        comboBox2.valueProperty().addListener((obs, oldVal, newVal) ->
+            doFilter()
+        );
 
         // Carica le lobby iniziali
         List<LobbyBean> initial = Converter.convertLobbyListEntityToBean(controller.getLobbies());
@@ -169,7 +157,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     }
 
 
-    private void doFilter() throws IOException {
+    private void doFilter() {
         String type = comboBox1.getValue();
         String duration = comboBox2.getValue();
         String searchQuery= searchBar.getText().toLowerCase();
@@ -178,7 +166,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     }
 
     @FXML
-    public void resetFilters(ActionEvent event) throws IOException {
+    public void resetFilters(ActionEvent event) {
         comboBox1.setValue(null);
         comboBox2.setValue(null);
         doFilter();
