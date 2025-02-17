@@ -86,11 +86,9 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
                     User authenticatedUser = loginController.login(userEmail, userPassword);
                     if (authenticatedUser != null) {
                         currentUser = Converter.convert(authenticatedUser);
-                        logger.log( Level.INFO,">>> Login avvenuto con successo. Ruolo: {}", currentUser.getRoleBehavior());
                         SceneSwitcher.changeScene(currentStage,SceneNames.HOME,currentUser);
                     } else {
                         wrongLogin.setText("Wrong email or password!");
-                        logger.log( Level.INFO,">>> ERRORE: Login fallito. UserBean è NULL!");
                     }
                 }
 
@@ -104,7 +102,6 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
                             new ArrayList<>(),
                             new ArrayList<>()
                     );
-                    logger.log(Level.INFO,">>> Utente impostato come Guest. Ruolo: {}", currentUser.getRoleBehavior());
 
                     // Se usi session, aggiorna l'entity in session
                     Session.getInstance().setCurrentUser(Converter.userBeanToEntity(currentUser));
@@ -114,7 +111,6 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
                 // Caso CREATE_ACCOUNT
                 case "CREATE_ACCOUNT" -> {
                     if (currentUser == null) {
-                        logger.log(Level.INFO,">>> Creazione di un UserBean temporaneo per la registrazione.");
                         currentUser = new UserBean(
                                 "temp@example.com",
                                 new ArrayList<>(),
@@ -122,7 +118,6 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
                                 new ArrayList<>()
                         );
                     }
-                    logger.info(">>> Sto passando currentUser con ruolo: " + currentUser.getRoleBehavior());
                     SceneSwitcher.changeScene(currentStage, SceneNames.REGISTER, currentUser);
                 }
                 default -> logger.log(Level.INFO,"default");

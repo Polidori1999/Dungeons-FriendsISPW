@@ -25,7 +25,7 @@ public class RegisterController implements UserAwareInterface {
     //non serve creare new userbean meglio metterlo in login
     public void register(String email, String password) throws AccountAlreadyExistsException {
         if (logger.isLoggable(Level.INFO)) {
-            logger.info(String.format("🔍 Chiamato register() con: %s", email));
+            logger.info(String.format("Chiamato register() con: %s", email));
         }
         userService.registerUser(email, password);
     }
