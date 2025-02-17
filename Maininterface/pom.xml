@@ -9,57 +9,60 @@
   <version>1.0-SNAPSHOT</version>
   <name>Maininterface</name>
 
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit.version>5.10.2</junit.version>
     <sonar.organization>Leonardo</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-    <javafx.version>23.0.1</javafx.version>
   </properties>
 
   <dependencies>
-    <!-- JavaFX dependencies using the uniform version 23.0.1 -->
-    <dependency>
-      <groupId>org.openjfx</groupId>
-      <artifactId>javafx-controls</artifactId>
-      <version>${javafx.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.openjfx</groupId>
-      <artifactId>javafx-fxml</artifactId>
-      <version>${javafx.version}</version>
-    </dependency>
 
-    <!-- Altre dipendenze -->
+
     <dependency>
       <groupId>org.mindrot</groupId>
       <artifactId>jbcrypt</artifactId>
       <version>0.4</version>
     </dependency>
+
+
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <version>8.0.33</version>
     </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>17.0.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+      <version>17.0.6</version>
+    </dependency>
 
-    <!-- Dipendenze per i test -->
+
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
+
   </dependencies>
+
 
   <build>
     <plugins>
-      <!-- Plugin del compilatore -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -69,8 +72,8 @@
           <target>17</target>
         </configuration>
       </plugin>
-      <!-- Plugin JavaFX Maven -->
       <plugin>
+
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.8</version>
@@ -80,6 +83,7 @@
             <id>default-cli</id>
             <configuration>
               <mainClass>it.uniroma2.marchidori.maininterface.Main</mainClass>
+
               <launcher>app</launcher>
               <jlinkZipName>app</jlinkZipName>
               <jlinkImageName>app</jlinkImageName>
