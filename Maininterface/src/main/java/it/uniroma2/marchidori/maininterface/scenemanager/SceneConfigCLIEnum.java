@@ -14,7 +14,7 @@ public enum SceneConfigCLIEnum {
     CHAR_LIST_PLAYER_CLI(
             CHAR_LIST_DM_CLI.fxmlPath,
             forNameNoException("it.uniroma2.marchidori.maininterface.boundarycli.CharacterListPlayerCLIBoundary"),
-            CHAR_LIST_DM_CLI.controllerClass
+            forNameNoException("it.uniroma2.marchidori.maininterface.control.CharacterListController")
     ),
 
 
@@ -40,7 +40,7 @@ public enum SceneConfigCLIEnum {
     JOIN_LOBBY_PLAYER_CLI(
             JOIN_LOBBY_DM_CLI.fxmlPath,
             forNameNoException("it.uniroma2.marchidori.maininterface.boundarycli.JoinLobbyPlayerCLIBoundary"),
-            JOIN_LOBBY_DM_CLI.controllerClass
+            forNameNoException("it.uniroma2.marchidori.maininterface.control.JoinLobbyController")
         ),
 
     LOGIN_CLI(

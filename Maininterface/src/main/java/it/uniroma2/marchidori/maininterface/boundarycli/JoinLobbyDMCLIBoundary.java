@@ -20,7 +20,7 @@ import java.util.Scanner;
 public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwareInterface, RunInterface {
 
     private UserBean currentUser;
-    private JoinLobbyController controller;
+    protected JoinLobbyController controller;
     protected ObservableList<LobbyBean> filteredLobbies;
     private final Scanner scanner = new Scanner(System.in);
     private final Jout jout = new Jout("JoinLobbyDMCLIBoundary");
@@ -55,12 +55,20 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
      */
     protected void displayLobbyList() {
         jout.print("=== Lista Lobby Disponibili ===");
+
         if (filteredLobbies.isEmpty()) {
             jout.print("Nessuna lobby trovata con i filtri attuali.");
         } else {
             jout.print(String.format("%-3s %-20s %-15s %-10s %-10s", "No", "Nome", "Giocatori", "Durata", "Online"));
+
             int i = 1;
             for (LobbyBean lobby : filteredLobbies) {
+                // Verifica se la lobby è già joinata dall'utente
+                if (controller.isLobbyJoined(lobby)) {
+                    continue;  // Se è joinata, salta questa iterazione e non la stampare
+                }
+
+                // Stampa le informazioni della lobby non ancora joinata
                 jout.print(String.format("%-3d %-20s %-15s %-10s %-10s",
                         i,
                         lobby.getName(),
@@ -71,6 +79,8 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
             }
         }
     }
+
+
 
     /**
      * Visualizza il menu delle operazioni disponibili in modalità CLI.
@@ -132,7 +142,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
         // Filtro per tipo (Online/Presenza)
         jout.print("Scegli filtro per tipo:");
         jout.print("1. Online");
-        jout.print("2. Presenza");
+        jout.print("2. Live");
         jout.print("0. Lascia vuoto");
         String choice = prompt("Inserisci il numero dell'opzione: ");
         switch (choice) {
@@ -140,7 +150,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
                 filterType = "Online";
                 break;
             case "2":
-                filterType = "Presenza";
+                filterType = "Live";
                 break;
             default:
                 filterType = "";
@@ -149,44 +159,21 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
 
         // Filtro per durata (Singola/Campagna)
         jout.print("Scegli filtro per durata:");
-        jout.print("1. Singola");
-        jout.print("2. Campagna");
+        jout.print("1. One-Shot");
+        jout.print("2. Campaign");
         jout.print("0. Lascia vuoto");
         choice = prompt("Inserisci il numero dell'opzione: ");
         switch (choice) {
             case "1":
-                filterDuration = "Singola";
+                filterDuration = "One-Shot";
                 break;
             case "2":
-                filterDuration = "Campagna";
+                filterDuration = "Campaign";
                 break;
             default:
                 filterDuration = "";
                 break;
         }
-
-        // Filtro per numero di giocatori (2, 4, 6, 8)
-        jout.print("Scegli filtro per numero di giocatori:");
-        jout.print("1. 2 giocatori");
-        jout.print("2. 4 giocatori");
-        jout.print("3. 6 giocatori");
-        jout.print("0. Lascia vuoto");
-        choice = prompt("Inserisci il numero dell'opzione: ");
-        switch (choice) {
-            case "1":
-                filterNumPlayers = "2";
-                break;
-            case "2":
-                filterNumPlayers = "4";
-                break;
-            case "3":
-                filterNumPlayers = "6";
-                break;
-            default:
-                filterNumPlayers = "";
-                break;
-        }
-
         doFilter();
     }
 
@@ -213,7 +200,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
      * Applica i filtri impostati chiamando il metodo di filtraggio del controller.
      */
     protected void doFilter() throws IOException {
-        List<LobbyBean> result = controller.filterLobbies(filterType, filterDuration, filterNumPlayers, searchQuery);
+        List<LobbyBean> result = controller.filterLobbies(filterType, filterDuration, searchQuery);
         filteredLobbies.setAll(result);
     }
 

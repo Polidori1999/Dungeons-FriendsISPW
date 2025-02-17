@@ -77,7 +77,6 @@ public class RoleSceneMap {
 
         MAPPING_CLI.put(new Pair<>(RoleEnum.DM, SceneIdEnum.HOME), HOME_CLI);
         MAPPING_CLI.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.HOME), HOME_CLI);
-        MAPPING_CLI.put(new Pair<>(RoleEnum.NONE, SceneIdEnum.HOME), HOME_CLI);
 
         MAPPING_CLI.put(new Pair<>(RoleEnum.DM, SceneIdEnum.LOGIN), LOGIN_CLI);
         MAPPING_CLI.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.LOGIN), LOGIN_CLI);

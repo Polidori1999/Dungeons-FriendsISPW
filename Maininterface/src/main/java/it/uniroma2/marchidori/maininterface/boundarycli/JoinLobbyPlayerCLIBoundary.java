@@ -15,7 +15,6 @@ import java.io.IOException;
 public class JoinLobbyPlayerCLIBoundary extends JoinLobbyDMCLIBoundary{
 
     private UserBean currentUser;
-    private JoinLobbyController controller;
     private final Jout jout = new Jout("JoinLobbyPlayerCLIBoundary");
 
 

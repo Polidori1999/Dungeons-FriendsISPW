@@ -90,23 +90,16 @@ public class JoinLobbyController implements UserAwareInterface {
     /**
      * Filtra le lobby in base ai parametri.
      */
-    public List<LobbyBean> filterLobbies(String type, String duration, String numPlayersStr, String searchQuery) throws IOException {
+    public List<LobbyBean> filterLobbies(String type, String duration, String searchQuery) throws IOException {
         List<LobbyBean> result = new ArrayList<>();
         LobbyDAO lobbyDAO = Session.getInstance().getLobbyDAO();
         for (Lobby lob : lobbyDAO.getLobby()) {
             boolean matchesType = (type == null || type.isEmpty() || lob.getLiveOnline().equals(type));
             boolean matchesDuration = (duration == null || duration.isEmpty() || lob.getDuration().equals(duration));
-            boolean matchesPlayers = true;
             boolean matchesSearch = (searchQuery == null || searchQuery.isEmpty() ||
                     lob.getLobbyName().toLowerCase().contains(searchQuery.toLowerCase()));
 
-            if (numPlayersStr != null && !numPlayersStr.isEmpty()) {
-                int n = Integer.parseInt(numPlayersStr);
-                // Utilizza il contatore invece della dimensione della lista
-                matchesPlayers = (lob.getJoinedPlayersCount() == n);
-            }
-
-            if (matchesType && matchesDuration && matchesPlayers && matchesSearch) {
+            if (matchesType && matchesDuration && matchesSearch) {
                 result.add(Converter.lobbyEntityToBean(lob));
             }
         }

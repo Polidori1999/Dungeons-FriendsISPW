@@ -38,8 +38,6 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     protected ComboBox<String> comboBox1; // "Online"/"Presenza"
     @FXML
     protected ComboBox<String> comboBox2; // "Singola"/"Campagna"
-    @FXML
-    protected ComboBox<String> comboBox3; // "2", "3", ... "8"
 
     @FXML
     protected ImageView joinLobbyImage;
@@ -111,9 +109,8 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         }
 
         // Popola i ComboBox
-        comboBox1.setItems(FXCollections.observableArrayList("Online", "Presenza"));
-        comboBox2.setItems(FXCollections.observableArrayList("Singola", "Campagna"));
-        comboBox3.setItems(FXCollections.observableArrayList("2", "3", "4", "5", "6", "7", "8"));
+        comboBox1.setItems(FXCollections.observableArrayList("Online", "Live"));
+        comboBox2.setItems(FXCollections.observableArrayList("One-Shot", "Campaign"));
 
         //barra di ricerca
         searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -133,13 +130,6 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
             }
         });
         comboBox2.valueProperty().addListener((obs, oldVal, newVal) -> {
-            try {
-                doFilter();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        comboBox3.valueProperty().addListener((obs, oldVal, newVal) -> {
             try {
                 doFilter();
             } catch (IOException e) {
@@ -187,9 +177,8 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     private void doFilter() throws IOException {
         String type = comboBox1.getValue();
         String duration = comboBox2.getValue();
-        String numPlayers = comboBox3.getValue();
         String searchQuery= searchBar.getText().toLowerCase();
-        List<LobbyBean> result = controller.filterLobbies(type, duration, numPlayers,searchQuery);
+        List<LobbyBean> result = controller.filterLobbies(type, duration,searchQuery);
         filteredLobbies.setAll(result);
     }
 
@@ -197,7 +186,6 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     public void resetFilters(ActionEvent event) throws IOException {
         comboBox1.setValue(null);
         comboBox2.setValue(null);
-        comboBox3.setValue(null);
         doFilter();
     }
 

@@ -2,7 +2,9 @@ package it.uniroma2.marchidori.maininterface.boundarycli;
 
 import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
+import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.RunInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
@@ -49,36 +51,42 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
             String choice = prompt("Scegli un'opzione: ");
             switch (choice) {
                 case "1":
-                    editRace();
+                    if(creationMode){
+                        editName();
+                    }
+                    jout.print("nome non modificbaile in editMode");
                     break;
                 case "2":
-                    editClass();
+                    editRace();
                     break;
                 case "3":
-                    editAge();
+                    editClass();
                     break;
                 case "4":
-                    editLevel();
+                    editAge();
                     break;
                 case "5":
-                    editStrength();
+                    editLevel();
                     break;
                 case "6":
-                    editDexterity();
+                    editStrength();
                     break;
                 case "7":
-                    editConstitution();
+                    editDexterity();
                     break;
                 case "8":
-                    editIntelligence();
+                    editConstitution();
                     break;
                 case "9":
-                    editWisdom();
+                    editIntelligence();
                     break;
                 case "10":
-                    editCharisma();
+                    editWisdom();
                     break;
                 case "11":
+                    editCharisma();
+                    break;
+                case "12":
                     onClickSaveCharacter();
                     exit = true;
                     break;
@@ -148,17 +156,18 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
      */
     private void displayMenu() {
         jout.print("=== Menu Scheda Personaggio ===");
-        jout.print("1. Modifica Razza");
-        jout.print("2. Modifica Classe");
-        jout.print("3. Modifica Età");
-        jout.print("4. Modifica Livello");
-        jout.print("5. Modifica STR");
-        jout.print("6. Modifica DEX");
-        jout.print("7. Modifica CON");
-        jout.print("8. Modifica INT");
-        jout.print("9. Modifica WIS");
-        jout.print("10. Modifica CHA");
-        jout.print("11. Salva Scheda");
+        jout.print("1. Modifica Nome");
+        jout.print("2. Modifica Razza");
+        jout.print("3. Modifica Classe");
+        jout.print("4. Modifica Età");
+        jout.print("5. Modifica Livello");
+        jout.print("6. Modifica STR");
+        jout.print("7. Modifica DEX");
+        jout.print("8. Modifica CON");
+        jout.print("9. Modifica INT");
+        jout.print("10. Modifica WIS");
+        jout.print("11. Modifica CHA");
+        jout.print("12. Salva Scheda");
         jout.print("0. Torna alla Lista Personaggi");
 
     }
@@ -312,6 +321,10 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
         jout.print("Class updated to: " + clazz);
     }
 
+    private void editName() {
+        String nameStr = prompt("Enter your name: ");
+        currentBean.getInfoBean().setName(nameStr);
+    }
 
     private void editAge() {
         String ageStr = prompt("Inserisci l'età: ");
@@ -407,6 +420,12 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
      * Pulisce i campi impostando valori di default.
      */
     private void clearFields() {
+        if(currentBean.getInfoBean() == null){
+            currentBean.setInfoBean(new CharacterInfoBean());
+        }
+        if (currentBean.getStatsBean() == null){
+            currentBean.setStatsBean(new CharacterStatsBean());
+        }
         currentBean.getInfoBean().setName("");
         currentBean.getInfoBean().setRace("");
         currentBean.getInfoBean().setClasse("");
