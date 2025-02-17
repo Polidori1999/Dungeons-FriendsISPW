@@ -4,6 +4,7 @@ import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.control.Converter;
 
+import it.uniroma2.marchidori.maininterface.exception.JoinLobbyException;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.collections.FXCollections;
 
@@ -117,7 +118,8 @@ public class JoinLobbyPlayerCLIBoundary extends JoinLobbyDMCLIBoundary{
         } catch (NumberFormatException e) {
             jout.print("Input non valido.");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new JoinLobbyException("Errore durante l'unione alla lobby.", e);
         }
     }
+
 }

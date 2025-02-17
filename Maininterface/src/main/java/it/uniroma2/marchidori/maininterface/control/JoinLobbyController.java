@@ -9,7 +9,6 @@ import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
-import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 
 import it.uniroma2.marchidori.maininterface.utils.Alert;
 import javafx.collections.FXCollections;
@@ -59,8 +58,7 @@ public class JoinLobbyController implements UserAwareInterface {
             return;
         }
 
-        // Debug: stampa il nuovo numero di giocatori
-        System.out.println("Numero di giocatori ora: " + lobbyBean.getJoinedPlayersCount());
+
 
         // Aggiorna le strutture dell'utente e della sessione
         if (currentUser.getJoinedLobbies() == null) {
@@ -101,7 +99,7 @@ public class JoinLobbyController implements UserAwareInterface {
     /**
      * Filtra le lobby in base ai parametri.
      */
-    public List<LobbyBean> filterLobbies(String type, String duration, String searchQuery) throws IOException {
+    public List<LobbyBean> filterLobbies(String type, String duration, String searchQuery)  {
         List<LobbyBean> result = new ArrayList<>();
         LobbyDAO lobbyDAO = Session.getInstance().getLobbyDAO();
         for (Lobby lob : lobbyDAO.getLobby()) {

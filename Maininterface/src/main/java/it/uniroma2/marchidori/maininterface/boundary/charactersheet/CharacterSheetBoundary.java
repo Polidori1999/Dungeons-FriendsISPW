@@ -7,6 +7,7 @@ import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsB
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetController;
+import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.Alert;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
@@ -76,12 +77,9 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
 
     @FXML
     public void initialize() {
-        // Log per verificare che currentUser sia stato iniettato
-        logger.info("CharacterSheetBoundary.initialize: currentUser = " + currentUser);
 
         // Legge il campo selectedLobbyName e lo logga
         String selected = (currentUser != null) ? currentUser.getSelectedLobbyName() : null;
-        logger.info("CharacterSheetBoundary.initialize: selectedLobbyName = " + selected);
 
         if (selected == null || selected.isEmpty()) {
             creationMode = true;
@@ -92,7 +90,6 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
             currentBean = findCharByName(selected);
             oldName = selected;
             if (currentBean == null) {
-                logger.warning("CharacterSheetBoundary.initialize: Nessun character sheet trovato con nome: " + selected);
                 creationMode = true;
                 currentBean = new CharacterSheetBean();
             }
@@ -251,7 +248,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         try {
             SceneSwitcher.changeScene(currentStage, fxml, currentUser);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new SceneChangeException("Errore nel cambio scena verso: " + fxml, e);
         }
     }
 

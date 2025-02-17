@@ -14,7 +14,7 @@ public class Main extends Application {
 
     static UserBean tempUser = new UserBean("", null, null, null);
     private static final Jout jout = new Jout("Main");
-    private static final String choice = "Enter the corresponding number (1 or 2): ";
+    private static final String CHOICE = "Enter the corresponding number (1 or 2): ";
 
 
     @Override
@@ -44,7 +44,7 @@ public class Main extends Application {
             jout.print("Select application mode:");
             jout.print("1. Demo Mode");
             jout.print("2. Non-Demo Mode");
-            jout.print(choice);
+            jout.print(CHOICE);
             String appModeChoice = scanner.nextLine().trim();
             if ("1".equals(appModeChoice)) {
                 jout.print("Demo Mode selected.");
@@ -63,7 +63,7 @@ public class Main extends Application {
             jout.print("Select the data source option:");
             jout.print("1. DAO Database");
             jout.print("2. DAO FileSystem");
-            jout.print(choice);
+            jout.print(CHOICE);
             String dataSourceChoice = scanner.nextLine().trim();
             if ("1".equals(dataSourceChoice)) {
                 jout.print("DAO Database selected.");
@@ -84,7 +84,7 @@ public class Main extends Application {
             jout.print("Select the execution mode of the application:");
             jout.print("1. CLI");
             jout.print("2. JavaFX");
-            jout.print(choice);
+            jout.print(CHOICE);
             String modeChoice = scanner.nextLine().trim();
             if ("1".equals(modeChoice)) {
                 jout.print("Launching CLI mode...");

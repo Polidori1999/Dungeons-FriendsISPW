@@ -175,7 +175,6 @@ public class Converter {
 
     public static UserBean convert(User user) {
         if (user == null) {
-            System.out.println("user is null");
             return null;
         }
 

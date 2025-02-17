@@ -2,22 +2,22 @@ package it.uniroma2.marchidori.maininterface.control;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
-import it.uniroma2.marchidori.maininterface.dao.UserDaoMem;
+
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
+
 import java.util.logging.Logger;
 
 public class LoginController implements UserAwareInterface {
 
     private UserService userService;
-    private UserBean userBean;  // Bean usato dall'interfaccia
+
     private static final Logger logger = Logger.getLogger(LoginController.class.getName());
-    private UserBean currentUser;
+    UserBean currentUser;
 
     public LoginController() {
         this.userService = UserService.getInstance(Session.getInstance().getDB());
@@ -29,21 +29,18 @@ public class LoginController implements UserAwareInterface {
     }
 
     public User login(String email, String password) throws FileNotFoundException {
-        logger.info("🔍 Tentativo di login per: " + email);
+
 
         // Recupera l'utente tramite il servizio; il DAO carica tutte le info (comprese le lobby)
         User retrievedUser = userService.getUserByEmail(email);
 
         if (retrievedUser == null) {
-            logger.severe("❌ Utente non trovato per: " + email);
             return null;
         }
 
-        logger.info("🔄 Utente trovato: " + retrievedUser.getEmail());
 
         // Verifica la password usando BCrypt
         if (BCrypt.checkpw(password, retrievedUser.getPassword())) {
-            logger.info("✅ Password corretta per: " + email);
             if(Session.getInstance().getDemo()){
                 logger.info("demo true!");
                 retrievedUser = userService.loadUserDataDemo(email);
@@ -52,11 +49,7 @@ public class LoginController implements UserAwareInterface {
                 retrievedUser = userService.loadUserData(retrievedUser);
             }
             // Converte l'entity User in un UserBean per l'interfaccia utente
-            System.out.println("Sto per stampare lo user:"+retrievedUser);
-            /*if(retrievedUser==null) {
-                retrievedUser = new User("temp", "temp", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-            }*/
-            System.out.println("Sto per stampare lo user pt2:"+retrievedUser);
+
             retrievedUser.setRoleBehavior(RoleEnum.PLAYER);
             UserBean convertedUser = Converter.convert(retrievedUser);
             logger.info("🔄 Conversione User -> UserBean completata: " + convertedUser.getEmail());
@@ -67,7 +60,6 @@ public class LoginController implements UserAwareInterface {
 
             return retrievedUser;
         } else {
-            logger.severe("❌ Password errata per: " + email);
             return null;
         }
     }

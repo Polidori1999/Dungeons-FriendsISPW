@@ -1,7 +1,7 @@
 package it.uniroma2.marchidori.maininterface.boundary.joinlobby;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
-import it.uniroma2.marchidori.maininterface.control.Converter;
+import it.uniroma2.marchidori.maininterface.exception.JoinLobbyException;
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
 import javafx.application.Platform;
 
@@ -20,10 +20,7 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
     @Override
     public void initialize() throws IOException {
         super.initialize();
-        Platform.runLater(() -> {
-            System.out.println("joinLobbyPane dimensions: "
-                    + joinLobbyPane.getWidth() + " x " + joinLobbyPane.getHeight());
-        });
+
 
         // Setup dynamic button for joining lobby
         TableColumnUtils.<LobbyBean>setupDynamicButtonColumn(
@@ -37,19 +34,17 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
                             10,
                             () -> {
                                 try {
-                                    // Aggiungi il nuovo giocatore nel primo slot vuoto
-                                    //controller.addPlayerToLobby(Converter.lobbyBeanToEntity(lobbyBean), currentUser.getEmail());
-                                    controller.addLobby(lobbyBean); // oppure aggiorna la lobby
+                                    // Aggiungi il nuovo giocatore nel primo slot vuoto o aggiorna la lobby
+                                    controller.addLobby(lobbyBean);
                                 } catch (IOException e) {
-                                    throw new RuntimeException(e);
+                                    throw new JoinLobbyException("Errore durante l'entrata nella lobby: " + lobbyBean.getName(), e);
                                 }
-                                //joinButtonColumn.getTableView().refresh();
+
                                 Platform.runLater(() -> joinButtonColumn.getTableView().refresh());
                             },
                             () -> logger.info("Azione annullata o scaduta.")
                     );
                 }
-
         );
 
         // Setup dynamic button for adding/removing lobby from favourites

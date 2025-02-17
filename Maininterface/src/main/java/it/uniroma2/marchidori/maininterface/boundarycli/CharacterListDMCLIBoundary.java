@@ -92,7 +92,7 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
      * @return true se si vuole uscire dalla modalità, false altrimenti.
      * @throws IOException in caso di errori nel cambio scena.
      */
-    private boolean processInput(String input) throws IOException {
+    private boolean processInput(String input) {
         switch (input) {
             case "1":
                 handleDeleteCharacter();

@@ -70,18 +70,19 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
         List<RuleBookBean> ruleBooks = controller.getAllRuleBooks();
         while (!returnToMenu) {
             refreshList();
-            int listChoice = readChoice(scanner, "0. Torna al menu CONSULT RULES\n" +
-                    "Seleziona il numero del RuleBook da consultare o comprare: ");
+            int listChoice = readChoice(scanner,
+                    "0. Torna al menu CONSULT RULES\nSeleziona il numero del RuleBook da consultare o comprare: ");
+
             if (listChoice == 0) {
                 returnToMenu = true;
-                continue;
             } else if (listChoice < 1 || listChoice > ruleBooks.size()) {
                 jout.print("Scelta non valida. Riprova.");
-                continue;
+            } else {
+                processRuleBookSelection(ruleBooks.get(listChoice - 1), scanner);
+                jout.print(""); // Riga vuota per separare le iterazioni
             }
-            processRuleBookSelection(ruleBooks.get(listChoice - 1), scanner);
-            jout.print(""); // Riga vuota per separare le iterazioni
         }
+
     }
 
     /**

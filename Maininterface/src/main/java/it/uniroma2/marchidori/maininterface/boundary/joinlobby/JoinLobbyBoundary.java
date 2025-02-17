@@ -10,6 +10,7 @@ import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
+import it.uniroma2.marchidori.maininterface.exception.LobbyFilterException;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import javafx.collections.FXCollections;
@@ -26,7 +27,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
 
-import static it.uniroma2.marchidori.maininterface.boundary.joinlobby.JoinLobbyPlayerBoundary.logger;
 
 public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInterface {
 
@@ -117,7 +117,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
             try {
                 doFilter();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new LobbyFilterException("Error while filtering lobbies in search bar.", e);
             }
         });
 
@@ -126,14 +126,14 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
             try {
                 doFilter();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new LobbyFilterException("Error while filtering lobbies in box1.", e);
             }
         });
         comboBox2.valueProperty().addListener((obs, oldVal, newVal) -> {
             try {
                 doFilter();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new LobbyFilterException("Error while filtering lobbies in box2.", e);
             }
         });
 
@@ -154,18 +154,13 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
 
 
 
-    public void refreshTable() throws IOException {
+    public void refreshTable() {
         if (controller != null) {
 
-            ////if-else demo non demo
-            //List<Lobby> rawLobbies = LobbyRepository.getAllLobbies();
+
             List<Lobby> rawLobbies = controller.getLobbies();
             List<LobbyBean> updatedList = Converter.convertLobbyListEntityToBean(rawLobbies);
 
-
-            // LOGGING DEBUG
-            logger.info("📌 LobbyRepository attuale: " + rawLobbies);
-            logger.info("📌 LobbyBean convertite: " + updatedList);
 
             filteredLobbies.setAll(updatedList);
             lobbyTableView.setItems(filteredLobbies); // Forza il reset della lista
@@ -199,8 +194,6 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         try {
             SceneSwitcher.changeScene(currentStage, fxml, currentUser);
         } catch (IOException e) {
-            // Se preferisci, potresti usare un messaggio più "dinamico", come:
-            // "Error during change scene from ManageLobbyListBoundary to " + fxml
             throw new SceneChangeException("Error during change scene.", e);
         }
     }

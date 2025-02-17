@@ -29,8 +29,7 @@ public class LobbyDAOMem implements LobbyDAO {
 
     @Override
     public void updateLobby(Lobby lobby) throws IOException {
-        Lobby old = getLobbyByName(lobby.getLobbyName());
-        old = lobby;
+        //void
     }
 
     @Override

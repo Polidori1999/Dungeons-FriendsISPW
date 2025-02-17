@@ -8,12 +8,15 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public class LobbyDaoFileSys implements LobbyDAO {
 
     private static final String BASE_DIR = "src/main/java/it/uniroma2/marchidori/maininterface/repository/";
     private static final String LOBBY_FILE_PATH = BASE_DIR + "lobby.txt";
+    private static final Logger logger = Logger.getLogger(LobbyDaoFileSys.class.getName());
 
     /**
      * Aggiunge (appende) una lobby al file, utilizzando un formato con 7 campi:
@@ -44,7 +47,7 @@ public class LobbyDaoFileSys implements LobbyDAO {
             writer.write(linea);
             writer.newLine();
         } catch (IOException e) {
-            System.err.println("Errore durante la scrittura sul file: " + e.getMessage());
+            logger.severe("Errore durante la scrittura sul file: " + e.getMessage());
         }
     }
 
@@ -54,26 +57,22 @@ public class LobbyDaoFileSys implements LobbyDAO {
     public void updateLobby(Lobby updatedLobby) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(LOBBY_FILE_PATH));
         boolean found = false;
-        for (int i = 0; i < lines.size(); i++) {
+        for (int i = 0; i < lines.size() && !found; i++) {
             String line = lines.get(i).trim();
-            if (line.isEmpty()) {
-                continue;
-            }
-            String[] tokens = line.split(";", -1);
-            if (tokens.length > 0 && tokens[0].equals(updatedLobby.getLobbyName())) {
-                String newLine = convertLobbyToString(updatedLobby);
-                lines.set(i, newLine);
-                found = true;
-                break;
+            if (!line.isEmpty()) {
+                String[] tokens = line.split(";", -1);
+                if (tokens.length > 0 && tokens[0].equals(updatedLobby.getLobbyName())) {
+                    String newLine = convertLobbyToString(updatedLobby);
+                    lines.set(i, newLine);
+                    found = true;
+                }
             }
         }
         if (!found) {
-            System.err.println("Lobby con nome '" + updatedLobby.getLobbyName() + "' non trovata.");
+            logger.severe("Lobby con nome '" + updatedLobby.getLobbyName() + "' non trovata.");
         }
         Files.write(Paths.get(LOBBY_FILE_PATH), lines);
     }
-
-
 
     /**
      * Elimina dal file la lobby avente il nome specificato.
@@ -81,12 +80,12 @@ public class LobbyDaoFileSys implements LobbyDAO {
     @Override
     public void deleteLobby(String lobbyName) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(LOBBY_FILE_PATH));
-        List<String> updatedLines = lines.stream()
+        List<String> updatedLines = new ArrayList<>(lines.stream()
                 .filter(line -> {
                     String[] tokens = line.split(";", -1);
                     return tokens.length > 0 && !tokens[0].equals(lobbyName);
                 })
-                .collect(Collectors.toList());
+                .toList());
         Files.write(Paths.get(LOBBY_FILE_PATH), updatedLines);
     }
 
@@ -98,42 +97,57 @@ public class LobbyDaoFileSys implements LobbyDAO {
         try (BufferedReader reader = new BufferedReader(new FileReader(LOBBY_FILE_PATH))) {
             String linea;
             while ((linea = reader.readLine()) != null) {
-                if (linea.trim().isEmpty()) {
-                    continue;
+                Lobby lobby = parseLobbyLine(linea);
+                if (lobby != null) {
+                    lobbyList.add(lobby);
                 }
-                String[] campi = linea.split(";", -1);
-                if (campi.length < 7) {
-                    System.err.println("Linea non valida (meno di 7 campi): " + linea);
-                    continue;
-                }
-                String name = campi[0];
-                String duration = campi[1];
-                String liveOnline = campi[2];
-                int maxOfPlayers;
-                try {
-                    maxOfPlayers = Integer.parseInt(campi[3]);
-                } catch (NumberFormatException e) {
-                    System.err.println("Numero di giocatori non valido in: " + linea);
-                    continue;
-                }
-                String owner = campi[4];
-                String infoLink = campi[5];
-                int joinedPlayersCount;
-                try {
-                    joinedPlayersCount = Integer.parseInt(campi[6]);
-                } catch (NumberFormatException e) {
-                    System.err.println("Contatore dei giocatori non valido in: " + linea);
-                    continue;
-                }
-                // Si assume che esista un costruttore della Lobby che accetti joinedPlayersCount
-                Lobby lobby = new Lobby(name, duration, liveOnline, maxOfPlayers, owner, infoLink, joinedPlayersCount);
-                lobbyList.add(lobby);
             }
         } catch (IOException e) {
-            System.err.println("Errore durante la lettura dal file: " + e.getMessage());
+            logger.severe("Errore durante la lettura dal file: " + e.getMessage());
         }
         return lobbyList;
     }
+
+    /**
+     * Parses a single line from the lobby file into a Lobby object.
+     * Returns null if the line is empty or invalid.
+     */
+    private Lobby parseLobbyLine(String linea) {
+        if (linea.trim().isEmpty()) {
+            return null;
+        }
+        String[] campi = linea.split(";", -1);
+        if (campi.length < 7) {
+            logger.log(Level.SEVERE, "Linea non valida (meno di 7 campi): {0}", linea);
+            return null;
+        }
+
+        String name = campi[0];
+        String duration = campi[1];
+        String liveOnline = campi[2];
+
+        int maxOfPlayers;
+        try {
+            maxOfPlayers = Integer.parseInt(campi[3]);
+        } catch (NumberFormatException e) {
+            logger.severe("Numero di giocatori non valido in: " + linea);
+            return null;
+        }
+
+        String owner = campi[4];
+        String infoLink = campi[5];
+
+        int joinedPlayersCount;
+        try {
+            joinedPlayersCount = Integer.parseInt(campi[6]);
+        } catch (NumberFormatException e) {
+            logger.severe("Contatore dei giocatori non valido in: " + linea);
+            return null;
+        }
+
+        return new Lobby(name, duration, liveOnline, maxOfPlayers, owner, infoLink, joinedPlayersCount);
+    }
+
 
     /**
      * Converte una Lobby in una stringa formattata (con 7 campi) per la memorizzazione.

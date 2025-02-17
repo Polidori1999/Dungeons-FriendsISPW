@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.boundarycli;
 
 import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
+import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 
 import java.io.IOException;
@@ -88,7 +89,7 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary {
                     try {
                         editCharacter(characterSheetBean);
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        throw new SceneChangeException("Errore durante l'editing del personaggio", e);
                     }
                 });
     }

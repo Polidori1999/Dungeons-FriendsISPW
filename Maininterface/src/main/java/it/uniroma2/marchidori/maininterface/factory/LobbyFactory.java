@@ -3,8 +3,7 @@ package it.uniroma2.marchidori.maininterface.factory;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 
-import java.util.ArrayList;
-import java.util.List;
+
 
 
 public class LobbyFactory {
