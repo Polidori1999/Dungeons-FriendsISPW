@@ -48,8 +48,7 @@ public class UserDaoMem implements UserDAO {
 
 
     public void updateUsersEntityData(User user){
-        User oldUser = getUserByEmail(user.getEmail());
-        oldUser = user;
+        //void
     }
 
     @Override

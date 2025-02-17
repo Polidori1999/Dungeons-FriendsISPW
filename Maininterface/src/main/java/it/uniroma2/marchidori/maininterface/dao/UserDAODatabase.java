@@ -24,7 +24,6 @@ public class UserDAODatabase implements UserDAO {
     public void saveUser(String email, String password) throws AccountAlreadyExistsException {
         // Verifica se l'utente esiste già
         if (getUserByEmail(email) != null) {
-            logger.severe(String.format("❌ Errore: Email già registrata - %s", email));
             throw new AccountAlreadyExistsException("Account already exists for email: " + email);
         }
 
@@ -32,7 +31,6 @@ public class UserDAODatabase implements UserDAO {
         if (!password.startsWith("$2a$")) {
             password = BCrypt.hashpw(password, BCrypt.gensalt());
         }
-        logger.info(String.format("🔍 DEBUG: Password hashata prima dell'inserimento → '%s'", password));
 
         String query = "INSERT INTO users (email, password) VALUES (?, ?)";
 
@@ -44,12 +42,12 @@ public class UserDAODatabase implements UserDAO {
 
             int rowsInserted = stmt.executeUpdate();
             if (rowsInserted > 0) {
-                logger.info(String.format("✅ Utente salvato nel database: %s", email));
+                logger.log(Level.INFO, "Utente salvato nel database: {0}", email);
             } else {
-                logger.severe("❌ ERRORE: Nessuna riga inserita nel database!");
+                logger.severe("ERRORE: Nessuna riga inserita nel database!");
             }
         } catch (SQLException e) {
-            logger.severe(String.format("❌ Errore nel salvataggio dell'utente: %s", e.getMessage()));
+            logger.severe(String.format("Errore nel salvataggio dell'utente: %s", e.getMessage()));
         }
     }
 
@@ -67,7 +65,6 @@ public class UserDAODatabase implements UserDAO {
                 String foundEmail = rs.getString("email");
                 String hashedPassword = rs.getString("password").trim();
 
-                logger.info(String.format("🔍 DEBUG: Password dal database per %s → %s", foundEmail, hashedPassword));
 
                 return new User(
                         foundEmail,
@@ -77,10 +74,10 @@ public class UserDAODatabase implements UserDAO {
                         new ArrayList<>()
                 );
             } else {
-                logger.warning(String.format("❌ Utente non trovato nel database: %s", email));
+                logger.log(Level.WARNING, "Utente non trovato nel database: {0}", email);
             }
         } catch (SQLException e) {
-            logger.severe(String.format("❌ Errore nel recupero dell'utente dal database: %s", e.getMessage()));
+            logger.severe(String.format("Errore nel recupero dell'utente dal database: %s", e.getMessage()));
         }
         return null;
     }
@@ -167,9 +164,9 @@ public class UserDAODatabase implements UserDAO {
 
             // Commit della transazione
             conn.commit();
-            logger.info(String.format("✅ Dati utente aggiornati per: %s", user.getEmail()));
+            logger.log(Level.INFO, "Dati utente aggiornati per: {0}", user.getEmail());
         } catch (SQLException e) {
-            logger.severe("❌ Errore nell'aggiornamento dei dati utente: " + e.getMessage());
+            logger.severe("Errore nell'aggiornamento dei dati utente: " + e.getMessage());
         }
     }
 
@@ -245,7 +242,7 @@ public class UserDAODatabase implements UserDAO {
                 }
             }
         } catch (SQLException e) {
-            logger.severe("❌ Errore nel caricamento dei dati utente: " + e.getMessage());
+            logger.severe("Errore nel caricamento dei dati utente: " + e.getMessage());
         }
         // Restituisce l'utente con i dati caricati (la password viene impostata a un dummy per sicurezza)
         return new User(user.getEmail(), "******", characterSheets, favouriteLobbies, joinedLobbies);

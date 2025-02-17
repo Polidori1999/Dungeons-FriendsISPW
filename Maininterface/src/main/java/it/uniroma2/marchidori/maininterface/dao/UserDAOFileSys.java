@@ -3,16 +3,23 @@ package it.uniroma2.marchidori.maininterface.dao;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.entity.*;
 import it.uniroma2.marchidori.maininterface.exception.AccountAlreadyExistsException;
+import it.uniroma2.marchidori.maininterface.exception.UserDataAccessException;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Function;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 public class UserDAOFileSys implements UserDAO {
 
     private static final String BASE_DIR = "src/main/java/it/uniroma2/marchidori/maininterface/repository/";
     private static final String USERS_FILE_PATH = BASE_DIR + "users.txt";
     private static final String USER_DATA_DIR = BASE_DIR + "user/";
+    private static final String CHARACTER_SHEET = "characterSheets.csv";
+    private static final String JOINED_LOBBIES = "joinedLobbies.csv";
+    private static final String FAVOURITE_LOBBIES = "favouriteLobbies.csv";
 
     private static final Logger logger = Logger.getLogger(UserDAOFileSys.class.getName());
 
@@ -35,10 +42,8 @@ public class UserDAOFileSys implements UserDAO {
     public void saveUser(String email, String password) throws AccountAlreadyExistsException {
 
         if (userExists(email)) {
-            logger.warning("L'utente " + email + " esiste già. Registrazione annullata.");
-            throw new AccountAlreadyExistsException("Account already exists for email: "+email);
+            throw new AccountAlreadyExistsException("Account already exists for email: " + email);
         }
-
 
         String hashedPassword = org.mindrot.jbcrypt.BCrypt.hashpw(password, org.mindrot.jbcrypt.BCrypt.gensalt());
 
@@ -46,35 +51,35 @@ public class UserDAOFileSys implements UserDAO {
             writer.write(email + "," + hashedPassword);
             writer.newLine();
         } catch (IOException e) {
-            logger.severe("Errore nella scrittura del file users.txt: " + e.getMessage());
+            // Lancia una eccezione dedicata invece di RuntimeException
+            throw new UserDataAccessException("Errore nella scrittura del file users.txt: " + e.getMessage(), e);
         }
         File userDir = getUserFolder(email);
         if (!userDir.exists()) {
             if (userDir.mkdirs()) {
-                logger.info("Directory dei dati utente creata: " + email);
+                logger.log(Level.INFO, "Directory dei dati utente creata: {0}", email);
             } else {
-                logger.severe("Errore nella creazione della cartella per: " + email);
+                logger.log(Level.INFO, "Errore nella creazione della cartella per: {0}" , email);
             }
         }
-        createUserDataFiles(userDir, email);
+        createUserDataFiles(userDir);
     }
 
     private boolean userExists(String email) {
-        File file=new File(USERS_FILE_PATH);
-        if(!file.exists()){
+        File file = new File(USERS_FILE_PATH);
+        if (!file.exists()) {
             return false;
         }
-        try (BufferedReader reader=new BufferedReader(new FileReader(file))){
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
-            while((line=reader.readLine())!=null){
+            while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if(parts.length>0 && parts[0].equals(email)){
+                if (parts.length > 0 && parts[0].equals(email)) {
                     return true;
                 }
             }
-
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UserDataAccessException("Errore durante la verifica dell'esistenza dell'utente " + email, e);
         }
         return false;
     }
@@ -84,8 +89,8 @@ public class UserDAOFileSys implements UserDAO {
         return new File(USER_DATA_DIR + mail);
     }
 
-    private void createUserDataFiles(File userDir, String email) {
-        String[] fileNames = {"characterSheets.csv", "joinedLobbies.csv", "favouriteLobbies.csv"};
+    private void createUserDataFiles(File userDir) {
+        String[] fileNames = {CHARACTER_SHEET, JOINED_LOBBIES, FAVOURITE_LOBBIES};
         for (String fileName : fileNames) {
             File file = new File(userDir, fileName);
             if (!file.exists()) {
@@ -114,7 +119,6 @@ public class UserDAOFileSys implements UserDAO {
         return null;
     }
 
-
     public void updateUsersEntityData(User user) {
         File userDir = getUserFolder(user.getEmail());
         if (!userDir.exists() && !userDir.mkdirs()) {
@@ -122,17 +126,17 @@ public class UserDAOFileSys implements UserDAO {
             return;
         }
         // Riscrive il file dei character sheets
-        File characterFile = new File(userDir, "characterSheets.csv");
+        File characterFile = new File(userDir, CHARACTER_SHEET);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(characterFile, false))) {
             for (CharacterSheet cs : user.getCharacterSheets()) {
                 writer.write(serializeCharacterSheet(cs));
                 writer.newLine();
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UserDataAccessException("Errore durante l'aggiornamento dei character sheets per l'utente " + user.getEmail(), e);
         }
-        // Riscrive il file delle joined lobbies usando il nuovo formato (serializeLobby)
-        File joinedFile = new File(userDir, "joinedLobbies.csv");
+        // Riscrive il file delle joined lobbies
+        File joinedFile = new File(userDir, JOINED_LOBBIES);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(joinedFile, false))) {
             for (Lobby lobby : user.getJoinedLobbies()) {
                 writer.write(serializeLobby(lobby));
@@ -142,7 +146,7 @@ public class UserDAOFileSys implements UserDAO {
             logger.severe("Errore durante l'aggiornamento delle joined lobbies: " + e.getMessage());
         }
         // Riscrive il file delle favourite lobbies
-        File favFile = new File(userDir, "favouriteLobbies.csv");
+        File favFile = new File(userDir, FAVOURITE_LOBBIES);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(favFile, false))) {
             for (Lobby lobby : user.getFavouriteLobbies()) {
                 writer.write(serializeLobby(lobby));
@@ -171,7 +175,7 @@ public class UserDAOFileSys implements UserDAO {
         return sb.toString();
     }
 
-    public static Lobby deserializeLobby(String line) {
+    public Lobby deserializeLobby(String line) {
         String[] parts = line.split(";", -1);
         String lobbyName = parts[0];
         String duration = parts[1];
@@ -182,9 +186,6 @@ public class UserDAOFileSys implements UserDAO {
         int joinedPlayersCount = Integer.parseInt(parts[6]);
         return new Lobby(lobbyName, duration, type, numberOfPlayers, owner, infoLink, joinedPlayersCount);
     }
-
-
-
 
     public String serializeLobby(Lobby lobby) {
         if (lobby == null) {
@@ -204,62 +205,57 @@ public class UserDAOFileSys implements UserDAO {
     public User loadUserData(User user) throws FileNotFoundException {
         File userDir = getUserFolder(user.getEmail());
         if (!userDir.exists() || !userDir.isDirectory()) {
-            System.out.println("non mi dire che mi incappio");
             return null;
         }
-        // Carica i character sheets
-        File characterFile = new File(userDir, "characterSheets.csv");
-        List<CharacterSheet> characterSheets = new ArrayList<>();
-        if (characterFile.exists()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(characterFile))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    if (!line.trim().isEmpty()) {
-                        CharacterSheet cs = deserializeCharacterSheet(line);
-                        characterSheets.add(cs);
-                    }
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        // Carica le joined lobbies
-        File joinedFile = new File(userDir, "joinedLobbies.csv");
-        List<Lobby> joinedLobbies = new ArrayList<>();
-        if (joinedFile.exists()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(joinedFile))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    if (!line.trim().isEmpty()) {
-                        Lobby lobby = deserializeLobby(line);
-                        joinedLobbies.add(lobby);
-                    }
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        // Carica le favourite lobbies
-        File favFile = new File(userDir, "favouriteLobbies.csv");
-        List<Lobby> favouriteLobbies = new ArrayList<>();
-        if (favFile.exists()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(favFile))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    if (!line.trim().isEmpty()) {
-                        Lobby lobby = deserializeLobby(line);
-                        favouriteLobbies.add(lobby);
-                    }
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+
+        List<CharacterSheet> characterSheets = loadItems(
+                new File(userDir, CHARACTER_SHEET),
+                this::deserializeCharacterSheet,
+                "Errore nel caricamento dei character sheets per l'utente " + user.getEmail()
+        );
+
+        List<Lobby> joinedLobbies = loadItems(
+                new File(userDir, JOINED_LOBBIES),
+                this::deserializeLobby,
+                "Errore nel caricamento delle joined lobbies per l'utente " + user.getEmail()
+        );
+
+        List<Lobby> favouriteLobbies = loadItems(
+                new File(userDir, FAVOURITE_LOBBIES),
+                this::deserializeLobby,
+                "Errore nel caricamento delle favourite lobbies per l'utente " + user.getEmail()
+        );
+
         String dummy = "******";
         return new User(user.getEmail(), dummy, characterSheets, favouriteLobbies, joinedLobbies);
     }
 
-    public static CharacterSheet deserializeCharacterSheet(String line) {
+    /**
+     * Helper method that loads items from a file using a given deserializer.
+     *
+     * @param file the file to read from
+     * @param deserializer a function that converts a line into an object of type T
+     * @param errorMessage the error message to use if an IOException occurs
+     * @param <T> the type of objects being loaded
+     * @return a list of items loaded from the file
+     */
+    private <T> List<T> loadItems(File file, Function<String, T> deserializer, String errorMessage) {
+        List<T> items = new ArrayList<>();
+        if (file.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (!line.trim().isEmpty()) {
+                        items.add(deserializer.apply(line));
+                    }
+                }
+            } catch (IOException e) {
+                throw new UserDataAccessException(errorMessage, e);
+            }
+        }
+        return items;
+    }
+    public CharacterSheet deserializeCharacterSheet(String line) {
         String[] parts = line.split(";", -1);
         String name = parts[0];
         String race = parts[1];
