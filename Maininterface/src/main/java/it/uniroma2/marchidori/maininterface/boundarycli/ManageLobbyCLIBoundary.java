@@ -10,7 +10,6 @@ import it.uniroma2.marchidori.maininterface.control.ManageLobbyController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.factory.LobbyFactory;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
-import it.uniroma2.marchidori.maininterface.utils.Alert;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 
 import java.io.IOException;
@@ -63,10 +62,13 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
                     editDuration();
                     break;
                 case "5":
+                    editInfoLink();
+                    break;
+                case "6":
                     onClickSaveLobby();
                     exit = true;
                     break;
-                case "6":
+                case "7":
                     onClickGoBackToListOfLobbies();
                     exit = true;
                     break;
@@ -120,6 +122,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         jout.print("Live/Online    : " + (currentBean.getLiveOnline() != null ? currentBean.getLiveOnline() : ""));
         jout.print("Max Giocatori  : " + currentBean.getMaxOfPlayers());
         jout.print("Durata         : " + (currentBean.getDuration() != null ? currentBean.getDuration() : ""));
+        jout.print("InfoLink       : " + (currentBean.getInfoLink() != null ? currentBean.getInfoLink() : ""));
     }
 
     /**
@@ -131,8 +134,9 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         jout.print("2. Modifica Live/Online");
         jout.print("3. Modifica Numero Giocatori");
         jout.print("4. Modifica Durata");
-        jout.print("5. Salva Lobby");
-        jout.print("6. Torna alla Lista delle Lobby");
+        jout.print("5. Modifica InfoLink");
+        jout.print("6. Salva Lobby");
+        jout.print("7. Torna alla Lista delle Lobby");
         jout.print("0. Esci senza salvare");
     }
 
@@ -145,6 +149,11 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
     }
 
     // -------------------- Metodi per la modifica dei campi --------------------
+
+    private void editInfoLink() {
+        String infoLink = prompt("Inserisci il nuovo InfoLink della lobby: ");
+        currentBean.setInfoLink(infoLink);
+    }
 
     private void editLobbyName() {
         String nome = prompt("Inserisci il nuovo nome della lobby: ");
@@ -164,8 +173,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
                 currentBean.setLiveOnline("Online");
                 break;
             default:
-                jout.print("Scelta non valida. Imposto valore predefinito 'Live'.");
-                currentBean.setLiveOnline("Live");
+                jout.print("Scelta non valida.");
                 break;
         }
     }
@@ -176,9 +184,8 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         jout.print("1. 2 giocatori");
         jout.print("2. 4 giocatori");
         jout.print("3. 6 giocatori");
-        jout.print("4. 8 giocatori");
         String choice = prompt("Inserisci il numero dell'opzione: ");
-        int num;
+        int num = currentBean.getMaxOfPlayers();;
         switch (choice) {
             case "1":
                 num = 2;
@@ -189,12 +196,8 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
             case "3":
                 num = 6;
                 break;
-            case "4":
-                num = 8;
-                break;
             default:
-                jout.print("Scelta non valida. Imposto valore predefinito 2.");
-                num = 2;
+                jout.print("Scelta non valida.");
                 break;
         }
         currentBean.setMaxOfPlayers(num);
@@ -234,7 +237,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         // Validazione del bean tramite il controller
         String validationErrors = controller.validate(currentBean);
         if (!validationErrors.isEmpty()) {
-            Alert.showError("Errore di Validazione", validationErrors);
+            jout.print(validationErrors);
             return;
         }
 

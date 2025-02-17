@@ -17,12 +17,12 @@ import java.util.Scanner;
 
 public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, ControllerAwareInterface, RunInterface {
 
-    private UserBean currentUser;
-    private ManageLobbyListController controller;
-    private List<LobbyBean> data = new ArrayList<>();
-    private final Scanner scanner = new Scanner(System.in);
+    protected UserBean currentUser;
+    protected ManageLobbyListController controller;
+    protected List<LobbyBean> data = new ArrayList<>();
+    protected final Scanner scanner = new Scanner(System.in);
     private final Jout jout = new Jout("ManageLobbyListPlayerCLIBoundary");
-    private LobbyBean pendingDeleteBean;
+    protected LobbyBean pendingDeleteBean;
 
     @Override
     public void run() throws IOException {

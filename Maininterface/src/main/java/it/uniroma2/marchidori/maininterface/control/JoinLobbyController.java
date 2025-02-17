@@ -31,6 +31,18 @@ public class JoinLobbyController implements UserAwareInterface {
     }
 
 
+    public String validate(LobbyBean lobby) {
+        // Recupera il contatore corrente
+        int currentCount = lobby.getJoinedPlayersCount();
+        StringBuilder errors = new StringBuilder();
+
+        // Se c'è spazio, incrementa il contatore; altrimenti, segnala che la lobby è piena.
+        if (currentCount+1 > lobby.getMaxOfPlayers()) {
+            errors.append("Lobby piena operazione di join non possibile!\n");
+        }
+        return errors.toString();
+    }
+
     /**
      * Aggiunge l'utente corrente alla lobby se c'è spazio disponibile.
      * Utilizza un contatore (joinedPlayersCount) per tenere traccia del numero di giocatori.
@@ -43,7 +55,6 @@ public class JoinLobbyController implements UserAwareInterface {
         if (currentCount < lobbyBean.getMaxOfPlayers()) {
             lobbyBean.setJoinedPlayersCount(currentCount + 1);
         } else {
-
             Alert.showError("Lobby piena","La lobby è piena!");
             return;
         }

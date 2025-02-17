@@ -2,9 +2,7 @@ package it.uniroma2.marchidori.maininterface.boundarycli;
 
 import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
-import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.control.Converter;
-import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
 
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.collections.FXCollections;
@@ -103,6 +101,11 @@ public class JoinLobbyPlayerCLIBoundary extends JoinLobbyDMCLIBoundary{
                 return;
             }
             LobbyBean lobbyToJoin = filteredLobbies.get(index - 1);
+            String validationErrors = controller.validate(lobbyToJoin);
+            if (!validationErrors.isEmpty()) {
+                jout.print(validationErrors);
+                return;
+            }
             String conf = prompt("Vuoi unirti alla lobby '" + lobbyToJoin.getName() + "'? (y/n): ");
             if (conf.equalsIgnoreCase("y")) {
                 controller.addLobby(lobbyToJoin);

@@ -2,20 +2,12 @@ package it.uniroma2.marchidori.maininterface.boundarycli;
 
 import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
-import it.uniroma2.marchidori.maininterface.bean.UserBean;
-import it.uniroma2.marchidori.maininterface.control.ManageLobbyListController;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 public class ManageLobbyListDMCLIBoundary extends ManageLobbyListPlayerCLIBoundary {
 
-    private UserBean currentUser;
-    private ManageLobbyListController controller;
-    private List<LobbyBean> data = new ArrayList<>();
     private final Jout jout = new Jout("ManageLobbyListDMCLIBoundary");
 
 
@@ -55,8 +47,7 @@ public class ManageLobbyListDMCLIBoundary extends ManageLobbyListPlayerCLIBounda
                 handleEditLobby();
                 break;
             case "3":
-                currentUser.setSelectedLobbyName(null);
-                changeScene(SceneNames.MANAGE_LOBBY);
+                handleCreateLobby();
                 break;
             case "4":
                 refreshLobbyList();
@@ -68,6 +59,16 @@ public class ManageLobbyListDMCLIBoundary extends ManageLobbyListPlayerCLIBounda
                 jout.print("Opzione non valida, riprova.");
         }
         return false;
+    }
+
+
+    /**
+     * Gestisce la creazione di un nuovo personaggio.
+     */
+    private void handleCreateLobby() throws IOException {
+        currentUser.setSelectedLobbyName(null);
+        jout.print("Creazione di un nuovo personaggio.");
+        changeScene(SceneNames.MANAGE_LOBBY);
     }
 
     private void handleEditLobby() {
