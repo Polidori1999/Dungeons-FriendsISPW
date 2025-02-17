@@ -1,8 +1,7 @@
 package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
-import it.uniroma2.marchidori.maininterface.control.Converter;
-import it.uniroma2.marchidori.maininterface.entity.Session;
+
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;

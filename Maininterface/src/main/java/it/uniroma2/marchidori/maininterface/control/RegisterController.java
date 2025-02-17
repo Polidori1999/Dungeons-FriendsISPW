@@ -32,6 +32,6 @@ public class RegisterController implements UserAwareInterface {
 
     @Override
     public void setCurrentUser(UserBean user) {
-        // Metodo vuoto perchè implementa UserAwareInterface
+        // Metodo vuoto perchè implementa
     }
 }

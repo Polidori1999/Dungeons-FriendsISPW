@@ -2,7 +2,6 @@ package it.uniroma2.marchidori.maininterface.scenemanager;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.RunInterface;
-import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.enumerate.SceneIdEnum;
@@ -77,7 +76,6 @@ public class SceneSwitcher {
         }
 
         Object boundaryInstance = BoundaryFactory.createBoundary(boundaryClass);
-        //injectCurrentUser(boundaryInstance, Converter.convert(Session.getInstance().getCurrentUser()));
         injectCurrentUser(boundaryInstance, currentUser);
 
         if (controllerClass != null) {

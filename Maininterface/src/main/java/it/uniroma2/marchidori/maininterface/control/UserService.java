@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.control;
 
+import it.uniroma2.marchidori.maininterface.boundary.LobbyDAO;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 import it.uniroma2.marchidori.maininterface.dao.LobbyDAOMem;
 import it.uniroma2.marchidori.maininterface.dao.LobbyDaoFileSys;
@@ -61,17 +62,24 @@ public class UserService {
     public User loadUserDataDemo(String email){
         Session.getInstance().setUserDAO(userDAO);
         Session.getInstance().setLobbyDAO(LobbyDAOMem.getInstance());
-        return getUserByEmail(email);
+        User loadedUser = getUserByEmail(email);
+
+        // Pulisce le lobby joinate obsolete
+        cleanUserJoinedLobbies(loadedUser);
+
+        return loadedUser;
     }
 
 
     public void cleanUserJoinedLobbies(User user) {
         // Recupera il DAO delle lobby dalla sessione (assicurandoti che sia il DAO giusto, in questo caso quello da file)
-        LobbyDaoFileSys lobbyDao = (LobbyDaoFileSys) Session.getInstance().getLobbyDAO();
+        LobbyDAO lobbyDao = Session.getInstance().getLobbyDAO();
         List<Lobby> activeLobbies = lobbyDao.getLobby();
 
         // Filtra le lobby joinate dell'utente, tenendo solo quelle che sono attive
-        List<Lobby> filteredLobbies = new ArrayList<>(user.getJoinedLobbies().stream().filter(joined -> activeLobbies.stream().anyMatch(active->active.getLobbyName().equals(joined.getLobbyName()))).toList());
+        List<Lobby> filteredLobbies = new ArrayList<>(user.getJoinedLobbies().stream()
+                .filter(joined -> activeLobbies.stream()
+                        .anyMatch(active->active.getLobbyName().equals(joined.getLobbyName()))).toList());
 
         // Aggiorna la lista delle lobby dell'utente
         user.setJoinedLobbies(filteredLobbies);

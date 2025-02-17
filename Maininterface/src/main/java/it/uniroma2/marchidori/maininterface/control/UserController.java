@@ -30,7 +30,6 @@ public class UserController implements UserAwareInterface {
     }
 
     public void switchRole(RoleEnum role) {
-        logger.info("SwitchRole chiamato con role: " + role);
         if(role == PLAYER) {
             currentUser.setRoleBehavior(DM);
             currentEntity.setRoleBehavior(DM);
