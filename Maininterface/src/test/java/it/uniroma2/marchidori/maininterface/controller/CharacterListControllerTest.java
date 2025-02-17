@@ -5,8 +5,10 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterInfoBean;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterStatsBean;
-import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
+
+
 import it.uniroma2.marchidori.maininterface.entity.*;
+import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -76,7 +78,8 @@ class CharacterListControllerTest {
 
         assertEquals(1, testUserBean.getCharacterSheets().size());
         assertEquals(1, testUser.getCharacterSheets().size());
-        Session.getInstance().setUserDAOFileSys(new UserDAOFileSys());
+        Session.getInstance().setUserDAO(UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB()));
+
         controller.deleteCharacter("TestCharacter");
 
         assertEquals(0, testUserBean.getCharacterSheets().size(),
