@@ -133,6 +133,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
     }
 
 
+
     /**
      * Scarica il personaggio (con progress bar).
      */
