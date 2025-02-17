@@ -27,8 +27,6 @@ public class SceneSwitcher {
         if (Session.getInstance().getCLI()) {
             SceneConfigCLIEnum config = RoleSceneMap.getCLIConfig(role, sceneId);
             Object boundaryInstance = createAndInjectBoundary(config, currentUser);
-            logger.info(">>> [SceneSwitcher] Boundary risolta: " + config.getBoundaryClass().getSimpleName());
-            logger.info(">>> [SceneSwitcher] Istanza della boundary creata: " + boundaryInstance.getClass().getSimpleName());
 
             if (boundaryInstance instanceof RunInterface runInterface) {
                 runInterface.run();
@@ -44,8 +42,6 @@ public class SceneSwitcher {
 
         SceneConfigEnum config = RoleSceneMap.getConfig(role, sceneId);
         Object boundaryInstance = createAndInjectBoundary(config, currentUser);
-        logger.info(">>> [SceneSwitcher] Boundary risolta: " + config.getBoundaryClass().getSimpleName());
-        logger.info(">>> [SceneSwitcher] Istanza della boundary creata: " + boundaryInstance.getClass().getSimpleName());
 
         Parent root = loadFXML(fxmlPath, boundaryInstance);
         Scene newScene = new Scene(root);

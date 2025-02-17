@@ -114,8 +114,12 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
 
         // Determina la modalità in base al campo selectedLobbyName del currentUser
         String selected = currentUser != null ? currentUser.getSelectedLobbyName() : null;
-        LOGGER.log(Level.INFO, "Current user email: {0}", currentUser.getEmail());
-        LOGGER.log(Level.INFO, "Selected Lobby Name: {0}", currentUser.getSelectedLobbyName());
+        if (currentUser != null) {
+            LOGGER.log(Level.INFO, "Current user email: {0}", currentUser.getEmail());
+            LOGGER.log(Level.INFO, "Selected Lobby Name: {0}", currentUser.getSelectedLobbyName());
+        } else {
+            LOGGER.warning("currentUser è null");
+        }
 
         if (selected == null || selected.isEmpty()) {
             creationMode = true;
