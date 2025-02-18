@@ -14,7 +14,7 @@ public class CharacterListGuestBoundary extends CharacterListPlayerBoundary {
     @Override
     public void initialize() {
         super.initialize();
-        // Carica il popup di conferma per il download
+
     }
 
     /**

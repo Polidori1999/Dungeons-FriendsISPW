@@ -3,9 +3,12 @@ package it.uniroma2.marchidori.maininterface.control;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 
+import it.uniroma2.marchidori.maininterface.dao.LobbyDAOMem;
+import it.uniroma2.marchidori.maininterface.dao.LobbyDaoFileSys;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
+import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.FileNotFoundException;
@@ -62,5 +65,10 @@ public class LoginController implements UserAwareInterface {
         } else {
             return null;
         }
+    }
+
+    public void caseGuest(){
+        Session.getInstance().setUserDAO(UserDAOFactory.getInstance().getUserDAO(false,true));
+        Session.getInstance().setLobbyDAO(new LobbyDaoFileSys());
     }
 }

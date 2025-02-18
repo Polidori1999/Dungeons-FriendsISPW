@@ -9,6 +9,7 @@ import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
+import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.event.ActionEvent;
@@ -105,6 +106,7 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
 
                     // Se usi session, aggiorna l'entity in session
                     Session.getInstance().setCurrentUser(Converter.userBeanToEntity(currentUser));
+                    loginController.caseGuest();
                     SceneSwitcher.changeScene(currentStage,SceneNames.HOME,currentUser);
                 }
 
@@ -126,6 +128,8 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
             throw new SceneChangeException("Error during change scene.", e);
         }
     }
+
+
 
     // -------------------------------------------------------------
     //          METODI DI INTERFACCIA (UserAware, ControllerAware)
