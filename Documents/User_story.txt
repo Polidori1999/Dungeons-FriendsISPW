@@ -1,9 +1,8 @@
 USER STORY poi se dividono
 1)Come "Dungeon Master", voglio creare una lobby, in modo che i giocatori possano unirsi.
 2)Come "Dungeon Master", voglio modificare le lobby, in modo da tenerle aggiornate.
-3)Come "Player", voglio consultare il manuale del giocatore, in modo da poter conoscere le regole.
-4)Come "Player", voglio accedere alla scheda del mio personaggio, in modo da poterla modificare.
+3)Come "Player", voglio creare un character sheet, per partecipare alle sessioni.
+4)Come "Player", voglio modificare la mia character sheet, in modo da tenerla aggiornata.
 5)Come "Player", voglio unirmi a una lobby, in modo da poter giocare con gli altri utenti.
 6)Come "Player", voglio scaricare la scheda del mio personaggio, in modo da poterla consultare offline
-7)Come "Player", voglio creare un character sheet, per partecipare alle sessioni.
-8)Come "Player", voglio aggiungere ai preferiti una lobby, per trovarla facilmente
+
