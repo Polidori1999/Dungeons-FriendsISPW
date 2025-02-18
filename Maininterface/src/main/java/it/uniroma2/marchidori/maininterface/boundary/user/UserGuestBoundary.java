@@ -1,5 +1,6 @@
 package it.uniroma2.marchidori.maininterface.boundary.user;
 
+import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.event.ActionEvent;
@@ -22,6 +23,8 @@ public class UserGuestBoundary extends UserBoundary{
     @Override
     protected void onClickSwitchRole(ActionEvent event) {
         try {
+            Session.getInstance().clear();
+            currentUser = null;
             changeScene(SceneNames.LOGIN);
         }catch(Exception e){
             throw new SceneChangeException(e.getMessage());

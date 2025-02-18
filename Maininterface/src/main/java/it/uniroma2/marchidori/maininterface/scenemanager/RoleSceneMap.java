@@ -54,7 +54,7 @@ public class RoleSceneMap {
 
         MAPPING.put(new Pair<>(RoleEnum.PLAYER, SceneIdEnum.CONSULT_RULES), CONSULT_RULES);
         MAPPING.put(new Pair<>(RoleEnum.DM, SceneIdEnum.CONSULT_RULES), CONSULT_RULES);
-        MAPPING.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.CONSULT_RULES), CONSULT_RULES_GUEST);
+        MAPPING.put(new Pair<>(RoleEnum.GUEST, SceneIdEnum.CONSULT_RULES), CONSULT_RULES);
     }
 
     private static final Map<Pair<RoleEnum, SceneIdEnum>, SceneConfigCLIEnum> MAPPING_CLI = new HashMap<>();

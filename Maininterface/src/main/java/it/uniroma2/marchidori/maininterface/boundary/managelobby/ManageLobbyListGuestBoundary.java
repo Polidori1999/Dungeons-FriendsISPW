@@ -2,6 +2,7 @@ package it.uniroma2.marchidori.maininterface.boundary.managelobby;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
+import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.exception.PopupLoadingException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
@@ -83,6 +84,8 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListDMBoundary {
             // Usare Platform.runLater per posticipare il reindirizzamento al login
             Platform.runLater(() -> {
                 try {
+                    Session.getInstance().clear();
+                    currentUser = null;
                     // Verifica che la scena sia associata al currentStage
                     Stage currentStage = (Stage) manageLobbyListPane.getScene().getWindow();
                     SceneSwitcher.changeScene(currentStage, SceneNames.LOGIN, currentUser);
@@ -103,11 +106,5 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListDMBoundary {
                 logger.severe("Errore nel reindirizzamento al login: " + e.getMessage());
             }
         });
-    }
-
-    @Override
-    public void setCurrentUser(UserBean user) {
-        logger.info(">>> Impostazione currentUser: " + user.getRoleBehavior());
-        this.currentUser = user;
     }
 }
