@@ -54,7 +54,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
     @FXML
     protected TableColumn<CharacterSheetBean, Button> tableViewCharDownloadButton;
 
-    // Il DM NON supporta la creazione, quindi questo bottone resta nascosto
+
     @FXML
     protected Button newCharacterButton;
 
@@ -76,7 +76,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
             logger.warning("Controller non inizializzato in DM Boundary.");
             return;
         }
-        // Carica i dati (ad es. dal controller)
+
         data.clear();
         data.addAll(controller.getCharacterSheets());
         confirmationPopupController = ConfirmationPopupController.loadPopup(characterPane);
@@ -123,20 +123,16 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
         String name = pendingDeleteBean.getInfoBean().getName();
         tableViewChar.getItems().remove(pendingDeleteBean);
         controller.deleteCharacter(name);
-        jout.print("Personaggio '" + name + "' cancellato (DM).");
         pendingDeleteBean = null;
     }
 
     protected void onCancelDelete() {
-        logger.info("Eliminazione annullata.");
         pendingDeleteBean = null;
     }
 
 
 
-    /**
-     * Scarica il personaggio (con progress bar).
-     */
+
     protected void downloadCharacter(CharacterSheetBean bean) {
         CharacterSheetDownloadController downloadController;
         downloadController = new CharacterSheetDownloadController();
@@ -181,7 +177,6 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
             data.clear();
             data.addAll(controller.getCharacterSheets()); // Carica i dati aggiornati dallo UserBean
             tableViewChar.refresh();
-            logger.info(">>> DEBUG: Tabella ricaricata con personaggi aggiornati.");
         }
     }
 

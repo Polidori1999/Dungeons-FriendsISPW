@@ -12,9 +12,7 @@ public class CharacterListGuestBoundary extends CharacterListPlayerBoundary {
     private static final Logger logger = Logger.getLogger(CharacterListGuestBoundary.class.getName());
 
 
-    /**
-     * Esegue l’override del download: invece di scaricare, reindirizza al login.
-     */
+    //reindirizza a login
     @Override
     protected void downloadCharacter(CharacterSheetBean bean) {
         if (confirmationPopupController != null) {

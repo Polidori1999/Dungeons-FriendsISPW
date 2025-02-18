@@ -18,7 +18,7 @@ public class CharacterListPlayerBoundary extends CharacterListDMBoundary {
 
     private static final Logger logger = Logger.getLogger(CharacterListPlayerBoundary.class.getName());
 
-    // Colonna per il pulsante Edit (aggiunta)
+    // Colonna per il pulsante Edit
     @FXML
     protected TableColumn<CharacterSheetBean, Button> tableViewCharButton;
 
@@ -38,20 +38,18 @@ public class CharacterListPlayerBoundary extends CharacterListDMBoundary {
         tableViewCharButton.setVisible(true);
 
 
-        logger.info("Player Boundary inizializzato (edit e create abilitati).");
+
 
     }
 
-    /**
-     * Handler per la creazione di un nuovo personaggio.
-     */
+
     @Override
     @FXML
     protected void onNavigationButtonClick(ActionEvent event) {
         Button sourceButton = (Button) event.getSource();
         String fxml = (String) sourceButton.getUserData();
 
-        if (SceneNames.MANAGE_LOBBY.equals(fxml)) {  // ipotizzando di avere una costante dedicata
+        if (SceneNames.MANAGE_LOBBY.equals(fxml)) {
             newChar();
         } else {
             super.onNavigationButtonClick(event);

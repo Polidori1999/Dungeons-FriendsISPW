@@ -16,14 +16,8 @@ public class RuleBookBean {
 
         return rulesBookName;
     }
-    public void setRulesBookName(String rulesBookName) {
-        this.rulesBookName = rulesBookName;
-    }
     public String getPath() {
         return path;
-    }
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public boolean isObtained() {

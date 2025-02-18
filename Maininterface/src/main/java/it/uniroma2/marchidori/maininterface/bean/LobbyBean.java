@@ -12,17 +12,7 @@ public class LobbyBean {
     public LobbyBean() {
     }
 
-    /**
-     * Costruttore che utilizza un contatore per i giocatori joinati.
-     *
-     * @param name                  nome della lobby
-     * @param duration              durata (es. "Singola" o "Campagna")
-     * @param type                  modalità ("Online" o "Presenza")
-     * @param numberOfPlayers       numero massimo di giocatori
-     * @param owner                 proprietario della lobby
-     * @param infoLink              link di informazioni
-     * @param joinedPlayersCount    numero di giocatori che hanno joinato la lobby
-     */
+
     public LobbyBean(String name, String duration, String type, int numberOfPlayers, String owner, String infoLink, int joinedPlayersCount) {
         this.name = name;
         this.duration = duration;
@@ -84,11 +74,4 @@ public class LobbyBean {
         this.joinedPlayersCount = joinedPlayersCount;
     }
 
-    /**
-     * Restituisce una stringa formattata che mostra il numero di giocatori joinati
-     * rispetto al numero massimo.
-     */
-    public String getPlayers() {
-        return joinedPlayersCount + "/" + maxOfPlayers;
-    }
 }

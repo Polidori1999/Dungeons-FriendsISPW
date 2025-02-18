@@ -35,7 +35,7 @@ public class CharacterSheetBean {
 
     @Override
     public String toString() {
-        // Esempio di output, usando i dati dei due bean
+
         return "[CharacterSheetBean] " +
                 (infoBean != null ? infoBean.getName() : "NoName") +
                 " (Class: " + (infoBean != null ? infoBean.getClasse() : "?") +
