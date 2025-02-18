@@ -1,8 +1,9 @@
 package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
-
+import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
+import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -11,6 +12,11 @@ public class CharacterListGuestBoundary extends CharacterListPlayerBoundary {
 
     private static final Logger logger = Logger.getLogger(CharacterListGuestBoundary.class.getName());
 
+    @Override
+    public void initialize() {
+        super.initialize();
+
+    }
 
     //reindirizza a login
     @Override
@@ -32,10 +38,11 @@ public class CharacterListGuestBoundary extends CharacterListPlayerBoundary {
 
     private void redirectToLogin() {
         try {
+            Session.getInstance().clear();
             SceneSwitcher.changeScene(
                     (Stage) characterPane.getScene().getWindow(),
-                    "login.fxml",
-                    currentUser
+                    SceneNames.LOGIN,
+                    null
             );
         } catch (IOException e) {
             logger.severe("Errore nel reindirizzamento al login: " + e.getMessage());

@@ -1,17 +1,14 @@
-Il sistema deve fornire una scheda del personaggio compilabile.
+Functional requirement:
 
-Il sistema deve fornire un contatore dei giocatori per le lobby a cui è possibile unirsi.
+1)Il sistema deve fornire un'opzione per il login
+2)Il sistema deve fornire un contatore dei giocatori per le lobby a cui è possibile unirsi.
+3)Il sistema deve fornire un elenco di lobbies disponibili con i filtri* applicati.
+4)Il sistema deve fornire un metodo per cambiare ruolo*
+5)Il sistema deve fornire un metodo di pagamento PayPal
+6)Il sistema deve fornire la memorizzazione delle lobbies preferite
 
-Il sistema deve fornire una casella di testo compilabile per le informazioni sulla sessione di gioco.
-
-Il sistema deve fornire un menu a scorrimento per selezionare il raggio di ricerca.
-
-Il sistema deve fornire un elenco di lobby disponibili nel raggio selezionato.
-(Non devi preoccuparti dell'implementazione del raggio, quindi questa parte è già considerata.)
-
-Il sistema deve fornire una notifica con il nickname del giocatore che si è unito alla lobby.
-(Forse è troppo simile alla user story, dipende da come viene gestito.)
-
-Il sistema deve fornire un pulsante di registrazione per creare un account.
-
-Il sistema deve fornire un'opzione per acquistare il manuale delle regole tramite PayPal.
+*i filtri sono:-barra di ricerca con nome
+               -oneshot/campaign
+               -live/online
+*ruolo: -player
+        -DungeonMaster(DM)

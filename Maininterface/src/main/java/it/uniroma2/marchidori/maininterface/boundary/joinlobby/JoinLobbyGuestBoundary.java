@@ -1,6 +1,7 @@
 package it.uniroma2.marchidori.maininterface.boundary.joinlobby;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
@@ -60,6 +61,8 @@ public class JoinLobbyGuestBoundary extends JoinLobbyPlayerBoundary {
      */
     private void onConfirm() {
         try {
+            Session.getInstance().clear();
+            currentUser = null;
             changeScene(SceneNames.LOGIN);
         } catch (IOException e) {
             throw new SceneChangeException(e.getMessage());

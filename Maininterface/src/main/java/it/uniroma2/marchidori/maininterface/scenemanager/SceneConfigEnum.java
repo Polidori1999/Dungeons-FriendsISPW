@@ -34,11 +34,6 @@ public enum SceneConfigEnum {
             forNameNoException("it.uniroma2.marchidori.maininterface.control.ConsultRulesController")
     ),
 
-    CONSULT_RULES_GUEST(
-            "consultRules.fxml",
-            forNameNoException("it.uniroma2.marchidori.maininterface.boundary.consultrules.ConsultRulesGuestBoundary"),
-            forNameNoException("it.uniroma2.marchidori.maininterface.control.ConsultRulesController")
-    ),
 
     JOIN_LOBBY_DM(
             "joinLobby.fxml",
