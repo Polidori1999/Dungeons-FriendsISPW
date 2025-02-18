@@ -105,7 +105,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
         }
     }
 
-    private void showDeleteConfirmation() {
+    protected void showDeleteConfirmation() {
         if (confirmationPopupController != null && pendingDeleteBean != null) {
             String message = "Vuoi eliminare il personaggio '" + pendingDeleteBean.getInfoBean().getName() + "'?";
             confirmationPopupController.show(
@@ -119,7 +119,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
         }
     }
 
-    private void onConfirmDelete() {
+    protected void onConfirmDelete() {
         String name = pendingDeleteBean.getInfoBean().getName();
         tableViewChar.getItems().remove(pendingDeleteBean);
         controller.deleteCharacter(name);
@@ -127,7 +127,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
         pendingDeleteBean = null;
     }
 
-    private void onCancelDelete() {
+    protected void onCancelDelete() {
         logger.info("Eliminazione annullata.");
         pendingDeleteBean = null;
     }

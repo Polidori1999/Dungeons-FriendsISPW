@@ -73,7 +73,7 @@ public class CharacterListPlayerBoundary extends CharacterListDMBoundary {
     /**
      * Handler per l'edit di un personaggio esistente.
      */
-    private void editChar(CharacterSheetBean bean) {
+    protected void editChar(CharacterSheetBean bean) {
         if (bean != null && bean.getInfoBean() != null) {
             logger.info("editChar: bean passato con nome: " + bean.getInfoBean().getName());
 

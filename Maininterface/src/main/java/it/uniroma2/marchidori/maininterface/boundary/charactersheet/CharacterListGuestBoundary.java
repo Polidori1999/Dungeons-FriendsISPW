@@ -15,7 +15,6 @@ public class CharacterListGuestBoundary extends CharacterListPlayerBoundary {
     public void initialize() {
         super.initialize();
         // Carica il popup di conferma per il download
-        ConfirmationPopupController.loadPopup(characterPane);
     }
 
     /**
