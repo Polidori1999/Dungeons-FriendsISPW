@@ -1,7 +1,7 @@
 package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
-import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
+
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -11,11 +11,6 @@ public class CharacterListGuestBoundary extends CharacterListPlayerBoundary {
 
     private static final Logger logger = Logger.getLogger(CharacterListGuestBoundary.class.getName());
 
-    @Override
-    public void initialize() {
-        super.initialize();
-
-    }
 
     /**
      * Esegue l’override del download: invece di scaricare, reindirizza al login.
