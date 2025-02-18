@@ -177,6 +177,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
             currentBean.setStatsBean(new CharacterStatsBean());
         }
 
+
         // Aggiorna i dati del bean con i valori presenti nei campi della UI
         currentBean.getInfoBean().setName(charName.getText());
         currentBean.getInfoBean().setAge(parseIntOrZero(charAge.getText()));
