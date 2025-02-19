@@ -6,7 +6,7 @@ import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.ManageLobbyController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
-import it.uniroma2.marchidori.maininterface.factory.LobbyFactory;
+
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.Alert;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
@@ -123,7 +123,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
 
         if (selected == null || selected.isEmpty()) {
             creationMode = true;
-            currentBean = LobbyFactory.createBean();
+            currentBean = new LobbyBean("", "", "", 0, "","", 0);
             oldName = null;
         } else {
             creationMode = false;
@@ -132,7 +132,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
             if (currentBean == null) {
                 LOGGER.log(Level.SEVERE, "Non ho trovato la lobby con nome: {0}", selected);
                 creationMode = true;
-                currentBean = LobbyFactory.createBean();
+                currentBean = new LobbyBean("", "", "", 0, "","", 0);
             }
         }
 

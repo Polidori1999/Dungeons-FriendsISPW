@@ -8,7 +8,7 @@ import it.uniroma2.marchidori.maininterface.boundary.RunInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.ManageLobbyController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
-import it.uniroma2.marchidori.maininterface.factory.LobbyFactory;
+
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 
@@ -95,7 +95,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         String selected = currentUser != null ? currentUser.getSelectedLobbyName() : null;
         if (selected == null || selected.isEmpty()) {
             creationMode = true;
-            currentBean = LobbyFactory.createBean();
+            currentBean = new LobbyBean("", "", "", 0, "","", 0);
             oldName = null;
             clearFields();
             jout.print("Modalità creazione attiva.");
@@ -106,7 +106,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
             if (currentBean == null) {
                 LOGGER.log(Level.SEVERE, "Non ho trovato la lobby con nome: {0}", selected);
                 creationMode = true;
-                currentBean = LobbyFactory.createBean();
+                currentBean = new LobbyBean("", "", "", 0, "","", 0);
                 clearFields();
             } else {
                 jout.print("Modalità modifica attiva per lobby: " + currentBean.getName());
