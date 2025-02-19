@@ -1,5 +1,6 @@
-package it.uniroma2.marchidori.maininterface.control;
+package it.uniroma2.marchidori.maininterface.boundary;
 
+import it.uniroma2.marchidori.maininterface.control.TimerController;
 import it.uniroma2.marchidori.maininterface.exception.PopupLoadingException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;

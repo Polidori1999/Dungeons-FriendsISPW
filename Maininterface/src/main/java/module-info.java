@@ -20,7 +20,6 @@ module it.uniroma2.marchidori.maininterface {
     exports it.uniroma2.marchidori.maininterface.bean.charactersheetb;
     opens it.uniroma2.marchidori.maininterface.bean.charactersheetb to javafx.base;
     exports it.uniroma2.marchidori.maininterface.boundary;
-    opens it.uniroma2.marchidori.maininterface.boundary to javafx.fxml;
     exports it.uniroma2.marchidori.maininterface.boundary.charactersheet;
     opens it.uniroma2.marchidori.maininterface.boundary.charactersheet to javafx.fxml;
     exports it.uniroma2.marchidori.maininterface.boundary.joinlobby;
@@ -39,6 +38,7 @@ module it.uniroma2.marchidori.maininterface {
     exports it.uniroma2.marchidori.maininterface.control to javafx.fxml;
     exports it.uniroma2.marchidori.maininterface.scenemanager;
     opens it.uniroma2.marchidori.maininterface.scenemanager to javafx.fxml;
+    opens it.uniroma2.marchidori.maininterface.boundary;
 
 
 }

@@ -7,7 +7,7 @@ import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.CharacterListController;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetDownloadController;
-import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
+import it.uniroma2.marchidori.maininterface.boundary.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;

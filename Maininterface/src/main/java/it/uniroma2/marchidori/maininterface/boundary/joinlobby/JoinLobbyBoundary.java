@@ -6,7 +6,7 @@ import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
-import it.uniroma2.marchidori.maininterface.control.ConfirmationPopupController;
+import it.uniroma2.marchidori.maininterface.boundary.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
