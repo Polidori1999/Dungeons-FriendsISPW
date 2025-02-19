@@ -2,7 +2,6 @@ package it.uniroma2.marchidori.maininterface.controller;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
-import it.uniroma2.marchidori.maininterface.boundary.LobbyDAO;
 import it.uniroma2.marchidori.maininterface.control.ManageLobbyListController;
 import it.uniroma2.marchidori.maininterface.dao.LobbyDAOMem;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
