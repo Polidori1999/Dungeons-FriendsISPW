@@ -1,7 +1,7 @@
 package it.uniroma2.marchidori.maininterface.boundary.managelobby;
 
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
-import it.uniroma2.marchidori.maininterface.boundary.ConfirmationPopupController;
+import it.uniroma2.marchidori.maininterface.boundary.ConfirmationPopup;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import it.uniroma2.marchidori.maininterface.exception.PopupLoadingException;
@@ -25,7 +25,7 @@ import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.lo
 
 public class ManageLobbyListGuestBoundary extends ManageLobbyListDMBoundary {
 
-    protected ConfirmationPopupController confirmationPopup;
+    protected ConfirmationPopup confirmationPopup;
 
     /**
      * Metodo di inizializzazione che richiama l'inizializzazione del parent e, subito dopo,

@@ -4,7 +4,7 @@ import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.bean.RuleBookBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
-import it.uniroma2.marchidori.maininterface.boundary.ConfirmationPopupController;
+import it.uniroma2.marchidori.maininterface.boundary.ConfirmationPopup;
 import it.uniroma2.marchidori.maininterface.control.ConsultRulesController;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
@@ -61,7 +61,7 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
 
     protected ObservableList<RuleBookBean> rulesBook;
     protected ConsultRulesController controller;
-    protected ConfirmationPopupController confirmationPopupController;
+    protected ConfirmationPopup confirmationPopup;
 
     private static final Logger logger = Logger.getLogger(ConsultRulesBoundary.class.getName());
 
@@ -73,7 +73,7 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
 
     @FXML
     public void initialize() {
-        confirmationPopupController = ConfirmationPopupController.loadPopup(consultRulesPane);
+        confirmationPopup = ConfirmationPopup.loadPopup(consultRulesPane);
         initRulesBookTable();
         rulesBookTableView.setItems(rulesBook);
     }
@@ -96,17 +96,17 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
         pendingBuyBean = book;
         if (book.isObtained()) {
             controller.openFileIfExists(book.getPath());
-        } else if (confirmationPopupController != null) {
+        } else if (confirmationPopup != null) {
             String message = "Vuoi comprare il libro: " + book.getRulesBookName() + "?";
-            confirmationPopupController.show(message, 10, this::onConfirm, this::onCancel);
+            confirmationPopup.show(message, 10, this::onConfirm, this::onCancel);
         }
     }
 
     private void handleBuyConfirmation(RuleBookBean bean) {
         pendingBuyBean = bean;
-        if (confirmationPopupController != null && pendingBuyBean != null) {
+        if (confirmationPopup != null && pendingBuyBean != null) {
             String message = "Vuoi comprare il libro: " + pendingBuyBean.getRulesBookName() + "?";
-            confirmationPopupController.show(message, 10, this::onConfirm, this::onCancel);
+            confirmationPopup.show(message, 10, this::onConfirm, this::onCancel);
         } else {
             logger.log(Level.WARNING, "Errore: popup o bean non inizializzato correttamente.");
         }

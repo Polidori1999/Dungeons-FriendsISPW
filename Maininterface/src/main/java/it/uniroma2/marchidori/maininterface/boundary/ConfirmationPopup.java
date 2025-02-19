@@ -18,7 +18,7 @@ import java.io.IOException;
  * Controller per il popup di conferma con timer.
  *
  */
-public class ConfirmationPopupController {
+public class ConfirmationPopup {
 
     @FXML
     private AnchorPane popupPane;
@@ -111,10 +111,10 @@ public class ConfirmationPopupController {
 
 
     //questa versione funziona mette il pop in alto a sx
-    public static ConfirmationPopupController loadPopup(AnchorPane container) {
+    public static ConfirmationPopup loadPopup(AnchorPane container) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    ConfirmationPopupController.class.getResource("/it/uniroma2/marchidori/maininterface/confirmationPopup.fxml")
+                    ConfirmationPopup.class.getResource("/it/uniroma2/marchidori/maininterface/confirmationPopup.fxml")
             );
             Parent popupRoot = loader.load();
             container.getChildren().add(popupRoot);

@@ -29,7 +29,7 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
                 lobbyBean -> false,  // Nessun pulsante viene disabilitato (la visualizzazione è gestita dal testo vuoto)
                 lobbyBean -> {
                     String message = "Vuoi entrare nella lobby '" + lobbyBean.getName() + "'?";
-                    confirmationPopupController.show(
+                    confirmationPopup.show(
                             message,
                             10,
                             () -> {

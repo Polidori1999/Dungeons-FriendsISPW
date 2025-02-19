@@ -6,7 +6,7 @@ import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.Converter;
 import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
-import it.uniroma2.marchidori.maininterface.boundary.ConfirmationPopupController;
+import it.uniroma2.marchidori.maininterface.boundary.ConfirmationPopup;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
@@ -83,7 +83,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     protected JoinLobbyController controller;
 
     // Controller del popup di conferma con timer
-    protected ConfirmationPopupController confirmationPopupController;
+    protected ConfirmationPopup confirmationPopup;
 
     // Observable list delle lobby filtrate
     private ObservableList<LobbyBean> filteredLobbies;
@@ -99,8 +99,8 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
             }
             AnchorPane popupRoot = loader.load();
             joinLobbyPane.getChildren().add(popupRoot);
-            confirmationPopupController = loader.getController();
-            if (confirmationPopupController == null) {
+            confirmationPopup = loader.getController();
+            if (confirmationPopup == null) {
                 throw new NullPointerException("Errore: il controller di confirmationPopup.fxml è null!");
             }
         } catch (IOException e) {

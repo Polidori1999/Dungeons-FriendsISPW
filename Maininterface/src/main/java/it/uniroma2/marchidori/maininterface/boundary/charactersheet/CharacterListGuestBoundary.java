@@ -21,14 +21,14 @@ public class CharacterListGuestBoundary extends CharacterListPlayerBoundary {
     //reindirizza a login
     @Override
     protected void downloadCharacter(CharacterSheetBean bean) {
-        if (confirmationPopupController != null) {
+        if (confirmationPopup != null) {
             String message = "Non puoi scaricare come Guest. Verrai reindirizzato al login.";
-            confirmationPopupController.show(message, 10,
+            confirmationPopup.show(message, 10,
                     this::redirectToLogin,
                     this::onDownloadCancelled
             );
         } else {
-            logger.warning("ConfirmationPopupController non inizializzato in GuestBoundary.");
+            logger.warning("ConfirmationPopup non inizializzato in GuestBoundary.");
         }
     }
 

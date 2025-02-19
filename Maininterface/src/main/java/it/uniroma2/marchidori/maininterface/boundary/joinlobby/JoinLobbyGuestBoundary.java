@@ -46,13 +46,13 @@ public class JoinLobbyGuestBoundary extends JoinLobbyPlayerBoundary {
      */
 
     private void handleSame() {
-        if (confirmationPopupController != null) {
+        if (confirmationPopup != null) {
             String message = "you are gettin redirected to login";
-            confirmationPopupController.show(message, 10,
+            confirmationPopup.show(message, 10,
                     this::onConfirm,
                     this::onCancel);
         } else {
-            logger.severe("Errore: ConfirmationPopupController non inizializzato o pendingDeleteBean è null");
+            logger.severe("Errore: ConfirmationPopup non inizializzato o pendingDeleteBean è null");
         }
     }
 

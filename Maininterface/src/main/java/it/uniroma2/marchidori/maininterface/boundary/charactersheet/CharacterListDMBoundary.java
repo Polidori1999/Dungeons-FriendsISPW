@@ -6,7 +6,7 @@ import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.CharacterListController;
 import it.uniroma2.marchidori.maininterface.control.CharacterSheetDownloadController;
-import it.uniroma2.marchidori.maininterface.boundary.ConfirmationPopupController;
+import it.uniroma2.marchidori.maininterface.boundary.ConfirmationPopup;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.CharacterSheetDownloadTask;
@@ -61,7 +61,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
     protected CharacterListController controller;
     protected CharacterSheetBean pendingDeleteBean;
     protected ObservableList<CharacterSheetBean> data = FXCollections.observableArrayList();
-    protected ConfirmationPopupController confirmationPopupController;
+    protected ConfirmationPopup confirmationPopup;
 
 
     protected static final Logger logger = Logger.getLogger(CharacterListDMBoundary.class.getName());
@@ -76,7 +76,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
 
         data.clear();
         data.addAll(controller.getCharacterSheets());
-        confirmationPopupController = ConfirmationPopupController.loadPopup(characterPane);
+        confirmationPopup = ConfirmationPopup.loadPopup(characterPane);
 
         // Imposta le colonne base
         tableViewCharName.setCellValueFactory(new ReadOnlyObjectWrapperFactory<>("name"));
@@ -103,16 +103,16 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
     }
 
     protected void showDeleteConfirmation() {
-        if (confirmationPopupController != null && pendingDeleteBean != null) {
+        if (confirmationPopup != null && pendingDeleteBean != null) {
             String message = "Vuoi eliminare il personaggio '" + pendingDeleteBean.getInfoBean().getName() + "'?";
-            confirmationPopupController.show(
+            confirmationPopup.show(
                     message,
                     10,  // timer di scadenza popup
                     this::onConfirmDelete,
                     this::onCancelDelete
             );
         } else {
-            logger.severe("Errore: ConfirmationPopupController non inizializzato o pendingDeleteBean è null");
+            logger.severe("Errore: ConfirmationPopup non inizializzato o pendingDeleteBean è null");
         }
     }
 

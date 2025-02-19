@@ -2,9 +2,9 @@ package it.uniroma2.marchidori.maininterface.boundary.managelobby;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.boundary.ConfirmationPopup;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
-import it.uniroma2.marchidori.maininterface.boundary.ConfirmationPopupController;
 import it.uniroma2.marchidori.maininterface.control.ManageLobbyListController;
 import it.uniroma2.marchidori.maininterface.exception.PopupLoadingException;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
@@ -70,7 +70,7 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
     protected ManageLobbyListController controller;
     protected ObservableList<LobbyBean> data = FXCollections.observableArrayList();
     private LobbyBean pendingDeleteBean;
-    protected ConfirmationPopupController confirmationPopupController;
+    protected ConfirmationPopup confirmationPopupController;
 
     @FXML
     protected void initialize() {
@@ -82,7 +82,7 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
         if (currentUser.getJoinedLobbies() == null) {
             currentUser.setJoinedLobbies(new ArrayList<>());
         }
-        confirmationPopupController = ConfirmationPopupController.loadPopup(manageLobbyListPane);
+        confirmationPopupController = ConfirmationPopup.loadPopup(manageLobbyListPane);
 
         data.clear();
         data.addAll(controller.getJoinedLobbies());
@@ -122,7 +122,7 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
                     this::onCancel
             );
         } else {
-            logger.severe("Errore: ConfirmationPopupController non inizializzato o pendingDeleteBean è null");
+            logger.severe("Errore: ConfirmationPopup non inizializzato o pendingDeleteBean è null");
         }
     }
 
