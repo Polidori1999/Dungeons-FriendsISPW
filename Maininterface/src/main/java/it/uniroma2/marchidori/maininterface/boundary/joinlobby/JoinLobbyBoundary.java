@@ -134,6 +134,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         durationColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
         liveOnlineColumn.setCellValueFactory(new PropertyValueFactory<>("liveOnline"));
 
+        numberOfPlayersColumn.setCellValueFactory(new PropertyValueFactory<>("playersCountDisplay"));
         lobbyTableView.setItems(filteredLobbies);
         lobbyTableView.refresh();
         refreshTable();

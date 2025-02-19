@@ -74,4 +74,7 @@ public class LobbyBean {
         this.joinedPlayersCount = joinedPlayersCount;
     }
 
+    public String getPlayersCountDisplay() {
+        return joinedPlayersCount + "/" + maxOfPlayers;
+    }
 }
