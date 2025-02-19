@@ -11,7 +11,6 @@ public class Session {
 
     // Campo che contiene l'utente corrente (non statico)
     private User currentUser;
-    private UserDAOFileSys userDAOFileSys;
     private UserDAO userDAO;
     private LobbyDAO lobbyDAO;
     private boolean isCLI = false;
@@ -60,12 +59,6 @@ public class Session {
     }
     public void setDemo(boolean isDemo) {
         this.isDemo = isDemo;
-    }
-    public UserDAOFileSys getUserDAOFileSys() {
-        return userDAOFileSys;
-    }
-    public void setUserDAOFileSys(UserDAOFileSys userDAOFileSys) {
-        this.userDAOFileSys = userDAOFileSys;
     }
     public UserDAO getUserDAO() {
         return userDAO;
