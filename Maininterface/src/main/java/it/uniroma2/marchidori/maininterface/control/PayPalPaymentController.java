@@ -24,6 +24,7 @@ public class PayPalPaymentController {
      */
     public String getAccessToken() throws IOException, InterruptedException, PayPalPaymentException {
         String clientId;
+
         String clientSecret;
         HttpClient httpClient = HttpClient.newHttpClient();
 

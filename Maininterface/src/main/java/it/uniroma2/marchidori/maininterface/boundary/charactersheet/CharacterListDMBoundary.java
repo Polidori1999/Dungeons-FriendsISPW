@@ -64,8 +64,6 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
     protected ObservableList<CharacterSheetBean> data = FXCollections.observableArrayList();
     protected ConfirmationPopupController confirmationPopupController;
 
-    private final Jout jout = new Jout("CharacterListDMBoundary");
-
 
     protected static final Logger logger = Logger.getLogger(CharacterListDMBoundary.class.getName());
 
