@@ -97,35 +97,6 @@ public class CharacterSheetController implements UserAwareInterface {
     //                      METODI PRIVATI
     // -------------------------------------------------------------
 
-    public CharacterSheet beanToEntity(CharacterSheetBean bean) {
-
-        if(bean == null) {
-            logger.log(Level.INFO, "bean is null!");
-            return null;
-        }
-
-        CharacterInfoBean infoBean = bean.getInfoBean();
-        CharacterStatsBean statsBean = bean.getStatsBean();
-
-        CharacterInfo infoEntity = new CharacterInfo(
-                infoBean.getName(),
-                infoBean.getRace(),
-                infoBean.getAge(),
-                infoBean.getClasse(),
-                infoBean.getLevel()
-        );
-        CharacterStats statsEntity = new CharacterStats(
-                statsBean.getStrength(),
-                statsBean.getDexterity(),
-                statsBean.getIntelligence(),
-                statsBean.getWisdom(),
-                statsBean.getCharisma(),
-                statsBean.getConstitution()
-        );
-        return new CharacterSheet(infoEntity, statsEntity);
-    }
-
-
 
     public String validate(CharacterSheetBean characterSheet) {
         StringBuilder errors = new StringBuilder();

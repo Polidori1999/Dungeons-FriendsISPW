@@ -144,10 +144,8 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     public void refreshTable() {
         if (controller != null) {
 
-
             List<Lobby> rawLobbies = controller.getLobbies();
             List<LobbyBean> updatedList = Converter.convertLobbyListEntityToBean(rawLobbies);
-
 
             filteredLobbies.setAll(updatedList);
             lobbyTableView.setItems(filteredLobbies); // Forza il reset della lista
@@ -156,7 +154,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     }
 
 
-    private void doFilter() {
+    public void doFilter() {
         String type = comboBox1.getValue();
         String duration = comboBox2.getValue();
         String searchQuery= searchBar.getText().toLowerCase();
