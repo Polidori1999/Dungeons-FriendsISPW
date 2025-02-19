@@ -1,6 +1,5 @@
 package it.uniroma2.marchidori.maininterface.boundary.charactersheet;
 
-import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.bean.charactersheetb.CharacterSheetBean;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
@@ -63,8 +62,6 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
     protected CharacterSheetBean pendingDeleteBean;
     protected ObservableList<CharacterSheetBean> data = FXCollections.observableArrayList();
     protected ConfirmationPopupController confirmationPopupController;
-
-    private final Jout jout = new Jout("CharacterListDMBoundary");
 
 
     protected static final Logger logger = Logger.getLogger(CharacterListDMBoundary.class.getName());
