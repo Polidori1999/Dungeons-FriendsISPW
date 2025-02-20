@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 
 
 
-//persistenza da implementare questo caso d'uso non rientra nelle funzioni principali del progetto
 public class ConsultRulesBoundary implements UserAwareInterface, ControllerAwareInterface {
 
     private UserBean currentUser;
@@ -60,17 +59,17 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
     private VBox vBox;
 
     protected ObservableList<RuleBookBean> rulesBook;
-    protected ConsultRulesController controller;
+    protected ConsultRulesController controller;//reference al controller relativo
     protected ConfirmationPopup confirmationPopup;
 
     private static final Logger logger = Logger.getLogger(ConsultRulesBoundary.class.getName());
 
 
-    /**
-     * Bean selezionato in attesa di conferma dell'acquisto.
-     */
+    //Bean selezionato in attesa di conferma dell'acquisto.
+
     protected RuleBookBean pendingBuyBean;
 
+    //metodo di inizializzazione della GUI
     @FXML
     public void initialize() {
         confirmationPopup = ConfirmationPopup.loadPopup(consultRulesPane);
@@ -78,6 +77,7 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
         rulesBookTableView.setItems(rulesBook);
     }
 
+    //riempimento tableview
     private void initRulesBookTable() {
         rulesBook = controller.getAllRuleBooks();
         rulesBookNameColumn.setCellValueFactory(new PropertyValueFactory<>("rulesBookName"));
@@ -92,6 +92,7 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
         TableColumnUtils.setupButtonColumn(consultButton, "Consult Now", this::handleConsultAction);
     }
 
+    //metodo per consultare un libro di regole
     private void handleConsultAction(RuleBookBean book) {
         pendingBuyBean = book;
         if (book.isObtained()) {
@@ -102,6 +103,7 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
         }
     }
 
+    //confirmtaion op up per buy
     private void handleBuyConfirmation(RuleBookBean bean) {
         pendingBuyBean = bean;
         if (confirmationPopup != null && pendingBuyBean != null) {
@@ -112,27 +114,20 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
         }
     }
 
+    //annulla operazione
     private void onCancel() {
         pendingBuyBean = null;
     }
 
-    /**
-     * Chiamato quando l'utente conferma l'acquisto dal popup.
-     * Qui puoi inserire la logica PayPal (creazione ordine, apertura link).
-     */
+
+    // Chiamato quando l'utente conferma l'acquisto dal popup.
+    //delego al controller paypal
     private void onConfirm() {
         if (pendingBuyBean != null) {
-            // ESEMPIO: Prezzo fisso (oppure puoi derivarlo dal bean)
             double price = 0.01;
             // Avvia la procedura di pagamento PayPal
             controller.startPayPalPayment(price);
-
-            // Se vuoi segnare subito come "obtained":
             pendingBuyBean.setObtained(true);
-            // Oppure, se preferisci attendere la conferma dal server PayPal,
-            // potresti farlo DOPO la cattura.
-            // Per semplicità, lo facciamo subito:
-
             // Aggiornare la tabella
             rulesBookTableView.refresh();
             pendingBuyBean = null;
@@ -153,12 +148,7 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
         }
     }
 
-    @FXML
-    protected void changeScene(String fxml) throws IOException {
-        Stage currentStage = (Stage) consultRulesPane.getScene().getWindow();
-        SceneSwitcher.changeScene(currentStage, fxml, currentUser);
-    }
-
+    //funzioni per realizzazzione userawareinterface e controllerawareinterface
     @Override
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;
