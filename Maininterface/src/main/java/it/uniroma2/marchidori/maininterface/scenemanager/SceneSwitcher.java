@@ -56,6 +56,7 @@ public class SceneSwitcher {
      * Il parametro 'config' può essere un'istanza di SceneConfigCLIEnum o SceneConfigEnum,
      * purché entrambi offrano i metodi getBoundaryClass() e getControllerClass().
      */
+    //crea la boundary e il relativo controller iniettando il currentuser
     private static Object createAndInjectBoundary(Object config, UserBean currentUser) {
         Class<?> boundaryClass;
         Class<?> controllerClass;
@@ -71,6 +72,7 @@ public class SceneSwitcher {
             throw new IllegalArgumentException("Tipo di config non supportato: " + config.getClass());
         }
 
+        //factory per boundary
         Object boundaryInstance = BoundaryFactory.createBoundary(boundaryClass);
         injectCurrentUser(boundaryInstance, currentUser);
 
@@ -83,12 +85,12 @@ public class SceneSwitcher {
         return boundaryInstance;
     }
 
-
+    //Inietta il controller nella boundary
     private static void injectControllerIntoBoundary(Object controller, Object boundary) {
         if (controller != null && boundary instanceof it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface controllerAware) {
             controllerAware.setLogicController(controller);
         } else {
-            logger.info(">>> [SceneSwitcher] Nessun controller da iniettare in " + boundary.getClass().getSimpleName());
+            logger.info("Nessun controller da iniettare in " + boundary.getClass().getSimpleName());
         }
     }
 
@@ -97,7 +99,7 @@ public class SceneSwitcher {
             userAware.setCurrentUser(currentUser);
         } else {
 
-            logger.info(">>> [SceneSwitcher] Nessun currentUser da iniettare in " + target.getClass().getSimpleName());
+            logger.info(" Nessun currentUser da iniettare in " + target.getClass().getSimpleName());
         }
     }
 

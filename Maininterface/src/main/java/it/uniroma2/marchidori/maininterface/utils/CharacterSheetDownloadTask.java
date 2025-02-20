@@ -7,23 +7,15 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-/**
- * Simula il download di un file partendo da un CharacterSheetBean.
- * Durante il download il task aggiorna il progresso; al termine, crea un file di testo
- * contenente i dati del bean.
- */
+
+//Simula il download di un file partendo da un CharacterSheetBean.
 public class CharacterSheetDownloadTask extends Task<Void> {
 
 
     private final CharacterSheetBean bean;
     private final String destinationPath;
 
-    /**
-     * Costruttore.
-     *
-     * @param bean            il CharacterSheetBean da "scaricare"
-     * @param destinationPath il percorso (incluso il nome del file) in cui salvare il file.txt
-     */
+
     public CharacterSheetDownloadTask(CharacterSheetBean bean, String destinationPath) {
         this.bean = bean;
         this.destinationPath = destinationPath;
@@ -38,7 +30,7 @@ public class CharacterSheetDownloadTask extends Task<Void> {
             if (isCancelled()) {
                 break;
             }
-            // Aggiorna il progresso (puoi legarlo a una ProgressBar nella UI)
+            // Aggiorna il progresso
             updateProgress(i, totalSteps);
             // Simula il tempo di download (50 ms * 100 = circa 5 secondi)
             Thread.sleep(50);

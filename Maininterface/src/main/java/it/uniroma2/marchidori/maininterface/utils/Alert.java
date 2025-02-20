@@ -6,7 +6,7 @@ public class Alert {
         // Costruttore privato per impedire l'istanza della classe
     }
 
-
+    //mostra un errore con titolo e testo
     public static void showError(String title, String message) {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
         alert.setTitle(title);

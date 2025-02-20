@@ -9,6 +9,9 @@ import java.util.Map;
 
 import static it.uniroma2.marchidori.maininterface.scenemanager.SceneConfigEnum.*;
 import static it.uniroma2.marchidori.maininterface.scenemanager.SceneConfigCLIEnum.*;
+//RoleSceneMap fornisce una mappatura tra il ruolo di un utente (RoleEnum)
+//e l'identificativo di una scena (SceneIdEnum), verso l'effettiva configurazione
+//di scena
 
 public class RoleSceneMap {
 
