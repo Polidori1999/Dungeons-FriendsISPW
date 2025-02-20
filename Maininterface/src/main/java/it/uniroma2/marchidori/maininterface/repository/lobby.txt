@@ -1,9 +1,1 @@
-listo2;Campaign;Online;2;2;info;2
-3;Campaign;Live;2;qwerty@gmail.com;2;0
-1111;One-Shot;Live;4;middo@gmail.com;1112;0
-I;One-Shot;Live;4;1;I;0
-D;Campaign;Live;2;1;D;0
-D;Campaign;Online;4;1;D;0
-O;Campaign;Live;4;1;O;0
-W;One-Shot;Online;4;1;W;1
-listo1;Campaign;Live;2;1;list;1
+

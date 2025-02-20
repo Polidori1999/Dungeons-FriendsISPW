@@ -49,11 +49,7 @@ public class RulesRepository {
         ruleBookList.add(createRuleBook("Regole Avanzate", advancedRulesPath, false));
     }
 
-    /**
-     * Restituisce una copia della lista dei RuleBook per evitare modifiche dirette.
-     *
-     * @return lista dei RuleBook
-     */
+
     public static List<RuleBook> getAllBooks() {
         return new ArrayList<>(ruleBookList);
     }
