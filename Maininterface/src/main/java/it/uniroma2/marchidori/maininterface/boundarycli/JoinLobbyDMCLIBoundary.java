@@ -14,7 +14,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwareInterface, RunInterface {
@@ -66,10 +68,10 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
             for (LobbyBean lobby : filteredLobbies) {
                 // Verifica se la lobby è già joinata dall'utente
                 if (controller.isLobbyJoined(lobby)) {
-                    continue;  // Se è joinata, salta questa iterazione e non la stampare
+                    // Se è già joinata, la saltiamo
+                    continue;
                 }
-
-                // Stampa le informazioni della lobby non ancora joinata
+                // Stampa informazioni della lobby non ancora joinata
                 jout.print(String.format("%-3d %-20s %-15s %-10s %-10s",
                         i,
                         lobby.getName(),
@@ -80,8 +82,6 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
             }
         }
     }
-
-
 
     /**
      * Visualizza il menu delle operazioni disponibili in modalità CLI.
@@ -95,21 +95,11 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
         jout.print("0. Torna a Home");
     }
 
-    /**
-     * Richiede in console un input all'utente.
-     */
     protected String prompt(String message) {
         jout.print(message);
         return scanner.nextLine().trim();
     }
 
-    /**
-     * Elabora l'input utente e delega l'esecuzione delle operazioni.
-     *
-     * @param input La scelta dell'utente.
-     * @return true se si vuole uscire dalla modalità CLI, false altrimenti.
-     * @throws IOException in caso di errori nel cambio scena.
-     */
     private boolean processInput(String input) {
         switch (input) {
             case "1":
@@ -135,46 +125,47 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
     }
 
     /**
-     * Richiede all'utente di impostare i filtri per tipo, durata e numero di giocatori,
+     * Richiede all'utente di impostare i filtri per tipo e durata,
      * e applica il filtraggio.
      */
-    protected void applyFilters()  {
-        // Filtro per tipo (Online/Presenza)
-        jout.print("Scegli filtro per tipo:");
-        jout.print("1. Online");
-        jout.print("2. Live");
-        jout.print("0. Lascia vuoto");
-        String choice = prompt("Inserisci il numero dell'opzione: ");
-        switch (choice) {
-            case "1":
-                filterType = "Online";
-                break;
-            case "2":
-                filterType = "Live";
-                break;
-            default:
-                filterType = "";
-                break;
+    protected void applyFilters() {
+        // 1) Filtro per tipo
+        LinkedHashMap<String, String> typeOptions = new LinkedHashMap<>();
+        typeOptions.put("1", "Online");
+        typeOptions.put("2", "Live");
+        filterType = chooseOption("tipo", typeOptions);
+
+        // 2) Filtro per durata
+        LinkedHashMap<String, String> durationOptions = new LinkedHashMap<>();
+        durationOptions.put("1", "One-Shot");
+        durationOptions.put("2", "Campaign");
+        filterDuration = chooseOption("durata", durationOptions);
+
+        // Applica i filtri
+        doFilter();
+    }
+
+    /**
+     * Metodo generico per mostrare un "mini-menu" e ottenere una scelta.
+     * Esempio di utilizzo per 'tipo' (Online/Live) o 'durata' (One-Shot/Campaign).
+     *
+     * @param filterLabel  Descrizione del filtro (es. "tipo", "durata")
+     * @param options      Mappa: numero -> stringa corrispondente
+     * @return la stringa selezionata, oppure "" se l'utente ha scelto 0 o un valore non valido
+     */
+    private String chooseOption(String filterLabel, LinkedHashMap<String, String> options) {
+        jout.print("Scegli filtro per " + filterLabel + " (0 per lasciare vuoto):");
+        // Stampa le scelte
+        for (Map.Entry<String, String> entry : options.entrySet()) {
+            jout.print(entry.getKey() + ". " + entry.getValue());
         }
 
-        // Filtro per durata (Singola/Campagna)
-        jout.print("Scegli filtro per durata:");
-        jout.print("1. One-Shot");
-        jout.print("2. Campaign");
-        jout.print("0. Lascia vuoto");
-        choice = prompt("Inserisci il numero dell'opzione: ");
-        switch (choice) {
-            case "1":
-                filterDuration = "One-Shot";
-                break;
-            case "2":
-                filterDuration = "Campaign";
-                break;
-            default:
-                filterDuration = "";
-                break;
+        String choice = prompt("Inserisci il numero dell'opzione: ");
+        if ("0".equals(choice)) {
+            return "";
         }
-        doFilter();
+        // Se la mappa contiene la chiave, ritorna la stringa, altrimenti ""
+        return options.getOrDefault(choice, "");
     }
 
     /**
@@ -185,9 +176,6 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
         doFilter();
     }
 
-    /**
-     * Resetta tutti i filtri impostati e riapplica il filtraggio.
-     */
     protected void resetFilters() {
         filterType = "";
         filterDuration = "";
@@ -196,31 +184,17 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
         doFilter();
     }
 
-    /**
-     * Applica i filtri impostati chiamando il metodo di filtraggio del controller.
-     */
     protected void doFilter() {
         List<LobbyBean> result = controller.filterLobbies(filterType, filterDuration, searchQuery);
         filteredLobbies.setAll(result);
     }
 
-
-    /**
-     * Ricarica la lista delle lobby disponibili, ottenendola dal controller e
-     * applica i filtri correnti.
-     */
     protected void refreshTable() {
         if (controller != null) {
             doFilter();
         }
     }
 
-    /**
-     * Simula il cambio scena (in ambiente CLI si limita a stampare un messaggio).
-     *
-     * @param fxml Il nome della scena verso cui cambiare.
-     * @throws IOException in caso di errori nel cambio scena.
-     */
     protected void changeScene(String fxml) throws IOException {
         jout.print("Cambio scena verso " + fxml + "...");
         SceneSwitcher.changeScene(null, fxml, currentUser);
