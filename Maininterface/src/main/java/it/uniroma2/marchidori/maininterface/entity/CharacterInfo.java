@@ -8,12 +8,11 @@ public class CharacterInfo {
     private String classe;
     private int level;
 
-    // Costruttore vuoto (utile se serve a framework o riflessione)
-    public CharacterInfo() {
-    }
+    // Costruttore vuoto
+    public CharacterInfo() {}
 
 
-    // Costruttore con parametri
+    // Costruttore con parametri "base"
     public CharacterInfo(String name, String race, int age, String classe, int level) {
         this.name = name;
         this.race = race;
@@ -22,7 +21,7 @@ public class CharacterInfo {
         this.level = level;
     }
 
-    // Getter e Setter
+    // Getter & Setter
     public String getName() {
         return name;
     }
@@ -47,5 +46,4 @@ public class CharacterInfo {
     public void setLevel(int level) {
         this.level = level;
     }
-
 }

@@ -20,6 +20,7 @@ public class UserDAODatabase implements UserDAO {
     // Creazione del logger
     private static final Logger logger = Logger.getLogger(UserDAODatabase.class.getName());
 
+    //metodo per salvare lo user nel database
     @Override
     public void saveUser(String email, String password) throws AccountAlreadyExistsException {
         // Verifica se l'utente esiste già
@@ -31,7 +32,7 @@ public class UserDAODatabase implements UserDAO {
         if (!password.startsWith("$2a$")) {
             password = BCrypt.hashpw(password, BCrypt.gensalt());
         }
-
+        //query di inserimento
         String query = "INSERT INTO users (email, password) VALUES (?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -51,8 +52,10 @@ public class UserDAODatabase implements UserDAO {
         }
     }
 
+    //metodo per cercare uno user tramite l email nel db
     @Override
     public User getUserByEmail(String email) {
+        //definizione query di ricerca
         String query = "SELECT email, password FROM users WHERE email = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -65,7 +68,7 @@ public class UserDAODatabase implements UserDAO {
                 String foundEmail = rs.getString("email");
                 String hashedPassword = rs.getString("password").trim();
 
-
+                //se utente trovato ritorna l entity
                 return new User(
                         foundEmail,
                         hashedPassword,
@@ -82,13 +85,11 @@ public class UserDAODatabase implements UserDAO {
         return null;
     }
 
-    /**
-     * Aggiorna nel database i dati associati all'utente: character sheets, joined lobbies e favourite lobbies.
-     */
+
+    //Aggiorna nel database i dati associati all'utente: character sheets, joined lobbies e favourite lobbies.
     @Override
     public void updateUsersEntityData(User user) {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            // Disabilita l'autocommit per poter effettuare tutte le operazioni in un'unica transazione
             conn.setAutoCommit(false);
 
             // Elimina i vecchi dati dell'utente
@@ -170,9 +171,7 @@ public class UserDAODatabase implements UserDAO {
         }
     }
 
-    /**
-     * Carica dal database i dati associati all'utente e li inserisce nell'oggetto User.
-     */
+    //Carica dal database i dati associati all'utente e li inserisce nell entity User.
     @Override
     public User loadUserData(User user) throws FileNotFoundException {
         List<CharacterSheet> characterSheets = new ArrayList<>();
@@ -244,7 +243,6 @@ public class UserDAODatabase implements UserDAO {
         } catch (SQLException e) {
             logger.severe("Errore nel caricamento dei dati utente: " + e.getMessage());
         }
-        // Restituisce l'utente con i dati caricati (la password viene impostata a un dummy per sicurezza)
         return new User(user.getEmail(), "******", characterSheets, favouriteLobbies, joinedLobbies);
     }
 }

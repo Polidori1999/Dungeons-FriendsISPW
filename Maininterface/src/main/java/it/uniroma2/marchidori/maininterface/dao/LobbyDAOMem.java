@@ -27,11 +27,13 @@ public class LobbyDAOMem implements LobbyDAO {
         return lobbies;
     }
 
+    //metodo vuoto copia aggiornata insieme all'entity
     @Override
     public void updateLobby(Lobby lobby) throws IOException {
         //void
     }
 
+    //elimina una lobby dalla lista
     @Override
     public boolean deleteLobby(String lobbyName) {
         Lobby lobby = getLobbyByName(lobbyName);
@@ -39,12 +41,14 @@ public class LobbyDAOMem implements LobbyDAO {
         return true;
     }
 
+    //aggiunge una lobby alla lista
     @Override
     public boolean addLobby(Lobby lobby) {
         lobbies.add(lobby);
         return true;
     }
 
+    //metodo per cercare una lobby nella lista
     private Lobby getLobbyByName(String name){
         for(Lobby lobby : lobbies){
             if(lobby.getLobbyName().equals(name)){

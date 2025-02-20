@@ -6,20 +6,22 @@ import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
 public class Session {
 
     // L'istanza singleton
+    //referenza unica nel sistema
     private static Session instance = null;
 
-    // Campo che contiene l'utente corrente (non statico)
-    private User currentUser;
-    private UserDAO userDAO;
-    private LobbyDAO lobbyDAO;
+    // Campo che contiene l'utente corrente
+    private User currentUser; //currentEntity
+    private UserDAO userDAO; //currentUserDao
+    private LobbyDAO lobbyDAO; //currentLobbyDao
     private boolean isCLI = false;
     private boolean isDB = false;
     private boolean isDemo = false;
+    //booleani per le varie modalità
 
     // Costruttore privato per evitare istanziazioni esterne
     private Session() { }
 
-    // Metodo per ottenere l'unica istanza della sessione
+    // Metodo per ottenere l'unica istanza della sessione(singleton)
     public static synchronized Session getInstance() {
         if (instance == null) {
             instance = new Session();
@@ -37,10 +39,12 @@ public class Session {
         return this.currentUser;
     }
 
-    // Pulisce la sessione (ad es. logout)
+
     public void clear() {
         this.currentUser = null;
-    }
+    }// Pulisce la sessione
+
+    //Getter & Setter
     public boolean getCLI() {
         return isCLI;
     }

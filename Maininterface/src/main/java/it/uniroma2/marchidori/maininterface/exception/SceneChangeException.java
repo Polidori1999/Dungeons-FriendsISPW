@@ -1,9 +1,6 @@
 package it.uniroma2.marchidori.maininterface.exception;
 
-    /**
-     * Eccezione dedicata per gestire gli errori di cambio scena.
-     * Estende RuntimeException così che sia unchecked.
-     */
+
     public class SceneChangeException extends RuntimeException {
 
         // Costruttore di base

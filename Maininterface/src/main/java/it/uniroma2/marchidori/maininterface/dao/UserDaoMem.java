@@ -11,18 +11,9 @@ import java.util.List;
 public class UserDaoMem implements UserDAO {
 
     private List<User> userList = new ArrayList<>();
-    public UserDaoMem() {}
 
-    public UserDaoMem(List<User> userList) {
-        this.userList = userList;
-    }
-
-    public List<User> getUserList() {
-        return userList;
-    }
-
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
+    public UserDaoMem() {
+        //costruttore vuoto
     }
 
 
@@ -54,5 +45,12 @@ public class UserDaoMem implements UserDAO {
     @Override
     public User loadUserData(User user) throws FileNotFoundException {
         return getUserByEmail(user.getEmail());
+    }
+
+    public List<User> getUserList() {
+        return userList;
+    }
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
     }
 }

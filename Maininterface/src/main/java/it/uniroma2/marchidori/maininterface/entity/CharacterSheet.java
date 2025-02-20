@@ -1,10 +1,5 @@
 package it.uniroma2.marchidori.maininterface.entity;
 
-/**
- * Entity "CharacterSheet":
- * Aggrega i dati relativi a un personaggio,
- * suddivisi tra "CharacterInfo" e "CharacterStats ".
- */
 public class CharacterSheet {
 
     private CharacterInfo characterInfo;
@@ -20,7 +15,7 @@ public class CharacterSheet {
         this.characterStats = characterStats;
     }
 
-    // Getter e Setter per i due oggetti
+    // Getter & Setter per i due oggetti
     public CharacterInfo getCharacterInfo() {
         return characterInfo;
     }
@@ -29,7 +24,6 @@ public class CharacterSheet {
         return characterStats;
     }
 
-    // ---------- METODI DELEGATI PER LA PARTE "INFO" ----------
     public String getName() {
         return characterInfo.getName();
     }

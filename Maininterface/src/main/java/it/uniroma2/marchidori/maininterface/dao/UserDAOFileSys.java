@@ -27,6 +27,7 @@ public class UserDAOFileSys implements UserDAO {
         createDirectory();
     }
 
+    //se non esiste la cartella relativa la crea
     private void createDirectory() {
         File baseDir = new File(BASE_DIR);
         if (!baseDir.exists()) {
@@ -38,6 +39,7 @@ public class UserDAOFileSys implements UserDAO {
         }
     }
 
+    //metodo per salvare un nuovo user nel fileSystem
     @Override
     public void saveUser(String email, String password) throws AccountAlreadyExistsException {
 
@@ -51,7 +53,6 @@ public class UserDAOFileSys implements UserDAO {
             writer.write(email + "," + hashedPassword);
             writer.newLine();
         } catch (IOException e) {
-            // Lancia una eccezione dedicata invece di RuntimeException
             throw new UserDataAccessException("Errore nella scrittura del file users.txt: " + e.getMessage(), e);
         }
         File userDir = getUserFolder(email);
@@ -65,6 +66,7 @@ public class UserDAOFileSys implements UserDAO {
         createUserDataFiles(userDir);
     }
 
+    //metodo per vedere se un utente esiste già
     private boolean userExists(String email) {
         File file = new File(USERS_FILE_PATH);
         if (!file.exists()) {
@@ -84,11 +86,13 @@ public class UserDAOFileSys implements UserDAO {
         return false;
     }
 
+    //restituisce il folder relativo
     private static File getUserFolder(String email) {
         String mail = email.replaceAll("[^a-zA-Z0-9._@-]", "_");
         return new File(USER_DATA_DIR + mail);
     }
 
+    //crea i file contenuti nelle cartelle
     private void createUserDataFiles(File userDir) {
         String[] fileNames = {CHARACTER_SHEET, JOINED_LOBBIES, FAVOURITE_LOBBIES};
         for (String fileName : fileNames) {
@@ -103,6 +107,7 @@ public class UserDAOFileSys implements UserDAO {
         }
     }
 
+    //restituisce uno user dopo una ricerca tra quelli esistenti
     @Override
     public User getUserByEmail(String email) {
         try (BufferedReader reader = new BufferedReader(new FileReader(USERS_FILE_PATH))) {
@@ -119,6 +124,7 @@ public class UserDAOFileSys implements UserDAO {
         return null;
     }
 
+    //aggiorna i dati dello user
     public void updateUsersEntityData(User user) {
         File userDir = getUserFolder(user.getEmail());
         if (!userDir.exists() && !userDir.mkdirs()) {
@@ -129,7 +135,7 @@ public class UserDAOFileSys implements UserDAO {
         File characterFile = new File(userDir, CHARACTER_SHEET);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(characterFile, false))) {
             for (CharacterSheet cs : user.getCharacterSheets()) {
-                writer.write(serializeCharacterSheet(cs));
+                writer.write(characterSheetToString(cs));
                 writer.newLine();
             }
         } catch (IOException e) {
@@ -139,7 +145,7 @@ public class UserDAOFileSys implements UserDAO {
         File joinedFile = new File(userDir, JOINED_LOBBIES);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(joinedFile, false))) {
             for (Lobby lobby : user.getJoinedLobbies()) {
-                writer.write(serializeLobby(lobby));
+                writer.write(lobbyToString(lobby));
                 writer.newLine();
             }
         } catch (IOException e) {
@@ -149,7 +155,7 @@ public class UserDAOFileSys implements UserDAO {
         File favFile = new File(userDir, FAVOURITE_LOBBIES);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(favFile, false))) {
             for (Lobby lobby : user.getFavouriteLobbies()) {
-                writer.write(serializeLobby(lobby));
+                writer.write(lobbyToString(lobby));
                 writer.newLine();
             }
         } catch (IOException e) {
@@ -157,7 +163,8 @@ public class UserDAOFileSys implements UserDAO {
         }
     }
 
-    public String serializeCharacterSheet(CharacterSheet cs) {
+    //converte l entity in una stringa
+    public String characterSheetToString(CharacterSheet cs) {
         CharacterInfo info = cs.getCharacterInfo();
         CharacterStats stats = cs.getCharacterStats();
         StringBuilder sb = new StringBuilder();
@@ -174,8 +181,8 @@ public class UserDAOFileSys implements UserDAO {
                 .append(stats.getConstitution());
         return sb.toString();
     }
-
-    public Lobby deserializeLobby(String line) {
+    //converte la stringa in un entity
+    public Lobby stringToLobby(String line) {
         String[] parts = line.split(";", -1);
         String lobbyName = parts[0];
         String duration = parts[1];
@@ -187,7 +194,8 @@ public class UserDAOFileSys implements UserDAO {
         return new Lobby(lobbyName, duration, type, numberOfPlayers, owner, infoLink, joinedPlayersCount);
     }
 
-    public String serializeLobby(Lobby lobby) {
+    //converte l entity in una stringa
+    public String lobbyToString(Lobby lobby) {
         if (lobby == null) {
             return "Lobby is null";
         }
@@ -202,6 +210,7 @@ public class UserDAOFileSys implements UserDAO {
         return String.join(";", fields);
     }
 
+    //preleva dai file i dati dell'utente
     public User loadUserData(User user) throws FileNotFoundException {
         File userDir = getUserFolder(user.getEmail());
         if (!userDir.exists() || !userDir.isDirectory()) {
@@ -210,19 +219,19 @@ public class UserDAOFileSys implements UserDAO {
 
         List<CharacterSheet> characterSheets = loadItems(
                 new File(userDir, CHARACTER_SHEET),
-                this::deserializeCharacterSheet,
+                this::stringToCharacterSheet,
                 "Errore nel caricamento dei character sheets per l'utente " + user.getEmail()
         );
 
         List<Lobby> joinedLobbies = loadItems(
                 new File(userDir, JOINED_LOBBIES),
-                this::deserializeLobby,
+                this::stringToLobby,
                 "Errore nel caricamento delle joined lobbies per l'utente " + user.getEmail()
         );
 
         List<Lobby> favouriteLobbies = loadItems(
                 new File(userDir, FAVOURITE_LOBBIES),
-                this::deserializeLobby,
+                this::stringToLobby,
                 "Errore nel caricamento delle favourite lobbies per l'utente " + user.getEmail()
         );
 
@@ -230,15 +239,8 @@ public class UserDAOFileSys implements UserDAO {
         return new User(user.getEmail(), dummy, characterSheets, favouriteLobbies, joinedLobbies);
     }
 
-    /**
-     * Helper method that loads items from a file using a given deserializer.
-     *
-     * @param file the file to read from
-     * @param deserializer a function that converts a line into an object of type T
-     * @param errorMessage the error message to use if an IOException occurs
-     * @param <T> the type of objects being loaded
-     * @return a list of items loaded from the file
-     */
+
+    //metodo di lettura e restituzione delle linee
     private <T> List<T> loadItems(File file, Function<String, T> deserializer, String errorMessage) {
         List<T> items = new ArrayList<>();
         if (file.exists()) {
@@ -255,7 +257,9 @@ public class UserDAOFileSys implements UserDAO {
         }
         return items;
     }
-    public CharacterSheet deserializeCharacterSheet(String line) {
+
+    //converte una stringa in un entity
+    public CharacterSheet stringToCharacterSheet(String line) {
         String[] parts = line.split(";", -1);
         String name = parts[0];
         String race = parts[1];
