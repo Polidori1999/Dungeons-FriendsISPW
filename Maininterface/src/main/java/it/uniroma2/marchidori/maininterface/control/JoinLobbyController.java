@@ -90,6 +90,9 @@ public class JoinLobbyController implements UserAwareInterface {
         if (currentUser.getFavouriteLobbies() == null) {
             currentUser.setFavouriteLobbies(new ArrayList<>());
         }
+        if(currentUser.getFavouriteLobbies().contains(lobbyBean)){
+            return;
+        }
         //aggiungo nel bean
         currentUser.getFavouriteLobbies().add(lobbyBean);
         // Aggiorna anche la lista nell'entity

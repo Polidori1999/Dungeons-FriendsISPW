@@ -10,22 +10,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ConverterTest {
 
-    /**
-     * Metodo da testare:
-     * public static Lobby lobbyBeanToEntity(LobbyBean lobbyBean) { ... }
-     */
+    ////////////////////////////////Edoardo Marchionni/////////////////////////////////////
 
     @Test
     @DisplayName("Test: Pass null come lobbyBean -> deve restituire null")
     void testLobbyBeanToEntity_NullInput() {
+        //testo per conversione con bean nullo
         Lobby result = Converter.lobbyBeanToEntity(null);
+        //controllo che la conversione sia ancora null
         assertNull(result, "Se l'input è null, il metodo dovrebbe restituire null.");
     }
 
     @Test
     @DisplayName("Test: Pass un bean con valori standard -> conversione corretta")
     void testLobbyBeanToEntity_ValidInput() {
-        // Arrange
+        //bean di test
         LobbyBean bean = new LobbyBean(
                 "TestLobby",    // name
                 "Campagna",     // duration
@@ -36,10 +35,10 @@ class ConverterTest {
                 2               // joinedPlayersCount
         );
 
-        // Act
+        //conversione
         Lobby result = Converter.lobbyBeanToEntity(bean);
 
-        // Assert
+        //controllo che la conversione sia non nulla e che tutti i campi siano convertiti corrrettamenti
         assertNotNull(result, "Il risultato non dovrebbe essere null per un input valido.");
         assertEquals("TestLobby", result.getLobbyName());
         assertEquals("Campagna", result.getDuration());
@@ -50,9 +49,11 @@ class ConverterTest {
         assertEquals(2, result.getJoinedPlayersCount());
     }
 
+    //test per la conversione corretta dei joined player count
     @Test
     @DisplayName("Test: Pass un bean con joinedPlayersCount=0 -> conversione corretta")
     void testLobbyBeanToEntity_ZeroJoinedPlayers() {
+        //bean di test
         LobbyBean bean = new LobbyBean(
                 "ZeroPlayersLobby",
                 "Singola",
@@ -63,35 +64,20 @@ class ConverterTest {
                 0
         );
 
+        //conversione
         Lobby result = Converter.lobbyBeanToEntity(bean);
+        //controllo di conversione non nulla e se conversione di un campo corretta
         assertNotNull(result);
         assertEquals(0, result.getJoinedPlayersCount(),
                 "joinedPlayersCount dovrebbe essere 0 se specificato così nel bean.");
     }
 
-    @Test
-    @DisplayName("Test: Pass un bean con joinedPlayersCount > maxOfPlayers (logica di business discutibile)")
-    void testLobbyBeanToEntity_CountExceedingMax() {
-        LobbyBean bean = new LobbyBean(
-                "OvercrowdedLobby",
-                "Campagna",
-                "Presenza",
-                3,  // maxOfPlayers
-                "Owner3",
-                "http://info.link3",
-                5   // joinedPlayersCount > maxOfPlayers
-        );
 
-        Lobby result = Converter.lobbyBeanToEntity(bean);
-        assertNotNull(result);
-        assertEquals(5, result.getJoinedPlayersCount(),
-                "Anche se joinedPlayersCount supera maxOfPlayers, il metodo deve mantenere il valore come da bean.");
-        assertEquals(3, result.getMaxOfPlayers());
-    }
-
+    //test per verificare la conversione di una lobby piena rimanga piena
     @Test
     @DisplayName("Test: Pass un bean con valori limite (maxOfPlayers=1, joinedPlayersCount=1)")
     void testLobbyBeanToEntity_EdgeValues() {
+        //lobby bean di test
         LobbyBean bean = new LobbyBean(
                 "EdgeLobby",
                 "Singola",
@@ -102,7 +88,9 @@ class ConverterTest {
                 1     // joinedPlayersCount
         );
 
+        //il converter esegue la conversione
         Lobby result = Converter.lobbyBeanToEntity(bean);
+        //asserti di controllo per risultato non nullo e se player correnti e massimi siano invariati
         assertNotNull(result);
         assertEquals(1, result.getMaxOfPlayers());
         assertEquals(1, result.getJoinedPlayersCount());

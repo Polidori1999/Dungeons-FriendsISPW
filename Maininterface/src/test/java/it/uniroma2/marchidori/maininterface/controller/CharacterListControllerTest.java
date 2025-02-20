@@ -17,11 +17,13 @@ import java.util.ArrayList;
 import static it.uniroma2.marchidori.maininterface.enumerate.RoleEnum.PLAYER;
 import static org.junit.jupiter.api.Assertions.*;
 
+////////////////////////////////Leonardo Polidori/////////////////////////////////////
+
 class CharacterListControllerTest {
 
-    private CharacterListController controller;
-    private UserBean testUserBean;
-    private User testUser;
+    private CharacterListController controller; //reference al controller relativo
+    private UserBean testUserBean; //userbean di test
+    private User testUser; //user entity di test
 
     // Costanti per i valori di default
     private static final String DEFAULT_RACE = "Human";
@@ -30,6 +32,7 @@ class CharacterListControllerTest {
     private static final int DEFAULT_LEVEL = 5;
     private static final int DEFAULT_STAT = 10;
 
+    //metodo per creare una scheda personaggio bean di test
     private CharacterSheetBean createTestCharacterSheetBean(String name) {
         CharacterInfoBean infoBean = new CharacterInfoBean();
         infoBean.setName(name);
@@ -49,15 +52,16 @@ class CharacterListControllerTest {
         return new CharacterSheetBean(infoBean, statsBean);
     }
 
+    //crea una scheda personaggio entity di test
     private CharacterSheet createTestCharacterSheetEntity(String name) {
         CharacterInfo info = new CharacterInfo(name, DEFAULT_RACE, DEFAULT_AGE, DEFAULT_CLASS, DEFAULT_LEVEL);
         CharacterStats stats = new CharacterStats(DEFAULT_STAT, DEFAULT_STAT, DEFAULT_STAT, DEFAULT_STAT, DEFAULT_STAT, DEFAULT_STAT);
         return new CharacterSheet(info, stats);
     }
 
-    /**
-     * Metodo helper per aggiungere un foglio personaggio sia al bean che all'entity.
-     */
+
+    //Metodo helper per aggiungere un foglio personaggio sia al bean che all'entity.
+
     private void addCharacterSheetToUser(String name) {
         testUserBean.getCharacterSheets().add(createTestCharacterSheetBean(name));
         testUser.getCharacterSheets().add(createTestCharacterSheetEntity(name));
@@ -72,37 +76,44 @@ class CharacterListControllerTest {
         controller.setCurrentUser(testUserBean);
     }
 
+    //test per verificare se il delete di un personaggio esistente funziona
     @Test
     void testDeleteCharacter_ExistingCharacter() {
-        addCharacterSheetToUser("TestCharacter");
+        addCharacterSheetToUser("TestCharacter"); //aggiungo ad entity e bean di test
 
+        //verifico se l aggiunta ad entrambi sia stata eseguita
         assertEquals(1, testUserBean.getCharacterSheets().size());
         assertEquals(1, testUser.getCharacterSheets().size());
         Session.getInstance().setUserDAO(UserDAOFactory.getInstance().getUserDAO(Session.getInstance().getDB()));
 
-        controller.deleteCharacter("TestCharacter");
+        controller.deleteCharacter("TestCharacter"); //chiamata del controller per il delete
 
+        //mi assicuro che avvenga il delete
         assertEquals(0, testUserBean.getCharacterSheets().size(),
                 "La lista dei CharacterSheetBean dovrebbe essere vuota dopo l'eliminazione");
         assertEquals(0, testUser.getCharacterSheets().size(),
                 "La lista delle entity CharacterSheet dovrebbe essere vuota dopo l'eliminazione");
     }
 
+    //test per verificare il funzionamento del delete di una scheda personaggio non esistente
     @Test
     void testDeleteCharacter_NonExistingCharacter() {
         addCharacterSheetToUser("ExistingCharacter");
 
+        //verifico l aggiunta sia avvenuta correttamente
         assertEquals(1, testUserBean.getCharacterSheets().size());
         assertEquals(1, testUser.getCharacterSheets().size());
 
-        controller.deleteCharacter("NonExistingCharacter");
+        controller.deleteCharacter("NonExistingCharacter");//chiamata al controller per il delete
 
+        //verifico che il delete non sia avvenuto poiche personaggio non esistente
         assertEquals(1, testUserBean.getCharacterSheets().size(),
                 "La lista dei CharacterSheetBean non dovrebbe essere modificata");
         assertEquals(1, testUser.getCharacterSheets().size(),
                 "La lista delle entity CharacterSheet non dovrebbe essere modificata");
     }
 
+    //verifico che il metodo delete funzioni con uno user nullo e che non crei errori
     @Test
     void testDeleteCharacter_NullUser() {
         controller.setCurrentUser(null);
@@ -116,6 +127,7 @@ class CharacterListControllerTest {
                 "La lista delle entity CharacterSheet dovrebbe rimanere invariata se currentUser è null");
     }
 
+    //test per verificare che delete funzioni con una lista nulla e che non crei errori
     @Test
     void testDeleteCharacter_NullCharacterSheetsInUserBean() {
         testUserBean.setCharacterSheets(null);

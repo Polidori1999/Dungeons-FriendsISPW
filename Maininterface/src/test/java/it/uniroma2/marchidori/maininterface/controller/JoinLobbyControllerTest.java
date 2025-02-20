@@ -1,67 +1,69 @@
 package it.uniroma2.marchidori.maininterface.controller;
 
-import it.uniroma2.marchidori.maininterface.control.Converter;
-import it.uniroma2.marchidori.maininterface.entity.Lobby;
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
+import it.uniroma2.marchidori.maininterface.bean.UserBean;
+import it.uniroma2.marchidori.maininterface.control.Converter;
+import it.uniroma2.marchidori.maininterface.control.JoinLobbyController;
+import it.uniroma2.marchidori.maininterface.dao.LobbyDAOMem;
+import it.uniroma2.marchidori.maininterface.entity.Session;
+import it.uniroma2.marchidori.maininterface.entity.User;
+import it.uniroma2.marchidori.maininterface.factory.UserDAOFactory;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class JoinLobbyControllerTest {
 
-    @Test
-    void testEntityToBeanConversion_SingleLobby() {
-        // Supponiamo che nella lobby siano joinati 2 giocatori
-        int joinedCount = 2;
-        Lobby lobby = new Lobby("TestLobby", "30", "Online", 4, "Smith", "https://test", joinedCount);
-        List<Lobby> lobbyList = new ArrayList<>();
-        lobbyList.add(lobby);
+    private JoinLobbyController joinLobbyController;
+    private UserBean currentUserBean;
+    private User currentUser;
+    private LobbyBean lobbyBean;
+    private LobbyDAOMem lobbyDAOMem;
 
+    //////////////////////EDOARDO MARCHIONNI///////////////////////////////////
 
-        List<LobbyBean> beans = Converter.convertLobbyListEntityToBean(lobbyList);
-
-        assertNotNull(beans, "La lista dei LobbyBean non dovrebbe essere null.");
-        assertEquals(1, beans.size(), "La lista dovrebbe contenere un solo LobbyBean.");
-
-        LobbyBean bean = beans.get(0);
-        assertEquals(lobby.getLobbyName(), bean.getName(), "Il nome della lobby deve corrispondere.");
-        assertEquals(lobby.getDuration(), bean.getDuration(), "La durata della lobby deve corrispondere.");
-        assertEquals(lobby.getLiveOnline(), bean.getLiveOnline(), "Il tipo (Live/Online) deve corrispondere.");
-        assertEquals(lobby.getMaxOfPlayers(), bean.getMaxOfPlayers(), "Il numero massimo di giocatori deve corrispondere.");
-        // Verifica che il contatore dei giocatori sia stato convertito correttamente
-        assertEquals(lobby.getJoinedPlayersCount(), bean.getJoinedPlayersCount(), "Il contatore dei giocatori deve corrispondere.");
+    @BeforeEach
+    void setUp() {
+        Session.getInstance().setLobbyDAO(lobbyDAOMem);
+        Session.getInstance().setUserDAO(UserDAOFactory.getInstance().getUserDAO(false, true));
+        currentUserBean = new UserBean("test@example.com", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        currentUser = Converter.userBeanToEntity(currentUserBean);
+        Session.getInstance().setCurrentUser(currentUser);
+        joinLobbyController = new JoinLobbyController();
+        joinLobbyController.setCurrentUser(currentUserBean);
+        lobbyBean = new LobbyBean("TestLobby","Campaign","Live",6,"test","link",4);
     }
 
+    //test per verificare se si aggiunge effettivamente una lobby ai preferiti
     @Test
-    void testEntityToBeanConversion_MultipleLobbies() {
-        int joinedCount1 = 1;
-        int joinedCount2 = 3;
-        Lobby lobby1 = new Lobby("Lobby1", "30", "Online", 4, "prova1", "https://prova2", joinedCount1);
-        Lobby lobby2 = new Lobby("Lobby2", "45", "Live", 6, "prova2", "https://prova2", joinedCount2);
-        List<Lobby> lobbyList = new ArrayList<>();
-        lobbyList.add(lobby1);
-        lobbyList.add(lobby2);
+    void testAddLobbyToFavourite() {
+        currentUser.getFavouriteLobbies().clear();
+        currentUserBean.getFavouriteLobbies().clear();
+        assertTrue(currentUserBean.getFavouriteLobbies().isEmpty(), "Favorites list should be empty initially");
+        assertTrue(currentUser.getFavouriteLobbies().isEmpty(), "Favorites list should be empty initially");
 
-        List<LobbyBean> beans = Converter.convertLobbyListEntityToBean(lobbyList);
+        joinLobbyController.addLobbyToFavourite(lobbyBean);
 
-        assertNotNull(beans, "La lista dei LobbyBean non dovrebbe essere null.");
-        assertEquals(2, beans.size(), "La lista dovrebbe contenere due LobbyBean.");
+        assertEquals(1, currentUserBean.getFavouriteLobbies().size(), "Favorites list should contain one lobby");
+        assertEquals(1, currentUser.getFavouriteLobbies().size(), "Favorites list should contain one lobby");
+    }
 
-        LobbyBean bean1 = beans.get(0);
-        assertEquals(lobby1.getLobbyName(), bean1.getName(), "Il nome della prima lobby deve corrispondere.");
-        assertEquals(lobby1.getDuration(), bean1.getDuration(), "La durata della prima lobby deve corrispondere.");
-        assertEquals(lobby1.getLiveOnline(), bean1.getLiveOnline(), "Il tipo della prima lobby deve corrispondere.");
-        assertEquals(lobby1.getMaxOfPlayers(), bean1.getMaxOfPlayers(), "Il numero massimo di giocatori della prima lobby deve corrispondere.");
-        assertEquals(lobby1.getJoinedPlayersCount(), bean1.getJoinedPlayersCount(), "Il contatore dei giocatori della prima lobby deve corrispondere.");
+    //test per verificare che non si aggiunga più volte la stessa lobby ai preferiti
+    @Test
+    void testAddSameLobbyToFavourite() {
+        // Add the lobby to the favorites first time
+        joinLobbyController.addLobbyToFavourite(lobbyBean);
+        int initialSize = currentUserBean.getFavouriteLobbies().size();
+        int initialSize2 = currentUser.getFavouriteLobbies().size();
 
-        LobbyBean bean2 = beans.get(1);
-        assertEquals(lobby2.getLobbyName(), bean2.getName(), "Il nome della seconda lobby deve corrispondere.");
-        assertEquals(lobby2.getDuration(), bean2.getDuration(), "La durata della seconda lobby deve corrispondere.");
-        assertEquals(lobby2.getLiveOnline(), bean2.getLiveOnline(), "Il tipo della seconda lobby deve corrispondere.");
-        assertEquals(lobby2.getMaxOfPlayers(), bean2.getMaxOfPlayers(), "Il numero massimo di giocatori della seconda lobby deve corrispondere.");
-        assertEquals(lobby2.getJoinedPlayersCount(), bean2.getJoinedPlayersCount(), "Il contatore dei giocatori della seconda lobby deve corrispondere.");
+        // Try to add the same lobby again
+        joinLobbyController.addLobbyToFavourite(lobbyBean);
+
+        // The list should not grow, meaning the same lobby is not added again
+        assertEquals(initialSize, currentUserBean.getFavouriteLobbies().size(), "Duplicate lobby should not be added to favorites");
+        assertEquals(initialSize2, currentUser.getFavouriteLobbies().size(), "Duplicate lobby should not be added to favorites");
     }
 }
