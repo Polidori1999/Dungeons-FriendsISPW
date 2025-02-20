@@ -97,13 +97,10 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
 
         if (creationMode) {
             clearFields();
-            logger.info("CharacterSheetBoundary.initialize: Modalità creazione attiva.");
         } else {
             populateFields(currentBean);
             charName.setEditable(false);
             charName.setFocusTraversable(false);
-            logger.info("CharacterSheetBoundary.initialize: Modalità modifica attiva per personaggio: "
-                    + currentBean.getInfoBean().getName());
         }
     }
 
@@ -146,9 +143,9 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         charClass.setValue(null);
     }
 
-    /**
-     * Cerca il CharacterSheetBean nella lista dell'utente in base al nome.
-     */
+
+    //  Cerca il CharacterSheetBean nella lista dell'utente in base al nome.
+
     private CharacterSheetBean findCharByName(String charName) {
         if (currentUser.getCharacterSheets() == null) {
             return null;
@@ -159,9 +156,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
                 .orElse(null);
     }
 
-    // -------------------------------------------------------------
-    //                 SALVATAGGIO (BOTTONE SAVE)
-    // -------------------------------------------------------------
+    //cliccato il pulsante di save
     @FXML
     private void onClickSaveCharacter(ActionEvent event) throws IOException {
         if (currentBean == null) {
@@ -199,8 +194,6 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
             return;
         }
 
-        logger.info(">>> Personaggio aggiornato con successo: " + currentBean.getInfoBean().getName());
-
         // Chiamata alle funzioni di update o create in base alla modalità
         if (!creationMode) {
             controller.updateChar(oldName, currentBean);
@@ -215,7 +208,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
 
         // Dopo il salvataggio, resetta la selezione e torna alla lista dei personaggi
         currentUser.setSelectedLobbyName(null);
-        changeScene(SceneNames.CHARACTER_LIST);
+        changeScene();
     }
 
 
@@ -231,12 +224,10 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         }
     }
 
-    // -------------------------------------------------------------
-    //                     NAVIGAZIONE (RESTO)
-    // -------------------------------------------------------------
+
     @FXML
     void onClickGoBackToList(ActionEvent event) throws IOException {
-        changeScene(SceneNames.CHARACTER_LIST);
+        changeScene();
     }
 
     @FXML
@@ -253,12 +244,14 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         }
     }
 
+    //funzione per il cambio di scena
     @FXML
-    private void changeScene(String fxml) throws IOException {
+    private void changeScene() throws IOException {
         Stage currentStage = (Stage) characterSheetPane.getScene().getWindow();
-        SceneSwitcher.changeScene(currentStage, fxml, currentUser);
+        SceneSwitcher.changeScene(currentStage, SceneNames.CHARACTER_LIST, currentUser);
     }
 
+    //realizzazione metodi di interfacce userawareinterface e controllerawareinterface
     @Override
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;
