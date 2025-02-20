@@ -33,30 +33,34 @@ public class ManageLobbyController implements UserAwareInterface {
         this.currentUser = user;
     }
 
+    //creo una nuova lobby
     public void createLobby(LobbyBean bean) {
         if (bean == null) {
             LOGGER.log(Level.SEVERE, "ERRORE: Il Bean passato a createLobby() è NULL!");
             return;
         }
         Lobby newlobby = Converter.lobbyBeanToEntity(bean);
+
         if (currentUser != null && currentUser.getJoinedLobbies() != null) {
-            LOGGER.log(Level.INFO, "Aggiungendo lobby a UserBean: {0}", newlobby.getLobbyName());
+            // Aggiunge la lobby alle liste (Bean e Entity)
             currentUser.getJoinedLobbies().add(bean);
             currentEntity.getJoinedLobbies().add(newlobby);
 
-            //add to file sys missing dao repository
 
+            // Salva la lobby appena creata tramite LobbyDAO
             LobbyDAO lobbyDAO=Session.getInstance().getLobbyDAO();
             lobbyDAO.addLobby(newlobby);
+            // Aggiorna i dati dell'utente
             UserDAO userDAO = Session.getInstance().getUserDAO();
             userDAO.updateUsersEntityData(currentEntity);
+
             currentUser.setSelectedLobbyName(null);
-            LOGGER.log(Level.INFO, "Lista attuale delle lobby: {0}", currentUser.getJoinedLobbies());
         } else {
             LOGGER.log(Level.SEVERE, "ERRORE: currentUser è NULL in createLobby()!");
         }
     }
 
+    //aggiorna lobby
     public void updateLobby(String oldName, LobbyBean bean) throws IOException {
         if (currentUser != null && currentUser.getJoinedLobbies() != null) {
             // Cerca la lobby nella lista dello user
@@ -64,19 +68,23 @@ public class ManageLobbyController implements UserAwareInterface {
                 LobbyBean lobbyBean = currentUser.getJoinedLobbies().get(i);
                 // Confronta usando oldName (il nome originale)
                 if (lobbyBean.getName().equals(oldName)) {
+
                     // Converte il bean aggiornato in un'entità Lobby
                     Lobby updatedLobby = Converter.lobbyBeanToEntity(bean);
+
                     // Aggiorna la lobby nella lista dello user
                     currentUser.getJoinedLobbies().set(i, bean);
                     currentEntity.getJoinedLobbies().set(i, updatedLobby);
 
-
+                    // Salva le modifiche tramite LobbyDAO e UserDAO
                     LobbyDAO lobbyDAO = Session.getInstance().getLobbyDAO();
                     lobbyDAO.updateLobby(updatedLobby);
+
                     UserDAO userDAO = Session.getInstance().getUserDAO();
                     userDAO.updateUsersEntityData(currentEntity);
+
+
                     currentUser.setSelectedLobbyName(null);
-                    LOGGER.log(Level.INFO, "Lobby aggiornata correttamente in UserBean e Repository.");
                     return;
                 }
             }
@@ -86,7 +94,7 @@ public class ManageLobbyController implements UserAwareInterface {
         }
     }
 
-
+    //Cerca una lobby per nome nella lista di LobbyBean passata.
     public LobbyBean findLobbyByName(String lobbyName, List<LobbyBean> beans) {
         if (beans == null) {
             return null;
@@ -102,6 +110,7 @@ public class ManageLobbyController implements UserAwareInterface {
         return foundLobby;
     }
 
+    //validate
     public String validate(LobbyBean lobby) {
         StringBuilder errors = new StringBuilder();
 
@@ -123,6 +132,7 @@ public class ManageLobbyController implements UserAwareInterface {
         return errors.toString();
     }
 
+    //verifica se non è vuota
     private static void validateNotEmpty(List<String> value, List<String> fieldName, StringBuilder errors) {
         for(int i = 0; i < value.size(); i++) {
             if (value.get(i) == null || value.get(i).trim().isEmpty()) {

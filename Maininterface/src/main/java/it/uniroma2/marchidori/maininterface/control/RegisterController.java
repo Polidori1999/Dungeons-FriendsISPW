@@ -22,24 +22,23 @@ public class RegisterController implements UserAwareInterface {
         }
     }
 
+
     public boolean register(String email, String password) {
         if (logger.isLoggable(Level.INFO)) {
             logger.info(String.format("Chiamato register() con: %s", email));
         }
 
         try {
-            // Questo metodo può lanciare AccountAlreadyExistsException
+            // Chiamata al servizio che si occupa di creare un nuovo account.
             userService.registerUser(email, password);
             // Se non è stata lanciata alcuna eccezione, la registrazione è andata a buon fine.
             return true;
         } catch (AccountAlreadyExistsException e) {
             // GESTIONE dell’eccezione: log e segnalazione di fallimento
             logger.warning("Tentativo di registrazione fallito: " + e.getMessage());
-            // Qui potresti anche salvare un messaggio di errore in una variabile d'istanza
-            // e farla leggere alla Boundary, se ti serve
             return false;
         } catch (Exception e) {
-            // Catch generico (opzionale) per altre eccezioni non previste
+            //metti caso va male
             logger.severe("Errore imprevisto durante la registrazione: " + e.getMessage());
             return false;
         }

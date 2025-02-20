@@ -30,8 +30,9 @@ public class ManageLobbyListController implements UserAwareInterface {
 
     public void leaveLobby(LobbyBean lobbyBean) {
 
-        // 1. Recupera la lobby dal repository (versione persistente) cercandola per nome.
+        // 1. Recupera la lobby dal repository cercandola per nome
         LobbyDAO lobbyDao=Session.getInstance().getLobbyDAO();
+
         List<Lobby> repoLobbies = lobbyDao.getLobby();
         Lobby repoLobby = null;
         for (Lobby l : repoLobbies) {
@@ -40,12 +41,13 @@ public class ManageLobbyListController implements UserAwareInterface {
                 break;
             }
         }
+        // Se non troviamo la lobby corrispondente, usciamo dal metodo.
         if (repoLobby == null) {
             return;
         }
 
 
-        // 2. Decrementa il contatore della lobby (solo sulla versione repository)
+        // 2. Decrementa il contatore della lobby
         int currentCount = repoLobby.getJoinedPlayersCount();
         if(repoLobby.getOwner().equals(currentUser.getEmail())){
             if(!lobbyDao.deleteLobby(repoLobby.getLobbyName())){
@@ -53,7 +55,7 @@ public class ManageLobbyListController implements UserAwareInterface {
                 return;
             }
         }else if (currentCount > 0) {
-            // 3. Aggiorna il file della lobby: elimina la riga esistente e aggiungi quella aggiornata.
+                //Aggiorna il file della lobby: elimina la riga esistente e aggiungi quella aggiornata.
                 repoLobby.setJoinedPlayersCount(currentCount - 1);
                 if(!lobbyDao.deleteLobby(repoLobby.getLobbyName())){
                     LOGGER.severe("delete lobby failed");
@@ -66,15 +68,16 @@ public class ManageLobbyListController implements UserAwareInterface {
         } else {
             return;
         }
+        // Rimuove la lobby dalla lista delle joinedLobbies del currentUser bean
         if (currentUser.getJoinedLobbies() != null) {
             currentUser.getJoinedLobbies().removeIf(lobby -> lobby.getName().equals(lobbyBean.getName()));
         }
 
-// Rimuovi la lobby dalla lista delle lobby joinate dell'entity (User)
+        // Rimuovi la lobby dalla lista delle lobby joinate dell'entity
         if (currentEntity.getJoinedLobbies() != null) {
             currentEntity.getJoinedLobbies().removeIf(lobby -> lobby.getLobbyName().equals(lobbyBean.getName()));
         }
-        // 5. Aggiorna la persistenza dell'utente.
+        //Aggiorna la persistenza dell'utente.
         UserDAO dao = Session.getInstance().getUserDAO();
         dao.updateUsersEntityData(currentEntity);
 

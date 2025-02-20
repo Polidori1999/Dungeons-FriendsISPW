@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 
 
 public class CharacterListController implements UserAwareInterface {
+    //entita user presa dalla sessione
     private final User currentEntity = Session.getInstance().getCurrentUser();
     private UserBean currentUser;
     private final Jout jout = new Jout("CharacterListController");
@@ -37,13 +38,12 @@ public class CharacterListController implements UserAwareInterface {
                     currentEntity.getCharacterSheets().remove(i);
                     UserDAO dao = Session.getInstance().getUserDAO();
                     dao.updateUsersEntityData(currentEntity);
-                    logger.info(() -> ">>> DEBUG: Personaggio eliminato dallo UserBean: " + characterName);
                     return;
                 }
             }
-            logger.log(Level.SEVERE, () -> ">>> ERRORE: Nessun personaggio trovato con il nome: " + characterName);
+            logger.log(Level.SEVERE, () -> "ERRORE: Nessun personaggio trovato con il nome: " + characterName);
         } else {
-            logger.severe(">>> ERRORE: currentUser o lista personaggi NULL in deleteCharacter()");
+            logger.severe("ERRORE: currentUser o lista personaggi NULL in deleteCharacter()");
         }
     }
 
@@ -82,7 +82,6 @@ public class CharacterListController implements UserAwareInterface {
             logger.severe(">>> ERRORE: currentEntity o la sua lista di CharacterSheet è null in getCharacterSheets()");
         }
         jout.print("getCharacterSheets restituisce " + beans.size() + " elementi.");
-        beans.forEach(b -> logger.info(" - " + b.getInfoBean().getName()));//display log
         return beans;
     }
 

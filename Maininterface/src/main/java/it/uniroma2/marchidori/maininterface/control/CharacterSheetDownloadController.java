@@ -11,7 +11,7 @@ public class CharacterSheetDownloadController {
 
     public CharacterSheetDownloadTask getDownloadTask(CharacterSheetBean bean) {
         try {
-            // Ottieni la cartella di download (ad es. Downloads dell'utente)
+            // Ottieni la cartella di download
             String userHome = System.getProperty("user.home");
             String downloadFolder = Paths.get(userHome, "Downloads").toString();
             // Crea il nome del file

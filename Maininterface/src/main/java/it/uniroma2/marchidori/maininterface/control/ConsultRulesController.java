@@ -20,7 +20,7 @@ public class ConsultRulesController implements UserAwareInterface {
     private Jout jout = new Jout(this.getClass().getSimpleName());
 
     public ConsultRulesController() {
-        // Empty constructor
+        //void
     }
 
     @Override
@@ -36,9 +36,7 @@ public class ConsultRulesController implements UserAwareInterface {
         return FXCollections.observableArrayList(ruleBookBeans);
     }
 
-    /**
-     * Prova ad aprire il file associato al percorso indicato, se esiste.
-     */
+    //apertura file
     public void openFileIfExists(String filePath) {
         if (filePath == null || filePath.isEmpty()) {
             jout.print("Errore: Il percorso del file è vuoto o nullo.");
@@ -63,26 +61,6 @@ public class ConsultRulesController implements UserAwareInterface {
         }
     }
 
-    /**
-     * Aggiorna lo stato del RuleBook nel repository.
-     * Cerca il RuleBook con lo stesso nome e imposta il flag obtained in base al bean aggiornato.
-     * Infine persiste le modifiche.
-     *
-     * @param updatedBean Il RuleBookBean aggiornato.
-     */
-    public void updateRuleBook(RuleBookBean updatedBean) {
-        // Ottieni la lista corrente dei RuleBook dal repository
-        List<RuleBook> ruleBooks = RulesRepository.getAllBooks();
-        // Cerca il RuleBook da aggiornare (corrispondenza per nome)
-        for (RuleBook rb : ruleBooks) {
-            if (rb.getRulesBookName().equals(updatedBean.getRulesBookName())) {
-                rb.setObtained(true);
-                break;
-            }
-        }
-        // Persiste le modifiche: si assume che il repository offra questo metodo.
-        RulesRepository.setAllBooks(ruleBooks);
-    }
 
 
     public void startPayPalPayment(double amount) {
@@ -90,22 +68,22 @@ public class ConsultRulesController implements UserAwareInterface {
             RulesRepository.getAllBooks().get(1).setObtained(true);
             PayPalPaymentController payCtrl = new PayPalPaymentController();
 
-            // 1) Ottieni access token
+            //Ottieni access token
             String accessToken = payCtrl.getAccessToken();
             jout.print("AccessToken = " + accessToken);
 
-            // 2) Crea ordine (EUR e importo a piacere)
+            //Crea ordine
             String createOrderResponse = payCtrl.createOrder(accessToken, "EUR", String.valueOf(amount));
             jout.print("createOrderResponse = " + createOrderResponse);
 
-            // 3) Estrai link "approve"
+            //Estrai link "approve"
             String approveLink = payCtrl.extractApproveLink(createOrderResponse);
             if (approveLink == null) {
                 jout.print("Impossibile trovare il link di approvazione nel JSON di risposta PayPal");
                 return;
             }
 
-            // 4) Apri il browser con il link PayPal
+            // Apri il browser con il link PayPal
             Desktop desktop = Desktop.getDesktop();
             if (desktop.isSupported(Desktop.Action.BROWSE)) {
                 desktop.browse(new java.net.URI(approveLink));
@@ -116,7 +94,6 @@ public class ConsultRulesController implements UserAwareInterface {
         } catch (InterruptedException e) {
             // Re-interrupt the thread if an InterruptedException is caught
             Thread.currentThread().interrupt();  // Preserve the interrupt status
-            jout.print("helo");
         } catch (IOException | PayPalPaymentException | URISyntaxException e) {
             jout.print("help");
         }

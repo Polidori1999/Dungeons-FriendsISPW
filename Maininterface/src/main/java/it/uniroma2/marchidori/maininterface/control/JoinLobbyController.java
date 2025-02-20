@@ -15,7 +15,7 @@ import javafx.collections.FXCollections;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
+
 import java.util.logging.Logger;
 
 public class JoinLobbyController implements UserAwareInterface {
@@ -41,10 +41,8 @@ public class JoinLobbyController implements UserAwareInterface {
         return errors.toString();
     }
 
-    /**
-     * Aggiunge l'utente corrente alla lobby se c'è spazio disponibile.
-     * Utilizza un contatore (joinedPlayersCount) per tenere traccia del numero di giocatori.
-     */
+
+    //Aggiunge l'utente corrente alla lobby se c'è spazio disponibile.
     public void addLobby(LobbyBean lobbyBean) {
         // Recupera il contatore corrente
         int currentCount = lobbyBean.getJoinedPlayersCount();
@@ -63,6 +61,7 @@ public class JoinLobbyController implements UserAwareInterface {
         if (currentUser.getJoinedLobbies() == null) {
             currentUser.setJoinedLobbies(FXCollections.observableArrayList());
         }
+
         currentUser.getJoinedLobbies().add(lobbyBean);
         currentEntity.getJoinedLobbies().add(Converter.lobbyBeanToEntity(lobbyBean));
 
@@ -83,29 +82,29 @@ public class JoinLobbyController implements UserAwareInterface {
         // Aggiorna la persistenza dell'utente
         dao.updateUsersEntityData(currentEntity);
 
-        logger.log(Level.INFO, "Lobby aggiornata! Numero giocatori: {0}", lobbyBean.getJoinedPlayersCount());
     }
 
-    /**
-     * Aggiunge la lobby ai preferiti dell'utente.
-     */
+
+    //aggiunge la lobby ai preferiti
     public void addLobbyToFavourite(LobbyBean lobbyBean) {
         if (currentUser.getFavouriteLobbies() == null) {
             currentUser.setFavouriteLobbies(new ArrayList<>());
         }
+        //aggiungo nel bean
         currentUser.getFavouriteLobbies().add(lobbyBean);
         // Aggiorna anche la lista nell'entity
         currentEntity.getFavouriteLobbies().add(Converter.lobbyBeanToEntity(lobbyBean));
+        //aggiorno il dao
         UserDAO dao = Session.getInstance().getUserDAO();
         dao.updateUsersEntityData(currentEntity);
     }
 
-    /**
-     * Filtra le lobby in base ai parametri.
-     */
+    //filtra le lobby in base ai parametri
     public List<LobbyBean> filterLobbies(String type, String duration, String searchQuery)  {
         List<LobbyBean> result = new ArrayList<>();
+        //prende il dao dalla sessione
         LobbyDAO lobbyDAO = Session.getInstance().getLobbyDAO();
+        //ottiene le lobby
         for (Lobby lob : lobbyDAO.getLobby()) {
             boolean matchesType = (type == null || type.isEmpty() || lob.getLiveOnline().equals(type));
             boolean matchesDuration = (duration == null || duration.isEmpty() || lob.getDuration().equals(duration));
@@ -119,9 +118,8 @@ public class JoinLobbyController implements UserAwareInterface {
         return result;
     }
 
-    /**
-     * Verifica se una lobby è nei preferiti dell'utente.
-     */
+
+    //Verifica se una lobby è nei preferiti dell'utente.
     public boolean isLobbyFavorite(String lobbyName, List<LobbyBean> favouriteLobbies) {
         if (favouriteLobbies == null) {
             return false;
@@ -130,9 +128,8 @@ public class JoinLobbyController implements UserAwareInterface {
                 .anyMatch(lobby -> lobby.getName().equals(lobbyName));
     }
 
-    /**
-     * Rimuove una lobby dai preferiti dell'utente dato il nome.
-     */
+
+    //rimuove la lobby dai preferiti
     public boolean removeLobbyByName(String name) {
         if (currentUser.getFavouriteLobbies() == null || name == null) {
             return false;
@@ -142,9 +139,8 @@ public class JoinLobbyController implements UserAwareInterface {
         return removed;
     }
 
-    /**
-     * Controlla se l'utente ha già joinato una lobby.
-     */
+
+    //controlla se l'utente ha joinato
     public boolean isLobbyJoined(LobbyBean lobby) {
         return currentUser != null &&
                 currentUser.getJoinedLobbies() != null &&
@@ -157,6 +153,7 @@ public class JoinLobbyController implements UserAwareInterface {
         this.currentUser = user;
     }
 
+    //Restituisce la lista di Lobby (Entity) dal dao.
     public List<Lobby> getLobbies() {
         LobbyDAO lobbyDAO = Session.getInstance().getLobbyDAO();
         return lobbyDAO.getLobby();

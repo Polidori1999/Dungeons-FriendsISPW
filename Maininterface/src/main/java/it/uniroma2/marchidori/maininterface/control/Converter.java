@@ -17,29 +17,23 @@ import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Classe che fornisce i metodi di conversione da Bean a Entity.
- */
+
 public class Converter {
 
     private Converter(){
         // empty
     }
 
-    /**
-     * Metodo principale: converte un oggetto UserBean in un oggetto User.
-     *
-     * @param userBean l'oggetto bean da convertire
-     * @return l'oggetto entity User corrispondente oppure null se userBean è null
-     */
+
+    //converte user bean in user entity
     public static User userBeanToEntity(UserBean userBean) {
         if (userBean == null) {
             return null;
         }
 
-        // Campi semplici
+
         String email = userBean.getEmail();
-        String password = userBean.getPassword();  // Assicurati che la password venga passata
+        String password = userBean.getPassword();
         RoleEnum role = userBean.getRoleBehavior();
 
         // Conversione CharacterSheetBean -> CharacterSheet
@@ -66,9 +60,8 @@ public class Converter {
         }
     }
 
-    /**
-     * Converte un CharacterSheetBean in un CharacterSheetEntity.
-     */
+
+    //Converte un CharacterSheetBean in un CharacterSheetEntity.
     public static CharacterSheet characterSheetBeanToEntity(CharacterSheetBean csBean) {
         if (csBean == null) {
             return null;
@@ -80,15 +73,12 @@ public class Converter {
         return new CharacterSheet(characterInfo, characterStats);
     }
 
-    /**
-     * Converte un CharacterInfoBean in un CharacterInfo.
-     */
+
+    //Converte un CharacterInfoBean in un CharacterInfo.
     public static CharacterInfo characterInfoBeanToEntity(CharacterInfoBean infoBean) {
         if (infoBean == null) {
             return null;
         }
-        // Usa il costruttore di CharacterInfo
-        // (String name, String race, int age, String classe, int level)
         return new CharacterInfo(
                 infoBean.getName(),
                 infoBean.getRace(),
@@ -98,15 +88,13 @@ public class Converter {
         );
     }
 
-    /**
-     * Converte un CharacterStatsBean in un CharacterStats.
-     */
+
+    //Converte un CharacterStatsBean in un CharacterStats.
     public static CharacterStats characterStatsBeanToEntity(CharacterStatsBean statsBean) {
         if (statsBean == null) {
             return null;
         }
         // Usa il costruttore di CharacterStats
-        // (int strength, int dexterity, int intelligence, int wisdom, int charisma, int constitution)
         return new CharacterStats(
                 statsBean.getStrength(),
                 statsBean.getDexterity(),
@@ -117,9 +105,8 @@ public class Converter {
         );
     }
 
-    /**
-     * Converte un LobbyBean in un Lobby.
-     */
+
+    //Converte un LobbyBean in un Lobby
     public static Lobby lobbyBeanToEntity(LobbyBean lobbyBean) {
         if (lobbyBean == null) {
             return null;
@@ -135,14 +122,14 @@ public class Converter {
         );
     }
 
-    /**
-     * Converte una lista che può contenere LobbyBean o Lobby (già convertite) in una lista di Lobby.
-     */
+
+    //Converte una lista che può contenere LobbyBean in una lista di Lobby.
     public static List<Lobby> convertLobbyList(List<LobbyBean> inputList) {
         List<Lobby> result = new ArrayList<>();
         if (inputList == null) {
             return result;
         }
+        //per ogni bean esegue conversione
         for (LobbyBean bean : inputList) {
             result.add(lobbyBeanToEntity(bean));
         }
@@ -150,29 +137,8 @@ public class Converter {
     }
 
 
-    public static Lobby stringToLobby(String lobbyData) {
-        if (lobbyData == null || lobbyData.isEmpty()) {
-            return null;
-        }
 
-        // Suddivide la stringa in parti usando ";" come delimitatore.
-        String[] dataParts = lobbyData.split(";");
-
-        // Recupera i vari campi:
-        // [0] lobbyName, [1] duration, [2] liveOnline, [3] maxOfPlayers, [4] owner, [5] infoLink, [6] joinedPlayersCount
-        String lobbyName = dataParts.length > 0 ? dataParts[0] : "";
-        String duration = dataParts.length > 1 ? dataParts[1] : "";
-        String type = dataParts.length > 2 ? dataParts[2] : "";
-        int maxOfPlayers = dataParts.length > 3 ? Integer.parseInt(dataParts[3]) : 0;
-        String owner = dataParts.length > 4 ? dataParts[4] : "";
-        String infoLink = dataParts.length > 5 ? dataParts[5] : "";
-        int joinedPlayersCount = dataParts.length > 6 ? Integer.parseInt(dataParts[6]) : 0;
-
-        return new Lobby(lobbyName, duration, type, maxOfPlayers, owner, infoLink, joinedPlayersCount);
-    }
-
-    //////////////////////////////////////////////
-
+    //converte user in user bean
     public static UserBean convert(User user) {
         if (user == null) {
             return null;
@@ -194,15 +160,7 @@ public class Converter {
         );
     }
 
-    /**
-     * =====================
-     *     METODI LOBBY
-     * =====================
-     */
-
-    /**
-     * Converte un singolo oggetto Lobby (entity) in un oggetto LobbyBean (bean).
-     */
+    //converte lobby entity in lobby bean
     public static LobbyBean lobbyEntityToBean(Lobby lobby) {
         if (lobby == null) {
             return null;
@@ -219,10 +177,8 @@ public class Converter {
     }
 
 
-    /**
-     * Converte una lista di Lobby in una lista di LobbyBean.
-     * Qui usiamo new ArrayList<>(...) per rendere la lista mutabile.
-     */
+
+    //converte lista di lobby in lista di lobbybean
     public static List<LobbyBean> convertLobbyListEntityToBean(List<Lobby> lobbies) {
         if (lobbies == null) {
             return new ArrayList<>();
@@ -234,15 +190,8 @@ public class Converter {
         return result;
     }
 
-    /*
-     * =====================
-     *  METODI CHAR-SHEET
-     * =====================
-     */
 
-    /**
-     * Converte un singolo CharacterSheet (entity) in CharacterSheetBean (bean).
-     */
+    //converte charactersheet entity in charactersheet bean
     public static CharacterSheetBean characterSheetEntityToBean(CharacterSheet sheet) {
         if (sheet == null) {
             return null;
@@ -279,13 +228,10 @@ public class Converter {
         return new CharacterSheetBean(infoBean, statsBean);
     }
 
-    /**
-     * Converte una lista di CharacterSheet in una lista di CharacterSheetBean.
-     * Anche qui restituiamo una nuova ArrayList per garantire la mutabilità.
-     */
+
+    //converte una lista di CharacterSheet in una lista di CharacterSheetBean.
     public static List<CharacterSheetBean> convertCharacterSheetList(List<CharacterSheet> sheets) {
         if (sheets == null) {
-            // Puoi anche usare List.of() se vuoi una lista immutabile vuota
             return new ArrayList<>();
         }
         ArrayList<CharacterSheetBean> result = new ArrayList<>();

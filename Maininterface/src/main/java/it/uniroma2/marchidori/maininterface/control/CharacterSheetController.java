@@ -15,7 +15,7 @@ public class CharacterSheetController implements UserAwareInterface {
 
     private UserBean currentUser;
     private final Jout jout = new Jout("CharacterSheetController");
-
+    //prendo lo user dalla session
     private User currentEntity = Session.getInstance().getCurrentUser();
 
     private static final Logger logger = Logger.getLogger(CharacterSheetController.class.getName());
@@ -34,11 +34,9 @@ public class CharacterSheetController implements UserAwareInterface {
         logger.info(() -> "CharacterSheetController creato con UserBean: " + this.currentUser);
     }
 
-    /**
-     * Crea un nuovo personaggio, partendo dal Bean.
-     * Converte il CharacterSheetBean (spezzato in info e ability)
-     * in una Entity "CharacterSheet" e la aggiunge alla lista in memoria.
-     */
+
+    //Crea un nuovo personaggio, partendo dal Bean.
+
     public void createChar(CharacterSheetBean characterSheetBean) {
         // Aggiungi il nuovo character sheet alla lista dell'utente
         currentUser.getCharacterSheets().add(characterSheetBean);
@@ -47,17 +45,14 @@ public class CharacterSheetController implements UserAwareInterface {
 
         // Log: stampa il numero di personaggi attuali e i loro nomi
         jout.print("Dopo createChar, currentUser ha " + currentUser.getCharacterSheets().size() + " personaggi.");
-        // Ora aggiorna il file (usa updateUsersEntityData per riscrivere completamente il file)
+        // Ora aggiorna il file
         UserDAO dao = Session.getInstance().getUserDAO();
         dao.updateUsersEntityData(currentEntity);
     }
 
 
 
-    /**
-     * Aggiorna un personaggio esistente (cerca per nome).
-     * Usa i campi di CharacterSheetBean (spezzati in info e ability).
-     */
+    //aggiorna personaggio esistente
     public void updateChar(String oldName, CharacterSheetBean characterSheetBean) {
         if (currentUser != null && currentUser.getCharacterSheets() != null) {
             boolean found = false;
@@ -70,8 +65,8 @@ public class CharacterSheetController implements UserAwareInterface {
                     currentUser.getCharacterSheets().set(i, characterSheetBean);
                     // Converte il bean aggiornato in un'entità CharacterSheet
                     CharacterSheet updatedCharacter = Converter.characterSheetBeanToEntity(characterSheetBean);
-                    // Aggiorna la lobby nella lista dello user
 
+                    //update
                     currentEntity.getCharacterSheets().set(i, updatedCharacter);
                     found=true;
                     break;
@@ -81,6 +76,7 @@ public class CharacterSheetController implements UserAwareInterface {
                 logger.log(Level.SEVERE,()->"Errore nessun personaggio trovato");
                 return;
             }
+            //aggiorno i dati tramite DAO
             UserDAO userDAO = Session.getInstance().getUserDAO();
             userDAO.updateUsersEntityData(currentEntity);
 
@@ -91,11 +87,8 @@ public class CharacterSheetController implements UserAwareInterface {
         }
     }
 
-    // -------------------------------------------------------------
-    //                      METODI PRIVATI
-    // -------------------------------------------------------------
 
-
+    //validazione dei campi
     public String validate(CharacterSheetBean characterSheet) {
         StringBuilder errors = new StringBuilder();
 
@@ -118,26 +111,14 @@ public class CharacterSheetController implements UserAwareInterface {
         return errors.toString();
     }
 
-    /**
-     * Verifica che il valore testuale non sia null o vuoto.
-     *
-     * @param value il valore da controllare
-     * @param fieldName il nome del campo (per il messaggio di errore)
-     * @param errors lo StringBuilder su cui appendere eventuali errori
-     */
+
     private static void validateNotEmpty(String value, String fieldName, StringBuilder errors) {
         if (value == null || value.trim().isEmpty()) {
             errors.append(fieldName).append(" non può essere vuoto.\n");
         }
     }
 
-    /**
-     * Verifica che un valore numerico sia compreso tra min e max (inclusi).
-     *
-     * @param value     il valore da controllare
-     * @param fieldName il nome del campo (per il messaggio di errore)
-     * @param errors    lo StringBuilder su cui appendere eventuali errori
-     */
+
     private static void validateRange(int value, String fieldName, StringBuilder errors) {
         if (value < 1 || value > 20) {
             errors.append(fieldName)

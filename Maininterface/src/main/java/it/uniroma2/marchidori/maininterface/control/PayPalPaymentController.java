@@ -35,9 +35,9 @@ public class PayPalPaymentController {
             clientId = properties.getProperty("pp.user");
             clientSecret = properties.getProperty("pp.password");
         } catch (IOException e) {
-            // Gestisci l'eccezione qui
+
             jout.print("IO exception thrown");
-            throw e;  // Rilancia l'eccezione se necessario
+            throw e;
         }
 
         String auth = clientId + ":" + clientSecret;
@@ -67,11 +67,8 @@ public class PayPalPaymentController {
     }
 
 
-    /**
-     * Crea un ordine di pagamento su PayPal (v2/checkout/orders) con importo e valuta specificati.
-     * Restituisce la **risposta grezza** in formato JSON. In questa risposta,
-     * ci saranno i link da cui estrarre l'URL "approve" (dove l'utente deve andare per pagare).
-     */
+
+    //Crea un ordine di pagamento su PayPal
     public String createOrder(String accessToken, String currency, String amount)
             throws IOException, InterruptedException, PayPalPaymentException {
 
@@ -107,16 +104,7 @@ public class PayPalPaymentController {
         }
     }
 
-    /**
-     * Esempio di metodo per estrarre l'URL di approvazione dal JSON di risposta
-     * rest. Ritorna `null` se non trovato.
-     *
-     * Nel JSON troverai un array "links" contenente oggetti con "rel":"approve".
-     * Qualcosa tipo:
-     *  "links": [
-     *    { "href": "...", "rel": "approve", "method": "GET" }
-     *  ]
-     */
+    //Esempio di metodo per estrarre l'URL di approvazione dal JSON di risposta
     public String extractApproveLink(String createOrderResponse) {
         String relApprove = "\"rel\":\"approve\"";
         int index = createOrderResponse.indexOf(relApprove);
