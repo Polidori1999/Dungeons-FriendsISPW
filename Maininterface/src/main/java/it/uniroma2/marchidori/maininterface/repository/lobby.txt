@@ -1,1 +1,2 @@
-
+prova;One-Shot;Live;4;prova@example;info;0
+LobbyVideo;One-Shot;Live;4;admin;https://example;1

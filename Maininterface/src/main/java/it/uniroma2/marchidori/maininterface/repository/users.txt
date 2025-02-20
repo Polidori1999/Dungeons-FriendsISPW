@@ -1,0 +1,3 @@
+1,$2a$10$X2J2faWEF40rXe3ddXEaU.K4EnX1RNuPFsydNGmcT2jNw4NeBUzBi
+admin,$2a$10$eZEwWYy8ptitFQjAxVTbQebfmYC/GhGH0LBdU8bx91MmKRkz10.vm
+prova@example,$2a$10$qBcp0HtH4DJc3qSdLVmyU.nivI/rBNtFBpV8Beute4Wj/S1Z/C6g6

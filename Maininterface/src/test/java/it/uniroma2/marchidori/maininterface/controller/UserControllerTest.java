@@ -11,6 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserControllerTest {
 
+    ////////////////////////////////Edoardo Marchionni/////////////////////////////////////
+
+
     private final User currentDm = new User("test",DM,null,null,null);
     private final User currentPlayer = new User("test",PLAYER,null,null,null);
 
@@ -41,6 +44,5 @@ class UserControllerTest {
         userController.switchRole(null);
         assertEquals(PLAYER, currentPlayer.getRoleBehavior());
     }
-
 
 }

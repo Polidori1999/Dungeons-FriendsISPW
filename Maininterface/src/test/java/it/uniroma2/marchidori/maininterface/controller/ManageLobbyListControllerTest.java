@@ -15,11 +15,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Esempio di test per ManageLobbyListController senza utilizzo di Mockito.
- * Creiamo mini-implementazioni di LobbyDAO e UserDAO come classi interne
- * e popolate “a mano” per simulare i comportamenti.
- */
+////////////////////////////////Leonardo Polidori/////////////////////////////////////
+
+
+
 class ManageLobbyListControllerTest {
 
     private ManageLobbyListController controllerUnderTest;
@@ -57,9 +56,7 @@ class ManageLobbyListControllerTest {
         controllerUnderTest.setCurrentUser(testUserBean);
     }
 
-    /**
-     * Verifica che getJoinedLobbies() ritorni vuota se l'utente non ha joinato nessuna lobby.
-     */
+
     @Test
     void testGetJoinedLobbies_Empty() {
         List<LobbyBean> result = controllerUnderTest.getJoinedLobbies();
@@ -67,9 +64,7 @@ class ManageLobbyListControllerTest {
         assertTrue(result.isEmpty(), "La lista di lobby dovrebbe essere vuota se l'utente non ne ha nessuna.");
     }
 
-    /**
-     * Verifica che getJoinedLobbies() ritorni correttamente le lobby a cui l'utente ha preso parte.
-     */
+
     @Test
     void testGetJoinedLobbies_SomeLobbies() {
         // Aggiungiamo qualche lobby all'utente e aggiorniamo il bean
@@ -85,17 +80,7 @@ class ManageLobbyListControllerTest {
         assertEquals("LobbyB", result.get(1).getName());
     }
 
-    /**
-     * Testiamo leaveLobby() quando l'utente NON è l'owner della lobby.
-     * Ci aspettiamo che venga decrementato joinedPlayersCount e rimossa la lobby dalle liste dell'utente.
-     */
 
-
-    /**
-     * Se l'utente è owner della lobby, la lobby viene totalmente eliminata dal repository.
-
-     * Se la lobby non esiste, non succede nulla.
-     */
     @Test
     void testLeaveLobby_LobbyNotFound(){
         // Non creiamo nessuna lobby nel DAO
@@ -113,6 +98,4 @@ class ManageLobbyListControllerTest {
         // L'utente bean rimane invariato
         assertEquals(1, testUserBean.getJoinedLobbies().size());
     }
-
-
 }
