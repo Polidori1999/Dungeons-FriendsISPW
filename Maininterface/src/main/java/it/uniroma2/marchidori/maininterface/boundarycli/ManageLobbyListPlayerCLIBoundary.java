@@ -24,6 +24,10 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
     private final Jout jout = new Jout("ManageLobbyListPlayerCLIBoundary");
     protected LobbyBean pendingDeleteBean;
 
+    // Costanti per la stampa tabellare (header + riga)
+    private static final String TABLE_HEADER_FORMAT = "%-3s %-20s %-15s %-10s %-10s";
+    private static final String TABLE_ROW_FORMAT    = "%-3d %-20s %-15s %-10s %-10s";
+
     @Override
     public void run() throws IOException {
         if (!initBoundary()) {
@@ -35,7 +39,7 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
             displayMenu();
             String input = prompt("Scegli un'opzione: ");
             exit = processInput(input);
-            jout.print(""); // Riga vuota per separare le iterazioni
+            jout.print(""); // Riga vuota per separare iterazioni
         }
         changeScene(SceneNames.HOME);
     }
@@ -52,13 +56,21 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
     protected void displayLobbyList() {
         jout.print("=== Lista Lobby Iscritte ===");
         if (data.isEmpty()) {
+            // Se la lista è vuota, stampo e basta
             jout.print("Non sei iscritto a nessuna lobby.");
         } else {
-            jout.print(String.format("%-3s %-20s %-15s %-10s %-10s", "No", "Nome", "Numero Giocatori", "Durata", "Online"));
+            // Stampo header
+            jout.print(String.format(TABLE_HEADER_FORMAT,
+                    "No", "Nome", "Num Giocatori", "Durata", "Online"));
+            // Stampo le righe
             int i = 1;
             for (LobbyBean lobby : data) {
-                jout.print(String.format("%-3d %-20s %-15s %-10s %-10s",
-                        i, lobby.getName(), lobby.getMaxOfPlayers(), lobby.getDuration(), lobby.getLiveOnline()));
+                jout.print(String.format(TABLE_ROW_FORMAT,
+                        i,
+                        lobby.getName(),
+                        lobby.getMaxOfPlayers(),
+                        lobby.getDuration(),
+                        lobby.getLiveOnline()));
                 i++;
             }
         }
@@ -94,25 +106,41 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
     }
 
     protected void handleLeaveLobby() {
-        if (data.isEmpty()) {
-            jout.print("Non sei iscritto a nessuna lobby.");
+        if (checkNoLobby()) {
             return;
         }
         String idxStr = prompt("Inserisci il numero della lobby da cui uscire: ");
+        int index;
+        try {
+            index = Integer.parseInt(idxStr);
+        } catch (NumberFormatException e) {
+            jout.print("Input non valido.");
+            return;
+        }
 
-            int index = Integer.parseInt(idxStr);
-            if (index < 1 || index > data.size()) {
-                jout.print("Indice non valido.");
-                return;
-            }
-            pendingDeleteBean = data.get(index - 1);
-            String conf = prompt("Sei sicuro di voler lasciare la lobby '" + pendingDeleteBean.getName() + "'? (y/n): ");
-            if (conf.equalsIgnoreCase("y")) {
-                processLeave(pendingDeleteBean);
-                jout.print("Lobby lasciata.");
-            } else {
-                jout.print("Operazione annullata.");
-            }
+        if (index < 1 || index > data.size()) {
+            jout.print("Indice non valido.");
+            return;
+        }
+        pendingDeleteBean = data.get(index - 1);
+        String conf = prompt("Sei sicuro di voler lasciare la lobby '" + pendingDeleteBean.getName() + "'? (y/n): ");
+        if (conf.equalsIgnoreCase("y")) {
+            processLeave(pendingDeleteBean);
+            jout.print("Lobby lasciata.");
+        } else {
+            jout.print("Operazione annullata.");
+        }
+    }
+
+    /**
+     * Controlla se la lista 'data' è vuota. In tal caso stampa un messaggio e restituisce true.
+     */
+    private boolean checkNoLobby() {
+        if (data.isEmpty()) {
+            jout.print("Non sei iscritto a nessuna lobby.");
+            return true;
+        }
+        return false;
     }
 
     protected void processLeave(LobbyBean lobbyToLeave) {
