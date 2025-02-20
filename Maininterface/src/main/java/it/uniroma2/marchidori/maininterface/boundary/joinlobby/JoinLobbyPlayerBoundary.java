@@ -37,12 +37,12 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
                                 controller.addLobby(lobbyBean);
                                 Platform.runLater(() -> joinButtonColumn.getTableView().refresh());
                             },
-                            () -> logger.info("Azione annullata o scaduta.")
+                            this::onCancel
                     );
                 }
         );
 
-        // Setup dynamic button for adding/removing lobby from favourites
+        // Setup per il bottone dinamico per aggiungere/rimuovere lobby dai favoriti
         TableColumnUtils.<LobbyBean>setupDynamicButtonColumn(
                 favouriteButton, // Assicurarsi che sia TableColumn<LobbyBean, Button>
                 lobbyBean -> controller.isLobbyFavorite(lobbyBean.getName(), currentUser.getFavouriteLobbies())
@@ -64,4 +64,8 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
         );
     }
 
+
+    private void onCancel() {
+        //empty method
+    }
 }

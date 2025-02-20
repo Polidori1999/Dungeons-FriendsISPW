@@ -29,7 +29,6 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
     @FXML
     private AnchorPane characterSheetPane;
 
-    // ---------------------- FIELDS: sezione "info" ----------------------
     @FXML
     private TextField charName;
 
@@ -44,7 +43,6 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
     @FXML
     private TextField charLevel;
 
-    // ---------------------- FIELDS: sezione "statsScores" ----------------------
     @FXML
     private TextField charStrenght;     // STR
     @FXML
@@ -74,7 +72,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
     protected CharacterSheetController controller;
 
 
-
+//funzione di inizializzazione della GUI
     @FXML
     public void initialize() {
 
@@ -105,9 +103,9 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
     }
 
 
-    /**
-     * Popola i campi della UI con i dati presenti nel CharacterSheetBean.
-     */
+
+      //Popola i campi della UI con i dati presenti nel CharacterSheetBean.
+
     private void populateFields(CharacterSheetBean currentBean) {
         if (currentBean.getInfoBean() != null) {
             charName.setText(currentBean.getInfoBean().getName());
@@ -126,9 +124,9 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
         }
     }
 
-    /**
-     * Pulisce tutti i campi della UI e imposta dei valori di default per i punteggi.
-     */
+
+     //Pulisce tutti i campi della UI e imposta dei valori di default per i punteggi.
+
     private void clearFields() {
         charName.clear();
         charAge.clear();
@@ -144,7 +142,7 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
     }
 
 
-    //  Cerca il CharacterSheetBean nella lista dell'utente in base al nome.
+    // Cerca il CharacterSheetBean nella lista dell'utente in base al nome.
 
     private CharacterSheetBean findCharByName(String charName) {
         if (currentUser.getCharacterSheets() == null) {
@@ -212,9 +210,9 @@ public class CharacterSheetBoundary implements UserAwareInterface, ControllerAwa
     }
 
 
-    /**
-     * Helper: prova a convertire una stringa in int, restituisce 0 se il parsing fallisce.
-     */
+
+     // Helper: prova a convertire una stringa in int, restituisce 0 se il parsing fallisce.
+
     private int parseIntOrZero(String input) {
         try {
             return Integer.parseInt(input.trim());

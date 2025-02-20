@@ -66,11 +66,13 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
     protected TableColumn<LobbyBean, String> tableViewLobbyInfoLink;
 
     protected UserBean currentUser;
-    protected ManageLobbyListController controller;
-    protected ObservableList<LobbyBean> data = FXCollections.observableArrayList();
-    private LobbyBean pendingDeleteBean;
-    protected ConfirmationPopup confirmationPopupController;
+    protected ManageLobbyListController controller; //reference al controller corrispondente
+    protected ObservableList<LobbyBean> data = FXCollections.observableArrayList(); //lista con le lobby filtrate
+    private LobbyBean pendingDeleteBean; //reference al bean su ciu compiere operazioni
+    protected ConfirmationPopup confirmationPopupController; //reference al controller del confirmation popup
 
+
+    //funzione di inizializzazione della GUI
     @FXML
     protected void initialize() {
         // Chiama la configurazione di base definita nella superclasse
@@ -97,6 +99,7 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
             showLeaveConfirmation();
         });
 
+        //riempimento tableview e disabilito il bottone nel caso di PLAYER
         tableViewLobby.setItems(data);
         newLobbyButton.setVisible(false);
         newLobbyButton.setDisable(true);
@@ -104,7 +107,7 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
 
 
 
-
+   //richiesta di conferma con funzioni relative
     private void showLeaveConfirmation() {
         if (confirmationPopupController != null && pendingDeleteBean != null) {
             String message = "Vuoi eliminare la lobby '" + pendingDeleteBean.getName() + "'?";
@@ -119,7 +122,7 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
         }
     }
 
-
+    //funzione di conferma operazione
     private void onConfirmLeave() {
         if (pendingDeleteBean != null) {
             // Rimuovi dalla TableView
@@ -133,15 +136,14 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
     }
 
 
-
+    //annullamento operazione
     private void onCancel() {
         pendingDeleteBean = null;
     }
 
 
-    /**
-     * Unico metodo per gestire la navigazione. Ricava l'FXML dal pulsante premuto (usando userData).
-     */
+
+    //Unico metodo per gestire la navigazione. Ricava l'FXML dal pulsante premuto (usando userData).
     @FXML
     protected void onNavigationButtonClick(ActionEvent event) {
         Button sourceButton = (Button) event.getSource();
@@ -151,21 +153,19 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
         try {
             SceneSwitcher.changeScene(currentStage, fxml, currentUser);
         } catch (IOException e) {
-            // Se preferisci, potresti usare un messaggio più "dinamico", come:
-            // "Error during change scene from ManageLobbyListBoundary to " + fxml
             throw new SceneChangeException("Error during change scene.", e);
         }
     }
 
-
+    //delego allo sceneSwitcher
     @FXML
     protected void changeScene(String fxml) throws IOException {
         Stage currentStage = (Stage) manageLobbyListPane.getScene().getWindow();
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);
     }
 
-    /* ================ Metodi di iniezione dipendenze ================ */
 
+    //metodi per la realizzazione delle interfacce userawareinterface e controllerawareinterface
     @Override
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;
