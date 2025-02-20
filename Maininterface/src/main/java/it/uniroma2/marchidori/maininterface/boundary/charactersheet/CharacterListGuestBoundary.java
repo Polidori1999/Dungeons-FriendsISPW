@@ -34,7 +34,7 @@ public class CharacterListGuestBoundary extends CharacterListPlayerBoundary {
 
     //annullamento operazione redirect to login
     private void onDownloadCancelled() {
-        logger.info("Download annullato (Guest).");
+        //do nothing
     }
 
     //avvio redirect to login

@@ -162,10 +162,9 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
         vbox.setStyle("-fx-padding: 10; -fx-background-color: white;");
         progressStage.setScene(new Scene(vbox, 350, 100));
 
-        downloadTask.setOnSucceeded(event -> {
-            progressStage.close();
-            logger.info("Download completato (DM).");
-        });
+        downloadTask.setOnSucceeded(event ->
+            progressStage.close()
+        );
         downloadTask.setOnFailed(event -> {
             progressStage.close();
             logger.severe("Errore durante il download: " + downloadTask.getException());

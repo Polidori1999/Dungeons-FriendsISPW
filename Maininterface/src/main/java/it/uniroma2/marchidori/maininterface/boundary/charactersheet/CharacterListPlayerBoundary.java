@@ -22,6 +22,7 @@ public class CharacterListPlayerBoundary extends CharacterListDMBoundary {
     @FXML
     protected TableColumn<CharacterSheetBean, Button> tableViewCharButton;
 
+    // initialize della superclasse + visibilità bottone new character e configurazione bottone edit
     @Override
     @FXML
     protected void initialize() {
@@ -36,13 +37,9 @@ public class CharacterListPlayerBoundary extends CharacterListDMBoundary {
         // Setup della colonna Edit
         TableColumnUtils.setupButtonColumn(tableViewCharButton, "Edit", this::editChar);
         tableViewCharButton.setVisible(true);
-
-
-
-
     }
 
-
+//funzione di nagigazione
     @Override
     @FXML
     protected void onNavigationButtonClick(ActionEvent event) {
@@ -73,12 +70,10 @@ public class CharacterListPlayerBoundary extends CharacterListDMBoundary {
      */
     protected void editChar(CharacterSheetBean bean) {
         if (bean != null && bean.getInfoBean() != null) {
-            logger.info("editChar: bean passato con nome: " + bean.getInfoBean().getName());
 
             // Aggiungi il controllo su null per evitare NullPointerException
             if (bean.getInfoBean().getName() != null) {
                 currentUser.setSelectedLobbyName(bean.getInfoBean().getName());
-                logger.info("editChar: selectedLobbyName settato a: " + currentUser.getSelectedLobbyName());
             } else {
                 logger.warning("editChar: name nel InfoBean è null");
             }

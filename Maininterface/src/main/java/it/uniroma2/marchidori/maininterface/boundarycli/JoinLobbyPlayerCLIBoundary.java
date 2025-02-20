@@ -117,8 +117,6 @@ public class JoinLobbyPlayerCLIBoundary extends JoinLobbyDMCLIBoundary{
             }
         } catch (NumberFormatException e) {
             jout.print("Input non valido.");
-        } catch (IOException e) {
-            throw new JoinLobbyException("Errore durante l'unione alla lobby.", e);
         }
     }
 
