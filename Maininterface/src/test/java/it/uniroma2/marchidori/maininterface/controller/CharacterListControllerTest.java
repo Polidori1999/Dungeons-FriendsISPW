@@ -81,6 +81,7 @@ class CharacterListControllerTest {
     void testDeleteCharacter_ExistingCharacter() {
         addCharacterSheetToUser("TestCharacter"); //aggiungo ad entity e bean di test
 
+
         //verifico se l aggiunta ad entrambi sia stata eseguita
         assertEquals(1, testUserBean.getCharacterSheets().size());
         assertEquals(1, testUser.getCharacterSheets().size());
