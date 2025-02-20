@@ -98,7 +98,7 @@ class ManageLobbyListControllerTest {
      * Se la lobby non esiste, non succede nulla.
      */
     @Test
-    void testLeaveLobby_LobbyNotFound() throws IOException {
+    void testLeaveLobby_LobbyNotFound(){
         // Non creiamo nessuna lobby nel DAO
         // L'utente ha un bean per "LobbyNonEsistente" ma in DAO non c'è
         LobbyBean nonexistentLobbyBean = new LobbyBean("LobbyNonEsistente", "Singola", "Online",

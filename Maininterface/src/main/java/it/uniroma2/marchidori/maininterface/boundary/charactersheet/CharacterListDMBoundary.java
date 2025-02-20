@@ -201,8 +201,12 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
         Button sourceButton = (Button) event.getSource();
         String fxml = (String) sourceButton.getUserData();
         Stage currentStage = (Stage) characterPane.getScene().getWindow();
+        if(SceneNames.CHARACTER_SHEET.equals(fxml)) {
+            currentUser.setSelectedLobbyName(null);
+        }
         try {
             SceneSwitcher.changeScene(currentStage, fxml, currentUser);
+            reloadCharacterList();
         } catch (IOException e) {
             throw new SceneChangeException("Errore nel cambio scena.", e);
         }
