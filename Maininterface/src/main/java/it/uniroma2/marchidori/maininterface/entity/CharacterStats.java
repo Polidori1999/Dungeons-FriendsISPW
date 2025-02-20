@@ -10,13 +10,12 @@ public class CharacterStats {
     private int constitution;
 
 
-    // Costruttore vuoto (per riflessione / framework)
+    // Costruttore vuoto
     public CharacterStats() {
     }
 
-    // Costruttore con parametri
-    public CharacterStats(int strength, int dexterity, int intelligence,
-                          int wisdom, int charisma, int constitution) {
+    // Costruttore con parametri "base"
+    public CharacterStats(int strength, int dexterity, int intelligence, int wisdom, int charisma, int constitution) {
         this.strength = strength;
         this.dexterity = dexterity;
         this.intelligence = intelligence;
@@ -25,7 +24,7 @@ public class CharacterStats {
         this.constitution = constitution;
     }
 
-    // Getter e Setter
+    // Getter & Setter
     public int getStrength() {
         return strength;
     }
