@@ -5,13 +5,14 @@ import it.uniroma2.marchidori.maininterface.dao.UserDAODatabase;
 import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
 import it.uniroma2.marchidori.maininterface.dao.UserDaoMem;
 
-import java.util.logging.Logger;
 
+// La classe UserDAOFactory segue il pattern "Factory" e "Singleton" per creare
+//  e restituire istanze di UserDAO in base a specifiche condizioni
 public class UserDAOFactory {
-    private static final Logger logger = Logger.getLogger(UserDAOFactory.class.getName());
 
-
+    // Singola istanza (Singleton) di UserDAOFactory
     private static UserDAOFactory instance = null;
+
     private UserDAO fileSysInstance;
     private UserDAO databaseInstance;
 
@@ -24,24 +25,22 @@ public class UserDAOFactory {
         }
         return instance;
     }
-
+    //Ritorna un'istanza di UserDAO:
     public UserDAO getUserDAO(boolean useDatabase) {
         if (useDatabase) {
             if (databaseInstance == null) {
-                logger.info("🛢️ Creazione di UserDAODatabase (MySQL)");
                 databaseInstance = new UserDAODatabase();
             }
             return databaseInstance;
         } else {
             if (fileSysInstance == null) {
-                logger.info("📁 Creazione di UserDAOFileSys (File System)");
                 fileSysInstance = new UserDAOFileSys();
             }
             return fileSysInstance;
         }
     }
 
-
+    //@overload di getUserDAO che permette di specificare anche la modalità "demo"
     public UserDAO getUserDAO(boolean useDatabase, boolean demo) {
         UserDAO memoryInstance;
         if(demo){
