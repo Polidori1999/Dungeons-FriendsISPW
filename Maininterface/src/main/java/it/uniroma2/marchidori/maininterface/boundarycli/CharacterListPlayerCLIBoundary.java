@@ -35,12 +35,17 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary {
      */
     private void menu() {
         jout.print("=== Menu Personaggi ===");
-        jout.print("1. Modifica un personaggio");
-        jout.print("2. Elimina un personaggio");
-        jout.print("3. Scarica un personaggio");
-        jout.print("4. Crea un nuovo personaggio");
-        jout.print("5. Aggiorna lista personaggi");
-        jout.print("0. Torna a Home");
+        String[] menuItems = {
+                "Modifica un personaggio",
+                "Elimina un personaggio",
+                "Scarica un personaggio",
+                "Crea un nuovo personaggio",
+                "Aggiorna lista personaggi",
+                "Torna a Home"
+        };
+        for (int i = 0; i < menuItems.length; i++) {
+            jout.print(i + ". " + menuItems[i]);
+        }
     }
 
     /**
