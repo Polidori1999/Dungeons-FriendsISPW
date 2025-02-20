@@ -9,6 +9,6 @@ public interface LobbyDAO {
     public List<Lobby> getLobby();
 
     public void updateLobby(Lobby lobby) throws IOException;
-    public void deleteLobby(String lobbyName)throws IOException;
-    public void addLobby(Lobby lobby)throws IOException;
+    public boolean deleteLobby(String lobbyName);
+    public boolean addLobby(Lobby lobby);
 }

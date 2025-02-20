@@ -1,7 +1,9 @@
 package it.uniroma2.marchidori.maininterface.dao;
 
+import it.uniroma2.marchidori.maininterface.Jout;
 import it.uniroma2.marchidori.maininterface.boundary.LobbyDAO;
 import it.uniroma2.marchidori.maininterface.entity.Lobby;
+import it.uniroma2.marchidori.maininterface.utils.Alert;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -14,6 +16,8 @@ import java.util.logging.Logger;
 
 public class LobbyDaoFileSys implements LobbyDAO {
 
+    private final Jout jout = new Jout("LobbyDaoFileSys");
+
     private static final String BASE_DIR = "src/main/java/it/uniroma2/marchidori/maininterface/repository/";
     private static final String LOBBY_FILE_PATH = BASE_DIR + "lobby.txt";
     private static final Logger logger = Logger.getLogger(LobbyDaoFileSys.class.getName());
@@ -23,11 +27,15 @@ public class LobbyDaoFileSys implements LobbyDAO {
      * [0] lobbyName, [1] duration, [2] liveOnline, [3] maxOfPlayers,
      * [4] owner, [5] infoLink, [6] joinedPlayersCount.
      */
-    public void addLobby(Lobby lobby) throws IOException {
+    public boolean addLobby(Lobby lobby) {
         // Crea la directory di base se non esiste
         File dir = new File(BASE_DIR);
         if (!dir.exists()) {
-            dir.mkdirs();
+            boolean dirCreated = dir.mkdirs();
+            if (!dirCreated) {
+                logger.severe("Impossibile creare la directory di base: " + BASE_DIR);
+                return false;  // Restituisce false se la directory non può essere creata
+            }
         }
 
         // Prepara i 7 campi fissi
@@ -46,10 +54,13 @@ public class LobbyDaoFileSys implements LobbyDAO {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(LOBBY_FILE_PATH, true))) {
             writer.write(linea);
             writer.newLine();
+            return true;  // Restituisce true se l'operazione è riuscita
         } catch (IOException e) {
             logger.severe("Errore durante la scrittura sul file: " + e.getMessage());
+            return false;  // Restituisce false se si è verificato un errore
         }
     }
+
 
     /**
      * Aggiorna una lobby già esistente nel file, sostituendo la sua riga con quella aggiornata.
@@ -78,16 +89,29 @@ public class LobbyDaoFileSys implements LobbyDAO {
      * Elimina dal file la lobby avente il nome specificato.
      */
     @Override
-    public void deleteLobby(String lobbyName) throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get(LOBBY_FILE_PATH));
-        List<String> updatedLines = new ArrayList<>(lines.stream()
-                .filter(line -> {
-                    String[] tokens = line.split(";", -1);
-                    return tokens.length > 0 && !tokens[0].equals(lobbyName);
-                })
-                .toList());
-        Files.write(Paths.get(LOBBY_FILE_PATH), updatedLines);
+    public boolean deleteLobby(String lobbyName) {
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(LOBBY_FILE_PATH));
+            List<String> updatedLines = new ArrayList<>(lines.stream()
+                    .filter(line -> {
+                        String[] tokens = line.split(";", -1);
+                        return tokens.length > 0 && !tokens[0].equals(lobbyName);
+                    })
+                    .toList());
+            Files.write(Paths.get(LOBBY_FILE_PATH), updatedLines);
+            return true; // Operazione riuscita
+        } catch (IOException e) {
+            // Log dell'errore
+            jout.print("Errore nel tentativo di eliminare la lobby: " + lobbyName);
+
+
+            // Azioni di fallback
+            Alert.showError("Errore nel file", "Si è verificato un errore durante l'eliminazione della lobby.");
+
+            return false; // Indica che l'operazione non è riuscita
+        }
     }
+
 
     /**
      * Legge il file e restituisce la lista di tutte le lobby (deserializzate).

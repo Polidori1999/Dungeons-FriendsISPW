@@ -33,14 +33,16 @@ public class LobbyDAOMem implements LobbyDAO {
     }
 
     @Override
-    public void deleteLobby(String lobbyName) throws IOException {
+    public boolean deleteLobby(String lobbyName) {
         Lobby lobby = getLobbyByName(lobbyName);
         lobbies.remove(lobby);
+        return true;
     }
 
     @Override
-    public void addLobby(Lobby lobby) throws IOException {
+    public boolean addLobby(Lobby lobby) {
         lobbies.add(lobby);
+        return true;
     }
 
     private Lobby getLobbyByName(String name){
