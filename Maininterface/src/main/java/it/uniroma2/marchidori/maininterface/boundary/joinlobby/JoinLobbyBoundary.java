@@ -32,7 +32,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     @FXML
     protected AnchorPane joinLobbyPane;
 
-    // ComboBox per i filtri (type, durata, numPlayers)
+    // ComboBox per i filtri (type, durata)
     @FXML
     protected ComboBox<String> comboBox1; // "Online"/"Presenza"
     @FXML
@@ -79,7 +79,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     protected UserBean currentUser;
     protected User currentEntity = Session.getInstance().getCurrentUser();
 
-    // Controller per logica di join
+    // reference al controller relativo
     protected JoinLobbyController controller;
 
     // Controller del popup di conferma con timer
@@ -88,10 +88,10 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
     // Observable list delle lobby filtrate
     private ObservableList<LobbyBean> filteredLobbies;
 
+    //funzione di inizializzazzione della GUI
     @FXML
     public void initialize() throws IOException {
 
-        // Inizializza il JoinLobbyController e il popup di conferma
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/confirmationPopup.fxml"));
             if (loader.getLocation() == null) {
@@ -128,7 +128,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         List<LobbyBean> initial = Converter.convertLobbyListEntityToBean(controller.getLobbies());
         filteredLobbies = FXCollections.observableArrayList(initial);
 
-        // Imposta le colonne: usa una lambda per la colonna "players"
+        // Imposta le colonne della tableview
         lobbyNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         numberOfPlayersColumn.setCellValueFactory(new PropertyValueFactory<>("players"));
         durationColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
@@ -142,6 +142,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
 
 
 
+    //funzione refresh della tableview
     public void refreshTable() {
         if (controller != null) {
 
@@ -154,7 +155,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         }
     }
 
-
+    //applicazione dei filtri e delego al controller il filtraggio ed il ritorno della lista filtrata
     public void doFilter() {
         String type = comboBox1.getValue();
         String duration = comboBox2.getValue();
@@ -163,6 +164,8 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         filteredLobbies.setAll(result);
     }
 
+
+    //funzione reset filtri
     @FXML
     public void resetFilters(ActionEvent event) {
         comboBox1.setValue(null);
@@ -170,6 +173,7 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         doFilter();
     }
 
+    //funzione di navigazione tra le scene
     @FXML
     protected void onNavigationButtonClick(ActionEvent event) {
         Button sourceButton = (Button) event.getSource();
@@ -189,6 +193,8 @@ public class JoinLobbyBoundary implements UserAwareInterface, ControllerAwareInt
         Stage currentStage = (Stage) joinLobbyPane.getScene().getWindow();
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);
     }
+
+    //funzioni di realizzazione delle interfaccie useraware e controlleraware
 
     @Override
     public void setCurrentUser(UserBean user) {

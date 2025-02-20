@@ -64,7 +64,6 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
         );
     }
 
-
     protected void onCancel() {
         //empty method
     }

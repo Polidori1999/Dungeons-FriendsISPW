@@ -54,32 +54,23 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
     private Label wrongLogin;
 
     private UserBean currentUser;
-    private LoginController loginController;
+    private LoginController loginController;//reference al controller relativo
 
     // Valore di default per il guest
     private static final String GUEST_EMAIL = "guest@example.com";
 
-    @FXML
-    public void initialize() {
-        // Binding vari, se necessario
-        login.maxWidthProperty().bind(anchorLoginPane.widthProperty().divide(2));
-        login.maxHeightProperty().bind(anchorLoginPane.heightProperty().divide(2));
-    }
 
-    /**
-     * Metodo UNICO che gestisce i cambi di scena e la logica dei pulsanti
-     */
+
+    //Metodo UNICO che gestisce i cambi di scena e la logica dei pulsanti
+
     @FXML
     protected void onNavigationButtonClick(ActionEvent event) {
         Button sourceButton = (Button) event.getSource();
         // Il valore userData corrisponde alle azioni che vogliamo gestire
         String action = (String) sourceButton.getUserData();
         Stage currentStage = (Stage) anchorLoginPane.getScene().getWindow();
-
-
         try {
             switch (action) {
-
                 // Caso LOGIN
                 case "LOGIN" -> {
                     String userEmail = email.getText();
@@ -92,7 +83,6 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
                         wrongLogin.setText("Wrong email or password!");
                     }
                 }
-
                 // Caso GUEST
                 case "GUEST" -> {
                     currentUser = new UserBean(
@@ -103,13 +93,10 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
                             new ArrayList<>(),
                             new ArrayList<>()
                     );
-
-                    // Se usi session, aggiorna l'entity in session
                     Session.getInstance().setCurrentUser(Converter.userBeanToEntity(currentUser));
                     loginController.caseGuest();
                     SceneSwitcher.changeScene(currentStage,SceneNames.HOME,currentUser);
                 }
-
                 // Caso CREATE_ACCOUNT
                 case "CREATE_ACCOUNT" -> {
                     if (currentUser == null) {
@@ -129,11 +116,7 @@ public class LoginBoundary implements UserAwareInterface, ControllerAwareInterfa
         }
     }
 
-
-
-    // -------------------------------------------------------------
-    //          METODI DI INTERFACCIA (UserAware, ControllerAware)
-    // -------------------------------------------------------------
+    //funzioni di realizzazione delle interfaccie useraware e controlleraware
     @Override
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;

@@ -11,12 +11,12 @@ import java.util.ArrayList;
 
 public class JoinLobbyGuestBoundary extends JoinLobbyPlayerBoundary {
 
+    //funzione di inizialiazzazione GUI
     @Override
     public void initialize() throws IOException {
         super.initialize();
         if (currentUser == null) {
             currentUser = new UserBean(
-
                     "guest@example.com",
                     "guest",
                     RoleEnum.GUEST,
@@ -28,23 +28,20 @@ public class JoinLobbyGuestBoundary extends JoinLobbyPlayerBoundary {
 
         // Configura la colonna "Join" utilizzando il metodo della classe utility
         TableColumnUtils.setupButtonColumn(
-                joinButtonColumn,  // Assicurarsi che sia TableColumn<LobbyBean, Button>
+                joinButtonColumn,
                 "Join",
                 lobby -> handleSame()
         );
 
         // Configura la colonna "Favourite" utilizzando il metodo della classe utility
         TableColumnUtils.setupButtonColumn(
-                favouriteButton,  // Assicurarsi che sia TableColumn<LobbyBean, Button>
+                favouriteButton,
                 "Add to Favourite",
                 lobby -> handleSame()
         );
     }
 
-    /**
-     * Gestisce l'azione per il pulsante "Join".
-     */
-
+     //Gestisce l'azione per il pulsante "Join".
     private void handleSame() {
         if (confirmationPopup != null) {
             String message = "you are gettin redirected to login";
@@ -56,9 +53,7 @@ public class JoinLobbyGuestBoundary extends JoinLobbyPlayerBoundary {
         }
     }
 
-    /**
-     * Gestisce l'azione per il pulsante "Add to Favourite".
-     */
+    //Gestisce l'azione per il pulsante "Add to Favourite".
     private void onConfirm() {
         try {
             Session.getInstance().clear();
@@ -68,5 +63,4 @@ public class JoinLobbyGuestBoundary extends JoinLobbyPlayerBoundary {
             throw new SceneChangeException(e.getMessage());
         }
     }
-
 }

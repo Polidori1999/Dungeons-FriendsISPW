@@ -28,9 +28,6 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
 
     private static final Logger LOGGER = Logger.getLogger(ManageLobbyBoundary.class.getName());
 
-    // -------------------------------------------------------------
-    //                      VARIABILI FXML
-    // -------------------------------------------------------------
     @FXML
     protected AnchorPane manageLobbyPane;
 
@@ -67,41 +64,19 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
     @FXML
     private Button myChar;
 
-    // -------------------------------------------------------------
-    //                    VARIABILI DI STATO
-    // -------------------------------------------------------------
     private UserBean currentUser;
     private ManageLobbyController controller;
 
-    /** true = creazione nuova lobby, false = modifica di una lobby esistente */
+    // Flag: true se stiamo creando, false se stiamo modificando
     private boolean creationMode;
 
-    /** Bean della lobby in creazione/modifica */
+    //Bean della lobby in creazione/modifica
     protected LobbyBean currentBean;
 
-    /** Vecchio nome della lobby, utile per l’update */
+    //Vecchio nome della lobby, utile per l’update
     private String oldName;
 
-    // -------------------------------------------------------------
-    //             INIEZIONE UTENTE E CONTROLLER
-    // -------------------------------------------------------------
-    @Override
-    public void setCurrentUser(UserBean user) {
-
-        this.currentUser = user;
-        if (controller != null) {
-            controller.setCurrentUser(user);
-        }
-    }
-
-    @Override
-    public void setLogicController(Object logicController) {
-        this.controller = (ManageLobbyController) logicController;
-    }
-
-    // -------------------------------------------------------------
-    //             METODO DI INIZIALIZZAZIONE
-    // -------------------------------------------------------------
+    //funzione di inizializzazzione GUI
     @FXML
     private void initialize() {
 
@@ -109,18 +84,13 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
         maxPlayersBox.setItems(FXCollections.observableArrayList("2", "4", "6"));
         liveOnlineBox.setItems(FXCollections.observableArrayList("Live", "Online"));
 
-        LOGGER.log(Level.INFO, "User in ManageLobbyBoundary: {0}",
-                (currentUser != null ? currentUser.getEmail() : "null"));
-
         // Determina la modalità in base al campo selectedLobbyName del currentUser
         String selected = currentUser != null ? currentUser.getSelectedLobbyName() : null;
-        if (currentUser != null) {
-            LOGGER.log(Level.INFO, "Current user email: {0}", currentUser.getEmail());
-            LOGGER.log(Level.INFO, "Selected Lobby Name: {0}", currentUser.getSelectedLobbyName());
-        } else {
+        if (currentUser == null) {
             LOGGER.warning("currentUser è null");
         }
 
+        //setting dei parametri
         if (selected == null || selected.isEmpty()) {
             creationMode = true;
             currentBean = new LobbyBean("", "", "", 0, "","", 0);
@@ -136,10 +106,8 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
             }
         }
 
-
         if (creationMode) {
             clearFields();
-            LOGGER.info("Modalità creazione attiva.");
         } else {
             populateFields(currentBean);
             // Disabilita il campo del nome per impedire la modifica in modalità edit
@@ -147,13 +115,10 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
             lobbyName.setFocusTraversable(false);
             // Disabilita il ComboBox del numero di giocatori per renderlo immutabile
             maxPlayersBox.setDisable(true);
-            LOGGER.log(Level.INFO, "Modalità modifica attiva per lobby: {0}", currentBean.getName());
         }
     }
 
-    // -------------------------------------------------------------
-    //                    LOGICA DI SALVATAGGIO
-    // -------------------------------------------------------------
+
     @FXML
     void onClickSaveLobby(ActionEvent event) throws IOException {
         if (currentBean == null) {
@@ -169,13 +134,12 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
         currentBean.setOwner(currentUser.getEmail());
         currentBean.setInfoLink(infoLink.getText());
 
-        // Validazione del bean
+        // Validazione del bean delego al controller
         String validationErrors = controller.validate(currentBean);
         if (!validationErrors.isEmpty()) {
             Alert.showError("Errore di Validazione", validationErrors);
             return;
         }
-
 
         if (!creationMode) {
             controller.updateLobby(oldName, currentBean);
@@ -195,9 +159,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
         }
     }
 
-    // -------------------------------------------------------------
-    //          Metodi di supporto per i campi della GUI
-    // -------------------------------------------------------------
+    //setta i campi vuoti della scheda della lobby in caso di creazione
     private void clearFields() {
         lobbyName.setText("");
         infoLink.setText("");
@@ -206,6 +168,7 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
         maxPlayersBox.setValue(null);
     }
 
+    //carica dalle info del bean i campi relativi
     private void populateFields(LobbyBean bean) {
         lobbyName.setText(bean.getName());
         infoLink.setText(bean.getInfoLink());
@@ -214,33 +177,48 @@ public class ManageLobbyBoundary implements UserAwareInterface, ControllerAwareI
         durationBox.setValue(bean.getDuration());
     }
 
+
+
     private int parseIntOrZero(String input) {
-        // Se input è null o vuoto, restituisci 0
         if (input == null || input.trim().isEmpty()) {
             LOGGER.log(Level.SEVERE, "ERRORE: Il campo per il numero di giocatori è vuoto o nullo.");
-            return 0;
+            return 0;  // Restituisce 0 in caso di input vuoto o nullo
         }
         try {
+            // Prova a convertire l'input in un intero
             return Integer.parseInt(input.trim());
         } catch (NumberFormatException e) {
+            // Se si verifica un errore di formato (input non numerico), logga l'errore
             LOGGER.log(Level.SEVERE, "ERRORE: Il valore inserito non è un numero valido: {0}", input);
-            return 0;
+            return 0;  // Restituisce 0 in caso di errore di formato
         }
     }
 
+
+    //funziona di navigazione per i cambi di scena
     @FXML
     protected void onNavigationButtonClick(ActionEvent event) {
         Button sourceButton = (Button) event.getSource();
         String fxml = (String) sourceButton.getUserData();
-
-        // Esegui il cambio scena
         Stage currentStage = (Stage) manageLobbyPane.getScene().getWindow();
         try {
             SceneSwitcher.changeScene(currentStage, fxml, currentUser);
         } catch (IOException e) {
-            // Se preferisci, potresti usare un messaggio più "dinamico", come:
-            // "Error during change scene from ManageLobbyListBoundary to " + fxml
             throw new SceneChangeException("Error during change scene.", e);
         }
+    }
+
+    //realizzazione metodi di interfacce userawareinterface e controllerawareinterface
+    @Override
+    public void setCurrentUser(UserBean user) {
+        this.currentUser = user;
+        if (controller != null) {
+            controller.setCurrentUser(user);
+        }
+    }
+
+    @Override
+    public void setLogicController(Object logicController) {
+        this.controller = (ManageLobbyController) logicController;
     }
 }

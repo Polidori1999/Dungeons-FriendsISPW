@@ -1,7 +1,6 @@
 package it.uniroma2.marchidori.maininterface.boundary.managelobby;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
-import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
@@ -10,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
 import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -18,12 +16,11 @@ import java.util.logging.Logger;
 public class ManageLobbyListDMBoundary extends ManageLobbyListPlayerBoundary {
     private static final Logger logger = Logger.getLogger(ManageLobbyListDMBoundary.class.getName());
 
-
+    //funzione di inizializzazione della GUI
     @Override
     protected void initialize() {
-        // Richiama l’initialize() della superclasse per caricare tabella, ecc.
+        // Richiama l’initialize() della superclasse
         super.initialize();
-
         if (controller == null) {
             logger.severe("Errore: controller non inizializzato!");
             return;
@@ -33,8 +30,6 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListPlayerBoundary {
         data.addAll(currentUser.getJoinedLobbies());
         tableViewLobby.refresh();
 
-        logger.log(Level.INFO, "Numero di lobby nella tabella: {0}", data.size());
-
         TableColumnUtils.setupConditionalButtonColumn(
                 tableViewLobbyEdit,
                 lobbyBean -> lobbyBean.getOwner().equals(currentUser.getEmail()),
@@ -42,12 +37,11 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListPlayerBoundary {
                 this::editLobby
         );
         // Rendo cliccabile il bottone "New Lobby"
-        // (nel FXML, newLobbyButton chiama onNavigationButtonClick con userData="manageLobby.fxml")
         newLobbyButton.setVisible(true);
         newLobbyButton.setDisable(false);
     }
 
-
+    //funzione per il cambio di scena per il caso di editlobby
     private void editLobby(LobbyBean lobbyBean) {
         // Imposta il nome della lobby selezionata nel currentUser
         currentUser.setSelectedLobbyName(lobbyBean.getName());
@@ -59,7 +53,7 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListPlayerBoundary {
         }
     }
 
-
+    //funzione per il cambio di scena per il caso di newLobby
     private void newLobby() {
         // Imposta la lobby da editare nel currentUser
         currentUser.setSelectedLobbyName(null);
@@ -71,6 +65,7 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListPlayerBoundary {
         }
     }
 
+    //funzione per gli altri cambi di scena
     @Override
     @FXML
     protected void onNavigationButtonClick(ActionEvent event) {
@@ -82,11 +77,5 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListPlayerBoundary {
         } else {
             super.onNavigationButtonClick(event);
         }
-    }
-
-    // Se vuoi, puoi sovrascrivere setCurrentUser, ma non è più strettamente necessario
-    @Override
-    public void setCurrentUser(UserBean currentUser) {
-        this.currentUser = currentUser;
     }
 }

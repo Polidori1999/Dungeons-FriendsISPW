@@ -134,7 +134,7 @@ public class ConsultRulesBoundary implements UserAwareInterface, ControllerAware
         }
     }
 
-
+//funzione per la navigazione tra le scene GUI
     @FXML
     protected void onNavigationButtonClick(ActionEvent event) {
         Button sourceButton = (Button) event.getSource();
