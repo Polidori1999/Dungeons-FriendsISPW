@@ -14,7 +14,7 @@ public class RegisterController implements UserAwareInterface {
     // Creazione del logger
     private static final Logger logger = Logger.getLogger(RegisterController.class.getName());
 
-    // ✅ Costruttore senza parametri per la Factory
+
     public RegisterController() {
         this.userService=UserService.getInstance(Session.getInstance().getDB());
         if (logger.isLoggable(Level.INFO)) {

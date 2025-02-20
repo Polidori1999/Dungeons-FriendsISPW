@@ -4,22 +4,16 @@ import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.boundary.ConfirmationPopup;
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.enumerate.RoleEnum;
-import it.uniroma2.marchidori.maininterface.exception.PopupLoadingException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
-
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.application.Platform;
-
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
 
 import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
@@ -39,7 +33,8 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListDMBoundary {
 
         // Se l'utente è guest e non ha una lista, inizializzala come vuota
         if (currentUser == null) {
-            currentUser = new UserBean("guest@example.com","guest" ,RoleEnum.GUEST, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            currentUser = new UserBean("guest@example.com","guest" ,RoleEnum.GUEST,
+                    new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
             logger.info(">>> currentUser inizializzato come Guest");
         } else if (currentUser.getRoleBehavior() == RoleEnum.GUEST && currentUser.getJoinedLobbies() == null) {
             currentUser.setJoinedLobbies(new ArrayList<>());
@@ -58,19 +53,25 @@ public class ManageLobbyListGuestBoundary extends ManageLobbyListDMBoundary {
      */
     private void showRedirectConfirmation() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/marchidori/maininterface/confirmationPopup.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/it/uniroma2/marchidori/maininterface/confirmationPopup.fxml")
+            );
             Parent popupRoot = loader.load();
             confirmationPopup = loader.getController();
 
             // Aggiungi il popup al layout
             Platform.runLater(() -> {
                 manageLobbyListPane.getChildren().add(popupRoot);
-
                 // Mostra il messaggio e imposta il timer
-                confirmationPopup.show("Stai per essere rediretto al login", 10, this::redirectToLogin, this::goToHome);
+                confirmationPopup.show("Stai per essere rediretto al login", 10,
+                        this::redirectToLogin,
+                        this::goToHome);
             });
+
         } catch (IOException e) {
-            throw new PopupLoadingException("Errore durante il caricamento del popup di conferma");
+            // Ora GESTIAMO qui l’errore invece di rilanciarlo come PopupLoadingException
+            logger.severe("Errore durante il caricamento del popup di conferma: " + e.getMessage());
+            // Se necessario, puoi gestire un fallback: ad esempio, disabilitare funzioni o mostrare un messaggio
         }
     }
 
