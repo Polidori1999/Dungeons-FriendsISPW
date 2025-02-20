@@ -6,7 +6,6 @@ import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.RunInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.RegisterController;
-import it.uniroma2.marchidori.maininterface.exception.AccountAlreadyExistsException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 
@@ -51,11 +50,14 @@ public class RegisterCLIBoundary implements UserAwareInterface, ControllerAwareI
             changeScene(SceneNames.REGISTER);
             return;
         }
-
-        try {
-            registerController.register(email, password);
-            changeScene(SceneNames.LOGIN);
-        } catch (AccountAlreadyExistsException e) {
+        boolean success = registerController.register(email, password);
+        if(success){
+            try{
+                changeScene(SceneNames.LOGIN);
+            }catch(IOException e){
+                jout.print("Errore nel cambio scena: " + e.getMessage());
+            }
+        }else{
             jout.print("Errore: Email already exists!");
         }
         jout.print("Registrazione completata per l'email: " + email);
