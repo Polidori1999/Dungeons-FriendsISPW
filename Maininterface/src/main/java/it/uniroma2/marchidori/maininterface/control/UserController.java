@@ -14,6 +14,7 @@ public class UserController implements UserAwareInterface {
     private UserBean currentUser;
 
 
+
     public UserController() {
         //costruttore vuoto
         currentEntity = Session.getInstance().getCurrentUser();
