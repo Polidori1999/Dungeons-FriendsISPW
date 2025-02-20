@@ -6,7 +6,6 @@ import it.uniroma2.marchidori.maininterface.boundary.ConfirmationPopup;
 import it.uniroma2.marchidori.maininterface.boundary.ControllerAwareInterface;
 import it.uniroma2.marchidori.maininterface.boundary.UserAwareInterface;
 import it.uniroma2.marchidori.maininterface.control.ManageLobbyListController;
-import it.uniroma2.marchidori.maininterface.exception.PopupLoadingException;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
@@ -112,13 +111,7 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
             confirmationPopupController.show(
                     message,
                     10,                // timer di scadenza popup
-                    () -> {
-                        try {
-                            onConfirmLeave();
-                        } catch (IOException e) {
-                            throw new PopupLoadingException(e);
-                        }
-                    },
+                    this::onConfirmLeave,
                     this::onCancel
             );
         } else {
@@ -127,7 +120,7 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
     }
 
 
-    private void onConfirmLeave() throws IOException {
+    private void onConfirmLeave() {
         if (pendingDeleteBean != null) {
             // Rimuovi dalla TableView
             tableViewLobby.getItems().remove(pendingDeleteBean);

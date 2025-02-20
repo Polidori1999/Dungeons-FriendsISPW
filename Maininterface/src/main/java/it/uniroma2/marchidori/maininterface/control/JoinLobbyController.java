@@ -13,7 +13,6 @@ import it.uniroma2.marchidori.maininterface.entity.User;
 import it.uniroma2.marchidori.maininterface.utils.Alert;
 import javafx.collections.FXCollections;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -46,7 +45,7 @@ public class JoinLobbyController implements UserAwareInterface {
      * Aggiunge l'utente corrente alla lobby se c'è spazio disponibile.
      * Utilizza un contatore (joinedPlayersCount) per tenere traccia del numero di giocatori.
      */
-    public void addLobby(LobbyBean lobbyBean) throws IOException {
+    public void addLobby(LobbyBean lobbyBean) {
         // Recupera il contatore corrente
         int currentCount = lobbyBean.getJoinedPlayersCount();
 
@@ -73,9 +72,14 @@ public class JoinLobbyController implements UserAwareInterface {
         UserDAO dao = Session.getInstance().getUserDAO();
 
         //fare update per migliorare invece di delete e add
-        lobbyDAO.deleteLobby(lobbyBean.getName());
-        lobbyDAO.addLobby(Converter.lobbyBeanToEntity(lobbyBean));
-
+        if(!lobbyDAO.deleteLobby(lobbyBean.getName())){
+            logger.severe("delete lobby failed");
+            return;
+        }
+        if(!lobbyDAO.addLobby(Converter.lobbyBeanToEntity(lobbyBean))){
+            logger.severe("add lobby failed");
+            return;
+        }
         // Aggiorna la persistenza dell'utente
         dao.updateUsersEntityData(currentEntity);
 

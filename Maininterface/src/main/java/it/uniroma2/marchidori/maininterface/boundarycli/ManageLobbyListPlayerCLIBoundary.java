@@ -99,7 +99,7 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
             return;
         }
         String idxStr = prompt("Inserisci il numero della lobby da cui uscire: ");
-        try {
+
             int index = Integer.parseInt(idxStr);
             if (index < 1 || index > data.size()) {
                 jout.print("Indice non valido.");
@@ -113,12 +113,9 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
             } else {
                 jout.print("Operazione annullata.");
             }
-        } catch (NumberFormatException | IOException e) {
-            jout.print("Input non valido.");
-        }
     }
 
-    protected void processLeave(LobbyBean lobbyToLeave) throws IOException {
+    protected void processLeave(LobbyBean lobbyToLeave) {
         controller.leaveLobby(lobbyToLeave);
         refreshLobbyList();
     }

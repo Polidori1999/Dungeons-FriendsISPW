@@ -6,7 +6,6 @@ import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -22,6 +21,7 @@ public class CharacterListPlayerBoundary extends CharacterListDMBoundary {
     @FXML
     protected TableColumn<CharacterSheetBean, Button> tableViewCharButton;
 
+    // initialize della superclasse + visibilità bottone new character e configurazione bottone edit
     @Override
     @FXML
     protected void initialize() {
@@ -36,49 +36,15 @@ public class CharacterListPlayerBoundary extends CharacterListDMBoundary {
         // Setup della colonna Edit
         TableColumnUtils.setupButtonColumn(tableViewCharButton, "Edit", this::editChar);
         tableViewCharButton.setVisible(true);
-
-
-
-
     }
 
-
-    @Override
-    @FXML
-    protected void onNavigationButtonClick(ActionEvent event) {
-        Button sourceButton = (Button) event.getSource();
-        String fxml = (String) sourceButton.getUserData();
-
-        if (SceneNames.MANAGE_LOBBY.equals(fxml)) {
-            newChar();
-        } else {
-            super.onNavigationButtonClick(event);
-        }
-
-    }
-
-    protected void newChar() {
-        // Imposta la lobby da editare nel currentUser
-        currentUser.setSelectedLobbyName(null);
-        // Cambia scena (usa il metodo protetto ereditato dalla superclasse)
-        try {
-            changeScene(SceneNames.CHARACTER_SHEET);
-            reloadCharacterList();
-        } catch (IOException e) {
-            throw new SceneChangeException("Errore nel cambio scena (crea Lobby).", e);
-        }
-    }
-    /**
-     * Handler per l'edit di un personaggio esistente.
-     */
+    //edit del character setto il nome del personaggio da editare e chiamo il sceneSwitcher per cambio di scena
     protected void editChar(CharacterSheetBean bean) {
         if (bean != null && bean.getInfoBean() != null) {
-            logger.info("editChar: bean passato con nome: " + bean.getInfoBean().getName());
 
             // Aggiungi il controllo su null per evitare NullPointerException
             if (bean.getInfoBean().getName() != null) {
                 currentUser.setSelectedLobbyName(bean.getInfoBean().getName());
-                logger.info("editChar: selectedLobbyName settato a: " + currentUser.getSelectedLobbyName());
             } else {
                 logger.warning("editChar: name nel InfoBean è null");
             }

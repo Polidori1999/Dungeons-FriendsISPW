@@ -1,7 +1,7 @@
 package it.uniroma2.marchidori.maininterface.boundary.joinlobby;
 
 import it.uniroma2.marchidori.maininterface.bean.LobbyBean;
-import it.uniroma2.marchidori.maininterface.exception.JoinLobbyException;
+
 import it.uniroma2.marchidori.maininterface.utils.TableColumnUtils;
 import javafx.application.Platform;
 
@@ -33,13 +33,8 @@ public class JoinLobbyPlayerBoundary extends JoinLobbyBoundary {
                             message,
                             10,
                             () -> {
-                                try {
-                                    // Aggiungi il nuovo giocatore nel primo slot vuoto o aggiorna la lobby
-                                    controller.addLobby(lobbyBean);
-                                } catch (IOException e) {
-                                    throw new JoinLobbyException("Errore durante l'entrata nella lobby: " + lobbyBean.getName(), e);
-                                }
-
+                                // Aggiungi il nuovo giocatore nel primo slot vuoto o aggiorna la lobby
+                                controller.addLobby(lobbyBean);
                                 Platform.runLater(() -> joinButtonColumn.getTableView().refresh());
                             },
                             () -> logger.info("Azione annullata o scaduta.")

@@ -32,6 +32,8 @@ import java.util.logging.Logger;
 
 public class CharacterListDMBoundary implements ControllerAwareInterface, UserAwareInterface {
 
+
+    //elementi fxml per la GUI
     @FXML
     protected AnchorPane characterPane;
 
@@ -52,12 +54,11 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
     protected TableColumn<CharacterSheetBean, Button> tableViewCharDelete;
     @FXML
     protected TableColumn<CharacterSheetBean, Button> tableViewCharDownloadButton;
-
-
+    //bottone per il new character
     @FXML
     protected Button newCharacterButton;
 
-    protected UserBean currentUser;
+    protected UserBean currentUser; //
     protected CharacterListController controller;
     protected CharacterSheetBean pendingDeleteBean;
     protected ObservableList<CharacterSheetBean> data = FXCollections.observableArrayList();
@@ -75,8 +76,8 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
         }
 
         data.clear();
-        data.addAll(controller.getCharacterSheets());
-        confirmationPopup = ConfirmationPopup.loadPopup(characterPane);
+        data.addAll(controller.getCharacterSheets());//riempimento lista data con le schede personaggi
+        confirmationPopup = ConfirmationPopup.loadPopup(characterPane); //caricamento del popup
 
         // Imposta le colonne base
         tableViewCharName.setCellValueFactory(new ReadOnlyObjectWrapperFactory<>("name"));
@@ -92,9 +93,10 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
         newCharacterButton.setVisible(false);
         newCharacterButton.setDisable(true);
 
-        tableViewChar.setItems(data);
+        tableViewChar.setItems(data);//inserimento dei dati nella tableview
     }
 
+    //gestione del delete richiedo conferma e poi delego al controller
     protected void handleDelete(CharacterSheetBean bean) {
         if (bean != null) {
             pendingDeleteBean = bean;
@@ -102,6 +104,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
         }
     }
 
+    //visualizzazione e richiesta di conferma
     protected void showDeleteConfirmation() {
         if (confirmationPopup != null && pendingDeleteBean != null) {
             String message = "Vuoi eliminare il personaggio '" + pendingDeleteBean.getInfoBean().getName() + "'?";
@@ -116,6 +119,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
         }
     }
 
+    //delego al controller l operazione di delete
     protected void onConfirmDelete() {
         String name = pendingDeleteBean.getInfoBean().getName();
         tableViewChar.getItems().remove(pendingDeleteBean);
@@ -123,6 +127,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
         pendingDeleteBean = null;
     }
 
+    //annullo operazione
     protected void onCancelDelete() {
         pendingDeleteBean = null;
     }
@@ -130,6 +135,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
 
 
 
+    //GUI download e con istanziazzione e delegazione al controller
     protected void downloadCharacter(CharacterSheetBean bean) {
         CharacterSheetDownloadController downloadController;
         downloadController = new CharacterSheetDownloadController();
@@ -156,10 +162,9 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
         vbox.setStyle("-fx-padding: 10; -fx-background-color: white;");
         progressStage.setScene(new Scene(vbox, 350, 100));
 
-        downloadTask.setOnSucceeded(event -> {
-            progressStage.close();
-            logger.info("Download completato (DM).");
-        });
+        downloadTask.setOnSucceeded(event ->
+            progressStage.close()
+        );
         downloadTask.setOnFailed(event -> {
             progressStage.close();
             logger.severe("Errore durante il download: " + downloadTask.getException());
@@ -169,6 +174,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
     }
 
 
+    //refresh della lista data e riempimento della tableview
     public void reloadCharacterList() {
         if (currentUser != null) {
             data.clear();
@@ -177,6 +183,7 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
         }
     }
 
+    //funzioni di realizzazione delle interfaccie useraware e controlleraware
     @Override
     public void setLogicController(Object logicController) {
         this.controller = (CharacterListController) logicController;
@@ -186,18 +193,26 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
         this.currentUser = user;
     }
 
+
+
+    //funzione per la navigazione tra le boundary delega al sceneSwitcher il cambio di scena
     @FXML
     protected void onNavigationButtonClick(javafx.event.ActionEvent event) {
         Button sourceButton = (Button) event.getSource();
         String fxml = (String) sourceButton.getUserData();
         Stage currentStage = (Stage) characterPane.getScene().getWindow();
+        if(SceneNames.CHARACTER_SHEET.equals(fxml)) {
+            currentUser.setSelectedLobbyName(null);
+        }
         try {
             SceneSwitcher.changeScene(currentStage, fxml, currentUser);
+            reloadCharacterList();
         } catch (IOException e) {
             throw new SceneChangeException("Errore nel cambio scena.", e);
         }
     }
 
+    //change scene che invoca lo SceneSwitcher dedicato ad una sola funzione
     @FXML
     protected void changeScene(String fxml) throws IOException {
         Stage currentStage = (Stage) characterPane.getScene().getWindow();
@@ -208,6 +223,8 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
         }
     }
 
+
+    //settings per la tableview
     private record ReadOnlyObjectWrapperFactory<S>(String propertyName)
             implements Callback<TableColumn.CellDataFeatures<S, String>, ObservableValue<String>> {
 
@@ -227,7 +244,6 @@ public class CharacterListDMBoundary implements ControllerAwareInterface, UserAw
                     default -> new ReadOnlyObjectWrapper<>("???");
                 };
             }
-
             return new ReadOnlyObjectWrapper<>("???");
         }
     }

@@ -9,15 +9,14 @@ import static it.uniroma2.marchidori.maininterface.enumerate.RoleEnum.PLAYER;
 public class UserBean {
 
     private String email;
-    // Aggiungi il campo password (hashata)
-    private String password; // transient se non vuoi esporlo in serializzazione
-    private RoleEnum roleBehavior;
-    private List<LobbyBean> favouriteLobbies;
+    private String password;
+    private RoleEnum roleBehavior; //PLAYER || DM
+    private List<LobbyBean> favouriteLobbies; //lista della lobby preferite
     private String selectedLobbyName;
-    private List<LobbyBean> joinedLobbies;
-    private List<CharacterSheetBean> characterSheets;
+    private List<LobbyBean> joinedLobbies; //lista delle lobby joinate
+    private List<CharacterSheetBean> characterSheets; //lista dei personaggi
 
-    // Costruttore "base" (senza password) per altri usi
+    // Costruttore "base"
     public UserBean(String email, List<LobbyBean> favouriteLobbies, List<LobbyBean> joinedLobbies, List<CharacterSheetBean> characterSheets) {
         this.email = email;
         this.favouriteLobbies = favouriteLobbies;
@@ -37,7 +36,7 @@ public class UserBean {
         this.characterSheets = characterSheets;
     }
 
-    // Getter e Setter
+    // Getter & Setter
     public String getEmail() {
         return email;
     }

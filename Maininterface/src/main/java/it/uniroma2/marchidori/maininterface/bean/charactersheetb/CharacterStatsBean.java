@@ -15,10 +15,8 @@ public class CharacterStatsBean {
         // costruttore vuoto
     }
 
-
-    public CharacterStatsBean(int strength, int dexterity,
-                              int intelligence, int wisdom,
-                              int charisma, int constitution) {
+    //costruttore per settare gli attributi
+    public CharacterStatsBean(int strength, int dexterity, int intelligence, int wisdom, int charisma, int constitution) {
         this.strength = strength;
         this.dexterity = dexterity;
         this.intelligence = intelligence;
@@ -27,7 +25,7 @@ public class CharacterStatsBean {
         this.constitution = constitution;
     }
 
-    // Getter / Setter
+    // Getter & Setter
     public int getStrength() { return strength; }
     public void setStrength(int strength) { this.strength = strength; }
 

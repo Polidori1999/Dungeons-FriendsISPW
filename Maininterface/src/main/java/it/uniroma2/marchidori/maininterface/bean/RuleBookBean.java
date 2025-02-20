@@ -1,17 +1,19 @@
 package it.uniroma2.marchidori.maininterface.bean;
 
 public class RuleBookBean {
-    //comment
-    private String rulesBookName;
-    private String path;
+
+    private String rulesBookName; //nome
+    private String path; //percorso
     private boolean isObtained;
 
+
+    //costruttore bean
     public RuleBookBean(String rulesBookName, String path, boolean isObtained) {
         this.rulesBookName = rulesBookName;
         this.path = path;
         this.isObtained = isObtained;
     }
-
+    // Getter & Setter
     public String getRulesBookName() {
 
         return rulesBookName;
@@ -19,7 +21,6 @@ public class RuleBookBean {
     public String getPath() {
         return path;
     }
-
     public boolean isObtained() {
         return isObtained;
     }

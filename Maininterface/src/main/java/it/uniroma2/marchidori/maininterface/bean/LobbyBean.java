@@ -4,15 +4,15 @@ public class LobbyBean {
     private String duration;       // "Singola"/"Campagna"
     private String name;           // nome lobby
     private String liveOnline;     // "Online"/"Presenza"
-    private String infoLink;
+    private String infoLink;        //link per info sulle lobby
     private int maxOfPlayers;      // Numero massimo di giocatori
-    private String owner;
+    private String owner;           // proprietario della lobby
     private int joinedPlayersCount; // Nuovo contatore per il numero di giocatori joinati
 
     public LobbyBean() {
     }
 
-
+//costruttore per settare gli attributi
     public LobbyBean(String name, String duration, String type, int numberOfPlayers, String owner, String infoLink, int joinedPlayersCount) {
         this.name = name;
         this.duration = duration;
@@ -23,7 +23,7 @@ public class LobbyBean {
         this.joinedPlayersCount = joinedPlayersCount;
     }
 
-    // Getters e Setters
+    // Getter & Setter
 
     public String getDuration() {
         return duration;

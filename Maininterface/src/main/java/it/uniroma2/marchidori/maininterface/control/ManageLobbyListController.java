@@ -11,7 +11,6 @@ import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,7 +28,7 @@ public class ManageLobbyListController implements UserAwareInterface {
         // empty
     }
 
-    public void leaveLobby(LobbyBean lobbyBean) throws IOException {
+    public void leaveLobby(LobbyBean lobbyBean) {
 
         // 1. Recupera la lobby dal repository (versione persistente) cercandola per nome.
         LobbyDAO lobbyDao=Session.getInstance().getLobbyDAO();
@@ -49,16 +48,21 @@ public class ManageLobbyListController implements UserAwareInterface {
         // 2. Decrementa il contatore della lobby (solo sulla versione repository)
         int currentCount = repoLobby.getJoinedPlayersCount();
         if(repoLobby.getOwner().equals(currentUser.getEmail())){
-            lobbyDao.deleteLobby(repoLobby.getLobbyName());
+            if(!lobbyDao.deleteLobby(repoLobby.getLobbyName())){
+                LOGGER.severe("delete lobby failed");
+                return;
+            }
         }else if (currentCount > 0) {
             // 3. Aggiorna il file della lobby: elimina la riga esistente e aggiungi quella aggiornata.
-            try {
                 repoLobby.setJoinedPlayersCount(currentCount - 1);
-                lobbyDao.deleteLobby(repoLobby.getLobbyName());
-                lobbyDao.addLobby(repoLobby);
-            } catch (IOException e) {
-                throw new IOException(e.getMessage());
-            }
+                if(!lobbyDao.deleteLobby(repoLobby.getLobbyName())){
+                    LOGGER.severe("delete lobby failed");
+                    return;
+                }
+                if(!lobbyDao.addLobby(repoLobby)){
+                    LOGGER.severe("add lobby failed");
+                    return;
+                }
         } else {
             return;
         }
