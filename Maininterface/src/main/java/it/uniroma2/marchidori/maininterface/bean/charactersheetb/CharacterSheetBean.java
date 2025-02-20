@@ -10,12 +10,13 @@ public class CharacterSheetBean {
         // costruttore vuoto
     }
 
+    //costruttore per settare gli attributi
     public CharacterSheetBean(CharacterInfoBean info, CharacterStatsBean abilityScores) {
         this.infoBean = info;
         this.statsBean = abilityScores;
     }
 
-    // Getter / Setter
+    // Getter & Setter
     public CharacterInfoBean getInfoBean() {
         return infoBean;
     }

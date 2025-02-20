@@ -33,7 +33,7 @@ public class ManageLobbyController implements UserAwareInterface {
         this.currentUser = user;
     }
 
-    public void createLobby(LobbyBean bean) throws IOException {
+    public void createLobby(LobbyBean bean) {
         if (bean == null) {
             LOGGER.log(Level.SEVERE, "ERRORE: Il Bean passato a createLobby() è NULL!");
             return;

@@ -12,10 +12,10 @@ public class CharacterListGuestBoundary extends CharacterListPlayerBoundary {
 
     private static final Logger logger = Logger.getLogger(CharacterListGuestBoundary.class.getName());
 
+    //funzione di inizializzazione uguale alla superclasse
     @Override
     public void initialize() {
         super.initialize();
-
     }
 
     //reindirizza a login
@@ -32,10 +32,12 @@ public class CharacterListGuestBoundary extends CharacterListPlayerBoundary {
         }
     }
 
+    //annullamento operazione redirect to login
     private void onDownloadCancelled() {
         logger.info("Download annullato (Guest).");
     }
 
+    //avvio redirect to login
     private void redirectToLogin() {
         try {
             Session.getInstance().clear();

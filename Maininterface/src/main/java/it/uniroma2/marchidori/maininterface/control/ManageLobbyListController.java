@@ -11,7 +11,6 @@ import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.entity.User;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,7 +28,7 @@ public class ManageLobbyListController implements UserAwareInterface {
         // empty
     }
 
-    public void leaveLobby(LobbyBean lobbyBean) throws IOException {
+    public void leaveLobby(LobbyBean lobbyBean) {
 
         // 1. Recupera la lobby dal repository (versione persistente) cercandola per nome.
         LobbyDAO lobbyDao=Session.getInstance().getLobbyDAO();

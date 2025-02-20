@@ -14,6 +14,7 @@ public class CharacterInfoBean {
         // costruttore vuoto
     }
 
+    //costruttore per settare gli attributi
     public CharacterInfoBean(String name, String race, int age, String classe, int level) {
         this.name = name;
         this.race = race;
@@ -22,7 +23,7 @@ public class CharacterInfoBean {
         this.level = level;
     }
 
-    // Getter / Setter
+    // Getter & Setter
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
