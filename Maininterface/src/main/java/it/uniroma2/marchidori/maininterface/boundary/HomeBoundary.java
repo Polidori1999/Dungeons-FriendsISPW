@@ -3,7 +3,6 @@ package it.uniroma2.marchidori.maininterface.boundary;
 import it.uniroma2.marchidori.maininterface.bean.UserBean;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
-import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
@@ -14,7 +13,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.logger;
 
 public class HomeBoundary implements UserAwareInterface {
 
