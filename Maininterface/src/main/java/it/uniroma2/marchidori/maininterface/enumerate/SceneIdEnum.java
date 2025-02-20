@@ -11,6 +11,4 @@ public enum SceneIdEnum {
     REGISTER,
     MANAGE_LOBBY,
     CONSULT_RULES
-    // Aggiungi altre scene se necessario
 }
-
