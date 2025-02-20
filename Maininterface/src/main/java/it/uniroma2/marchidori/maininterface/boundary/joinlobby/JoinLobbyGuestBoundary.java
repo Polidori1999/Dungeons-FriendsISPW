@@ -68,7 +68,5 @@ public class JoinLobbyGuestBoundary extends JoinLobbyPlayerBoundary {
             throw new SceneChangeException(e.getMessage());
         }
     }
-    private void onCancel() {
-        //empty
-    }
+
 }

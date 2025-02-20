@@ -3,7 +3,8 @@ package it.uniroma2.marchidori.maininterface.scenemanager;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
 
 public enum SceneConfigCLIEnum {
-    // ========== ESEMPI DI DEFINIZIONE ENUM CON REFLECTION ==========
+
+
 
     CHAR_LIST_DM_CLI(
             "characterList.fxml",
