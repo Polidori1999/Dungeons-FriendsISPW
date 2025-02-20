@@ -26,7 +26,7 @@ public class DatabaseConnection {
             password = properties.getProperty("db.password");
         } catch (IOException e) {
             // Lancia una nuova eccezione dedicata invece di RuntimeException
-            throw new DatabaseConnectionException("❌ Errore nel caricamento della configurazione del database", e);
+            throw new DatabaseConnectionException("Errore nel caricamento della configurazione del database", e);
         }
     }
 
@@ -36,7 +36,7 @@ public class DatabaseConnection {
             return DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             // Lancia una nuova eccezione dedicata in caso di errore nella connessione
-            throw new DatabaseConnectionException("❌ Errore nella connessione al database", e);
+            throw new DatabaseConnectionException("Errore nella connessione al database", e);
         }
     }
 }
