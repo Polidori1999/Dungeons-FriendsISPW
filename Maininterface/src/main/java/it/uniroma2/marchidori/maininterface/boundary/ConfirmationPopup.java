@@ -1,7 +1,6 @@
 package it.uniroma2.marchidori.maininterface.boundary;
 
 import it.uniroma2.marchidori.maininterface.control.TimerController;
-import it.uniroma2.marchidori.maininterface.exception.PopupLoadingException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,18 +10,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
-
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Controller per il popup di conferma con timer.
- *
  */
 public class ConfirmationPopup {
 
+    private static final Logger logger = Logger.getLogger(ConfirmationPopup.class.getName());
+
     @FXML
     private AnchorPane popupPane;
-
 
     @FXML
     private Label messageLabel;
@@ -57,7 +57,6 @@ public class ConfirmationPopup {
      * @param confirmAction azione da eseguire se l'utente conferma
      * @param cancelAction  azione da eseguire se l'utente annulla o scade il timer
      */
-
     public void show(String message, int duration, Runnable confirmAction, Runnable cancelAction) {
         this.confirmAction = confirmAction;
         this.cancelAction = cancelAction;
@@ -71,14 +70,12 @@ public class ConfirmationPopup {
     }
 
     private void onConfirm(ActionEvent event) {
-
         stopTimer();
         if (confirmAction != null) {
             confirmAction.run(); // Esegue join
         }
         hide();
     }
-
 
     private void onCancel(ActionEvent event) {
         stopTimer();
@@ -109,15 +106,19 @@ public class ConfirmationPopup {
         });
     }
 
-
-    //questa versione funziona mette il pop in alto a sx
+    /**
+     * Carica e posiziona il popup all'interno di un container, gestendo l'eventuale errore
+     * tramite logger (senza rilanciare eccezioni).
+     */
     public static ConfirmationPopup loadPopup(AnchorPane container) {
+        ConfirmationPopup popup = null;
         try {
             FXMLLoader loader = new FXMLLoader(
                     ConfirmationPopup.class.getResource("/it/uniroma2/marchidori/maininterface/confirmationPopup.fxml")
             );
             Parent popupRoot = loader.load();
             container.getChildren().add(popupRoot);
+            popup = loader.getController();
 
             // Assicurati di eseguire il posizionamento dopo che il container è stato layouttato
             Platform.runLater(() -> {
@@ -127,13 +128,10 @@ public class ConfirmationPopup {
                 popupRoot.setLayoutY(layoutY);
             });
 
-            return loader.getController();
         } catch (IOException e) {
-            throw new PopupLoadingException("Errore durante il caricamento del popup di conferma");
+            // Gestione interna con logger
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
+        return popup;
     }
-
-
-
-
 }
