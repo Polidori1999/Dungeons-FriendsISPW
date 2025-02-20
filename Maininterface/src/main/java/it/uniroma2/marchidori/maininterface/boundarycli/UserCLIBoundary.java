@@ -24,19 +24,15 @@ public class UserCLIBoundary implements UserAwareInterface, ControllerAwareInter
     private static final Logger LOGGER = Logger.getLogger(UserCLIBoundary.class.getName());
     private static final String SWITCHTO = "Switch Role to ";
 
-    /**
-     * Metodo principale per eseguire il boundary tramite CLI.
-     */
+
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
 
-        // Inizializzazione: mostra le informazioni dell'utente corrente (se presenti)
         if (currentUser != null) {
             jout.print("Benvenuto, " + currentUser.getEmail());
             jout.print("Ruolo attuale: " + currentUser.getRoleBehavior().getRoleName());
             displaySwitchRoleOption();
         }
-
         boolean exit = false;
         while (!exit) {
             showMenu();
@@ -70,9 +66,7 @@ public class UserCLIBoundary implements UserAwareInterface, ControllerAwareInter
         changeScene(SceneNames.HOME);
     }
 
-    /**
-     * Mostra il menù principale.
-     */
+
     private void showMenu() {
         jout.print("=== MENU UTENTE (CLI) ===");
         jout.print("1. Action Switch Role");
@@ -81,9 +75,6 @@ public class UserCLIBoundary implements UserAwareInterface, ControllerAwareInter
         jout.print("0. Go to Home");
     }
 
-    /**
-     * Visualizza il testo relativo al cambio ruolo.
-     */
     private void displaySwitchRoleOption() {
         if (currentUser != null) {
             if (currentUser.getRoleBehavior() == RoleEnum.PLAYER) {
@@ -94,9 +85,7 @@ public class UserCLIBoundary implements UserAwareInterface, ControllerAwareInter
         }
     }
 
-    /**
-     * Simula l'azione del cambio ruolo.
-     */
+
     private void onClickSwitchRole() {
         if (controller != null && currentUser != null) {
             controller.switchRole(currentUser.getRoleBehavior());
@@ -109,14 +98,8 @@ public class UserCLIBoundary implements UserAwareInterface, ControllerAwareInter
         }
     }
 
-    /**
-     * Simula il cambio scena stampando il nome della scena.
-     *
-     * @param sceneName il nome della scena verso cui cambiare
-     * @throws IOException in caso di errore (simulato)
-     */
+
     private void changeScene(String sceneName) throws IOException {
-        // In modalità CLI si può semplicemente stampare un messaggio oppure chiamare un altro boundary
         jout.print("Cambio scena a: " + sceneName);
         if(sceneName.equals(SceneNames.LOGIN)){
             currentUser = null;

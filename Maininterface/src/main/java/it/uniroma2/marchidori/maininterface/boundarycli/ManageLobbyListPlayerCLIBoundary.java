@@ -24,7 +24,6 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
     private final Jout jout = new Jout("ManageLobbyListPlayerCLIBoundary");
     protected LobbyBean pendingDeleteBean;
 
-    // Costanti per la stampa tabellare (header + riga)
     private static final String TABLE_HEADER_FORMAT = "%-3s %-20s %-15s %-10s %-10s";
     private static final String TABLE_ROW_FORMAT    = "%-3d %-20s %-15s %-10s %-10s";
 
@@ -56,13 +55,10 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
     protected void displayLobbyList() {
         jout.print("=== Lista Lobby Iscritte ===");
         if (data.isEmpty()) {
-            // Se la lista è vuota, stampo e basta
             jout.print("Non sei iscritto a nessuna lobby.");
         } else {
-            // Stampo header
             jout.print(String.format(TABLE_HEADER_FORMAT,
                     "No", "Nome", "Num Giocatori", "Durata", "Online"));
-            // Stampo le righe
             int i = 1;
             for (LobbyBean lobby : data) {
                 jout.print(String.format(TABLE_ROW_FORMAT,
@@ -132,9 +128,6 @@ public class ManageLobbyListPlayerCLIBoundary implements UserAwareInterface, Con
         }
     }
 
-    /**
-     * Controlla se la lista 'data' è vuota. In tal caso stampa un messaggio e restituisce true.
-     */
     private boolean checkNoLobby() {
         if (data.isEmpty()) {
             jout.print("Non sei iscritto a nessuna lobby.");

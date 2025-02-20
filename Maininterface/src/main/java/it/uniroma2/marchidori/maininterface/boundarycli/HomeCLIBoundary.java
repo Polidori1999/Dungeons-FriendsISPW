@@ -31,13 +31,11 @@ public class HomeCLIBoundary implements UserAwareInterface, RunInterface {
             String choice = scanner.nextLine().trim();
             switch (choice) {
                 case "1":
-                    // Avvia la schermata di Consult Rules
                     jout.print("Apertura Consult Rules...");
                     changeScene("consultRules.fxml");
                     break;
                 case "2":
                     jout.print("Apertura Join Lobby...");
-                    // Logica per partecipare a una lobby
                     changeScene("joinLobby.fxml");
                     break;
                 case "3":
@@ -51,12 +49,10 @@ public class HomeCLIBoundary implements UserAwareInterface, RunInterface {
                 case "4":
                     jout.print("Apertura Character List...");
                     changeScene("characterList.fxml");
-                    // Logica per mostrare il personaggio
                     break;
                 case "5":
                     jout.print("Visualizzazione dati utente...");
                     changeScene("user.fxml");
-                    // Puoi eventualmente rinfrescare la schermata o eseguire altre operazioni
                     break;
                 case "6":
                     jout.print("Uscita dalla schermata HOME, terminazione programma...");

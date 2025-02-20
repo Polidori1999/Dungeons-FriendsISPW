@@ -28,7 +28,6 @@ import static it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher.lo
 
 public class UserBoundary implements UserAwareInterface, ControllerAwareInterface {
 
-
     @FXML
     protected Button consultRules;
 
@@ -70,14 +69,11 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
 
     protected User currentEntity = Session.getInstance().getCurrentUser();
     protected UserBean currentUser;
-    protected UserController controller;
+    protected UserController controller;//reference al controller relativo
     private static final Logger LOGGER = Logger.getLogger(UserBoundary.class.getName());
     private static final String SWITCHTO = "Switch Role to ";
 
-
-    /**
-     * Invocato automaticamente da JavaFX dopo l'iniezione dei nodi @FXML.
-     */
+    //metodo di inizializzazione della GUI
     @FXML
     protected void initialize() {
         if (currentUser != null) {
@@ -87,6 +83,7 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
         }
     }
 
+    //cambio di testo del bottone per lo switch role
     private void setSwitchRoleButtonText(RoleEnum role){
         if(role == PLAYER){
             switchRoleButton.setText(SWITCHTO + DM.getRoleName());
@@ -96,6 +93,7 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
     }
 
 
+    //metodo di navigazione tra le GUI
     @FXML
     protected void onNavigationButtonClick(ActionEvent event) {
         Button sourceButton = (Button) event.getSource();
@@ -112,22 +110,12 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
         }
     }
 
-    @FXML
-    protected void onClickLogOut(ActionEvent event) {
-        try {
-            Session.getInstance().clear();
-            changeScene(SceneNames.LOGIN);
-        } catch (Exception e) {
-            throw new SceneChangeException("Error during change scene from user to login.", e);
-        }
-    }
 
+    //gestione vento click del bottone switch role
     @FXML
     protected void onClickSwitchRole(ActionEvent event) {
         logger.info("Ruolo prima dello switch: " + currentUser.getRoleBehavior());
         controller.switchRole(currentUser.getRoleBehavior());
-        // Recupera il ruolo aggiornato dalla Session (o dal controller) e aggiorna il currentUser nel boundary
-        // Ad esempio, se il controller fornisce un metodo getCurrentUser():
         currentUser = Converter.convert(Session.getInstance().getCurrentUser());
         roleUser.setText(currentUser.getRoleBehavior().getRoleName());
         setSwitchRoleButtonText(currentUser.getRoleBehavior());
@@ -135,13 +123,7 @@ public class UserBoundary implements UserAwareInterface, ControllerAwareInterfac
     }
 
 
-
-    @FXML
-    protected void changeScene(String fxml) throws IOException {
-        Stage currentStage = (Stage) userPane.getScene().getWindow();
-        SceneSwitcher.changeScene(currentStage, fxml, currentUser);  // Cambia scena con SceneSwitcher
-    }
-
+    //metodi per la realizzazione delle interfacce userawareinterface e controllerawareinterface
     @Override
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;

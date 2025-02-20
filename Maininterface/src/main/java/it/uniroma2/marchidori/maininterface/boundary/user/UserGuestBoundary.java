@@ -2,11 +2,15 @@ package it.uniroma2.marchidori.maininterface.boundary.user;
 
 import it.uniroma2.marchidori.maininterface.entity.Session;
 import it.uniroma2.marchidori.maininterface.exception.SceneChangeException;
+import it.uniroma2.marchidori.maininterface.scenemanager.SceneSwitcher;
 import it.uniroma2.marchidori.maininterface.utils.SceneNames;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.stage.Stage;
 
 public class UserGuestBoundary extends UserBoundary{
+
+    //metodo di inizializzazione GUI
     @Override
     protected void initialize() {
         // Richiama la logica base che setta userName, roleUser, emailUser
@@ -14,7 +18,6 @@ public class UserGuestBoundary extends UserBoundary{
         roleUser.setText(currentUser.getRoleBehavior().getRoleName());
         // Cambia etichetta del bottone
         switchRoleButton.setText("Login");
-
         logOutButton.setDisable(true);
         logOutButton.setVisible(false);
     }
@@ -25,10 +28,10 @@ public class UserGuestBoundary extends UserBoundary{
         try {
             Session.getInstance().clear();
             currentUser = null;
-            changeScene(SceneNames.LOGIN);
+            Stage currentStage = (Stage) userPane.getScene().getWindow();
+            SceneSwitcher.changeScene(currentStage, SceneNames.LOGIN, currentUser);
         }catch(Exception e){
             throw new SceneChangeException(e.getMessage());
         }
     }
-
 }

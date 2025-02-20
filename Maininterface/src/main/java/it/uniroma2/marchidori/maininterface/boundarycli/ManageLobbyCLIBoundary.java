@@ -30,7 +30,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
     private boolean creationMode;
     // Bean della lobby in creazione/modifica
     private LobbyBean currentBean;
-    // Vecchio nome della lobby, utile per l’update
+    // Vecchio nome della lobby
     private String oldName;
 
     private final Scanner scanner = new Scanner(System.in);
@@ -42,7 +42,6 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
             jout.print("ERRORE: Utente non inizializzato.");
             return;
         }
-        // Inizializza la boundary (simile all'initialize() della versione JavaFX)
         initializeBoundary();
 
         boolean exit = false;
@@ -86,11 +85,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         }
     }
 
-    /**
-     * Simula l'inizializzazione della boundary.
-     * Se currentUser ha un lobby selezionata, entra in modalità modifica;
-     * altrimenti, in modalità creazione.
-     */
+
     private void initializeBoundary() {
         String selected = currentUser != null ? currentUser.getSelectedLobbyName() : null;
         if (selected == null || selected.isEmpty()) {
@@ -115,9 +110,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         }
     }
 
-    /**
-     * Visualizza le informazioni attuali della lobby.
-     */
+
     private void displayCurrentLobbyInfo() {
         jout.print("=== Dettagli Lobby ===");
         jout.print("Nome           : " + (currentBean.getName() != null ? currentBean.getName() : ""));
@@ -127,9 +120,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         jout.print("InfoLink       : " + (currentBean.getInfoLink() != null ? currentBean.getInfoLink() : ""));
     }
 
-    /**
-     * Mostra il menu per modificare o salvare la lobby.
-     */
+
     private void displayMenu() {
         jout.print("=== Menu Gestione Lobby ===");
         jout.print("1. Modifica Nome Lobby");
@@ -142,15 +133,12 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         jout.print("0. Esci senza salvare");
     }
 
-    /**
-     * Metodo di utilità per richiedere un input all'utente.
-     */
+
     private String prompt(String message) {
         jout.print(message);
         return scanner.nextLine().trim();
     }
 
-    // -------------------- Metodi per la modifica dei campi --------------------
 
     private void editInfoLink() {
         String infoLink = prompt("Inserisci il nuovo InfoLink della lobby: ");
@@ -228,21 +216,12 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
     }
 
 
-
-    // -------------------- Metodi per gestire il salvataggio e la navigazione --------------------
-
-    /**
-     * Simula il salvataggio della lobby.
-     */
     private void onClickSaveLobby() throws IOException {
-        // Legge i dati già impostati (i metodi edit hanno aggiornato il bean)
-        // Validazione del bean tramite il controller
         String validationErrors = controller.validate(currentBean);
         if (!validationErrors.isEmpty()) {
             jout.print(validationErrors);
             return;
         }
-
         if (!creationMode) {
             controller.updateLobby(oldName, currentBean);
             jout.print("Lobby aggiornata con successo.");
@@ -250,7 +229,6 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
             controller.createLobby(currentBean);
             jout.print("Lobby creata con successo.");
         }
-        // Dopo il salvataggio, simula il cambio scena verso la lista delle lobby
         try {
             SceneSwitcher.changeScene(null, SceneNames.MANAGE_LOBBY_LIST, currentUser);
         } catch (IOException e) {
@@ -258,9 +236,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         }
     }
 
-    /**
-     * Simula il ritorno alla lista delle lobby senza salvare.
-     */
+
     private void onClickGoBackToListOfLobbies() {
         try {
             SceneSwitcher.changeScene(null, SceneNames.MANAGE_LOBBY_LIST, currentUser);
@@ -269,11 +245,6 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         }
     }
 
-    // -------------------- Metodi di supporto per la gestione dei campi --------------------
-
-    /**
-     * Simula la pulizia dei campi (per la modalità creazione).
-     */
     private void clearFields() {
         currentBean.setName("");
         currentBean.setLiveOnline("");
@@ -281,9 +252,7 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         currentBean.setDuration("");
     }
 
-    /**
-     * Simula il popolamento dei campi con i dati di un bean esistente.
-     */
+
     private void printField(String label, Object value) {
         jout.print(String.format("%-15s: %s", label, value));
     }
@@ -295,9 +264,6 @@ public class ManageLobbyCLIBoundary implements UserAwareInterface, ControllerAwa
         printField("Max Giocatori", bean.getMaxOfPlayers());
         printField("Durata", bean.getDuration());
     }
-
-
-    // -------------------- Iniezione delle dipendenze --------------------
 
     @Override
     public void setCurrentUser(UserBean user) {

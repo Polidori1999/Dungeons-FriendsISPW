@@ -9,8 +9,6 @@ import java.io.FileNotFoundException;
 public interface UserDAO {
     void saveUser(String email, String password)throws AccountAlreadyExistsException;
     User getUserByEmail(String email);
-
     void updateUsersEntityData(User currentEntity);
-
-     User loadUserData(User user) throws FileNotFoundException;
+    User loadUserData(User user) throws FileNotFoundException;
 }

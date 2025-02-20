@@ -127,23 +127,18 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
         if (pendingDeleteBean != null) {
             // Rimuovi dalla TableView
             tableViewLobby.getItems().remove(pendingDeleteBean);
-
             // Chiedi al controller di rimuoverla (la logica differenziata in base al ruolo viene gestita all'interno del controller)
             controller.leaveLobby(pendingDeleteBean);
-
             pendingDeleteBean = null;
         }
     }
-
 
     //annullamento operazione
     private void onCancel() {
         pendingDeleteBean = null;
     }
 
-
-
-    //Unico metodo per gestire la navigazione. Ricava l'FXML dal pulsante premuto (usando userData).
+    //metodo di cambio scena unificato
     @FXML
     protected void onNavigationButtonClick(ActionEvent event) {
         Button sourceButton = (Button) event.getSource();
@@ -164,7 +159,6 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
         SceneSwitcher.changeScene(currentStage, fxml, currentUser);
     }
 
-
     //metodi per la realizzazione delle interfacce userawareinterface e controllerawareinterface
     @Override
     public void setCurrentUser(UserBean user) {
@@ -175,5 +169,4 @@ public class ManageLobbyListPlayerBoundary implements UserAwareInterface, Contro
     public void setLogicController(Object logicController) {
         this.controller = (ManageLobbyListController) logicController;
     }
-
 }

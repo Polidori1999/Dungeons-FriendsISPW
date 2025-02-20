@@ -18,33 +18,25 @@ public class RegisterCLIBoundary implements UserAwareInterface, ControllerAwareI
     private RegisterController registerController;
     private Jout jout = new Jout(this.getClass().getSimpleName());
 
-    /**
-     * Avvia il processo di registrazione in modalità CLI.
-     */
     public void run() throws IOException {
         Scanner scanner = new Scanner(System.in);
         jout.print("=== SCHERMATA DI REGISTRAZIONE ===");
 
-        // Chiede l'email
         jout.print("Inserisci email: ");
         String email = scanner.nextLine().trim();
 
-        // Chiede la password
         jout.print("Inserisci password: ");
         String password = scanner.nextLine().trim();
 
-        // Chiede la conferma della password
         jout.print("Conferma password: ");
         String confirmPassword = scanner.nextLine().trim();
 
-        // Verifica che tutti i campi siano stati compilati
         if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             jout.print("Errore: Tutti i campi devono essere compilati!");
             changeScene(SceneNames.REGISTER);
             return;
         }
 
-        // Verifica che le password coincidano
         if (!password.equals(confirmPassword)) {
             jout.print("Errore: Le password non coincidono!");
             changeScene(SceneNames.REGISTER);

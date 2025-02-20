@@ -102,12 +102,8 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
         }
     }
 
-    /**
-     * Inizializza la boundary: se currentUser non ha selezionato un personaggio,
-     * entra in modalità creazione, altrimenti in modalità modifica.
-     */
+
     private void initializeBoundary() {
-        // si suppone che il nome del personaggio sia salvato lì.
         String selected = currentUser.getSelectedLobbyName();
         if (selected == null || selected.isEmpty()) {
             creationMode = true;
@@ -118,7 +114,6 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
             jout.print(">>> Modalità creazione attiva.");
         } else {
             creationMode = false;
-            // Si suppone che il controller possa individuare il personaggio in base al nome
             currentBean = findCharByName(selected);
             oldName = selected;
             if (currentBean == null) {
@@ -133,9 +128,7 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
         }
     }
 
-    /**
-     * Visualizza i dati attuali del Character Sheet.
-     */
+
     private void displayCharacterSheet() {
         jout.print("=== Scheda del Personaggio ===");
         jout.print("Nome      : " + (currentBean.getInfoBean().getName() != null ? currentBean.getInfoBean().getName() : ""));
@@ -151,9 +144,7 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
         jout.print("CHA       : " + currentBean.getStatsBean().getCharisma());
     }
 
-    /**
-     * Visualizza il menu delle operazioni.
-     */
+
     private void displayMenu() {
         jout.print("=== Menu Scheda Personaggio ===");
         jout.print("1. Modifica Nome");
@@ -172,18 +163,13 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
 
     }
 
-    /**
-     * Richiede un input all'utente.
-     */
+
     private String prompt(String message) {
         jout.print(message);
         return scanner.nextLine().trim();
     }
 
-    // -------------------- Metodi di modifica dei campi --------------------
-
     private void editRace() {
-        // Display the available races menu
         jout.print("Choose your character's race:");
         jout.print("1. Human");
         jout.print("2. Elf");
@@ -195,7 +181,6 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
         jout.print("8. Half-Orc");
         jout.print("9. Tiefling");
 
-        // Prompt the user for their selection
         String input = prompt("Enter the number corresponding to your choice: ");
         int choice;
         try {
@@ -204,9 +189,7 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
             jout.print("Invalid input. Race not updated.");
             return;
         }
-
         String race;
-        // Switch-case to associate the number with a race name
         switch (choice) {
             case 1:
                 race = "Human";
@@ -240,14 +223,12 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
                 return;
         }
 
-        // Update the character's race in the current bean
         currentBean.getInfoBean().setRace(race);
         jout.print("Race updated to: " + race);
     }
 
 
     private void editClass() {
-        // Display the available classes menu
         jout.print("Choose your character's class:");
         jout.print("1. Barbarian");
         jout.print("2. Bard");
@@ -262,7 +243,6 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
         jout.print("11. Sorcerer");
         jout.print("12. Warlock");
 
-        // Prompt the user for their selection
         String input = prompt("Enter the number corresponding to your choice: ");
         int choice;
         try {
@@ -273,7 +253,6 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
         }
 
         String clazz;
-        // Switch-case to associate the number with a class name
         switch (choice) {
             case 1:
                 clazz = "Barbarian";
@@ -316,7 +295,6 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
                 return;
         }
 
-        // Update the character's class in the current bean
         currentBean.getInfoBean().setClasse(clazz);
         jout.print("Class updated to: " + clazz);
     }
@@ -366,11 +344,8 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
         currentBean.getStatsBean().setCharisma(parseIntOrZero(cha));
     }
 
-    // -------------------- Salvataggio e navigazione --------------------
 
-    /**
-     * Esegue la validazione e il salvataggio della scheda del personaggio.
-     */
+
     private void onClickSaveCharacter() {
         // Validazione tramite il controller
         String validationErrors = controller.validate(currentBean);
@@ -389,36 +364,27 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
         // Resetta la selezione e torna alla lista dei personaggi
         currentUser.setSelectedLobbyName(null);
         try {
-            changeScene(SceneNames.CHARACTER_LIST);
+            changeScene();
         } catch (IOException e) {
             throw new SceneChangeException("Errore nel cambio scena verso la lista dei personaggi.", e);
         }
     }
 
-    /**
-     * Torna alla lista dei personaggi senza salvare.
-     */
     private void onClickGoBackToList() {
         try {
-            changeScene(SceneNames.CHARACTER_LIST);
+            changeScene();
         } catch (IOException e) {
             throw new SceneChangeException("Errore nel cambio scena verso la lista dei personaggi.", e);
         }
     }
 
-    /**
-     * Simula il cambio scena (in ambiente CLI si limita a stampare un messaggio e delega a SceneSwitcher).
-     */
-    private void changeScene(String fxml) throws IOException {
-        jout.print("Cambio scena verso " + fxml + "...");
-        SceneSwitcher.changeScene(null, fxml, currentUser);
+
+    private void changeScene() throws IOException {
+        jout.print("Cambio scena verso " + SceneNames.CHARACTER_LIST + "...");
+        SceneSwitcher.changeScene(null, SceneNames.CHARACTER_LIST, currentUser);
     }
 
-    // -------------------- Helper --------------------
 
-    /**
-     * Pulisce i campi impostando valori di default.
-     */
     private void clearFields() {
         if(currentBean.getInfoBean() == null){
             currentBean.setInfoBean(new CharacterInfoBean());
@@ -439,9 +405,7 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
         currentBean.getStatsBean().setCharisma(10);
     }
 
-    /**
-     * Popola (visualizza) i campi con i dati del CharacterSheetBean esistente.
-     */
+
     private void populateFields(CharacterSheetBean bean) {
         jout.print("Popolamento dei campi con i dati esistenti:");
         jout.print("Nome      : " + bean.getInfoBean().getName());
@@ -457,9 +421,6 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
         jout.print("CHA       : " + bean.getStatsBean().getCharisma());
     }
 
-    /**
-     * Prova a convertire una stringa in intero; restituisce 0 se il parsing fallisce.
-     */
     private int parseIntOrZero(String input) {
         try {
             return Integer.parseInt(input.trim());
@@ -469,10 +430,6 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
         }
     }
 
-    /**
-     * Cerca nella lista dei personaggi dell'utente quello con il nome specificato.
-     * (In ambiente CLI si suppone che currentUser.getCharacterSheets() contenga già i CharacterSheetBean.)
-     */
     private CharacterSheetBean findCharByName(String name) {
         if (currentUser.getCharacterSheets() == null) {
             return null;
@@ -482,8 +439,6 @@ public class CharacterSheetCLIBoundary implements UserAwareInterface, Controller
                 .findFirst()
                 .orElse(null);
     }
-
-    // -------------------- Iniezione delle dipendenze --------------------
 
     @Override
     public void setCurrentUser(UserBean user) {

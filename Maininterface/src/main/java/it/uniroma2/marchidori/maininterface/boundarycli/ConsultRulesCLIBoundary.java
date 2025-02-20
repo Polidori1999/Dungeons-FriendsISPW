@@ -29,7 +29,7 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
             exit = processMainMenu(scanner);
         }
         jout.print("Ritorno alla schermata HOME...");
-        changeScene(SceneNames.HOME);
+        changeScene();
 
     }
 
@@ -51,20 +51,14 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
         }
     }
 
-    /**
-     * Visualizza il menu principale di Consult Rules.
-     */
+
     private void displayMainMenu() {
         jout.print("=== MENU CONSULT RULES ===");
         jout.print("1. Visualizza RuleBooks");
         jout.print("0. Torna a HOME");
     }
 
-    /**
-     * Gestisce il menu per la consultazione/acquisto dei RuleBooks.
-     *
-     * @param scanner lo Scanner per l'input
-     */
+
     private void showRuleBooksMenu(Scanner scanner) {
         boolean returnToMenu = false;
         List<RuleBookBean> ruleBooks = controller.getAllRuleBooks();
@@ -85,12 +79,6 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
 
     }
 
-    /**
-     * Processa la selezione di un singolo RuleBook.
-     *
-     * @param selected il RuleBook selezionato
-     * @param scanner  lo Scanner per l'input
-     */
     private void processRuleBookSelection(RuleBookBean selected, Scanner scanner) {
         if (selected.isObtained()) {
             jout.print("Apertura del RuleBook: " + selected.getRulesBookName());
@@ -100,13 +88,7 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
         }
     }
 
-    /**
-     * Legge e converte l'input dell'utente in un intero.
-     *
-     * @param scanner lo Scanner per l'input
-     * @param prompt  il messaggio da visualizzare all'utente
-     * @return il numero scelto, oppure -1 se l'input non è valido
-     */
+
     private int readChoice(Scanner scanner, String prompt) {
         jout.print(prompt);
         String input = scanner.nextLine().trim();
@@ -118,9 +100,6 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
         }
     }
 
-    /**
-     * Recupera e visualizza l'elenco aggiornato dei RuleBooks.
-     */
     private void refreshList() {
         List<RuleBookBean> updatedList = controller.getAllRuleBooks();
         if (updatedList == null || updatedList.isEmpty()) {
@@ -135,12 +114,7 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
         }
     }
 
-    /**
-     * Gestisce l'azione di acquisto di un RuleBook.
-     *
-     * @param bean    il RuleBookBean da acquistare
-     * @param scanner lo Scanner per l'input dell'utente
-     */
+
     private void handleBuyAction(RuleBookBean bean, Scanner scanner) {
         pendingBuyBean = bean;
         jout.print("Vuoi comprare il libro: " + bean.getRulesBookName() + "? (Y/N)");
@@ -155,16 +129,10 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
         refreshList();
     }
 
-    /**
-     * Annulla l'operazione di acquisto.
-     */
     private void onCancel() {
         pendingBuyBean = null;
     }
 
-    /**
-     * Conferma l'acquisto, aggiornando il bean e il repository.
-     */
     private void onConfirm() {
         if (pendingBuyBean != null) {
             double price = 0.01;
@@ -177,9 +145,9 @@ public class ConsultRulesCLIBoundary implements UserAwareInterface, ControllerAw
         }
     }
 
-    private void changeScene(String sceneName) throws IOException {
-        jout.print("Cambio scena verso: " + sceneName);
-        SceneSwitcher.changeScene(null, sceneName, currentUser);
+    private void changeScene() throws IOException {
+        jout.print("Cambio scena verso: " + SceneNames.HOME);
+        SceneSwitcher.changeScene(null, SceneNames.HOME, currentUser);
     }
 
     @Override

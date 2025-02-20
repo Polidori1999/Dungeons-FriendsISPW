@@ -34,10 +34,6 @@ public class JoinLobbyPlayerCLIBoundary extends JoinLobbyDMCLIBoundary{
         changeScene(SceneNames.HOME);
     }
 
-
-    /**
-     * Visualizza il menu delle operazioni disponibili in modalità CLI.
-     */
     private void menu() {
         jout.print("=== Menu Join Lobby ===");
         jout.print("1. Applica filtri");
@@ -49,13 +45,6 @@ public class JoinLobbyPlayerCLIBoundary extends JoinLobbyDMCLIBoundary{
     }
 
 
-    /**
-     * Elabora l'input utente e delega l'esecuzione delle operazioni.
-     *
-     * @param input La scelta dell'utente.
-     * @return true se si vuole uscire dalla modalità CLI, false altrimenti.
-     * @throws IOException in caso di errori nel cambio scena.
-     */
     private boolean manageInput(String input)  {
         switch (input) {
             case "1":
@@ -84,10 +73,6 @@ public class JoinLobbyPlayerCLIBoundary extends JoinLobbyDMCLIBoundary{
     }
 
 
-    /**
-     * Gestisce l'operazione di join di una lobby:
-     * chiede all'utente l'indice della lobby, ne chiede conferma e chiama il controller per eseguire l'operazione.
-     */
     private void handleJoinLobby() {
         if (filteredLobbies.isEmpty()) {
             jout.print("Nessuna lobby disponibile per unirsi.");
@@ -118,5 +103,4 @@ public class JoinLobbyPlayerCLIBoundary extends JoinLobbyDMCLIBoundary{
             jout.print("Input non valido.");
         }
     }
-
 }

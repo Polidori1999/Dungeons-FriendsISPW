@@ -30,9 +30,7 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary {
         changeScene(SceneNames.HOME);
     }
 
-    /**
-     * Visualizza il menu delle operazioni disponibili.
-     */
+
     private void menu() {
         jout.print("=== Menu Personaggi ===");
         String[] menuItems = {
@@ -48,13 +46,7 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary {
         }
     }
 
-    /**
-     * Elabora la scelta dell'utente e richiama la relativa operazione.
-     *
-     * @param input La scelta inserita dall'utente.
-     * @return true se si vuole uscire dalla modalità, false altrimenti.
-     * @throws IOException in caso di errori nel cambio scena.
-     */
+
     private boolean manageInput(String input) throws IOException {
         switch (input) {
             case "1":
@@ -82,11 +74,6 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary {
     }
 
 
-
-
-    /**
-     * Gestisce la modifica di un personaggio selezionato.
-     */
     private void handleEditCharacter() {
         handleCharacterSelection("Nessun personaggio da modificare.",
                 "Inserisci il numero del personaggio da modificare: ",
@@ -99,9 +86,6 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary {
                 });
     }
 
-    /**
-     * Imposta il personaggio da modificare e simula il cambio scena verso l'editor.
-     */
     private void editCharacter(CharacterSheetBean characterSheetBean) throws IOException {
         // Imposta il nome del personaggio selezionato (usato per individuare il bean nell'editor)
         currentUser.setSelectedLobbyName(characterSheetBean.getInfoBean().getName());
@@ -109,9 +93,6 @@ public class CharacterListPlayerCLIBoundary extends CharacterListDMCLIBoundary {
         changeScene(SceneNames.CHARACTER_SHEET);
     }
 
-    /**
-     * Gestisce la creazione di un nuovo personaggio.
-     */
     private void handleNewCharacter() throws IOException {
         currentUser.setSelectedLobbyName(null);
         jout.print("Creazione di un nuovo personaggio.");

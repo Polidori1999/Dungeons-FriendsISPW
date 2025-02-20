@@ -57,7 +57,6 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListPlayerBoundary {
     private void newLobby() {
         // Imposta la lobby da editare nel currentUser
         currentUser.setSelectedLobbyName(null);
-        // Cambia scena (usa il metodo protetto ereditato dalla superclasse)
         try {
             changeScene(SceneNames.MANAGE_LOBBY);
         } catch (IOException e) {
@@ -72,7 +71,7 @@ public class ManageLobbyListDMBoundary extends ManageLobbyListPlayerBoundary {
         Button sourceButton = (Button) event.getSource();
         String fxml = (String) sourceButton.getUserData();
 
-        if (SceneNames.MANAGE_LOBBY.equals(fxml)) {  // ipotizzando di avere una costante dedicata
+        if (SceneNames.MANAGE_LOBBY.equals(fxml)) {
             newLobby();
         } else {
             super.onNavigationButtonClick(event);

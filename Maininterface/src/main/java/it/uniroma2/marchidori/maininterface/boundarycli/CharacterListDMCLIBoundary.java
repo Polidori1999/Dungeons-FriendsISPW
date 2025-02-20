@@ -47,9 +47,7 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
         changeScene(SceneNames.HOME);
     }
 
-    /**
-     * Visualizza in console l'elenco dei personaggi.
-     */
+
     protected void displayCharacterList() {
         jout.print("=== Lista Personaggi ===");
         if (data.isEmpty()) {
@@ -66,9 +64,6 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
         }
     }
 
-    /**
-     * Visualizza il menu delle operazioni disponibili.
-     */
     private void displayMenu() {
         jout.print("=== Menu Personaggi ===");
         jout.print("1. Elimina un personaggio");
@@ -77,21 +72,12 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
         jout.print("0. Torna a Home");
     }
 
-    /**
-     * Richiede un input all'utente.
-     */
     protected String prompt(String message) {
         jout.print(message);
         return scanner.nextLine().trim();
     }
 
-    /**
-     * Elabora la scelta dell'utente e richiama la relativa operazione.
-     *
-     * @param input La scelta inserita dall'utente.
-     * @return true se si vuole uscire dalla modalità, false altrimenti.
-     * @throws IOException in caso di errori nel cambio scena.
-     */
+
     private boolean processInput(String input) {
         switch (input) {
             case "1":
@@ -112,9 +98,6 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
         return false;
     }
 
-    /**
-     * Gestisce il download di un personaggio.
-     */
     protected void handleDownloadCharacter() {
         handleCharacterSelection("Nessun personaggio disponibile per il download.",
                 "Inserisci il numero del personaggio da scaricare: ",
@@ -140,9 +123,6 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
         }
     }
 
-    /**
-     * Simula il processo di download del personaggio.
-     */
     protected void downloadCharacter(CharacterSheetBean bean) {
         CharacterSheetDownloadController downloadController;
         downloadController = new CharacterSheetDownloadController();
@@ -164,10 +144,6 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
         }
     }
 
-    /**
-     * Gestisce l'eliminazione di un personaggio.
-     *
-     */
     protected void handleDeleteCharacter() {
         if (data.isEmpty()) {
             jout.print("Nessun personaggio da eliminare.");
@@ -194,9 +170,7 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
         }
     }
 
-    /**
-     * Conferma l'eliminazione del personaggio, aggiornando la lista e delegando al controller.
-     */
+
     protected void onConfirmDelete() {
         String characterName = pendingDeleteBean.getInfoBean().getName();
         controller.deleteCharacter(characterName);
@@ -204,16 +178,12 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
         refreshTable();
     }
 
-    /**
-     * Annulla l'operazione di eliminazione.
-     */
+
     protected void onCancelDelete() {
         pendingDeleteBean = null;
     }
 
-    /**
-     * Aggiorna la lista dei personaggi leggendo i dati dal currentUser.
-     */
+
     protected void refreshTable() {
         if (currentUser == null) {
             jout.print("ERRORE: currentUser non inizializzato.");
@@ -228,15 +198,10 @@ public class CharacterListDMCLIBoundary implements UserAwareInterface, Controlle
     }
 
 
-    /**
-     * Simula il cambio scena in ambiente CLI.
-     */
     protected void changeScene(String fxml) throws IOException {
         jout.print("Cambio scena verso " + fxml + "...");
         SceneSwitcher.changeScene(null, fxml, currentUser);
     }
-
-    // Metodi di "iniezione" delle dipendenze
 
     @Override
     public void setCurrentUser(UserBean user) {

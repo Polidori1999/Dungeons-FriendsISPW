@@ -41,30 +41,21 @@ public class HomeBoundary implements UserAwareInterface {
 
     private UserBean currentUser;
 
+//funzione di nagivazione tra le scene
     @FXML
     protected void onNavigationButtonClick(ActionEvent event) {
         Button sourceButton = (Button) event.getSource();
         String fxml = (String) sourceButton.getUserData();
-
-
-        // Se hai logiche speciali, ad esempio sul pulsante "New Lobby" (manageLobby.fxml):
-        if (SceneNames.MANAGE_LOBBY.equals(fxml)) {
-            currentUser.setSelectedLobbyName(null);
-            logger.info("Reset selectedLobbyName. Current user: " + currentUser.getEmail());
-        }
-
         // Esegui il cambio scena
         Stage currentStage = (Stage) homePane.getScene().getWindow();
         try {
-
             SceneSwitcher.changeScene(currentStage, fxml, currentUser);
         } catch (IOException e) {
-            // Se preferisci, potresti usare un messaggio più "dinamico", come:
-            // "Error during change scene from ManageLobbyListBoundary to " + fxml
             throw new SceneChangeException("Error during change scene.", e);
         }
     }
 
+    //realizzazzione userawareinterface
     @Override
     public void setCurrentUser(UserBean user) {
         this.currentUser = user;

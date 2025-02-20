@@ -27,7 +27,6 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
     private final Scanner scanner = new Scanner(System.in);
     private final Jout jout = new Jout("JoinLobbyDMCLIBoundary");
 
-    // Parametri per il filtraggio
     protected String filterType = "";
     protected String filterDuration = "";
     protected String filterNumPlayers = "";
@@ -53,9 +52,7 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
         changeScene(SceneNames.HOME);
     }
 
-    /**
-     * Visualizza la lista (tabellare) delle lobby filtrate.
-     */
+
     protected void displayLobbyList() {
         jout.print("=== Lista Lobby Disponibili ===");
 
@@ -66,12 +63,9 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
 
             int i = 1;
             for (LobbyBean lobby : filteredLobbies) {
-                // Verifica se la lobby è già joinata dall'utente
                 if (controller.isLobbyJoined(lobby)) {
-                    // Se è già joinata, la saltiamo
                     continue;
                 }
-                // Stampa informazioni della lobby non ancora joinata
                 jout.print(String.format("%-3d %-20s %-15s %-10s %-10s",
                         i,
                         lobby.getName(),
@@ -83,9 +77,6 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
         }
     }
 
-    /**
-     * Visualizza il menu delle operazioni disponibili in modalità CLI.
-     */
     private void displayMenu() {
         jout.print("=== Menu Join Lobby ===");
         jout.print("1. Applica filtri");
@@ -124,53 +115,32 @@ public class JoinLobbyDMCLIBoundary implements UserAwareInterface, ControllerAwa
         return false;
     }
 
-    /**
-     * Richiede all'utente di impostare i filtri per tipo e durata,
-     * e applica il filtraggio.
-     */
     protected void applyFilters() {
-        // 1) Filtro per tipo
         LinkedHashMap<String, String> typeOptions = new LinkedHashMap<>();
         typeOptions.put("1", "Online");
         typeOptions.put("2", "Live");
         filterType = chooseOption("tipo", typeOptions);
 
-        // 2) Filtro per durata
         LinkedHashMap<String, String> durationOptions = new LinkedHashMap<>();
         durationOptions.put("1", "One-Shot");
         durationOptions.put("2", "Campaign");
         filterDuration = chooseOption("durata", durationOptions);
 
-        // Applica i filtri
         doFilter();
     }
 
-    /**
-     * Metodo generico per mostrare un "mini-menu" e ottenere una scelta.
-     * Esempio di utilizzo per 'tipo' (Online/Live) o 'durata' (One-Shot/Campaign).
-     *
-     * @param filterLabel  Descrizione del filtro (es. "tipo", "durata")
-     * @param options      Mappa: numero -> stringa corrispondente
-     * @return la stringa selezionata, oppure "" se l'utente ha scelto 0 o un valore non valido
-     */
     private String chooseOption(String filterLabel, LinkedHashMap<String, String> options) {
         jout.print("Scegli filtro per " + filterLabel + " (0 per lasciare vuoto):");
-        // Stampa le scelte
         for (Map.Entry<String, String> entry : options.entrySet()) {
             jout.print(entry.getKey() + ". " + entry.getValue());
         }
-
         String choice = prompt("Inserisci il numero dell'opzione: ");
         if ("0".equals(choice)) {
             return "";
         }
-        // Se la mappa contiene la chiave, ritorna la stringa, altrimenti ""
         return options.getOrDefault(choice, "");
     }
 
-    /**
-     * Richiede all'utente una stringa di ricerca e la applica come filtro.
-     */
     protected void applySearch() {
         searchQuery = prompt("Inserisci stringa di ricerca: ").toLowerCase();
         doFilter();

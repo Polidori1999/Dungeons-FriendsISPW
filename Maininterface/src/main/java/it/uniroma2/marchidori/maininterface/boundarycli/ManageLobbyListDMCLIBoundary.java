@@ -62,9 +62,6 @@ public class ManageLobbyListDMCLIBoundary extends ManageLobbyListPlayerCLIBounda
     }
 
 
-    /**
-     * Gestisce la creazione di un nuovo personaggio.
-     */
     private void handleCreateLobby() throws IOException {
         currentUser.setSelectedLobbyName(null);
         jout.print("Creazione di un nuovo personaggio.");
