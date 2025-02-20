@@ -2,7 +2,6 @@ package it.uniroma2.marchidori.maininterface.entity;
 
 import it.uniroma2.marchidori.maininterface.boundary.LobbyDAO;
 import it.uniroma2.marchidori.maininterface.boundary.UserDAO;
-import it.uniroma2.marchidori.maininterface.dao.UserDAOFileSys;
 
 public class Session {
 
